@@ -53,22 +53,8 @@ int			Server::process(int sockfd)
 
 	req = getRequest();
 	std::cout << "\nTEXT:\n" << req->getText() << "\n";
-	//std::string				&uri = req->getURI();
-	/*
-	if (!_ncmp(buff, "GET /1.png"))
-		ft_sendfile(sockfd, "resources/gshona.png");
-	else if (!_ncmp(buff, "GET /favicon.ico"))
-		ft_sendfile(sockfd, "resources/favicon.ico");
-	else if (!_ncmp(buff, "GET /trump.gif"))
-		ft_sendfile(sockfd, "resources/trump.gif");
-	else if (!_ncmp(buff, "GET / HTTP/1.1"))
-	{
-		n = write(sockfd, webpage, sizeof(webpage) - 1);
-		printf("\n<%d> written\n", n);
-	}
-	*/
 
-	std::cout << "URI: " << req->getURI() << " =================\n";
+	//std::cout << "URI: " << req->getURI() << " =================\n";
 
 	if (req->getURI() == "/")
 		n = write(client_fd, webpage, sizeof(webpage) - 1);
