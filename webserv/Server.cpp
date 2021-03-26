@@ -68,7 +68,10 @@ int			Server::process(int sockfd)
 	//std::cout << "URI: " << req->getURI() << " =================\n";
 
 	if (req->getURI() == "/")
-		n = write(client_fd, webpage, sizeof(webpage) - 1);
+	{
+		n = write(client_fd, webpage_header, sizeof(webpage_header) - 1);
+		n = write(client_fd, webpage_body, sizeof(webpage_body) - 1);
+	}
 	else if (req->getURI() == "/favicon.ico")
 		ft_sendfile(client_fd, "resources/favicon.ico");
 	else if (req->getURI() == "/trump.gif")
@@ -90,6 +93,7 @@ IRequest	*Server::getRequest(void)
 	int					n;
 	char				buff[2048];
 
+	printf("GET REQUEST\n");
 	n = read(client_fd, buff, 2047);
 	if (n == 0)
 		throw std::runtime_error("Empty read");
@@ -106,9 +110,9 @@ IRequest	*Server::getRequest(void)
 int			Server::processConnection()
 {
 	bool cont = true;
+	printf("PROCESS CONNECTION\n");
 	do
 	{	
-		printf("PROCESS CONNECTION\n");
 		close(sockfd);
 		try
 		{
@@ -140,21 +144,59 @@ int						Server::_ncmp(char *buff, char *str)
 	return (strncmp(buff, str, strlen(str)));
 }
 
+
+unsigned int			Server::get_file_size(std::string const &filename)
+{
+	std::ifstream	in_file(filename, std::ios::binary);
+	
+	in_file.seekg(0, std::ios::end);
+	return(in_file.tellg());
+}
+
 int						Server::ft_sendfile(int out_fd, char *filename)
 {
 	char					buff[2048];
 	const int				buffsize = 2048;
-	int						fd, n;
+	int						fd, n, size = 0;
+	std::stringstream		ss;
+	std::string				str;
+	unsigned int			file_size;
+	char					*head_str;
 
 	printf("SENDFILE: %s\n", filename);
+
+
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
 		printf("file %s cannot be opened\n", filename);
 		return (0);
 	}
+
+	file_size = get_file_size(std::string(filename));
+	std::cout << "FILE SIZE: " << file_size << "\n";
+
+
+	ss << "HTTP/1.1 200 OK\r\n";
+	ss << "Connection: keep-alive\r\n";
+	ss << "Accept-Ranges: bytes\r\n";
+	ss << "Content-Length: "<< file_size <<"\r\n";
+	//ss << "Content-Type: image\r\n";
+	ss << "\r\n";
+	
+	str = ss.str();
+	std::cout << "HEADER:\n";
+	std::cout << "===============\n"<< str << "\n=========\n";
+	std::cout << "WRITE HEADER\n";
+	write(out_fd, str.c_str(), str.size());
+	std::cout << "HEADER WRITTEN\n";
+
 	while ( (n = read(fd, buff, buffsize)) > 0)
+	{
+		//std::cout << "BEGIN ["<< n <<"]\n";
 		write(out_fd, buff, n);
+		//std::cout << "END\n";
+	}
 	close(fd);
 	std::cout << "FILE SENDED\n";
 	return (1);
