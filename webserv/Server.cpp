@@ -26,8 +26,7 @@ Server::Server()
 }
 
 Server::~Server()
-{
-}
+{}
 
 Server::Server(const Server &ref)
 {
@@ -40,24 +39,22 @@ Server	&Server::operator=(const Server &ref)
 
 int			Server::acceptConnection()
 {
-	rc = accept(sockfd, NULL, NULL);
-	if (rc == -1)
+	client_fd = accept(sockfd, NULL, NULL);
+	if (client_fd == -1)
 		throw std::runtime_error("Connection failed...");
 }
 
 int			Server::process(int sockfd)
 {
-	char					buff[2048];
-	int						buffsize = 2048;
-	int						n;
-	char					*str = "Hello world\n";
-	int						fd, len = 0;
-	char					c;
+	//char					buff[2048];
+	//int						buffsize = 2048;
+	int						n = 0;
+	IRequest				*req;
 
-	n = read(sockfd, buff, 2048);
-	printf("READED: <%d>\n", n);
-	write(1, buff, n);
-
+	req = getRequest();
+	std::cout << req->getText() << "\n";
+	//std::string				&uri = req->getURI();
+	/*
 	if (!_ncmp(buff, "GET /1.png"))
 		ft_sendfile(sockfd, "resources/gshona.png");
 	else if (!_ncmp(buff, "GET /favicon.ico"))
@@ -69,24 +66,50 @@ int			Server::process(int sockfd)
 		n = write(sockfd, webpage, sizeof(webpage) - 1);
 		printf("\n<%d> written\n", n);
 	}
+	*/
+
+	std::cout << req->getURI() << " =================\n";
+
+	if (req->getURI() == "/")
+		n = write(sockfd, webpage, sizeof(webpage) - 1);
+	else if (req->getURI() == "/favicon.ico")
+		ft_sendfile(sockfd, "resources/favicon.ico");
+	else if (req->getURI() == "/trump.gif")
+		ft_sendfile(sockfd, "resources/trump.gif");
+
     if (n < 0)
-	{
-         printf("ERROR writing to socket");
-		 exit(0);
-	}
+         throw std::runtime_error("ERROR writing to socket");
+	delete req;
 }
+
+IRequest	*Server::getRequest(void)
+{
+	std::stringstream	ss;
+	int					n;
+	char				buff[2048];
+
+	n = read(client_fd, buff, 2048);
+	if (n == -1)
+		throw std::runtime_error("Cannot read client fd");
+	ss << buff;
+	dprintf(2, "reading finished\n");
+	return new Request(ss.str());
+}
+
+
 
 int			Server::processConnection()
 {
 	close(sockfd);
 	process(rc);
 	exit(0);
-
+	return (1);
 }
 
 int			Server::parentForkPart()
 {
 	close(rc);
+	return (1);
 }
 
 
@@ -116,12 +139,10 @@ int						Server::ft_sendfile(int out_fd, char *filename)
 }
 
 
-IRequest	&Server::getRequest(void)
-{
 
-}
 
 int			Server::sendResponce(const IResponse &resp)
 {
-
+	throw std::runtime_error("No implementation");
+	return (-1);
 }

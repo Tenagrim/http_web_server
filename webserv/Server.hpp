@@ -1,11 +1,17 @@
 #pragma once
 #include <IServer.hpp>
+#include <Request.hpp>
+
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string>
-#include <exception>
 #include <fcntl.h>
 #include <unistd.h>
+
+
+#include <string>
+#include <exception>
+#include <sstream>
+#include <iostream>
 
 static const char webpage[] =
 "HTTP/1.1 200 OK\r\n"
@@ -36,6 +42,7 @@ static const char webpage[] =
 "<img src=\"trump.gif\">"
 "</body>"
 "</html>";
+
 static const char					default_hostname[] = "localhost";
 
 class Server : public IServer
@@ -49,7 +56,7 @@ private:
 	struct sockaddr_in		serv_addr;
 	struct hostent			*server;
 	std::string				hostname;
-	int						sockfd, port, rc, pid, err, status;
+	int						sockfd, port, rc, pid, err, status, client_fd;
 
 	int						process(int sockfd);;
 	int						_ncmp(char *buff, char *str);
@@ -60,7 +67,7 @@ public:
 	Server(const Server &ref);
 	Server &operator=(const Server &ref);
 
-	IRequest	&getRequest(void);
+	IRequest	*getRequest(void);
 	int			sendResponce(const IResponse &resp);
 	int			acceptConnection();
 	int			processConnection();
