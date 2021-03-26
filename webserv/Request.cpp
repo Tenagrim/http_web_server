@@ -4,18 +4,22 @@
 
 Request::Request()
 {
+	throw std::runtime_error("No implementation");
 }
 
 Request::~Request()
 {
+	throw std::runtime_error("No implementation");
 }
 
 Request::Request(const Request &ref)
 {
+	throw std::runtime_error("No implementation");
 }
 
 Request	&Request::operator=(const Request &ref)
 {
+	throw std::runtime_error("No implementation");
 	return (*this);
 }
 
@@ -30,8 +34,8 @@ Request::Request(std::string const &req_text) : _text(req_text)
 	pos = _text.find(' ', prev_pos + 1);
 	_uri =_text.substr(prev_pos + 1, pos - prev_pos - 1);
 
-	std::cout << "\nURI: [" << _uri  << "]\n";
-	std::cout << "method: [" << _method  << "]\n\n";
+	//std::cout << "\nURI: [" << _uri  << "]\n";
+	//std::cout << "method: [" << _method  << "]\n\n";
 }
 
 std::string		&Request::getHeaderValue(std::string const &header)
