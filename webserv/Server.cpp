@@ -9,27 +9,35 @@ Server::Server()
 		throw std::runtime_error("Unable to sreate socket");
 
 
-	int enable = 1;
-	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
-		throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
+
 
 	memset(&serv_addr, 0, sizeof(serv_addr));
+
 	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = htons(port);
+	serv_addr.sin_port = port; // htons(port);  //FIXME ?
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
+
+	//std::cout << "htons port: " << htons(port) << "\n";
 
 	do{
 		if ((err = bind(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))) < 0)
 		{
 			close(sockfd);
 			//throw std::runtime_error("Unable to bind socket");
-			printf("Unable to bind socket\n");
+			printf("Unable to bind socket [%d]\n", err);
 			usleep(10 * 1000 * 1000);
 		}
 		else
 			st = true;
-
 	}while(!st);
+
+	int enable = 1;
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+		throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
+
+	//if (fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1)
+	///	throw std::runtime_error("FCNTL NONBLOCK FAILED");
+
 	printf("========= Socket binded ======\n");
 	if (listen(sockfd, 25) < 0)
 	{
@@ -113,7 +121,7 @@ int			Server::processConnection()
 	printf("PROCESS CONNECTION\n");
 	do
 	{	
-		close(sockfd);
+		//close(sockfd);
 		try
 		{
 			process(rc);
@@ -127,7 +135,7 @@ int			Server::processConnection()
 	} while (cont);
 	close(rc);
 	printf("EXIT CONNECTION\n");
-	exit(0);
+	//exit(0);
 	return (1);
 }
 
