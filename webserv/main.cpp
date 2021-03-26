@@ -18,5 +18,13 @@ int main(int ac, char **av)
 		else
 			serv->parentForkPart();
 	}
-
+	/*
+	std::string str("GET /trump.gif HTTP/1.1");
+	int pos = str.find(' ');
+	std::cout << "[" << str.substr(0, pos) << "]\n";
+	int o_pos = pos;
+	pos = str.find(' ', o_pos + 1);
+	std::cout << "o_pos:"  << o_pos << " pos: " << pos <<"\n";
+	std::cout << "[" << str.substr(o_pos + 1, pos - o_pos - 1) << "]\n";
+	*/
 }

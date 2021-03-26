@@ -52,7 +52,7 @@ int			Server::process(int sockfd)
 	IRequest				*req;
 
 	req = getRequest();
-	std::cout << req->getText() << "\n";
+	std::cout << "\nTEXT:\n" << req->getText() << "\n";
 	//std::string				&uri = req->getURI();
 	/*
 	if (!_ncmp(buff, "GET /1.png"))
@@ -68,14 +68,16 @@ int			Server::process(int sockfd)
 	}
 	*/
 
-	std::cout << req->getURI() << " =================\n";
+	std::cout << "URI: " << req->getURI() << " =================\n";
 
 	if (req->getURI() == "/")
-		n = write(sockfd, webpage, sizeof(webpage) - 1);
+		n = write(client_fd, webpage, sizeof(webpage) - 1);
 	else if (req->getURI() == "/favicon.ico")
-		ft_sendfile(sockfd, "resources/favicon.ico");
+		ft_sendfile(client_fd, "resources/favicon.ico");
 	else if (req->getURI() == "/trump.gif")
-		ft_sendfile(sockfd, "resources/trump.gif");
+		ft_sendfile(client_fd, "resources/trump.gif");
+	else
+		n = write(client_fd, webpage, sizeof(webpage) - 1);
 
     if (n < 0)
          throw std::runtime_error("ERROR writing to socket");
@@ -88,7 +90,8 @@ IRequest	*Server::getRequest(void)
 	int					n;
 	char				buff[2048];
 
-	n = read(client_fd, buff, 2048);
+	n = read(client_fd, buff, 2047);
+	buff[n] = 0;
 	if (n == -1)
 		throw std::runtime_error("Cannot read client fd");
 	ss << buff;

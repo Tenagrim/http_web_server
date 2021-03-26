@@ -1,5 +1,7 @@
 #include <Request.hpp>
 
+#include <iostream>
+
 Request::Request()
 {
 }
@@ -24,9 +26,12 @@ Request::Request(std::string const &req_text) : _text(req_text)
 
 	pos = _text.find(' ');
 	_method = _text.substr(0, pos);
-	prev_pos = pos + 1;
-	pos = _text.find(' ', prev_pos);
-	_uri =_text.substr(prev_pos, pos);
+	prev_pos = pos;
+	pos = _text.find(' ', prev_pos + 1);
+	_uri =_text.substr(prev_pos + 1, pos - prev_pos - 1);
+
+	std::cout << "\nURI: [" << _uri  << "]\n";
+	std::cout << "method: [" << _method  << "]\n\n";
 }
 
 std::string		&Request::getHeaderValue(std::string const &header)
