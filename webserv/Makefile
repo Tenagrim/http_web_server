@@ -1,6 +1,6 @@
 NAME=webserv
 SRC_FILES=main.cpp Server.cpp Request.cpp
-#HPP= ""  # FIXME
+HPP= Request.hpp Server.hpp  # FIXME
 CC= clang++
 OBJ_DIR=obj/
 SRC_DIR=./
@@ -25,7 +25,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@echo $<
 	$(CC) $(FLAGS) -c $< -o $@
 
-$(NAME): $(OBJ_DIR) $(OBJ) # $(HPP)  # FIXME
+$(NAME): $(OBJ_DIR) $(OBJ)  $(HPP)  # FIXME
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ);
 
 clean:
