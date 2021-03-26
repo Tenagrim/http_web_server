@@ -68,7 +68,7 @@ int			Server::process(int sockfd)
 	//std::cout << "URI: " << req->getURI() << " =================\n";
 
 	if (req->getURI() == "/")
-		n = write(client_fd, webpage2, sizeof(webpage2) - 1);
+		n = write(client_fd, webpage, sizeof(webpage) - 1);
 	else if (req->getURI() == "/favicon.ico")
 		ft_sendfile(client_fd, "resources/favicon.ico");
 	else if (req->getURI() == "/trump.gif")
@@ -91,6 +91,8 @@ IRequest	*Server::getRequest(void)
 	char				buff[2048];
 
 	n = read(client_fd, buff, 2047);
+	if (n == 0)
+		throw std::runtime_error("Empty read");
 	buff[n] = 0;
 	if (n == -1)
 		throw std::runtime_error("Cannot read client fd");
@@ -103,10 +105,24 @@ IRequest	*Server::getRequest(void)
 
 int			Server::processConnection()
 {
-	printf("PROCESS CONNECTION\n");
-	close(sockfd);
-	process(rc);
+	bool cont = true;
+	do
+	{	
+		printf("PROCESS CONNECTION\n");
+		close(sockfd);
+		try
+		{
+			process(rc);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			cont = false;
+		}
+		
+	} while (cont);
 	close(rc);
+	printf("EXIT CONNECTION\n");
 	exit(0);
 	return (1);
 }
