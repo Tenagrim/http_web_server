@@ -15,7 +15,7 @@ char webpage[] =
 "<!DOCTYPE html>"
 "<html>"
 "<head>"
-"<title>Welcome to nginx!</title>"
+"<title>Welcome to myNGINX!</title>"
 "<style>"
 "    body {"
 "        width: 35em;"
@@ -25,7 +25,7 @@ char webpage[] =
 "</style>"
 "</head>"
 "<body>"
-"<h1>Welcome to nginx!</h1>"
+"<h1>Welcome to myNGINX!</h1>"
 "<p>If you see this page, the nginx web server is successfully installed and "
 "working. Further configuration is required.</p>"
 
@@ -35,17 +35,10 @@ char webpage[] =
 "<a href=\"http://nginx.com/\">nginx.com</a>.</p>"
 
 "<p><em>Thank you for using nginx.</em></p>"
-"<img src=\"1.png\">"
+"<img src=\"trump.gif\">"
 "</body>"
 "</html>";
 
-/*
-"<!DOCTYPE html>\r\n"
-"<html><head><title>HelloWorld</title>\r\n"
-"</head>"
-"<body><center><h1>HELLOWORLD!!</h1><br>\r\n"
-"</center></body></html\r\n>>";
-*/
 int		_ncmp(char *buff, char *str)
 {
 	return (strncmp(buff, str, strlen(str)));
@@ -84,9 +77,11 @@ void process(int sockfd)
 	write(1, buff, n);
 
 	if (!_ncmp(buff, "GET /1.png"))
-		ft_sendfile(sockfd, "1.png");
-	if (!_ncmp(buff, "GET /favicon.ico"))
-		ft_sendfile(sockfd, "favicon.ico");
+		ft_sendfile(sockfd, "resources/gshona.png");
+	else if (!_ncmp(buff, "GET /favicon.ico"))
+		ft_sendfile(sockfd, "resources/favicon.ico");
+	else if (!_ncmp(buff, "GET /trump.gif"))
+		ft_sendfile(sockfd, "resources/trump.gif");
 	else if (!_ncmp(buff, "GET / HTTP/1.1"))
 	{
 		n = write(sockfd, webpage, sizeof(webpage) - 1);
