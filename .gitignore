@@ -4,3 +4,4 @@
 .vscode
 .DS_Store
 webserv/webserv
+*pthread_kill
