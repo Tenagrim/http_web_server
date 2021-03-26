@@ -43,6 +43,37 @@ static const char webpage[] =
 "</body>"
 "</html>";
 
+static const char webpage2[] =
+"HTTP/1.1 200 OK\r\n"
+"Content-Type: text/html; charset=UTF-8\r\n\r\n"
+"<!DOCTYPE html>"
+"<html>"
+"<head>"
+"<title>Welcome to myNGINX!</title>"
+"<style>"
+"    body {"
+"        width: 35em;"
+"        margin: 0 auto;"
+"        font-family: Tahoma, Verdana, Arial, sans-serif;"
+"    }"
+"</style>"
+"</head>"
+"<body>"
+"<h1>Welcome to myNGINX!</h1>"
+"<p>If you see this page, the nginx web server is successfully installed and "
+"working. Further configuration is required.</p>"
+
+"<p>For online documentation and support please refer to"
+"<a href=\"http://nginx.org/\">nginx.org</a>.<br/>"
+"Commercial support is available at "
+"<a href=\"http://nginx.com/\">nginx.com</a>.</p>"
+
+"<p><em>Thank you for using nginx.</em></p>"
+"</body>"
+"</html>\r\n\r\n";
+
+
+
 static const char					default_hostname[] = "localhost";
 
 class Server : public IServer

@@ -2,22 +2,35 @@
 
 Server::Server()
 {
+	bool st = false;
 	port = 80;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)
 		throw std::runtime_error("Unable to sreate socket");
-	
+
+
+	int enable = 1;
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+		throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
+
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(port);
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 
-	if ((err = bind(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))) < 0)
-	{
-		close(sockfd);
-		throw std::runtime_error("Unable to bind socket");
-	}
+	do{
+		if ((err = bind(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))) < 0)
+		{
+			close(sockfd);
+			//throw std::runtime_error("Unable to bind socket");
+			printf("Unable to bind socket\n");
+			usleep(10 * 1000 * 1000);
+		}
+		else
+			st = true;
 
+	}while(!st);
+	printf("========= Socket binded ======\n");
 	if (listen(sockfd, 25) < 0)
 	{
 		printf("listen error\n");
@@ -46,41 +59,28 @@ int			Server::acceptConnection()
 
 int			Server::process(int sockfd)
 {
-	//char					buff[2048];
-	//int						buffsize = 2048;
 	int						n = 0;
 	IRequest				*req;
 
 	req = getRequest();
 	std::cout << "\nTEXT:\n" << req->getText() << "\n";
-	//std::string				&uri = req->getURI();
-	/*
-	if (!_ncmp(buff, "GET /1.png"))
-		ft_sendfile(sockfd, "resources/gshona.png");
-	else if (!_ncmp(buff, "GET /favicon.ico"))
-		ft_sendfile(sockfd, "resources/favicon.ico");
-	else if (!_ncmp(buff, "GET /trump.gif"))
-		ft_sendfile(sockfd, "resources/trump.gif");
-	else if (!_ncmp(buff, "GET / HTTP/1.1"))
-	{
-		n = write(sockfd, webpage, sizeof(webpage) - 1);
-		printf("\n<%d> written\n", n);
-	}
-	*/
 
-	std::cout << "URI: " << req->getURI() << " =================\n";
+	//std::cout << "URI: " << req->getURI() << " =================\n";
 
 	if (req->getURI() == "/")
-		n = write(client_fd, webpage, sizeof(webpage) - 1);
+		n = write(client_fd, webpage2, sizeof(webpage2) - 1);
 	else if (req->getURI() == "/favicon.ico")
 		ft_sendfile(client_fd, "resources/favicon.ico");
 	else if (req->getURI() == "/trump.gif")
+	{
 		ft_sendfile(client_fd, "resources/trump.gif");
-	else
-		n = write(client_fd, webpage, sizeof(webpage) - 1);
+	}
+
+	std::cout << "WRITING COMPLETED\n";
 
     if (n < 0)
          throw std::runtime_error("ERROR writing to socket");
+	printf("EXIT FROM PROCESS\n");
 	delete req;
 }
 
@@ -103,8 +103,10 @@ IRequest	*Server::getRequest(void)
 
 int			Server::processConnection()
 {
+	printf("PROCESS CONNECTION\n");
 	close(sockfd);
 	process(rc);
+	close(rc);
 	exit(0);
 	return (1);
 }
@@ -138,6 +140,7 @@ int						Server::ft_sendfile(int out_fd, char *filename)
 	while ( (n = read(fd, buff, buffsize)) > 0)
 		write(out_fd, buff, n);
 	close(fd);
+	std::cout << "FILE SENDED\n";
 	return (1);
 }
 
