@@ -1,5 +1,5 @@
 NAME=webserv
-SRC_FILES=main.cpp
+SRC_FILES=main.cpp Server.cpp Request.cpp
 #HPP= ""  # FIXME
 CC= clang++
 OBJ_DIR=obj/
@@ -8,7 +8,7 @@ SRC_DIR=./
 SRC=$(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ=$(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
 
-FLAGS= -g -Wall -Wextra # -Werror FIXME
+FLAGS= -g -Wall -Wextra -I interfaces -I . # -Werror FIXME
 
 all: $(NAME)
 

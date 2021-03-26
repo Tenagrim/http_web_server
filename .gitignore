@@ -3,3 +3,4 @@
 *.o
 .vscode
 .DS_Store
+webserv/webserv
