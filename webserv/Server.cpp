@@ -218,3 +218,21 @@ int			Server::sendResponce(const IResponse &resp)
 	throw std::runtime_error("No implementation");
 	return (-1);
 }
+
+bool		Server::hasFlag(unsigned int flag)
+{
+	if (_flags & flag)
+		return (true);
+	else
+		return (false);
+}
+int			Server::setFlag(unsigned int flag)
+{
+	_flags |= flag;
+	return(1);
+}
+int			Server::switchFlag(unsigned int flag)
+{
+	_flags ^= flag;
+	return (1);
+}
