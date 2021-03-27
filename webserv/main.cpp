@@ -1,12 +1,30 @@
 #include <Server.hpp>
 
+#include <signal.h> // FIXME
+
+
+ft::Server	*SERVER;
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	SERVER->close_sockets();
+	printf("\n\nSIGINT catched\n\n");
+}
+
 int main(int ac, char **av)
 {
 	(void)ac; // FIXME
 	(void)av; // FIXME
-	
+
+
+
 	ft::Server		serv = ft::Server();
 
+////////// FORBIDDEN///////////
+	SERVER = &serv;
+	signal(SIGINT, &sigint_handler);
+//////////////////////////////////
+	
 	//int			pid;
 	while (1)
 	{

@@ -23,7 +23,7 @@ namespace ft
 	static const char webpage_header[] =
 		"HTTP/1.1 200 OK\r\n"
 		"Connection: keep-alive\r\n"
-		"Content-Length: 614\r\n" // 614
+		"Content-Length: 636\r\n" // 614
 		"Content-Type: text/html; charset=UTF-8\r\n\r\n";
 
 	static const char webpage_body[] =
@@ -51,6 +51,7 @@ namespace ft
 
 		"<p><em>Thank you for using nginx.</em></p>"
 		"<img src=\"trump.gif\">"
+		"<img src=\"baiden.gif\">"
 		"</body>"
 		"</html>";
 
@@ -88,11 +89,12 @@ namespace ft
 	class Server
 	{
 	private:
-		unsigned int _flags;
-		struct sockaddr_in serv_addr;
-		struct hostent *server;
-		std::string hostname;
-		int sockfd, port, rc, pid, err, status, client_fd;
+		unsigned int			_id;
+		unsigned int			_flags;
+		struct sockaddr_in		serv_addr;
+		struct hostent			*server;
+		std::string				hostname;
+		int sockfd,				port, rc, pid, err, status, client_fd;
 
 		int					process();
 		int 				ft_sendfile(int out_fd, std::string const &filename);
@@ -108,13 +110,15 @@ namespace ft
 		Server();
 		virtual ~Server();
 		Server(const Server &ref);
-		Server &operator=(const Server &ref);
-		bool hasFlag(unsigned int flag);
-		int setFlag(unsigned int flag);
-		int switchFlag(unsigned int flag);
-		IRequest *getRequest(void);
-		int sendResponce(const IResponse &resp);
-		int acceptConnection();
-		int processConnection();
+
+		Server			&operator=(const Server &ref);
+		bool			hasFlag(unsigned int flag);
+		int				setFlag(unsigned int flag);
+		int				switchFlag(unsigned int flag);
+		IRequest		*getRequest(void);
+		int				sendResponce(const IResponse &resp);
+		int				acceptConnection();
+		int				processConnection();
+		void			close_sockets(void);
 	};
 }
