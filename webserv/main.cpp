@@ -1,7 +1,7 @@
 #include <Server.hpp>
 
 #include <signal.h> // FIXME
-
+#include <Dispatcher.hpp>
 
 ft::Server	*SERVER;
 void	sigint_handler(int sig)
@@ -9,6 +9,7 @@ void	sigint_handler(int sig)
 	(void)sig;
 	SERVER->close_sockets();
 	printf("\n\nSIGINT catched\n\n");
+	exit(2);
 }
 
 int main(int ac, char **av)
@@ -16,34 +17,19 @@ int main(int ac, char **av)
 	(void)ac; // FIXME
 	(void)av; // FIXME
 
+	ft::Dispatcher 	dispatcher;
 
-
-	ft::Server		serv = ft::Server();
-
-////////// FORBIDDEN///////////
+	ft::Server		serv = ft::Server(&dispatcher);
+	serv.start();
+	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-//////////////////////////////////
 	
-	//int			pid;
 	while (1)
 	{
-		serv.acceptConnection();
-		//pid = fork();
-		//if (pid < 0)
-		//{
-		//	printf("fork error\n");
-		//	exit(-5);
-		//}
-		//else if (pid == 0)
-			serv.processConnection();
-		//else
-		//	serv->parentForkPart();
+		dispatcher.updateFdSet();
+		dispatcher.handleEvents();
 	}
-
-
-	//Request req("GET / HTTP/1.1\r\n");
-
 
 
 

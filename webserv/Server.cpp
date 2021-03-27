@@ -1,8 +1,17 @@
 #include <Server.hpp>
+#include <Dispatcher.hpp>
 
 namespace ft
 {
-	Server::Server()
+	Server::Server() : _reciever(new RequestReciever("localhost", 80))
+	{
+
+	}
+	Server::Server(Dispatcher *disp) : _reciever(new RequestReciever("localhost", 80))
+	{
+		_dispatcher = disp;
+	}
+	/*
 	{
 		bool st = false;
 		port = 80;
@@ -49,12 +58,14 @@ namespace ft
 			throw std::runtime_error("Unable to listen socket");
 		}
 	}
+*/
 
 	Server::~Server()
 	{
+		delete _reciever;
 	}
 
-	Server::Server(const Server &ref)
+	Server::Server(const Server &ref) : _reciever(new RequestReciever())
 	{
 		(void)ref;
 		throw std::runtime_error("no implementation");
@@ -69,9 +80,8 @@ namespace ft
 
 	int Server::acceptConnection()
 	{
-		client_fd = accept(sockfd, NULL, NULL);
-		if (client_fd == -1)
-			throw std::runtime_error("Connection failed... (accept -1)");
+		_reciever->accept_connection();
+		_dispatcher->addClient(this, _reciever->getListenFd());
 		return (1);
 	}
 
@@ -238,5 +248,52 @@ namespace ft
 	{
 		close(this->client_fd);
 		close(this->sockfd);
+	}
+
+	long			Server::getListenFd(void)
+	{
+		return _reciever->getListenFd();
+	}
+
+	void			Server::gotEvent(long socket)
+	{
+		if (socket == _reciever->getListenFd())
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+	void			Server::readEvent(long socket)
+	{
+		if (socket == _reciever->getListenFd())
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+	
+	void			Server::writeEvent(long socket)
+	{
+		if (socket == _reciever->getListenFd())
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+	void			Server::start(void)
+	{
+		_reciever->start();
+		_dispatcher->addListener(this);
 	}
 }

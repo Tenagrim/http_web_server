@@ -12,6 +12,8 @@ namespace ft
 		std::string _uri;
 		std::string _version;
 		std::map<std::string, std::string> _headers;
+
+		
 		Request();
 
 	public:

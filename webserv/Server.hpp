@@ -3,7 +3,7 @@
 #include <IFileManager.hpp>
 #include <ITimeMachine.hpp>
 #include <ILogger.hpp>
-#include <IRequestValidator.hpp>
+#include <RequestReciever.hpp>
 
 #include <Request.hpp>
 
@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <vector>
 
 #include <string>
 #include <exception>
@@ -20,6 +21,13 @@
 
 namespace ft
 {
+	class Dispatcher;
+}
+#include <Dispatcher.hpp>
+namespace ft
+{
+//class Server;
+
 	static const char webpage_header[] =
 		"HTTP/1.1 200 OK\r\n"
 		"Connection: keep-alive\r\n"
@@ -100,14 +108,20 @@ namespace ft
 		int 				ft_sendfile(int out_fd, std::string const &filename);
 		unsigned int		get_file_size(std::string const &filename);
 
-		/*
-	IFileManager			&_f_manager;
-	ILogger					&_logger;
-	ITimeMachine			&_t_machine;
-	IRequestValidator		&_req_validator;
-	*/
+		Dispatcher				*_dispatcher;
+
+		//IRequestReciever		*_reciever;
+
+		RequestReciever			*_reciever;
+
+		IFileManager			*_f_manager;
+		ILogger					*_logger;
+		ITimeMachine			*_t_machine;
+		//IRequestValidator		*_req_validator;
+	
 	public:
 		Server();
+		Server(Dispatcher *disp);
 		virtual ~Server();
 		Server(const Server &ref);
 
@@ -120,5 +134,13 @@ namespace ft
 		int				acceptConnection();
 		int				processConnection();
 		void			close_sockets(void);
+
+		void			gotEvent(long socket);
+		void			readEvent(long socket);
+		void			writeEvent(long socket);
+		long			getListenFd(void);
+
+		//void			run(void);
+		void			start(void);
 	};
 }

@@ -8,7 +8,8 @@ namespace ft
 	{
 	public:
 		virtual IRequest		*getRequest()=0;
+		virtual int				getId()=0;
 
-		virtual ~IRequestReciever();
+		virtual ~IRequestReciever(){}
 	};
 }
