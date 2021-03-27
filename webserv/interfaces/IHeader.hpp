@@ -1,8 +1,27 @@
 #pragma once
 #include <string>
-class IHeader
+
+namespace ft
 {
-public:
-	virtual std::string		str(void) = 0;
-	virtual char			*c_str(void) = 0;
-};
+	enum HeaderType
+	{
+		some_type,
+		some_another_type
+	};
+
+	enum MessageType
+	{
+		request,
+		response
+	};
+
+	class IHeader
+	{
+	public:
+		virtual std::string		str(void) = 0;
+		virtual char			*c_str(void) = 0;
+		virtual HeaderType		getType(void) = 0;
+
+		virtual ~IHeader(){}
+	};
+}

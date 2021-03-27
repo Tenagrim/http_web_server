@@ -5,7 +5,7 @@ int main(int ac, char **av)
 	(void)ac; // FIXME
 	(void)av; // FIXME
 	
-	Server		serv = Server();
+	ft::Server		serv = ft::Server();
 
 	//int			pid;
 	while (1)

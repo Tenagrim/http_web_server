@@ -1,5 +1,12 @@
-class ICgiController
+#pragma once
+
+namespace ft
 {
-	public:
-	// dont exactly know what to do here
-};
+	class ICgiController
+	{
+		public:
+		// dont exactly know what to do here
+
+		virtual ~ICgiController(){}
+	};
+}

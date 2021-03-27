@@ -1,6 +1,13 @@
 #pragma once
 #include <string>
-class ILoggerEvent
+
+namespace ft
 {
-	virtual std::string		str(void) = 0;
-};
+	class ILoggerEvent
+	{
+		public:
+		virtual std::string str(void) = 0;
+
+		virtual ~ILoggerEvent(){}
+	};
+}
