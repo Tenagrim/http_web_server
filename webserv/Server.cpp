@@ -14,7 +14,8 @@ Server::Server()
 	memset(&serv_addr, 0, sizeof(serv_addr));
 
 	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = port; // htons(port);  //FIXME ?
+	//serv_addr.sin_port = port; // htons(port);  //FIXME ?
+	serv_addr.sin_port =  htons(port);  //FIXME ?
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 
 	//std::cout << "htons port: " << htons(port) << "\n";
@@ -138,20 +139,6 @@ int			Server::processConnection()
 	//exit(0);
 	return (1);
 }
-
-int			Server::parentForkPart()
-{
-	close(rc);
-	return (1);
-}
-
-
-
-int						Server::_ncmp(char *buff, char *str)
-{
-	return (strncmp(buff, str, strlen(str)));
-}
-
 
 unsigned int			Server::get_file_size(std::string const &filename)
 {

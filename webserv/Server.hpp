@@ -1,5 +1,10 @@
 #pragma once
 #include <IServer.hpp>
+#include <IFileManager.hpp>
+#include <ITimeMachine.hpp>
+#include <ILogger.hpp>
+#include <IRequestValidator.hpp>
+
 #include <Request.hpp>
 
 #include <sys/socket.h>
@@ -81,7 +86,7 @@ static const char webpage2[] =
 
 static const char					default_hostname[] = "localhost";
 
-class Server : public IServer
+class Server
 {
 private:
 	unsigned int			_flags;
@@ -89,11 +94,17 @@ private:
 	struct hostent			*server;
 	std::string				hostname;
 	int						sockfd, port, rc, pid, err, status, client_fd;
-
+	
 	int						process(int sockfd);;
-	int						_ncmp(char *buff, char *str);
 	int						ft_sendfile(int out_fd, char *filename);
 	unsigned int			get_file_size(std::string const &filename);
+
+	/*
+	IFileManager			&_f_manager;
+	ILogger					&_logger;
+	ITimeMachine			&_t_machine;
+	IRequestValidator		&_req_validator;
+	*/
 public:
 	Server();
 	virtual ~Server();
@@ -106,5 +117,4 @@ public:
 	int			sendResponce(const IResponse &resp);
 	int			acceptConnection();
 	int			processConnection();
-	int			parentForkPart();
 };

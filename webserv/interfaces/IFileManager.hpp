@@ -15,5 +15,8 @@ class IFileManager
 
 		// Last change time 
 		virtual time_t			getCTime(std::string const &filename) = 0;
+
+		// returns opened file descriptor
+		virtual int				getFd(std::string const &filename) = 0;
 		
 };

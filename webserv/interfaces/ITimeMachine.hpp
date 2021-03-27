@@ -2,7 +2,7 @@
 #include <string>
 #include <sys/time.h>
 #include <time.h>
-class ITimaMachine
+class ITimeMachine
 {
 	// get current time as string as presented in http header "Date" or "Last-Modified"
 	//

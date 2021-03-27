@@ -2,11 +2,15 @@
 
 int main(int ac, char **av)
 {
-	IServer		*serv = new Server();
-	int			pid;
+	(void)ac; // FIXME
+	(void)av; // FIXME
+	
+	Server		serv = Server();
+
+	//int			pid;
 	while (1)
 	{
-		serv->acceptConnection();
+		serv.acceptConnection();
 		//pid = fork();
 		//if (pid < 0)
 		//{
@@ -14,11 +18,17 @@ int main(int ac, char **av)
 		//	exit(-5);
 		//}
 		//else if (pid == 0)
-			serv->processConnection();
+			serv.processConnection();
 		//else
 		//	serv->parentForkPart();
 	}
-	
+
+
+	//Request req("GET / HTTP/1.1\r\n");
+
+
+
+
 	/*
 	std::string str("GET /trump.gif HTTP/1.1");
 	int pos = str.find(' ');

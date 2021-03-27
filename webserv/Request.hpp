@@ -8,6 +8,7 @@ class Request : public IRequest
 		std::string							_text;
 		std::string							_method;
 		std::string							_uri;
+		std::string							_version;
 		std::map<std::string, std::string>	_headers;
 		Request();
 	public:
@@ -17,8 +18,9 @@ class Request : public IRequest
 
 		Request								&operator=(const Request &ref); 
 		std::string							&getHeaderValue(std::string const &header);
-		std::map<std::string, std::string>	&getHeaders(std::string const &header);	
+		std::map<std::string, std::string>	&getHeaders(void);	
 		std::string							&getMethod(void);	// GET / POST
 		std::string							&getURI(void);
 		std::string							&getText(void);
+		std::string							&getHTTPVersion(void);
 };
