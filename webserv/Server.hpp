@@ -84,11 +84,7 @@ static const char					default_hostname[] = "localhost";
 class Server : public IServer
 {
 private:
-
-
-
-
-
+	unsigned int			_flags;
 	struct sockaddr_in		serv_addr;
 	struct hostent			*server;
 	std::string				hostname;
@@ -102,8 +98,10 @@ public:
 	Server();
 	virtual ~Server();
 	Server(const Server &ref);
-	Server &operator=(const Server &ref);
-
+	Server		&operator=(const Server &ref);
+	bool		hasFlag(unsigned int flag);
+	int			setFlag(unsigned int flag);
+	int			switchFlag(unsigned int flag);
 	IRequest	*getRequest(void);
 	int			sendResponce(const IResponse &resp);
 	int			acceptConnection();

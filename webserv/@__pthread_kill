@@ -1,9 +1,0 @@
-; id = {0x0000010f}, range = [0x00000000000072b8-0x00000000000072cd), mangled="__pthread_kill"
-; Source location: unknown
-7FFF602B72B8: B8 48 01 00 02             movl   $0x2000148, %eax  ; imm = 0x2000148 
-7FFF602B72BD: 49 89 CA                   movq   %rcx, %r10
-7FFF602B72C0: 0F 05                      syscall 
-7FFF602B72C2: 73 08                      jae    0x7fff602b72cc  ; <+20>
-7FFF602B72C4: 48 89 C7                   movq   %rax, %rdi
-7FFF602B72C7: E9 87 A1 FF FF             jmp    0x7fff602b1453  ; cerror_nocancel
-7FFF602B72CC: C3                         retq   
