@@ -11,6 +11,7 @@
 #include <iostream>		// For cout
 #include <unistd.h>		// For read
 #include <sys/select.h> // For select
+#include <fcntl.h>
 
 #include <errno.h> // may be FORBIDDEN
 

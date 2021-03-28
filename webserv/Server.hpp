@@ -135,7 +135,7 @@ namespace ft
 		int				processConnection();
 		void			close_sockets(void);
 
-		void			gotEvent(long socket);
+		void			gotEvent(Dispatcher_event_args args);
 		void			readEvent(long socket);
 		void			writeEvent(long socket);
 		long			getListenFd(void);

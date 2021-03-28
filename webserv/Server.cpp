@@ -255,7 +255,7 @@ namespace ft
 		return _reciever->getListenFd();
 	}
 
-	void			Server::gotEvent(long socket)
+	void			Server::gotEvent(Dispatcher_event_args args)
 	{
 		if (socket == _reciever->getListenFd())
 		{

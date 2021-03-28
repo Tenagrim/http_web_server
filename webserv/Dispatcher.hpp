@@ -11,13 +11,26 @@ class Server;
 #include <Server.hpp>
 #include <webserv.hpp>
 
-#define UPDATE_DELAY (1000 * 4 * 1000)
+#define UPDATE_DELAY 1000
 
 namespace ft
 {
 
-//class Server;
-//class Dispatcher;
+
+	struct Dispatcher_event_args
+	{
+		int					_fd;
+		disp_event_type		_type;
+
+		Dispatcher_event_args(int __fd, disp_event_type __type) : _fd(__fd), _type(__type){}
+	};
+	
+	enum disp_event_type
+	{
+		reading,
+		writing,
+		timeout
+	};
 
 	class Dispatcher
 	{

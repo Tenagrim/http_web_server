@@ -26,12 +26,12 @@ deb:
 $(OBJ_DIR) : 
 	mkdir $(OBJ_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp 
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp  $(HPP)
 	@echo $@
 	@echo $<
 	$(CC) $(FLAGS) -c $< -o $@
 
-$(NAME): $(OBJ_DIR) $(OBJ)  $(HPP)  # FIXME
+$(NAME): $(OBJ_DIR) $(OBJ) # $(HPP)  # FIXME
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ);
 
 clean:

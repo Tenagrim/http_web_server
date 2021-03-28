@@ -6,7 +6,7 @@ namespace ft
 	Dispatcher::Dispatcher() : _listener_map()
 	{
 		_upd_delay.tv_usec = UPDATE_DELAY % 1000;
-		_upd_delay.tv_sec = UPDATE_DELAY / 1000;
+		_upd_delay.tv_sec = UPDATE_DELAY / 1000000;
 		_listening = 0;
 		FD_ZERO(&_fd_set);
 		_max_fd = 0;
@@ -24,6 +24,9 @@ namespace ft
 			_max_fd = sock;
 		FD_SET(sock, &_fd_set);
 		_listening++;
+			//#ifdef DEBUG
+			//	std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
+			//#endif
 	}
 
 	void Dispatcher::addClient(Server *serv, int sock)
@@ -59,16 +62,39 @@ namespace ft
 
 	void			Dispatcher::updateFdSet()
 	{
+			static int i;
 
+			#ifdef DEBUG
+				std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
+				std::cout << "CLIENTS: \n";
+				fd_map::iterator it = _client_map.begin();
+				for(; it != _client_map.end(); it++)
+					std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+				std::cout << "LISTENERS: \n";
+				it = _listener_map.begin();
+				for(; it != _listener_map.end(); it++)
+					std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+			#endif
 		_events = 0;
 		if (_listening == 0)
 			throw std::runtime_error("No have fd to dispatch");
 		ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
 		FD_ZERO(&_writing_set);
+
+
+			#ifdef DEBUG
+				std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
+			#endif
 		if (_client_map.size() == 0)
-			_events = select(_max_fd, &_reading_set, NULL, NULL, &_upd_delay);
+			_events = select(8, &_reading_set, NULL, NULL, &_upd_delay); // <--------------- !!!!!!!!!!!!!!!!!
 		else
-			_events = select(_max_fd, &_reading_set, &_writing_set, NULL, &_upd_delay);
+			_events = select(8, &_reading_set, &_writing_set, NULL, &_upd_delay);
+			
+			#ifdef DEBUG
+				std::cout << "DISPATCHER: EVENTS UPDATET. GOT: " << _events << "\n";
+			#endif
 
 	}
 
@@ -92,16 +118,21 @@ namespace ft
 			return ;
 		}
 
+
+
+
 		fd_map::iterator it;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set))
-				(*it).second->readEvent((*it).first);
+				(*it).second->gotEvent(Dispatcher_event_args((*it).first, reading));
+
 		}
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set))
 				(*it).second->writeEvent((*it).first);
 		}
+
 	}
 } // namespace ft

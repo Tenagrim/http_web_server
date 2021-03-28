@@ -29,6 +29,7 @@ int main(int ac, char **av)
 	{
 		dispatcher.updateFdSet();
 		dispatcher.handleEvents();
+		usleep(2 * 1000 * 1000);
 	}
 
 
