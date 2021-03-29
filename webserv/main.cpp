@@ -1,27 +1,29 @@
 #include <Server.hpp>
+#include <ConfigParser.hpp>
 
 int main(int ac, char **av)
 {
-	(void)ac; // FIXME
-	(void)av; // FIXME
-	
-	ft::Server		serv = ft::Server();
+//	(void)ac; // FIXME
+//	(void)av; // FIXME
 
-	//int			pid;
-	while (1)
-	{
-		serv.acceptConnection();
-		//pid = fork();
-		//if (pid < 0)
-		//{
-		//	printf("fork error\n");
-		//	exit(-5);
-		//}
-		//else if (pid == 0)
-			serv.processConnection();
-		//else
-		//	serv->parentForkPart();
-	}
+	ft::ConfigParser parser;
+//	ft::Server		serv = ft::Server();
+
+//	int			pid;
+//	while (1)
+//	{
+//		serv.acceptConnection();
+//		//pid = fork();
+//		//if (pid < 0)
+//		//{
+//		//	printf("fork error\n");
+//		//	exit(-5);
+//		//}
+//		//else if (pid == 0)
+//			serv.processConnection();
+//		//else
+//		//	serv->parentForkPart();
+//	}
 
 
 	//Request req("GET / HTTP/1.1\r\n");
