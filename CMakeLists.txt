@@ -5,7 +5,8 @@ INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
 add_executable(
         webserv
         webserv/webserv.hpp
-        webserv/main.cpp
+#        webserv/main.cpp
+        webserv/trash/unitTester.cpp
         webserv/Request.cpp
         webserv/Server.cpp
 #        webserv/ConfigParser.cpp
@@ -39,4 +40,4 @@ add_executable(
         webserv/ResponseBuilder.cpp
         webserv/ResponseBuilder.hpp
         webserv/ft_memcpy.cpp
-)
+        webserv/trash/unitTester.cpp)
