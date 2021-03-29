@@ -8,6 +8,7 @@ namespace ft
 	{
 		public:
 			virtual	bool			isFileExisting(std::string const &filename) = 0;
+			virtual	bool			isADirectory(std::string const &filename) = 0;
 			virtual unsigned int	getFileSize(std::string const &filename) = 0;
 
 			// as in http header content-type

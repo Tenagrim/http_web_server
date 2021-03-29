@@ -31,12 +31,27 @@ namespace ft
 		return (*this);
 	}
 
+	bool			FileManager::isADirectory(std::string const &filename)
+	{
+		struct stat statbuf = {};
+		std::string file;
+		
+		file = _root + filename;
+		stat(file.c_str(), &statbuf);
+		return S_ISDIR(statbuf.st_mode);	
+	}
+
 	bool			FileManager::isFileExisting(std::string const &filename)
 	{
 		struct stat statbuf = {};
 		std::string file;
 
 		file = _root + filename;
+
+		#ifdef DEBUG
+		std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
+		#endif
+
 		return !stat(file.c_str(), &statbuf);
 	}
 
@@ -147,7 +162,10 @@ namespace ft
 		char 		dir[MAXPATHLEN];
 
 		getcwd(dir, MAXPATHLEN);
-		this->_root = dir + new_root;
+		std::string slash;
+		if (new_root[0] != '/')
+			slash += '/';
+		this->_root = dir + slash + new_root;
 		std::cout << "set root: " << _root << std::endl;
 	}
 

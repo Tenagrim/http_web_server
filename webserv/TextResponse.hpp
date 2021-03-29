@@ -1,6 +1,7 @@
 #pragma once
 #include <IResponse.hpp>
 #include <string>
+#include <TextBody.hpp>
 namespace ft
 {
 	class TextResponse : public IResponse

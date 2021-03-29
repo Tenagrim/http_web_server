@@ -26,7 +26,7 @@ namespace ft
 		return (*this);
 	}
 	#pragma endregion
-	
+
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
 		unsigned long	size = resp->size();

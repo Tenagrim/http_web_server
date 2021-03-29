@@ -1,0 +1,3 @@
+[submodule "webserv/nginx-error-pages"]
+	path = webserv/nginx-error-pages
+	url = https://github.com/denysvitali/nginx-error-pages.git

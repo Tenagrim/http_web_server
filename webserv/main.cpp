@@ -31,7 +31,6 @@ int main(int ac, char **av)
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
 	
-	struct sockaddr addr;
 
 	
 

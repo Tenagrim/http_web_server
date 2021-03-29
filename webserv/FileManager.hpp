@@ -3,6 +3,12 @@
 #include <IFileManager.hpp>
 #include <string>
 
+#define DEBUG
+
+#ifdef DEBUG	
+# include <iostream>
+#endif
+
 namespace ft
 {
 	class FileManager : public IFileManager
@@ -16,6 +22,7 @@ namespace ft
 		FileManager &operator=(const FileManager &ref);
 
 		bool			isFileExisting(std::string const &filename);
+		bool			isADirectory(std::string const &filename);
 		unsigned int	getFileSize(std::string const &filename);
 
 			// as in http header content-type
