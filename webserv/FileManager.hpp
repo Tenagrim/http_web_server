@@ -1,7 +1,8 @@
 #pragma once
-#include <IFileManager.hpp>
 
+#include <IFileManager.hpp>
 #include <string>
+
 namespace ft
 {
 	class FileManager : public IFileManager
