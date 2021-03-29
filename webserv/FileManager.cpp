@@ -47,4 +47,8 @@ namespace ft
 	{
 
 	}
+	void			setRoot(std::string const &new_root)
+	{
+
+	}
 }

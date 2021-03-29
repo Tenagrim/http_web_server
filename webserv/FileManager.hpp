@@ -28,6 +28,7 @@ namespace ft
 
 			// returns opened file descriptor
 		int				getFd(std::string const &filename);
+		void			setRoot(std::string const &new_root);
 	};
 
 }
