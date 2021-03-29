@@ -101,7 +101,7 @@ namespace ft
 		"</html>\r\n\r\n";
 
 
-	enum header_keys_enum
+	typedef enum header_keys
 	{
 		h_accept_charsets,
 		h_accept_language,
@@ -121,6 +121,13 @@ namespace ft
 		h_transfer_encoding,
 		h_user_agent,
 		h_www_authenticate
+	} header_keys_enum;
+
+	enum methods_enum
+	{
+		m_get,
+		m_post,
+		m_put
 	};
 
 	enum disp_event_type
@@ -151,4 +158,5 @@ namespace ft
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char *str);
 	std::string			getHeaderKey(header_keys_enum key);
+	std::string			getMethodStr(const methods_enum key);
 }

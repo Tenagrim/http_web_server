@@ -12,9 +12,10 @@ std::ostream			&operator<<(std::ostream &os, const ft::IResponse &ref)
 	os << ref.to_string();
 	return (os);
 }
-
+/*
 std::ostream			&operator<<(std::ostream &os, const ft::IHeader &ref)
 {
-	os << ref.str();
+	os << ref.to_string();
 	return (os);
 }
+*/
