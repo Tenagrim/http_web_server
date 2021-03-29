@@ -28,6 +28,7 @@ namespace ft
 		time_t			getCTime(std::string const &filename);
 
 			// open file & returns it's descriptor
+		int				getFd(std::string const &filename, unsigned int _acess);
 		int				getFdReadOnly(std::string const &filename);
 		int				getFdWriteOnly(std::string const &filename);
 		int				getFdReadWrite(std::string const &filename);

@@ -96,6 +96,18 @@ namespace ft
 		return statbuf.st_ctime;
 	}
 
+	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
+	{
+		int fd;
+		std::string file;
+
+		file = _root + filename;
+		fd = open(file.c_str(), _acess);
+		if (fd < 0)
+			throw CannotOpenFile();
+		return fd;
+	}
+
 	int				FileManager::getFdReadOnly(std::string const &filename)
 	{
 		int fd;
