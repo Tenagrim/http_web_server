@@ -214,7 +214,7 @@ namespace ft
 	}
 
 
-	void					RequestReciever::writeEvent(int sock)
+	void					RequestReciever::writeEvent(int sock, IResponseSender *sender)
 	{
 		if (!_clients.count(sock))
 			throw std::runtime_error("No such client");
@@ -223,8 +223,14 @@ namespace ft
 		if (_clients[sock]->needsResponce())
 		{
 			std::cout << "CLIENT NEEDS RESPONSE ["<< sock <<"]\n";
-			sendResponce(_clients[sock]);
+			//sendResponce(_clients[sock]);
+
+			IResponse	*resp = new TextResponse(std::string(webpage_header) + std::string (webpage_body));
+
 			_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
+			sender->sendResponce(resp, _clients[sock]);
+			delete resp;
+
 		}
 
 	}

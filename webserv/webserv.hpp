@@ -110,7 +110,8 @@ namespace ft
 	{
 		reading,
 		writing,
-		timeout
+		timeout,
+		conn_close
 	};
 
 	enum disp_event_target
@@ -130,5 +131,6 @@ namespace ft
 	
 
 
-	void	*ft_memcpy(void *dest, const void *src, unsigned long num);
+	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
+	unsigned long		ft_strlen(char *str);
 }

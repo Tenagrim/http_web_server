@@ -1,5 +1,4 @@
 #include <Server.hpp>
-#include <Dispatcher.hpp>
 
 namespace ft
 {
@@ -9,7 +8,7 @@ namespace ft
 	{
 
 	}
-	Server::Server(Dispatcher *disp) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	Server::Server(Dispatcher *disp, IResponseSender *sender ) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT)), _resp_sender(sender)
 	{
 		_dispatcher = disp;
 	}
@@ -288,13 +287,18 @@ namespace ft
 	void			Server::listenerEvent(Dispatcher_event_args &args)
 	{
 		int sock;
-		if (args._fd == _reciever->getListenSock())
-		{		
-			sock = _reciever->accept_connection();
-			_dispatcher->addClient(this, sock);
+		if (args._type == reading)
+		{
+			if (args._fd == _reciever->getListenSock())
+			{		
+				sock = _reciever->accept_connection();
+				_dispatcher->addClient(this, sock);
+			}
+			else
+				throw std::runtime_error("Got wrong listener sock");
 		}
 		else
-			throw std::runtime_error("Got wrong listener sock");
+			throw std::runtime_error("SERVER: LISTENER EVENT: Got wrong event target");
 	}
 
 	void			Server::clientEvent(Dispatcher_event_args &args)
@@ -303,6 +307,8 @@ namespace ft
 			clientEventRead(args);
 		else if (args._type == writing)
 			clientEventWrite(args);
+		else if (args._type == conn_close)
+			_reciever->close_connection(args._fd);
 		else
 			throw std::runtime_error("Got wrong event target");
 	}
@@ -318,7 +324,7 @@ namespace ft
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
 	{
 			//std::cout << "CLIENT IS READY TO READ RESPONSE ["<< args._fd <<"]\n";
-			_reciever->writeEvent(args._fd);
+			_reciever->writeEvent(args._fd, _resp_sender);
 	}
 
 	#pragma endregion

@@ -4,6 +4,7 @@
 #include <Dispatcher.hpp>
 #include <FileManager.hpp>
 #include <ResponseBuilder.hpp>
+#include <ResponseSender.hpp>
 
 ft::Server	*SERVER;
 void	sigint_handler(int sig)
@@ -22,7 +23,9 @@ int main(int ac, char **av)
 	ft::Dispatcher			dispatcher;
 	ft::FileManager			fmngr;
 	ft::ResponseBuilder		resp_builder(&fmngr);
-	ft::Server		serv = ft::Server(&dispatcher);
+	ft::ResponseSender		sender(&dispatcher);
+	ft::Server				serv = ft::Server(&dispatcher, &sender);
+
 	serv.start();
 	
 	SERVER = &serv;

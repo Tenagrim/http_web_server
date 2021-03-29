@@ -53,16 +53,33 @@ namespace ft
 		_listening++;
 	}
 
-	void Dispatcher::removeSock(int sock)
+	void Dispatcher::closeSock(int sock)
+	{
+		_socks_to_close.push(sock);
+	}
+	
+	void Dispatcher::closeWhatNeed()
+	{
+		while (!_socks_to_close.empty())
+		{
+			reallyCloseSock(_socks_to_close.top());
+			_socks_to_close.pop();
+		}
+		
+	}
+
+	void Dispatcher::reallyCloseSock(int sock)
 	{
 		if (_listener_map.count(sock))
 		{
+			_listener_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, listener));
 			_listener_map.erase(sock);
 			if (sock == _max_fd)
 				_max_fd = (*(_listener_map.end())).first;
 		}
 		else if (_client_map.count(sock))
 		{
+			_client_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, client));
 			_client_map.erase(sock);
 			if (sock == _max_fd)
 				_max_fd = (*(_client_map.end())).first;
@@ -70,6 +87,7 @@ namespace ft
 		else
 			throw std::runtime_error("requested sock not found to delete it");
 
+		FD_CLR(sock, &_fd_set);
 		_listening--;
 	}
 
@@ -80,7 +98,6 @@ namespace ft
 	void			Dispatcher::updateEvents()
 	{
 		//#undef DEBUG
-
 
 			#ifdef DEBUG
 				static int i;
@@ -103,7 +120,6 @@ namespace ft
 		ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
 		ft_memcpy(&_writing_set, &_fd_set, sizeof(_fd_set));
 		//FD_ZERO(&_writing_set);
-
 
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";

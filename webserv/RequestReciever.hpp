@@ -1,5 +1,6 @@
 #pragma once
 #include <IRequestReciever.hpp>
+#include <IResponseSender.hpp>
 #include <Request.hpp>
 #include <Client.hpp>
 #include <webserv.hpp>
@@ -18,7 +19,9 @@
 #include <sstream>
 #include <map>
 
-#include <errno.h> // may be FORBIDDEN
+#include <errno.h>
+
+#include <TextResponse.hpp> // TEPORARILY
 
 #define DEBUG 1
 
@@ -67,7 +70,7 @@ namespace ft
 		void					close_connections(void);
 		int						getListenSock();
 		
-		void					writeEvent(int sock);
+		void					writeEvent(int sock, IResponseSender *sender);
 		
 		void					sendResponce(Client *client); // REMOVE THIS LOGIC FROM HERE
 

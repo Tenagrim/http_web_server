@@ -47,7 +47,7 @@ namespace ft
 	{
 
 	}
-	void			setRoot(std::string const &new_root)
+	void			FileManager::setRoot(std::string const &new_root)
 	{
 
 	}
