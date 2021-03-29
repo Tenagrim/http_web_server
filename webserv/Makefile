@@ -33,8 +33,8 @@ $(OBJ_DIR)%.o: utils/%.cpp  $(HPP)
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp  $(HPP)
-	@echo $@
-	@echo $<
+#	@echo $@
+#	@echo $<
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(OBJ) # $(HPP)  # FIXME

@@ -67,13 +67,14 @@ namespace ft
 		_sockaddr.sin_port = htons(_port);
 	}
 
+/*
 	void				RequestReciever::unlink_main_socket()
 	{
 		int ret;
 
 		//ret = unlink
 	}
-	
+*/	
 	void			RequestReciever::bind_main_socket(void)
 	{
 		int ret;

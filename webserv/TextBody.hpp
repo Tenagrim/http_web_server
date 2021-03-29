@@ -2,7 +2,7 @@
 #include <IBody.hpp>
 namespace ft
 {
-	class TextBody
+	class TextBody : public IBody
 	{
 	private:
 		TextBody();

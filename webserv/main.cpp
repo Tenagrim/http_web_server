@@ -41,7 +41,7 @@ int main(int ac, char **av)
 		usleep(2 * 1000 * 1000);
 	}
 
-
+	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
 
 	/*
 	std::string str("GET /trump.gif HTTP/1.1");

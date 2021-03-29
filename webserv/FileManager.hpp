@@ -3,7 +3,9 @@
 #include <IFileManager.hpp>
 #include <string>
 
+#ifndef DEBUG
 #define DEBUG
+#endif
 
 #ifdef DEBUG	
 # include <iostream>
@@ -15,6 +17,7 @@ namespace ft
 	{
 	private:
 		std::string		_root;
+		std::string		getPath(std::string const &filename);
 	public:
 		FileManager();
 		virtual ~FileManager();
@@ -40,6 +43,7 @@ namespace ft
 		int				getFdWriteOnly(std::string const &filename);
 		int				getFdReadWrite(std::string const &filename);
 		void			setRoot(std::string const &new_root);
+		std::string		getFullPath(std::string const &filename);
 
 		class CannotOpenFile : public std::exception { const char * what() const throw(); };
 		class NoSuchType : public std::exception { const char * what() const throw(); };

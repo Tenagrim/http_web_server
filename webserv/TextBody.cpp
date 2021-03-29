@@ -15,6 +15,7 @@ namespace ft
 
 	TextBody &TextBody::operator=(const TextBody &ref)
 	{
+		_text = ref._text;
 		return (*this);
 	}
 	bool				TextBody::getFd(void)

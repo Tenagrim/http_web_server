@@ -11,6 +11,7 @@ namespace ft
 
 	ResponseSender::~ResponseSender()
 	{
+		(void)_dispattcher;  // FIXME
 	}
 
 	ResponseSender::ResponseSender(const ResponseSender &ref)

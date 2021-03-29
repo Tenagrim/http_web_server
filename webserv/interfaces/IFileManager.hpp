@@ -26,6 +26,7 @@ namespace ft
 			virtual int				getFdWriteOnly(std::string const &filename) = 0;
 			virtual int				getFdReadWrite(std::string const &filename) = 0;
 			virtual void			setRoot(std::string const &new_root) = 0;
+			virtual std::string		getFullPath(std::string const &filename) = 0;
 
 			virtual ~IFileManager(){}	
 	};

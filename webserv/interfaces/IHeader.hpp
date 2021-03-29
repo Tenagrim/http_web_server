@@ -21,13 +21,13 @@ namespace ft
 	public:
 		virtual std::string			to_string(void)= 0;
 
-		virtual HeaderType			getType(void) const = 0;
+		virtual MessageType			getType(void) const = 0;
 		virtual std::string const	&getHeaderValue(header_keys_enum key) = 0;
 		virtual int					getResponseCode(void) const = 0;
 		virtual std::string			&getURI(void) = 0;
 		virtual std::string			&getHTTPVersion(void) = 0;
 		virtual std::string			&getCodeDescription(void) = 0;
-		virtual methods_enum		getMethod(void) = 0; // GET / POST
+		virtual methods_enum		getMethod(void) const = 0; // GET / POST
 
 		virtual void				setHTTPV(std::string const &new_vers) = 0;
 		virtual void				setMethod(methods_enum new_meth) = 0;
