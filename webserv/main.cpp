@@ -7,7 +7,7 @@ ft::Server	*SERVER;
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	SERVER->close_sockets();
+	SERVER->abort();
 	printf("\n\nSIGINT catched\n\n");
 	exit(2);
 }
@@ -27,7 +27,7 @@ int main(int ac, char **av)
 	
 	while (1)
 	{
-		dispatcher.updateFdSet();
+		dispatcher.updateEvents();
 		dispatcher.handleEvents();
 		usleep(2 * 1000 * 1000);
 	}

@@ -1,6 +1,41 @@
 #include <RequestReciever.hpp>
+
 namespace ft
 {
+	#pragma region Copilen
+
+	RequestReciever::RequestReciever() : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
+	{
+		throw std::runtime_error("No implementation");
+	}
+
+	RequestReciever::RequestReciever(std::string const &host, int port) : _host(host), _port(port), _queue(DEFAULT_CONN_QUEUE)
+	{
+		_client_max_id = 0;
+	}
+
+	RequestReciever::~RequestReciever()
+	{
+		close_connections();
+		close(_main_socket);
+	}
+
+	RequestReciever::RequestReciever(const RequestReciever &ref) : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
+	{
+		(void)ref;
+		throw std::runtime_error("No implementation");
+	}
+
+	RequestReciever &RequestReciever::operator=(const RequestReciever &ref)
+	{
+		(void)ref;
+		throw std::runtime_error("No implementation");
+		return (*this);
+	}
+
+	#pragma endregion
+
+	#pragma region Initialize
 	void			RequestReciever::start()
 	{
 			#ifdef DEBUG
@@ -72,188 +107,123 @@ namespace ft
 				std::cout << "MAIN SOCKET LISTENED\n";
 			#endif
 	}
-	
-	void				RequestReciever::accept_connection()
-	{
-		unsigned int	addrlen;
-			
-			#ifdef DEBUG
-				std::cout << "ATTEMPT TO ACEPT CONNECTION\n";
-			#endif
 
-		addrlen = sizeof(_main_socket);
-		_client_fd = accept(_main_socket, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
-		if (_client_fd < 0)
-			throw std::runtime_error(std::string("\nUnable accept main socket: \n" + std::string(strerror(errno))));
-		_client_connected = true;	
-			#ifdef DEBUG
-				std::cout << "CONNECTION ACCEPTED\n";
-			#endif
-	}
+	#pragma endregion // INITIALIZE
 
-	bool				RequestReciever::is_data_in_socket(int sock)
-	{
-		struct timeval		timeout;
-		int					sret;
-		fd_set				fdset;
-
-		timeout.tv_usec = CHECK_SOCKET_DELAY % 1000;
-		timeout.tv_sec = CHECK_SOCKET_DELAY / 1000;
-		FD_ZERO(&fdset);
-		FD_SET(sock, &fdset);
-
-		sret = select(1, &fdset, NULL, NULL, &timeout);
-
-		if (sret)
-		{
-			#ifdef DEBUG
-				std::cout << "READY TO READ " << sret << " BYTES OF DATA IN SOCKET\n";
-			#endif
-			return true;
-		}
-		else
-		{
-			#ifdef DEBUG
-				std::cout << "NO DATA IN SOCKET\n";
-			#endif
-			return false;
-		}
-	}
-
-	bool				RequestReciever::is_client_data(unsigned int delay)
-	{
-		struct timeval		timeout;
-		int					sret;
-		fd_set				fdset;
-
-		if (!_client_connected)
-		{
-			#ifdef DEBUG
-				std::cout << "NO CLIENT CONNECTED\n";
-			#endif
-			return false;
-		}
-
-		#pragma region save some usecs
-		if (delay <= 1000)
-		{
-			timeout.tv_usec = delay;
-			timeout.tv_sec = 0;
-		}
-		else
-		{
-			timeout.tv_usec = delay % 1000;
-			timeout.tv_sec = delay / 1000;
-		}
-		#pragma endregion
-		
-		FD_ZERO(&fdset);
-		FD_SET(_client_fd, &fdset);
-
-		sret = select(1, &fdset, NULL, NULL, &timeout);
-		//            ^num of fds
-		//                  ^read fds
-		//                        ^write fds
-		//                              ^err fds
-		//                                    ^delay
-		return (sret);	
-		/*
-		if (sret)
-		{
-			#ifdef DEBUG
-				std::cout << "READY TO READ " << sret << " BYTES OF DATA\n";
-			#endif
-			return true;
-		}
-		else
-		{
-			#ifdef DEBUG
-				std::cout << "NO CLIENT DATA HERE\n";
-			#endif
-			return false;
-		}
-		*/
-	}
-
-	std::string			RequestReciever::read_client_fd()
-	{
-		std::stringstream	ss;
-		char				buff[READ_BUFF_SIZE];
-		int					readed;
-			
-			#ifdef DEBUG
-				std::cout << "READING CLIENT FD\n";
-			#endif
-
-		while (is_client_data(CHECK_SOCKET_DELAY)) 
-		{
-			readed = read(_client_fd, buff, READ_BUFF_SIZE - 1);
-			if (readed == - 1)
-				throw std::runtime_error(std::string("\nUnable read client socket: \n" + std::string(strerror(errno))));
-			ss << buff;
-		}
-			#ifdef DEBUG
-				std::cout << "CLIENT FD READED\n";
-			#endif
-		return(ss.str());
-	}
-	
-	void					RequestReciever::close_connection()
-	{
-		if (_client_connected)
-		{
-			close(_client_fd);
-			_client_connected = false;
-		}
-	}
-
-
-	IRequest				*RequestReciever::getRequest()
-	{
-		if (!_client_connected)
-			throw std::runtime_error("No Client Connected");
-		if (!is_client_data(CHECK_SOCKET_DELAY))
-			throw std::runtime_error("No Client Data to read");
-		
-		std::string		text = read_client_fd();
-		return new Request(text);
-	}
-
-	RequestReciever::RequestReciever() : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
-	{
-		throw std::runtime_error("No implementation");
-	}
-
-	RequestReciever::RequestReciever(std::string const &host, int port) : _host(host), _port(port), _queue(DEFAULT_CONN_QUEUE),  _client_connected(false)
-	{
-	}
-
-	RequestReciever::~RequestReciever()
-	{
-		close_connection();
-		close(_main_socket);
-	}
-
-	RequestReciever::RequestReciever(const RequestReciever &ref) : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
-	{
-		(void)ref;
-		throw std::runtime_error("No implementation");
-	}
-
-	RequestReciever &RequestReciever::operator=(const RequestReciever &ref)
-	{
-		(void)ref;
-		throw std::runtime_error("No implementation");
-		return (*this);
-	}
-
+	#pragma region Getters
 	int						RequestReciever::getId()
 	{
 		return(_id);
 	}
 
-	long					RequestReciever::getListenFd()
+	int						RequestReciever::getListenSock()
 	{
 		return _main_socket;
 	}
+	#pragma endregion
+
+	#pragma region Connections
+
+	int					RequestReciever::accept_connection()
+	{
+		unsigned int	addrlen;
+		int				_client_fd;
+			
+			#ifdef DEBUG
+				std::cout << "ATTEMPT TO ACCEPT CONNECTION\n";
+			#endif
+		
+		/*
+		if ( _client)
+		{ 
+			#ifdef DEBUG
+				std::cout << "ALREADY CONNNECTED\n";
+			#endif
+			return 0;
+		}
+		*/
+
+		addrlen = sizeof(_main_socket);
+		_client_fd = accept(_main_socket, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
+		if (_client_fd < 0)
+			throw std::runtime_error(std::string("\nUnable accept main socket: \n" + std::string(strerror(errno))));
+
+		//_client = new Client(_client_max_id++, _client_fd);
+
+		_clients[_client_fd] = new Client(_client_max_id++, _client_fd);
+
+			#ifdef DEBUG
+				std::cout << "CONNECTION ACCEPTED\n";
+			#endif
+		return _client_fd;
+	}
+	
+	void					RequestReciever::close_connection(int sock)
+	{
+		if (!_clients.count(sock))
+			throw std::runtime_error("Can t close: No such connection");
+
+		delete	_clients[sock];
+		_clients.erase(sock);
+	}
+
+	void					RequestReciever::close_connections(void)
+	{
+		fd_map::iterator	it;
+		for(it = _clients.begin(); it != _clients.end(); it++)
+			close_connection((*it).first);
+	}
+
+	#pragma endregion
+
+
+	IRequest				*RequestReciever::getRequest(int sock)
+	{
+		//if (_client->getSock() != sock)
+		//	throw std::runtime_error("No client with this sock");
+		return getRequest(_clients[sock]);
+	}
+
+	IRequest				*RequestReciever::getRequest(Client *client)
+	{
+		char				buff[READ_BUFF_SIZE];
+		std::stringstream	ss;
+		int					n;
+		IRequest			*request;
+
+		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
+		buff[n] = 0;
+		ss << buff;
+
+		request = new Request(ss.str());
+
+		client->setFlag(Client::state_flags, Client::need_response);
+		client->setLastRequest(request);
+
+
+		return (request);
+	}
+
+	void					RequestReciever::sendResponce(Client *client)
+	{
+		write(client->getSock(), webpage2_header, sizeof(webpage2_header));
+		write(client->getSock(), webpage2_body, sizeof(webpage2_body));
+	}
+
+
+	void					RequestReciever::writeEvent(int sock)
+	{
+		if (!_clients.count(sock))
+			throw std::runtime_error("No such client");
+		
+		std::cout << "RECIEVER: WRITE EVENT\n";
+		if (_clients[sock]->needsResponce())
+		{
+			std::cout << "CLIENT NEEDS RESPONSE ["<< sock <<"]\n";
+			sendResponce(_clients[sock]);
+			_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
+		}
+
+	}
+
 }

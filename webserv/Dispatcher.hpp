@@ -17,20 +17,7 @@ namespace ft
 {
 
 
-	struct Dispatcher_event_args
-	{
-		int					_fd;
-		disp_event_type		_type;
 
-		Dispatcher_event_args(int __fd, disp_event_type __type) : _fd(__fd), _type(__type){}
-	};
-	
-	enum disp_event_type
-	{
-		reading,
-		writing,
-		timeout
-	};
 
 	class Dispatcher
 	{
@@ -49,6 +36,10 @@ namespace ft
 		unsigned int			_listening;
 		int						_max_fd;
 
+		void					handleListeners(void);
+		void					handleClients(void);
+		void					handleClientsRead(void);
+		void					handleClientsWrite(void);
 	public:
 		Dispatcher();
 		~Dispatcher();
@@ -57,7 +48,7 @@ namespace ft
 		void			addListener(ft::Server *serv);
 		void			addClient(ft::Server *serv, int sock);
 		void			removeSock(int sock);
-		void			updateFdSet();
+		void			updateEvents();
 		void			handleEvents();
 	};
 

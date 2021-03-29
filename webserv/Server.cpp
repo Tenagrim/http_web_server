@@ -3,14 +3,38 @@
 
 namespace ft
 {
-	Server::Server() : _reciever(new RequestReciever("localhost", 80))
+	#pragma region Copilen
+
+	Server::Server() : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
 	{
 
 	}
-	Server::Server(Dispatcher *disp) : _reciever(new RequestReciever("localhost", 80))
+	Server::Server(Dispatcher *disp) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
 	{
 		_dispatcher = disp;
 	}
+	
+	Server::~Server()
+	{
+		delete _reciever;
+	}
+
+	Server::Server(const Server &ref) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	{
+		(void)ref;
+		throw std::runtime_error("no implementation");
+	}
+
+	Server &Server::operator=(const Server &ref)
+	{
+		(void)ref;
+		throw std::runtime_error("no implementation");
+		return (*this);
+	}
+
+	#pragma endregion
+
+	#pragma region Legacy trash
 	/*
 	{
 		bool st = false;
@@ -58,32 +82,7 @@ namespace ft
 			throw std::runtime_error("Unable to listen socket");
 		}
 	}
-*/
-
-	Server::~Server()
-	{
-		delete _reciever;
-	}
-
-	Server::Server(const Server &ref) : _reciever(new RequestReciever())
-	{
-		(void)ref;
-		throw std::runtime_error("no implementation");
-	}
-
-	Server &Server::operator=(const Server &ref)
-	{
-		(void)ref;
-		throw std::runtime_error("no implementation");
-		return (*this);
-	}
-
-	int Server::acceptConnection()
-	{
-		_reciever->accept_connection();
-		_dispatcher->addClient(this, _reciever->getListenFd());
-		return (1);
-	}
+	*/
 
 	int Server::process()
 	{
@@ -220,12 +219,29 @@ namespace ft
 		return (1);
 	}
 
+	void	Server::close_sockets(void)
+	{
+		close(this->client_fd);
+		close(this->sockfd);	
+	}
+
+	#pragma endregion // Legacy trash
+
+	int Server::acceptConnection()
+	{
+		_reciever->accept_connection();
+		_dispatcher->addClient(this, _reciever->getListenSock());
+		return (1);
+	}
+
 	int Server::sendResponce(const IResponse &resp)
 	{
 		(void)resp;
 		throw std::runtime_error("No implementation");
 		return (-1);
 	}
+
+	#pragma region  Flags operations
 
 	bool Server::hasFlag(unsigned int flag)
 	{
@@ -234,66 +250,87 @@ namespace ft
 		else
 			return (false);
 	}
+
 	int Server::setFlag(unsigned int flag)
 	{
 		_flags |= flag;
 		return (1);
 	}
+
 	int Server::switchFlag(unsigned int flag)
 	{
 		_flags ^= flag;
 		return (1);
 	}
-	void	Server::close_sockets(void)
+
+	#pragma endregion
+
+	int				Server::getListenSock(void)
 	{
-		close(this->client_fd);
-		close(this->sockfd);
+		return _reciever->getListenSock();
 	}
 
-	long			Server::getListenFd(void)
-	{
-		return _reciever->getListenFd();
-	}
+	#pragma region Events operations
 
 	void			Server::gotEvent(Dispatcher_event_args args)
-	{
-		if (socket == _reciever->getListenFd())
-		{
-
-		}
+	{	
+		#ifdef DEBUG
+			std::cout << "SERVER: GOT EVENT\n";
+		#endif
+		if (args._target == listener)
+			listenerEvent(args);
+		else if (args._target == client)
+			clientEvent(args);
 		else
-		{
-
-		}
+			throw std::runtime_error("Wrong event type");
 	}
 
-	void			Server::readEvent(long socket)
+	void			Server::listenerEvent(Dispatcher_event_args &args)
 	{
-		if (socket == _reciever->getListenFd())
-		{
-
+		int sock;
+		if (args._fd == _reciever->getListenSock())
+		{		
+			sock = _reciever->accept_connection();
+			_dispatcher->addClient(this, sock);
 		}
 		else
-		{
-
-		}
+			throw std::runtime_error("Got wrong listener sock");
 	}
-	
-	void			Server::writeEvent(long socket)
+
+	void			Server::clientEvent(Dispatcher_event_args &args)
 	{
-		if (socket == _reciever->getListenFd())
-		{
-
-		}
+		if (args._type == reading)
+			clientEventRead(args);
+		else if (args._type == writing)
+			clientEventWrite(args);
 		else
-		{
-
-		}
+			throw std::runtime_error("Got wrong event target");
 	}
+
+
+	void			Server::clientEventRead(Dispatcher_event_args &args)
+	{
+			IRequest	*request = _reciever->getRequest(args._fd);
+			std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
+			std::cout << request->to_string() << "===========================\n";
+	}
+
+	void			Server::clientEventWrite(Dispatcher_event_args &args)
+	{
+			//std::cout << "CLIENT IS READY TO READ RESPONSE ["<< args._fd <<"]\n";
+			_reciever->writeEvent(args._fd);
+	}
+
+	#pragma endregion
 
 	void			Server::start(void)
 	{
 		_reciever->start();
 		_dispatcher->addListener(this);
+	}
+
+	void			Server::abort(void)
+	{
+		delete _reciever;
 	}
 }
