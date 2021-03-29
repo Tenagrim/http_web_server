@@ -33,7 +33,6 @@ namespace ft
 		std::string		str = resp->to_string();
 		//char const	*c_resp = resp->to_string().c_str();
 		write(client->getSock(), str.c_str(), size);
-		_dispattcher->closeSock(client->getSock());
 		return (1);
 	}
 }

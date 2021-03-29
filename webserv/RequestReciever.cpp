@@ -67,6 +67,13 @@ namespace ft
 		_sockaddr.sin_port = htons(_port);
 	}
 
+	void				RequestReciever::unlink_main_socket()
+	{
+		int ret;
+
+		//ret = unlink
+	}
+	
 	void			RequestReciever::bind_main_socket(void)
 	{
 		int ret;
@@ -214,7 +221,7 @@ namespace ft
 	}
 
 
-	void					RequestReciever::writeEvent(int sock, IResponseSender *sender)
+	int					RequestReciever::writeEvent(int sock)
 	{
 		if (!_clients.count(sock))
 			throw std::runtime_error("No such client");
@@ -222,17 +229,17 @@ namespace ft
 		std::cout << "RECIEVER: WRITE EVENT\n";
 		if (_clients[sock]->needsResponce())
 		{
-			std::cout << "CLIENT NEEDS RESPONSE ["<< sock <<"]\n";
-			//sendResponce(_clients[sock]);
-
-			IResponse	*resp = new TextResponse(std::string(webpage_header) + std::string (webpage_body));
-
 			_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
-			sender->sendResponce(resp, _clients[sock]);
-			delete resp;
-
+			return (1);
 		}
+		return (0);
 
+	}
+	IClient					*RequestReciever::getClient(int sock)
+	{
+		if (!_clients.count(sock))
+			throw std::runtime_error("No such client");
+		return(_clients[sock]);
 	}
 
 }

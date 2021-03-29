@@ -34,6 +34,7 @@ namespace ft
 	void Dispatcher::addListener(Server *serv)
 	{
 		int sock = serv->getListenSock();
+		std::cout << "ADD LISTENER[" << sock << "]\n";
 		_listener_map[sock] = serv;
 		if (sock > _max_fd)
 			_max_fd = sock;
@@ -46,6 +47,7 @@ namespace ft
 
 	void Dispatcher::addClient(Server *serv, int sock)
 	{
+		std::cout << "ADD CLIENT[" << sock << "]\n";
 		_client_map[sock] = serv;
 		if (sock > _max_fd)
 			_max_fd = sock;
@@ -60,9 +62,19 @@ namespace ft
 	
 	void Dispatcher::closeWhatNeed()
 	{
+		int sock;
+		if (!_socks_to_close.empty())
+		std::cout << "CLOSING SOCKETS";
 		while (!_socks_to_close.empty())
 		{
-			reallyCloseSock(_socks_to_close.top());
+			sock = _socks_to_close.top();
+			std::cout << " CLOSING[" << sock<< "]\n";
+			reallyCloseSock(sock);
+			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+				std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+			std::cout << " CLOSED[" << sock<< "]\n";
+			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
 			_socks_to_close.pop();
 		}
 		
@@ -75,14 +87,21 @@ namespace ft
 			_listener_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, listener));
 			_listener_map.erase(sock);
 			if (sock == _max_fd)
-				_max_fd = (*(_listener_map.end())).first;
+				_max_fd = _listener_map.rbegin()->first;
 		}
 		else if (_client_map.count(sock))
 		{
 			_client_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, client));
 			_client_map.erase(sock);
 			if (sock == _max_fd)
-				_max_fd = (*(_client_map.end())).first;
+			{
+				if (_client_map.size())
+					_max_fd = _client_map.rbegin()->first;
+				else if (_listener_map.size())
+					_max_fd = _listener_map.rbegin()->first;
+				else
+					_max_fd = 0;
+			}
 		}
 		else
 			throw std::runtime_error("requested sock not found to delete it");
@@ -171,6 +190,7 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
+		closeWhatNeed();
 	}
 
 	void			Dispatcher::handleEvents()

@@ -8,7 +8,8 @@ namespace ft
 	{
 
 	}
-	Server::Server(Dispatcher *disp, IResponseSender *sender ) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT)), _resp_sender(sender)
+
+	Server::Server(Dispatcher *disp, IResponseSender *sender , IResponseBuilder *builder) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT)), _resp_sender(sender), _resp_builder(builder)
 	{
 		_dispatcher = disp;
 	}
@@ -324,7 +325,21 @@ namespace ft
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
 	{
 			//std::cout << "CLIENT IS READY TO READ RESPONSE ["<< args._fd <<"]\n";
-			_reciever->writeEvent(args._fd, _resp_sender);
+
+		if (_reciever->writeEvent(args._fd))
+		{
+			std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+			//sendResponce(_clients[sock]);
+			IClient	*client = _reciever->getClient(args._fd);
+
+			IResponse	*resp = _resp_builder->buildResponse(client->getLastRequest()) ;
+			std::cout << "RESPONSE SENT: ================\n";
+			_resp_sender->sendResponce(resp, client);
+			std::cout << resp->to_string() << "\n";
+			_dispatcher->closeSock(client->getSock());
+			std::cout << "SOCKET CLOSED: " << client->getSock() << " ================\n";
+			delete resp;
+		}
 	}
 
 	#pragma endregion

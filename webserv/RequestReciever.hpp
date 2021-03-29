@@ -28,7 +28,7 @@
 namespace ft
 {
 
-	#define DEFAULT_PORT			83
+	#define DEFAULT_PORT			84
 	#define DEFAULT_HOST			"localhost"
 	#define DEFAULT_CONN_QUEUE		10
 	#define READ_BUFF_SIZE			2048
@@ -54,6 +54,7 @@ namespace ft
 		void				init_sockaddr();
 		void				bind_main_socket();
 		void				listen_main_socket();
+		void				unlink_main_socket();
 		
 		RequestReciever();
 	public:
@@ -69,8 +70,9 @@ namespace ft
 		void					close_connection(int sock);
 		void					close_connections(void);
 		int						getListenSock();
+		IClient					*getClient(int sock);
 		
-		void					writeEvent(int sock, IResponseSender *sender);
+		int						writeEvent(int sock);
 		
 		void					sendResponce(Client *client); // REMOVE THIS LOGIC FROM HERE
 

@@ -24,13 +24,17 @@ int main(int ac, char **av)
 	ft::FileManager			fmngr;
 	ft::ResponseBuilder		resp_builder(&fmngr);
 	ft::ResponseSender		sender(&dispatcher);
-	ft::Server				serv = ft::Server(&dispatcher, &sender);
+	ft::Server				serv = ft::Server(&dispatcher, &sender, &resp_builder);
 
 	serv.start();
 	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
 	
+	struct sockaddr addr;
+
+	
+
 	while (1)
 	{
 		dispatcher.updateEvents();

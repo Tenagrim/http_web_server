@@ -5,6 +5,8 @@
 #include <ILogger.hpp>
 #include <RequestReciever.hpp>
 #include <IResponseSender.hpp>
+#include <IResponseBuilder.hpp>
+#include <ResponseBuilder.hpp>
 
 #include <Request.hpp>
 
@@ -56,6 +58,7 @@ namespace ft
 		ILogger					*_logger;
 		ITimeMachine			*_t_machine;
 		IResponseSender			*_resp_sender;
+		IResponseBuilder		*_resp_builder;
 		//IRequestValidator		*_req_validator;
 		
 		void			close_sockets(void);
@@ -66,7 +69,7 @@ namespace ft
 	
 		Server();
 	public:
-		Server(Dispatcher *disp, IResponseSender *resp);
+		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
 		virtual ~Server();
 		Server(const Server &ref);
 
