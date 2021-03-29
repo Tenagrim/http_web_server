@@ -1,6 +1,10 @@
 #pragma once
 #include <IResponseBuilder.hpp>
 #include <IFileManager.hpp>
+
+#include <TextResponse.hpp>
+#include <webserv.hpp>
+
 namespace ft
 {
 	class ResponseBuilder : public IResponseBuilder

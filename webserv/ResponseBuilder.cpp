@@ -30,7 +30,6 @@ namespace ft
 	{
 		(void)request;
 		(void)_fmngr;
-		throw std::runtime_error("not impleented");
-		return 0;
+		return new TextResponse(std::string(webpage_header) + std::string (webpage_body));
 	}
 }

@@ -34,6 +34,7 @@ namespace ft
 	void Dispatcher::addListener(Server *serv)
 	{
 		int sock = serv->getListenSock();
+		std::cout << "ADD LISTENER[" << sock << "]\n";
 		_listener_map[sock] = serv;
 		if (sock > _max_fd)
 			_max_fd = sock;
@@ -46,6 +47,7 @@ namespace ft
 
 	void Dispatcher::addClient(Server *serv, int sock)
 	{
+		std::cout << "ADD CLIENT[" << sock << "]\n";
 		_client_map[sock] = serv;
 		if (sock > _max_fd)
 			_max_fd = sock;
@@ -53,23 +55,58 @@ namespace ft
 		_listening++;
 	}
 
-	void Dispatcher::removeSock(int sock)
+	void Dispatcher::closeSock(int sock)
+	{
+		_socks_to_close.push(sock);
+	}
+	
+	void Dispatcher::closeWhatNeed()
+	{
+		int sock;
+		if (!_socks_to_close.empty())
+		std::cout << "CLOSING SOCKETS";
+		while (!_socks_to_close.empty())
+		{
+			sock = _socks_to_close.top();
+			std::cout << " CLOSING[" << sock<< "]\n";
+			reallyCloseSock(sock);
+			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+				std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+			std::cout << " CLOSED[" << sock<< "]\n";
+			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
+			_socks_to_close.pop();
+		}
+		
+	}
+
+	void Dispatcher::reallyCloseSock(int sock)
 	{
 		if (_listener_map.count(sock))
 		{
+			_listener_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, listener));
 			_listener_map.erase(sock);
 			if (sock == _max_fd)
-				_max_fd = (*(_listener_map.end())).first;
+				_max_fd = _listener_map.rbegin()->first;
 		}
 		else if (_client_map.count(sock))
 		{
+			_client_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, client));
 			_client_map.erase(sock);
 			if (sock == _max_fd)
-				_max_fd = (*(_client_map.end())).first;
+			{
+				if (_client_map.size())
+					_max_fd = _client_map.rbegin()->first;
+				else if (_listener_map.size())
+					_max_fd = _listener_map.rbegin()->first;
+				else
+					_max_fd = 0;
+			}
 		}
 		else
 			throw std::runtime_error("requested sock not found to delete it");
 
+		FD_CLR(sock, &_fd_set);
 		_listening--;
 	}
 
@@ -80,7 +117,6 @@ namespace ft
 	void			Dispatcher::updateEvents()
 	{
 		//#undef DEBUG
-
 
 			#ifdef DEBUG
 				static int i;
@@ -103,7 +139,6 @@ namespace ft
 		ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
 		ft_memcpy(&_writing_set, &_fd_set, sizeof(_fd_set));
 		//FD_ZERO(&_writing_set);
-
 
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
@@ -155,6 +190,7 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
+		closeWhatNeed();
 	}
 
 	void			Dispatcher::handleEvents()

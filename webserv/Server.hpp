@@ -4,6 +4,9 @@
 #include <ITimeMachine.hpp>
 #include <ILogger.hpp>
 #include <RequestReciever.hpp>
+#include <IResponseSender.hpp>
+#include <IResponseBuilder.hpp>
+#include <ResponseBuilder.hpp>
 
 #include <Request.hpp>
 
@@ -54,6 +57,8 @@ namespace ft
 		IFileManager			*_f_manager;
 		ILogger					*_logger;
 		ITimeMachine			*_t_machine;
+		IResponseSender			*_resp_sender;
+		IResponseBuilder		*_resp_builder;
 		//IRequestValidator		*_req_validator;
 		
 		void			close_sockets(void);
@@ -62,9 +67,9 @@ namespace ft
 		void			clientEventRead(Dispatcher_event_args &args);
 		void			clientEventWrite(Dispatcher_event_args &args);
 	
-	public:
 		Server();
-		Server(Dispatcher *disp);
+	public:
+		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
 		virtual ~Server();
 		Server(const Server &ref);
 

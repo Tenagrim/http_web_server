@@ -15,6 +15,8 @@ namespace ft
 	Client::~Client()
 	{
 		close(_sock);
+		if (_last_request)
+			delete _last_request;
 	}
 
 	Client::Client(const Client &ref)
@@ -88,6 +90,11 @@ namespace ft
 		_last_request = request;
 	}
 	
+	IRequest		*Client::getLastRequest(void)
+	{
+		return _last_request;
+	}
+
 	bool			Client::needsResponce(void)
 	{
 		if (hasFlag(state_flags, need_response))

@@ -31,7 +31,7 @@ namespace ft
 		};
 
 		Client(int id, int sock);
-		~Client();
+		virtual ~Client();
 		Client(const Client &ref);
 		Client			&operator=(const Client &ref);
 		
@@ -43,6 +43,7 @@ namespace ft
 		int				unsetFlag(client_flags type,unsigned int flag);
 		int				switchFlag(client_flags type,unsigned int flag);
 		void			setLastRequest(IRequest *request);
+		IRequest		*getLastRequest(void);
 		bool			needsResponce(void);
 
 	private:
