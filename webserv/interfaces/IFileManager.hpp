@@ -21,6 +21,7 @@ namespace ft
 
 			// returns opened file descriptor
 			virtual int				getFd(std::string const &filename) = 0;
+			virtual void			setRoot(std::string const &new_root) = 0;
 
 			virtual ~IFileManager(){}	
 	};

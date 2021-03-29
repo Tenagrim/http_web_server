@@ -79,7 +79,7 @@ namespace ft
 
 	void			Dispatcher::updateEvents()
 	{
-		#undef DEBUG
+		//#undef DEBUG
 
 
 			#ifdef DEBUG
@@ -117,7 +117,7 @@ namespace ft
 				std::cout << "DISPATCHER: EVENTS UPDATET. GOT: " << _events << "\n";
 			#endif
 
-		#define DEBUG
+		//#define DEBUG
 	}
 
 

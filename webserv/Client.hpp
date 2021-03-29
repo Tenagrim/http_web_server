@@ -3,11 +3,10 @@
 #include <unistd.h>		// for close
 #include <sys/time.h>
 #include <IRequest.hpp>
+#include <IClient.hpp>
 namespace ft
 {
-
-	
-	class Client
+	class Client : public IClient
 	{
 	public:
 		enum client_flags

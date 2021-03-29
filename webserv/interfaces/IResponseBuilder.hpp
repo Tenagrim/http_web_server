@@ -1,9 +1,12 @@
 #pragma once
+#include <IRequest.hpp>
+#include <IResponse.hpp>
 namespace ft
 {
 	class IResponseBuilder
 	{
 	public:
-	virtual ~IResponseBuilder() = 0;
+	virtual		IResponse	*buildResponse(IRequest	*request) = 0;
+	virtual		~IResponseBuilder(){};
 	};
 }

@@ -2,6 +2,8 @@
 
 #include <signal.h> // FIXME
 #include <Dispatcher.hpp>
+#include <FileManager.hpp>
+#include <ResponseBuilder.hpp>
 
 ft::Server	*SERVER;
 void	sigint_handler(int sig)
@@ -17,8 +19,9 @@ int main(int ac, char **av)
 	(void)ac; // FIXME
 	(void)av; // FIXME
 
-	ft::Dispatcher 	dispatcher;
-
+	ft::Dispatcher			dispatcher;
+	ft::FileManager			fmngr;
+	ft::ResponseBuilder		resp_builder(&fmngr);
 	ft::Server		serv = ft::Server(&dispatcher);
 	serv.start();
 	

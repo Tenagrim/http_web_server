@@ -206,8 +206,11 @@ namespace ft
 
 	void					RequestReciever::sendResponce(Client *client)
 	{
-		write(client->getSock(), webpage2_header, sizeof(webpage2_header));
-		write(client->getSock(), webpage2_body, sizeof(webpage2_body));
+		write(client->getSock(), webpage_header, sizeof(webpage_header));
+		std::cout << "HEADER SEND ["<< client->getSock() <<"]\n";
+		write(client->getSock(), webpage_body, sizeof(webpage_body));
+		std::cout << "RESPONSE SEND ["<< client->getSock() <<"]\n";
+
 	}
 
 
