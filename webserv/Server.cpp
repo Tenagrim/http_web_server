@@ -328,11 +328,24 @@ namespace ft
 
 		if (_reciever->writeEvent(args._fd))
 		{
+			IResponse		*resp;
+			IClient			*client;
 			std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
-			//sendResponce(_clients[sock]);
-			IClient	*client = _reciever->getClient(args._fd);
+			client = _reciever->getClient(args._fd);
+			if (client->getLastRequest() && client->getLastRequest()->getText().size() == 0)
+			{
+				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
+				_dispatcher->closeSock(client->getSock());
+				return;
+			}
 
-			IResponse	*resp = _resp_builder->buildResponse(client->getLastRequest()) ;
+			if (!client->getLastResponse())
+			{
+				resp = _resp_builder->buildResponse(client->getLastRequest());
+				client->setLastResponse(resp);
+			}
+			else
+				resp = client->getLastResponse();
 			std::cout << "RESPONSE SENT: ================\n";
 			_resp_sender->sendResponce(resp, client);
 			//std::cout << resp->to_string() << "\n";
@@ -340,8 +353,9 @@ namespace ft
 			std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
 			if (client->requestReceived() && !client->needsResponce())
 				_dispatcher->closeSock(client->getSock());
-			std::cout << "SOCKET CLOSED: " << client->getSock() << " ================\n";
-			delete resp;
+
+
+			std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 		}
 	}
 

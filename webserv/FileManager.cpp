@@ -136,7 +136,7 @@ namespace ft
 			throw CannotOpenFile();
 	}
 */
-	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
+	int				FileManager::getFd(std::string const &filename, unsigned int _acess = O_RDONLY)
 	{
 		int fd;
 		std::string file;

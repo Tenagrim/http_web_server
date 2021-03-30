@@ -18,7 +18,7 @@ namespace ft
 		_text = ref._text;
 		return (*this);
 	}
-	bool				TextBody::getFd(void)
+	int					TextBody::getFd(void)
 	{
 		throw std::runtime_error("Not implemented");
 	}
@@ -34,4 +34,5 @@ namespace ft
 	{
 		throw std::runtime_error("Not implemented");
 	}
+
 }

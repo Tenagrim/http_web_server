@@ -11,8 +11,8 @@ namespace ft
 		IHeader		*_header;
 		IBody			*_body;
 		TextResponse();
-		TextResponse(std::string const &text);
 	public:
+		TextResponse(std::string const &text);
 		TextResponse(IHeader *head, IBody *body);
 		~TextResponse();
 		TextResponse(const TextResponse &ref);
@@ -24,6 +24,8 @@ namespace ft
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
 		unsigned long			size() const;
+
+
 	};
 
 }

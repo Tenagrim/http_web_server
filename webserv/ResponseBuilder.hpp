@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <Header.hpp>
 #include <stdlib.h>
+#include <FileBody.hpp>
+
 
 #include <list>
 
@@ -35,6 +37,9 @@ namespace ft
 		IHeader				*buildHeader(IBody *body);
 		IHeader				*buildHeader(int ret_code, std::string descr, IBody *body);
 		IBody				*bodyFromFile(std::string const &filename);
+
+		TextBody			*buildTextBody(std::string const &filename);
+		FileBody			*buildFileBody(std::string const &filename);
 
 	public:
 		ResponseBuilder(IFileManager	*mngr);

@@ -45,13 +45,14 @@ namespace ft
 		return fd;
 	}
 
-	IBody				*ResponseBuilder::bodyFromFile(std::string const &filename)
+
+	TextBody			*ResponseBuilder::buildTextBody(std::string const &filename)
 	{
-		int					fd;
-		unsigned int		size;
-		char				*buff;
-		int					ret;
-		IBody				*res;
+		//int					fd;
+		//unsigned int		size;
+		//char				*buff;
+		//int					ret;
+		TextBody			*res;
 		std::stringstream	ss;
 		std::string			str;
 		std::ifstream		fin(_fmngr->getFullPath(filename), std::ios::binary);
@@ -76,6 +77,28 @@ namespace ft
 		//delete[] buff;
 		fin.close();
 		return (res);
+	}
+
+	FileBody			*ResponseBuilder::buildFileBody(std::string const &filename)
+	{
+		std::cout << "BUILDER: BUILD FILE BODY ["<< filename <<"]\n";
+		
+		FileBody *res = new FileBody(_fmngr->getFileSize(filename), _fmngr->getFd(filename), _fmngr->getFullPath(filename));
+		std::cout << "BUILDER: BUILDING COMPLETED ["<<res->size() <<"] ["<< res->getFd() <<"] ["<< _fmngr->getFullPath(filename) <<"]\n";
+		//std::cout << "BUILDER: RESPONSE TEXT: ==============\n" << res->to_string() << "=============================\n";
+		return (res);
+	}
+
+	IBody				*ResponseBuilder::bodyFromFile(std::string const &filename)
+	{
+		std::string type;
+
+		type = _fmngr->getContentType(filename);
+		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
+		if (type.find("text") != std::string::npos)
+			return (buildTextBody(filename));
+		else
+			return (buildFileBody(filename));
 	}
 
 	IResponse			*ResponseBuilder::buildFromFile(std::string const &filename)
@@ -144,7 +167,7 @@ namespace ft
 		else
 			std::cout << "FILE NOT EXISTS\n";
 		
-		throw std::runtime_error("Need to send 404 (not implemented)");
-		//return new TextResponse(std::string(webpage_header) + std::string (webpage_body));
+		//throw std::runtime_error("Need to send 404 (not implemented)");
+		return new TextResponse("HTTP/1.1 404 NotFound\r\n\r\n");
 	}
 }

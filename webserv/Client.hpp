@@ -3,6 +3,7 @@
 #include <unistd.h>		// for close
 #include <sys/time.h>
 #include <IRequest.hpp>
+#include <IResponse.hpp>
 #include <IClient.hpp>
 namespace ft
 {
@@ -18,17 +19,17 @@ namespace ft
 
 		enum read_flags
 		{
-			first_line = 1,
-			headers = 2,
-			breakline = 4,
-			body = 8,
-			end = 16
+			r_first_line = 1,
+			r_headers = 2,
+			r_breakline = 4,
+			r_body = 8,
+			r_end = 16
 		};
 		
 		enum write_flags
 		{
-			head = 1,
-			body = 2
+			w_head = 1,
+			w_body = 2
 		};
 
 		enum state_flags
@@ -38,7 +39,6 @@ namespace ft
 
 		Client(int id, int sock);
 		virtual ~Client();
-		Client(const Client &ref);
 		Client			&operator=(const Client &ref);
 		
 		int				getSock(void) const;
@@ -52,12 +52,15 @@ namespace ft
 		IRequest		*getLastRequest(void);
 		bool			needsResponce(void);
 		
+		void			setLastResponse(IResponse *response);
+		IResponse		*getLastResponse(void);
+
 		bool			requestReceived(void);
 		bool			headerSent(void);
 		bool			bodySent(void);
 
-		bool			sendHeader(void);
-		bool			sendBody(void);
+		void			sendHeader(void);
+		void			sendBody(void);
 
 	private:
 		int					_id;
@@ -67,8 +70,10 @@ namespace ft
 		int					_write_flags;
 		struct timeval		_last_event;
 		IRequest			*_last_request;
+		IResponse			*_response;
 
 		Client();
+		Client(const Client &ref);
 		int				&getflags(client_flags type);
 	};
 

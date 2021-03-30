@@ -15,10 +15,12 @@ namespace ft
 	}
 
 	FileBody::FileBody(const FileBody &ref)
-	{/* Illegal */}
+	{/* Illegal */ (void)ref; }
 
 	FileBody &FileBody::operator=(const FileBody &ref)
 	{
+		(void)ref;
+		throw std::runtime_error("No implementation");
 		return (*this);
 	}
 
@@ -36,7 +38,7 @@ namespace ft
 			return ("CAN\'T READ FILE BODY");
 	}
 
-	bool				FileBody::getFd(void)
+	int					FileBody::getFd(void)
 	{
 		return(_fd);
 	}

@@ -49,7 +49,7 @@ namespace ft
 		return (1);
 	}
 	
-	void			sendHeader(IHeader *header, IClient *client)
+	void			ResponseSender::sendHeader(IHeader *header, IClient *client)
 	{
 		std::string str;
 
@@ -58,32 +58,52 @@ namespace ft
 		client->sendHeader();
 	}
 
-	void			ResponseSender::sendTextBody(TextBody *body)
+	void			ResponseSender::sendTextBody(TextBody *body, IClient *client)
 	{
 		std::string str;
-
-		str = header->to_string();
-		write(client->getSock(), str.c_str(),str.size());
+		int ret;
+		
+		std::cout << "SENDER: SEND TEXT BODY\n";
+		str = body->to_string();
+		ret = write(client->getSock(), str.c_str(),str.size());
+		if (ret != -1)
+			body->setWritten(ret);
+		else
+			throw std::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
+		std::cout << "SENDER: TEXT BODY SENT\n";
 	}
 
-	void			ResponseSender::sendFileBody(FileBody *body)
+	void			ResponseSender::sendFileBody(FileBody *body, IClient *client)
 	{
-		char	*buff = malloc(sizeof(char) * body->size());
+		std::cout << "SENDER: SEND FILE BODY\n";
+		char	*buff = new char [READ_BODY_ONE_TIME];
+		int ret;
 		if (!buff)
 			throw std::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
-		free(buff);
+		std::cout << "SENDER: BEGIN READING\n";
+		ret = read(body->getFd(), buff, READ_BODY_ONE_TIME);
+		std::cout << "SENDER: READING ENDED. READED [" << ret << "]\nSENDER: BEGIN WRITING\n";
+		//ret = write(client->getSock(), buff, body->size());
+		ret = send(client->getSock(), buff, ret, 0);
+		std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "]\nSENDER: FILE BODY SENT\n";
+		body->setWritten(ret);
+		delete [] buff;
 	}
 
 
 	void			ResponseSender::sendBody(IBody *body, IClient *client)
 	{
+		if (!body)
+			throw std::runtime_error("RESPONSE SENDER: NULL BODY GOT");
 		if (dynamic_cast<TextBody*>(body))
-			sendTextBody(dynamic_cast<TextBody*>(body));
-		if (dynamic_cast<FileBody*>(body))
-			sendTextBody(dynamic_cast<FileBody*>(body));
+			sendTextBody(dynamic_cast<TextBody*>(body), client);
+		else if (dynamic_cast<FileBody*>(body))
+			sendFileBody(dynamic_cast<FileBody*>(body), client);
 		else
 			throw std::runtime_error("RESPONSE SENDER: WRONG TYPE OF BODY GOT");
-		client->sendBody();
+			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
+		if (body->size() == body->getWritten())
+			client->sendBody();
 	}
 }
 
