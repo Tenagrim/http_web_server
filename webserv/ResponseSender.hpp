@@ -1,6 +1,8 @@
 #pragma once
 #include <IResponseSender.hpp>
 #include <Dispatcher.hpp>
+#include <TextBody.hpp>
+#include <FileBody.hpp>
 
 namespace ft
 {
@@ -9,6 +11,11 @@ namespace ft
 	private:
 		Dispatcher		*_dispattcher;
 		ResponseSender();
+		void			sendHeader(IHeader *header, IClient *client);
+		void			sendBody(IBody *body, IClient *client);
+		
+		void			sendTextBody(TextBody *body);
+		void			sendFileBody(FileBody *body);
 	public:
 		ResponseSender(Dispatcher *_disp);
 		virtual ~ResponseSender();

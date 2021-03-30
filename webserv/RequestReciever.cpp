@@ -205,7 +205,7 @@ namespace ft
 
 		request = new Request(ss.str());
 
-		client->setFlag(Client::state_flags, Client::need_response);
+		client->setFlag(Client::read_flags, Client::end);
 		client->setLastRequest(request);
 
 

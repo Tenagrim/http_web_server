@@ -115,8 +115,8 @@ namespace ft
 		}
 		else
 			throw std::runtime_error("Unknown type of header");
-		header_map::iterator it = _header_map.begin();
-		for (; it != _header_map.end(); it++)
+		header_map::iterator it;
+		for (it = _header_map.begin(); it != _header_map.end(); it++)
 			ss << getHeaderKey((*it).first) << ": " << (*it).second << "\r\n";
 		ss << "\r\n";
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()

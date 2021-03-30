@@ -18,11 +18,17 @@ namespace ft
 
 		enum read_flags
 		{
-			first_line,
-			headers,
-			breakline,
-			body,
-			end
+			first_line = 1,
+			headers = 2,
+			breakline = 4,
+			body = 8,
+			end = 16
+		};
+		
+		enum write_flags
+		{
+			head = 1,
+			body = 2
 		};
 
 		enum state_flags
@@ -45,6 +51,13 @@ namespace ft
 		void			setLastRequest(IRequest *request);
 		IRequest		*getLastRequest(void);
 		bool			needsResponce(void);
+		
+		bool			requestReceived(void);
+		bool			headerSent(void);
+		bool			bodySent(void);
+
+		bool			sendHeader(void);
+		bool			sendBody(void);
 
 	private:
 		int					_id;

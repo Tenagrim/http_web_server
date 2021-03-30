@@ -335,8 +335,11 @@ namespace ft
 			IResponse	*resp = _resp_builder->buildResponse(client->getLastRequest()) ;
 			std::cout << "RESPONSE SENT: ================\n";
 			_resp_sender->sendResponce(resp, client);
-			std::cout << resp->to_string() << "\n";
-			_dispatcher->closeSock(client->getSock());
+			//std::cout << resp->to_string() << "\n";
+			std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
+			std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
+			if (client->requestReceived() && !client->needsResponce())
+				_dispatcher->closeSock(client->getSock());
 			std::cout << "SOCKET CLOSED: " << client->getSock() << " ================\n";
 			delete resp;
 		}

@@ -97,8 +97,30 @@ namespace ft
 
 	bool			Client::needsResponce(void)
 	{
-		if (hasFlag(state_flags, need_response))
+		if (hasFlag(write_flags, head) && hasFlag(write_flags, body))
 			return true;
 		return false;
+	}
+	bool			Client::requestReceived(void)
+	{
+		return(hasFlag(read_flags, end));
+	}
+	bool			Client::headerSent(void)
+	{
+		return(hasFlag(write_flags, head));
+	}
+	bool			Client::bodySent(void)
+	{
+		return(hasFlag(write_flags, body));
+	}
+	
+	bool			Client::sendHeader(void)
+	{
+		setFlag(write_flags, head);
+	}
+
+	bool			Client::sendBody(void)
+	{
+		setFlag(write_flags, body);
 	}
 }

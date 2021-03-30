@@ -1,12 +1,17 @@
 #include <TextResponse.hpp>
 
+#include <iostream>
+
 namespace ft
 {
 	TextResponse::TextResponse()
 	{/* Illegal */}
 
 	TextResponse::TextResponse(std::string const &text) : _text(text), _header(0), _body(0)
-	{}
+	{
+		_header = NULL;
+		_body = NULL;
+	}
 	
 	TextResponse::TextResponse(IHeader *head, IBody *body) :  _header(head), _body(body)
 	{
@@ -42,6 +47,7 @@ namespace ft
 	}
 	IHeader					*TextResponse::getHeader(void)
 	{
+		//std::cout << "TEXT RESPONSE: GET HEADER["<< _header <<"]\n";
 		return _header;
 	}
 	IBody					*TextResponse::getBody(void)

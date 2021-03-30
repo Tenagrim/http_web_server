@@ -54,6 +54,8 @@ int main(int ac, char **av)
 	}
 
 	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
+	
+	// TODO Раздельное чтение запроса
 
 	/*
 	std::string str("GET /trump.gif HTTP/1.1");

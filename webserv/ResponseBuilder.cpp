@@ -91,8 +91,8 @@ namespace ft
 		
 		//res = new TextResponse(header->to_string() + body->to_string());
 		res = new TextResponse(header, body);
-		delete header;
-		delete body;
+		//delete header;
+		//delete body;
 		return (res);
 	}
 
@@ -144,7 +144,7 @@ namespace ft
 		else
 			std::cout << "FILE NOT EXISTS\n";
 		
-
-		return new TextResponse(std::string(webpage_header) + std::string (webpage_body));
+		throw std::runtime_error("Need to send 404 (not implemented)");
+		//return new TextResponse(std::string(webpage_header) + std::string (webpage_body));
 	}
 }
