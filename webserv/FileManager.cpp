@@ -1,6 +1,5 @@
 #include <FileManager.hpp>
 #include <sys/stat.h>
-#include <fstream>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/param.h>
@@ -136,7 +135,7 @@ namespace ft
 			throw CannotOpenFile();
 	}
 */
-	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
+	int				FileManager::getFd(std::string const &filename, int _acess)
 	{
 		int fd;
 		std::string file;
@@ -151,41 +150,6 @@ namespace ft
 		//buff[9] = 0;
 		//std::cout << "CONT: [" << buff<< "]\n";
 		#endif
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdReadOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdWriteOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_WRONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdReadWrite(const std::string &filename) {
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDWR);
 		if (fd < 0)
 			throw CannotOpenFile();
 		return fd;
