@@ -57,14 +57,22 @@ bool ft::ConfigParser::startParse(void)
 	iterator it = _confile.begin();
 	it = is_Space(it);
 	if (*it == "server") {
-		iterator end = findInList(_confile, ++it, "server");
-		if (end == _confile.end())
-			std::cout<<"1\n";
-		else
-			std::cout<<"2\n";
-		std::list<std::string> *new_list = listCutter(_confile, it, end);
-
-		std::cout<<*end<<std::endl;
+		iterator it_new = std::find(++it, --_confile.end(), "server");
+		list new_list;
+		new_list.splice(new_list.begin(), _confile, ++it, it_new);
+		iterator begin_it = new_list.begin();
+		for (;begin_it != new_list.end(); ++begin_it){
+			std::cout<<*begin_it;
+		}
+		std::cout<<"\n";
+//		iterator end = findInList(_confile, ++it, "server");
+//		if (end == _confile.end())
+//			std::cout<<"1\n";
+//		else
+//			std::cout<<"2\n";
+//		std::list<std::string> *new_list = listCutter(_confile, it, end);
+//
+//		std::cout<<*end<<std::endl;
 		state = serverParse(it);
 	} else {
 		throw std::runtime_error("No Main key-word... \"SERVER\"");

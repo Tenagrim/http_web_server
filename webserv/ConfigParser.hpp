@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <algorithm>
 #include <exception>
 #include <iostream>
 #include <sys/stat.h>
