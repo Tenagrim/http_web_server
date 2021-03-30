@@ -7,4 +7,4 @@ webserv/webserv
 *pthread_kill
 .idea
 cmake-build-debug
-./CMakeLists.txt
+CMakeLists.txt
