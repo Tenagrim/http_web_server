@@ -75,4 +75,9 @@ namespace ft
 	{
 		return (_version);
 	}
+	
+	std::string				Request::to_string(void) const
+	{
+		return (_text);
+	}
 }

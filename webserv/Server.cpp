@@ -2,11 +2,46 @@
 
 namespace ft
 {
-	Server::Server()
+	#pragma region Copilen
+
+	Server::Server() : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	{
+
+	}
+
+	Server::Server(Dispatcher *disp, IResponseSender *sender , IResponseBuilder *builder) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT)), _resp_sender(sender), _resp_builder(builder)
+	{
+		_dispatcher = disp;
+	}
+	
+	Server::~Server()
+	{
+		delete _reciever;
+	}
+
+	Server::Server(const Server &ref) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	{
+		(void)ref;
+		throw std::runtime_error("no implementation");
+	}
+
+	Server &Server::operator=(const Server &ref)
+	{
+		(void)ref;
+		throw std::runtime_error("no implementation");
+		return (*this);
+	}
+
+	#pragma endregion
+
+	#pragma region Legacy trash
+	/*
 	{
 		bool st = false;
 		port = 80;
+
 		sockfd = socket(AF_INET, SOCK_STREAM, 0);
+		
 		if (sockfd < 0)
 			throw std::runtime_error("Unable to sreate socket");
 
@@ -24,20 +59,21 @@ namespace ft
 			if ((err = bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr))) < 0)
 			{
 				close(sockfd);
-				//throw std::runtime_error("Unable to bind socket");
-				printf("Unable to bind socket [%d]\n", err);
-				usleep(10 * 1000 * 1000);
+				throw std::runtime_error("Unable to bind socket");
+				//printf("Unable to bind socket [%d]\n", err);
+				//usleep(10 * 1000 * 1000);
 			}
 			else
 				st = true;
 		} while (!st);
 
 		int enable = 1;
-		if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
-			throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
 
 		//if (fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1)
-		///	throw std::runtime_error("FCNTL NONBLOCK FAILED");
+		//	throw std::runtime_error("FCNTL NONBLOCK FAILED");
+
+		if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+			throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
 
 		printf("========= Socket binded ======\n");
 		if (listen(sockfd, 25) < 0)
@@ -46,31 +82,7 @@ namespace ft
 			throw std::runtime_error("Unable to listen socket");
 		}
 	}
-
-	Server::~Server()
-	{
-	}
-
-	Server::Server(const Server &ref)
-	{
-		(void)ref;
-		throw std::runtime_error("no implementation");
-	}
-
-	Server &Server::operator=(const Server &ref)
-	{
-		(void)ref;
-		throw std::runtime_error("no implementation");
-		return (*this);
-	}
-
-	int Server::acceptConnection()
-	{
-		client_fd = accept(sockfd, NULL, NULL);
-		if (client_fd == -1)
-			throw std::runtime_error("Connection failed...");
-		return (1);
-	}
+	*/
 
 	int Server::process()
 	{
@@ -91,9 +103,11 @@ namespace ft
 		else if (req->getURI() == "/favicon.ico")
 			ft_sendfile(client_fd, "resources/favicon.ico");
 		else if (req->getURI() == "/trump.gif")
-		{
 			ft_sendfile(client_fd, "resources/trump.gif");
-		}
+		else if (req->getURI() == "/trump_vid.mp4")
+			ft_sendfile(client_fd, "resources/trump_vid.mp4");
+		else if (req->getURI() == "/baiden.gif")
+			ft_sendfile(client_fd, "resources/baiden.gif");
 
 		std::cout << "WRITING COMPLETED\n";
 
@@ -108,10 +122,12 @@ namespace ft
 	{
 		std::stringstream ss;
 		int n;
-		char buff[2048];
+		char buff[4048];
 
 		printf("GET REQUEST\n");
 		n = read(client_fd, buff, 2047);
+		printf("GOT REQUEST [%d]\n", n);
+
 		if (n == 0)
 			throw std::runtime_error("Empty read");
 		buff[n] = 0;
@@ -132,6 +148,7 @@ namespace ft
 			try
 			{
 				process();
+				//close(client_fd);
 			}
 			catch (const std::exception &e)
 			{
@@ -202,12 +219,29 @@ namespace ft
 		return (1);
 	}
 
+	void	Server::close_sockets(void)
+	{
+		close(this->client_fd);
+		close(this->sockfd);	
+	}
+
+	#pragma endregion // Legacy trash
+
+	int Server::acceptConnection()
+	{
+		_reciever->accept_connection();
+		_dispatcher->addClient(this, _reciever->getListenSock());
+		return (1);
+	}
+
 	int Server::sendResponce(const IResponse &resp)
 	{
 		(void)resp;
 		throw std::runtime_error("No implementation");
 		return (-1);
 	}
+
+	#pragma region  Flags operations
 
 	bool Server::hasFlag(unsigned int flag)
 	{
@@ -216,14 +250,108 @@ namespace ft
 		else
 			return (false);
 	}
+
 	int Server::setFlag(unsigned int flag)
 	{
 		_flags |= flag;
 		return (1);
 	}
+
 	int Server::switchFlag(unsigned int flag)
 	{
 		_flags ^= flag;
 		return (1);
+	}
+
+	#pragma endregion
+
+	int				Server::getListenSock(void)
+	{
+		return _reciever->getListenSock();
+	}
+
+	#pragma region Events operations
+
+	void			Server::gotEvent(Dispatcher_event_args args)
+	{	
+		#ifdef DEBUG
+			std::cout << "SERVER: GOT EVENT\n";
+		#endif
+		if (args._target == listener)
+			listenerEvent(args);
+		else if (args._target == client)
+			clientEvent(args);
+		else
+			throw std::runtime_error("Wrong event type");
+	}
+
+	void			Server::listenerEvent(Dispatcher_event_args &args)
+	{
+		int sock;
+		if (args._type == reading)
+		{
+			if (args._fd == _reciever->getListenSock())
+			{		
+				sock = _reciever->accept_connection();
+				_dispatcher->addClient(this, sock);
+			}
+			else
+				throw std::runtime_error("Got wrong listener sock");
+		}
+		else
+			throw std::runtime_error("SERVER: LISTENER EVENT: Got wrong event target");
+	}
+
+	void			Server::clientEvent(Dispatcher_event_args &args)
+	{
+		if (args._type == reading)
+			clientEventRead(args);
+		else if (args._type == writing)
+			clientEventWrite(args);
+		else if (args._type == conn_close)
+			_reciever->close_connection(args._fd);
+		else
+			throw std::runtime_error("Got wrong event target");
+	}
+
+
+	void			Server::clientEventRead(Dispatcher_event_args &args)
+	{
+			IRequest	*request = _reciever->getRequest(args._fd);
+			std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
+			std::cout << request->to_string() << "===========================\n";
+	}
+
+	void			Server::clientEventWrite(Dispatcher_event_args &args)
+	{
+			//std::cout << "CLIENT IS READY TO READ RESPONSE ["<< args._fd <<"]\n";
+
+		if (_reciever->writeEvent(args._fd))
+		{
+			std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+			//sendResponce(_clients[sock]);
+			IClient	*client = _reciever->getClient(args._fd);
+
+			IResponse	*resp = _resp_builder->buildResponse(client->getLastRequest()) ;
+			std::cout << "RESPONSE SENT: ================\n";
+			_resp_sender->sendResponce(resp, client);
+			std::cout << resp->to_string() << "\n";
+			_dispatcher->closeSock(client->getSock());
+			std::cout << "SOCKET CLOSED: " << client->getSock() << " ================\n";
+			delete resp;
+		}
+	}
+
+	#pragma endregion
+
+	void			Server::start(void)
+	{
+		_reciever->start();
+		_dispatcher->addListener(this);
+	}
+
+	void			Server::abort(void)
+	{
+		delete _reciever;
 	}
 }
