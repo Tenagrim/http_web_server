@@ -20,8 +20,8 @@ int main(int ac, char **av)
 {
 //	(void)ac; // FIXME
 //	(void)av; // FIXME
-
-	ft::ConfigParser parser;
+//TODO: if you need to start server commit "Config Parser"
+//	ft::ConfigParser parser;
 //	ft::Server		serv = ft::Server();
 	(void)ac; // FIXME
 	(void)av; // FIXME
