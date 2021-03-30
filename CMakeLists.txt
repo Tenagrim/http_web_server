@@ -15,6 +15,20 @@ add_executable(
         webserv/interfaces/ICgiController.hpp
 #        webserv/interfaces/IConfigParser.hpp
 #        webserv/interfaces/IConfigValidator.hpp
+
+set(CMAKE_CXX_STANDARD 98)
+
+INCLUDE_DIRECTORIES(./webserv/interfaces)
+
+add_executable(
+        webserv
+        webserv/main.cpp
+        webserv/Request.cpp
+        webserv/Server.cpp
+        webserv/ConfigParser.cpp
+        webserv/ConfigParser.hpp
+        webserv/interfaces/IBody.hpp
+        webserv/interfaces/ICgiController.hpp
         webserv/interfaces/IFileManager.hpp
         webserv/interfaces/IHeader.hpp
         webserv/interfaces/ILogger.hpp
@@ -41,3 +55,11 @@ add_executable(
         webserv/ResponseBuilder.hpp
         webserv/ft_memcpy.cpp
         webserv/trash/unitTester.cpp)
+
+
+        webserv/ConfigParser.cpp
+        webserv/ConfigParser.hpp
+        webserv/ServerInit.cpp
+        webserv/ServerInit.hpp
+        webserv/Utils.cpp webserv/Utils.hpp
+        webserv/interfaces/IUtils.hpp)

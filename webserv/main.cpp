@@ -1,4 +1,5 @@
 #include <Server.hpp>
+#include <ConfigParser.hpp>
 
 #include <signal.h> // FIXME
 #include <Dispatcher.hpp>
@@ -17,6 +18,12 @@ void	sigint_handler(int sig)
 
 int main(int ac, char **av)
 {
+//	(void)ac; // FIXME
+//	(void)av; // FIXME
+
+//TODO: if you need to start server commit "Config Parser"
+	ft::ConfigParser parser;
+//	ft::Server		serv = ft::Server();
 	(void)ac; // FIXME
 	(void)av; // FIXME
 
@@ -27,13 +34,13 @@ int main(int ac, char **av)
 	ft::Server				serv = ft::Server(&dispatcher, &sender, &resp_builder);
 
 	serv.start();
-	
+
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-	
+
 	struct sockaddr addr;
 
-	
+
 
 	while (1)
 	{
