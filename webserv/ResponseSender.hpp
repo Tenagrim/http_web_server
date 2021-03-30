@@ -1,6 +1,10 @@
 #pragma once
 #include <IResponseSender.hpp>
 #include <Dispatcher.hpp>
+#include <TextBody.hpp>
+#include <FileBody.hpp>
+
+#define READ_BODY_ONE_TIME 200000
 
 namespace ft
 {
@@ -9,6 +13,11 @@ namespace ft
 	private:
 		Dispatcher		*_dispattcher;
 		ResponseSender();
+		void			sendHeader(IHeader *header, IClient *client);
+		void			sendBody(IBody *body, IClient *client);
+		
+		void			sendTextBody(TextBody *body, IClient *client);
+		void			sendFileBody(FileBody *body, IClient *client);
 	public:
 		ResponseSender(Dispatcher *_disp);
 		virtual ~ResponseSender();

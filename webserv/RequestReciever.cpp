@@ -43,7 +43,20 @@ namespace ft
 			#endif
 		open_main_socket();
 		init_sockaddr();
-		bind_main_socket();
+		try
+		{
+			/* code */
+			bind_main_socket();
+		}
+		catch(const std::exception& e)        // FIXME   REMOVE THIS SHIT OUT HERE !!!!
+		{
+			std::cerr << e.what() << '\n';
+			_port++;
+			open_main_socket();
+			init_sockaddr();
+			bind_main_socket();
+		}
+		
 		listen_main_socket();
 			#ifdef DEBUG
 				std::cout << "======== STARTED +++++++++++++=\n";
@@ -67,13 +80,14 @@ namespace ft
 		_sockaddr.sin_port = htons(_port);
 	}
 
+/*
 	void				RequestReciever::unlink_main_socket()
 	{
 		int ret;
 
 		//ret = unlink
 	}
-	
+*/	
 	void			RequestReciever::bind_main_socket(void)
 	{
 		int ret;
@@ -204,7 +218,7 @@ namespace ft
 
 		request = new Request(ss.str());
 
-		client->setFlag(Client::state_flags, Client::need_response);
+		client->setFlag(Client::read_flags, Client::r_end);
 		client->setLastRequest(request);
 
 
@@ -229,9 +243,11 @@ namespace ft
 		std::cout << "RECIEVER: WRITE EVENT\n";
 		if (_clients[sock]->needsResponce())
 		{
-			_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
+			std::cout << "RECIEVER: NEED RESPONSE TO CLIENT\n";
+			//_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
 			return (1);
 		}
+		std::cout << "RECIEVER: NO NEED RESPONSE TO CLIENT\n";
 		return (0);
 
 	}

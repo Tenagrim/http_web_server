@@ -22,21 +22,46 @@ namespace ft
 	{
 	}
 
-	FileManager::FileManager(const FileManager &ref)
+	FileManager::FileManager(const FileManager &ref) : _root(ref._root)
 	{
 	}
 
 	FileManager		&FileManager::operator=(const FileManager &ref)
 	{
+		_root = ref._root;
 		return (*this);
+	}
+
+	std::string		FileManager::getPath(std::string const &filename)
+	{
+		std::string file;
+		if (_root.back() != '/' && filename.front() != '/')
+			file = _root + '/' + filename;
+		else
+			file = _root + filename;
+		return file;
+	}
+
+	bool			FileManager::isADirectory(std::string const &filename)
+	{
+		struct stat statbuf = {};
+		std::string file;
+		file = _root + filename;
+		stat(file.c_str(), &statbuf);
+		return S_ISDIR(statbuf.st_mode);	
 	}
 
 	bool			FileManager::isFileExisting(std::string const &filename)
 	{
 		struct stat statbuf = {};
 		std::string file;
+		
+		file = getPath(filename);
+		
+		#ifdef DEBUG
+		std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
+		#endif
 
-		file = _root + filename;
 		return !stat(file.c_str(), &statbuf);
 	}
 
@@ -45,9 +70,15 @@ namespace ft
 		struct stat statbuf = {};
 		std::string file;
 
-		file = _root + filename;
+		file = getPath(filename);
+		//file = _root + filename;
 		stat(file.c_str(), &statbuf);
 		return statbuf.st_size;
+	}
+
+	std::string		FileManager::getFullPath(std::string const &filename)
+	{
+		return (getPath(filename));
 	}
 
 	std::string		FileManager::getContentType(std::string const &filename)
@@ -95,14 +126,31 @@ namespace ft
 		stat(file.c_str(), &statbuf);
 		return statbuf.st_ctime;
 	}
-
-	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
+/*
+	std::ifstream	FileManager::getIfstream(std::string const &filename)
+	{
+		std::ifstream res(getPath(filename), std::ios::binary);
+		if (res.good())
+			return res;
+		else
+			throw CannotOpenFile();
+	}
+*/
+	int				FileManager::getFd(std::string const &filename, unsigned int _acess = O_RDONLY)
 	{
 		int fd;
 		std::string file;
 
-		file = _root + filename;
+		file = getPath(filename);
 		fd = open(file.c_str(), _acess);
+		#ifdef DEBUG
+		std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+
+		//char buff[10];
+		//read(fd, buff, 9);
+		//buff[9] = 0;
+		//std::cout << "CONT: [" << buff<< "]\n";
+		#endif
 		if (fd < 0)
 			throw CannotOpenFile();
 		return fd;
@@ -147,7 +195,12 @@ namespace ft
 		char 		dir[MAXPATHLEN];
 
 		getcwd(dir, MAXPATHLEN);
-		this->_root = dir + new_root;
+		std::string slash;
+		if (new_root[0] != '/')
+			slash += '/';
+		this->_root = dir + slash + new_root;
+		//if (_root.back() != '/')
+		//	_root += '/';
 		std::cout << "set root: " << _root << std::endl;
 	}
 

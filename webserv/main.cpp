@@ -7,6 +7,9 @@
 #include <ResponseBuilder.hpp>
 #include <ResponseSender.hpp>
 
+
+#include <Request.hpp>
+
 ft::Server	*SERVER;
 void	sigint_handler(int sig)
 {
@@ -37,7 +40,18 @@ int main(int ac, char **av)
 
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
+	
+	//std::string req = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n";
+	
+	
+	// std::string req = "GET /some_shit.cpp HTTP/1.1\r\nHost: localhost\r\n\r\n";
 
+	// ft::IRequest *request = new ft::Request(req);
+	
+	// ft::IResponse *resp = resp_builder.buildResponse(request);
+
+	// std::cout << "REQUEST: ===========================\n" << request->to_string() << "=====================\n";
+	// std::cout << "RESPONSE: ==========================\n" << resp->to_string() << "=====================\n";
 
 	while (1)
 	{
@@ -46,7 +60,9 @@ int main(int ac, char **av)
 		usleep(2 * 1000 * 1000);
 	}
 
-
+	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
+	// TODO Раздельное чтение запроса
+	// TODO Закрывать соединение когда в сокете конец файла
 
 	/*
 	std::string str("GET /trump.gif HTTP/1.1");

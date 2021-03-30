@@ -4,6 +4,7 @@
 .vscode
 .DS_Store
 webserv/webserv
+webserv/log.txt
 *pthread_kill
 .idea
 cmake-build-debug

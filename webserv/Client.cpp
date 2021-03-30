@@ -1,5 +1,11 @@
 #include <Client.hpp>
 
+#define DEBUG
+
+#ifdef DEBUG
+# include <iostream>
+#endif
+
 namespace ft
 {
 	#pragma region Copilen
@@ -10,6 +16,7 @@ namespace ft
 		_read_flags = 0;
 		_write_flags = 0;
 		_last_request = 0;
+		_response = 0;
 	}
 
 	Client::~Client()
@@ -17,6 +24,8 @@ namespace ft
 		close(_sock);
 		if (_last_request)
 			delete _last_request;
+		if (_response)
+			delete _response;
 	}
 
 	Client::Client(const Client &ref)
@@ -95,10 +104,54 @@ namespace ft
 		return _last_request;
 	}
 
+	void			Client::setLastResponse(IResponse *response)
+	{
+		if (_response)
+			delete response;
+		_response = response;
+	}
+
+	IResponse		*Client::getLastResponse(void)
+	{
+		return _response;
+	}
 	bool			Client::needsResponce(void)
 	{
-		if (hasFlag(state_flags, need_response))
-			return true;
-		return false;
+		if (!hasFlag(read_flags, r_end))
+			return (false);
+
+		if (hasFlag(write_flags, w_head) && hasFlag(write_flags, w_body))
+		{
+			#ifdef DEBUG
+				std::cout << "CLIENT: NO NEED TO RESPONSE\n";
+			#endif
+			return false;
+		}
+		std::cout << "CLIENT: NEED TO RESPONSE\n";
+		return true;
 	}
+	bool			Client::requestReceived(void)
+	{
+		return(hasFlag(read_flags, r_end));
+	}
+	bool			Client::headerSent(void)
+	{
+		return(hasFlag(write_flags, w_head));
+	}
+	bool			Client::bodySent(void)
+	{
+		return(hasFlag(write_flags, w_body));
+	}
+	
+	void			Client::sendHeader(void)
+	{
+		setFlag(write_flags, w_head);
+	}
+
+	void	Client::sendBody(void)
+	{
+		setFlag(write_flags, w_body);
+	}
+
+
 }
