@@ -5,8 +5,13 @@ namespace ft
 	TextResponse::TextResponse()
 	{/* Illegal */}
 
-	TextResponse::TextResponse(std::string const &text) : _text(text)
+	TextResponse::TextResponse(std::string const &text) : _text(text), _header(0), _body(0)
 	{}
+	
+	TextResponse::TextResponse(IHeader *head, IBody *body) :  _header(head), _body(body)
+	{
+		_text = head->to_string() + body->to_string();
+	}
 
 	TextResponse::~TextResponse()
 	{}
@@ -37,14 +42,11 @@ namespace ft
 	}
 	IHeader					*TextResponse::getHeader(void)
 	{
-
-		throw std::runtime_error("No implementation");
-		return NULL;
+		return _header;
 	}
 	IBody					*TextResponse::getBody(void)
 	{
-		throw std::runtime_error("No implementation");
-		return NULL;
+		return _body;
 	}
 	
 	std::string				TextResponse::to_string(void) const

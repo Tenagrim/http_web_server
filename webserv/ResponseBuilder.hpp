@@ -26,6 +26,8 @@ namespace ft
 		int					findIndexFile(std::list<std::string> &priority);
 
 		IResponse			*buildFromDir(IRequest *request);
+		IResponse			*buildFromFile(IRequest *request);
+		IResponse			*buildFromFile(std::string const &filename);
 		IResponse			*buildAutoindex(IRequest *request);
 		IResponse			*buildErrorPage(int code);
 		

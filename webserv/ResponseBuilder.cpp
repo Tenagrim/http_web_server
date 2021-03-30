@@ -47,19 +47,52 @@ namespace ft
 
 	IBody				*ResponseBuilder::bodyFromFile(std::string const &filename)
 	{
-		int				fd;
-		unsigned int	size;
-		char			*buff;
-		int				ret;
-		IBody			*res;
+		int					fd;
+		unsigned int		size;
+		char				*buff;
+		int					ret;
+		IBody				*res;
+		std::stringstream	ss;
+		std::string			str;
+		std::ifstream		fin(_fmngr->getFullPath(filename), std::ios::binary);
+
+		std::cout << "BODY FROM FILE: ["<< filename <<"]\n";
+
+		if (!fin.good())
+			throw std::runtime_error("Cannot open file: " + filename);
 		
-		fd = _fmngr->getFd(filename, 0);
-		size = _fmngr->getFileSize(filename);
-		buff = new char[size + 1];
-		ret = read(fd, buff, size);
-		buff[ret] = 0;
-		res = new TextBody(std::string(buff, size));
-		delete[] buff;
+		//fd = _fmngr->getFd(filename, 0);
+		//size = _fmngr->getFileSize(filename);
+		
+		ss << fin.rdbuf();
+		str = ss.str();
+
+		std::cout << "SIZE:"<< str.size() <<"\n";
+		//buff = new char[size + 1];
+		//ret = read(fd, buff, size);
+		//buff[ret] = 0;
+
+		res = new TextBody(str);
+		//delete[] buff;
+		fin.close();
+		return (res);
+	}
+
+	IResponse			*ResponseBuilder::buildFromFile(std::string const &filename)
+	{
+		IResponse		*res;
+		IBody			*body;
+		IHeader			*header;
+		
+		std::cout << "BUILDER: BUILD FROM FILE: ["<< filename <<"]\n";
+		
+		body = bodyFromFile(filename);
+		header = buildHeader(200, "OK", body);
+		
+		//res = new TextResponse(header->to_string() + body->to_string());
+		res = new TextResponse(header, body);
+		delete header;
+		delete body;
 		return (res);
 	}
 
@@ -72,19 +105,20 @@ namespace ft
 
 	IResponse			*ResponseBuilder::buildFromDir(IRequest *request)
 	{
-		IResponse	*res;
-
 		(void)request;  // FIXME
 		//_fmngr->setRoot(request->getURI());
 		if (_fmngr->isFileExisting("index.html"))
 		{
 			std::cout << "FILE EXISTS\n";
+			/*
 			IBody		*body = bodyFromFile("index.html");
 			IHeader		*header = buildHeader(200, "OK", body);
 			res = new TextResponse(header->to_string() + body->to_string());
 			delete header;
 			delete body;
 			return (res);
+			*/
+			return buildFromFile("index.html");
 		}
 		throw std::runtime_error("BUILD FROM DIR NOT FULLY IPLEENTED");
 		return(0);
@@ -92,16 +126,21 @@ namespace ft
 
 	IResponse			*ResponseBuilder::buildResponse(IRequest	*request)
 	{
+		_fmngr->setRoot("resources");   // HARDCODED SERVER ROOT
+		IResponse	*res = 0;
 
-		_fmngr->setRoot("resources");
-		
 		std::cout << "URI ::::::::::: ["<< request->getURI() <<"]\n";
 
 		if (_fmngr->isADirectory(request->getURI()))
 			return (buildFromDir(request));
 
 		if (_fmngr->isFileExisting(request->getURI()))
+		{
 			std::cout << "FILE EXISTS\n";
+			res = buildFromFile(request->getURI());
+
+			return res;
+		}
 		else
 			std::cout << "FILE NOT EXISTS\n";
 		

@@ -2,6 +2,7 @@
 
 #include <IFileManager.hpp>
 #include <string>
+#include <fstream>
 
 #ifndef DEBUG
 #define DEBUG
@@ -39,6 +40,7 @@ namespace ft
 
 			// open file & returns it's descriptor
 		int				getFd(std::string const &filename, unsigned int _acess);
+		//std::ifstream	getIfstream(std::string const &filename);
 		int				getFdReadOnly(std::string const &filename);
 		int				getFdWriteOnly(std::string const &filename);
 		int				getFdReadWrite(std::string const &filename);

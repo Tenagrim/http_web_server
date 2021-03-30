@@ -8,9 +8,12 @@ namespace ft
 	{
 	private:
 		std::string		_text;
+		IHeader		*_header;
+		IBody			*_body;
 		TextResponse();
 	public:
 		TextResponse(std::string const &text);
+		TextResponse(IHeader *head, IBody *body);
 		~TextResponse();
 		TextResponse(const TextResponse &ref);
 		TextResponse &operator=(const TextResponse &ref);

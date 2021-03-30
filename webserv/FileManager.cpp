@@ -35,10 +35,10 @@ namespace ft
 	std::string		FileManager::getPath(std::string const &filename)
 	{
 		std::string file;
-		if (_root.back() == '/' && filename.front() != '/')
-			file = _root + filename;
-		else
+		if (_root.back() != '/' && filename.front() != '/')
 			file = _root + '/' + filename;
+		else
+			file = _root + filename;
 		return file;
 	}
 
@@ -70,14 +70,15 @@ namespace ft
 		struct stat statbuf = {};
 		std::string file;
 
-		file = _root + filename;
+		file = getPath(filename);
+		//file = _root + filename;
 		stat(file.c_str(), &statbuf);
 		return statbuf.st_size;
 	}
 
 	std::string		FileManager::getFullPath(std::string const &filename)
 	{
-		return (_root + filename);
+		return (getPath(filename));
 	}
 
 	std::string		FileManager::getContentType(std::string const &filename)
@@ -125,7 +126,16 @@ namespace ft
 		stat(file.c_str(), &statbuf);
 		return statbuf.st_ctime;
 	}
-
+/*
+	std::ifstream	FileManager::getIfstream(std::string const &filename)
+	{
+		std::ifstream res(getPath(filename), std::ios::binary);
+		if (res.good())
+			return res;
+		else
+			throw CannotOpenFile();
+	}
+*/
 	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
 	{
 		int fd;
@@ -133,6 +143,14 @@ namespace ft
 
 		file = getPath(filename);
 		fd = open(file.c_str(), _acess);
+		#ifdef DEBUG
+		std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+
+		//char buff[10];
+		//read(fd, buff, 9);
+		//buff[9] = 0;
+		//std::cout << "CONT: [" << buff<< "]\n";
+		#endif
 		if (fd < 0)
 			throw CannotOpenFile();
 		return fd;
