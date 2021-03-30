@@ -1,6 +1,7 @@
 #include "ConfigParser.hpp"
 
-ft::ConfigParser::ConfigParser(): _server_count(0) {
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
+
 	openConfigFile();
 	if (!initParsing())
 		throw std::runtime_error("Can't Read Config File ... ");
@@ -16,14 +17,14 @@ bool ft::ConfigParser::initParsing(void) {
 	std::string line = " ";
 	std::string::iterator it = _conf.begin();
 	for (; it != _conf.end(); ++it) {
-		if(strchr(tokenPool, *it)) {
+		if(_tokenPool.checkInPool(*it)) {
 			if (!line.empty()){
 				_confile.push_back(line);
 				line.clear();
 			}
 			line.push_back(*it);
 		} else {
-			if (strchr(tokenPool, *(line.begin()))){
+			if (_tokenPool.checkInPool(*(line.begin()))) {
 				_confile.push_back(line);
 				line.clear();
 			}
@@ -33,6 +34,7 @@ bool ft::ConfigParser::initParsing(void) {
 	if (it == _conf.end()) {
 		state = true;
 	}
+	_confile.unique();
 	std::list<std::string>::iterator lit = _confile.begin();
 	for (; lit != _confile.end(); ++lit) {
 		std::cout<<">"<<*lit<<"<";
@@ -55,6 +57,14 @@ bool ft::ConfigParser::startParse(void)
 	iterator it = _confile.begin();
 	it = is_Space(it);
 	if (*it == "server") {
+		iterator end = findInList(_confile, ++it, "server");
+		if (end == _confile.end())
+			std::cout<<"1\n";
+		else
+			std::cout<<"2\n";
+		std::list<std::string> *new_list = listCutter(_confile, it, end);
+
+		std::cout<<*end<<std::endl;
 		state = serverParse(it);
 	} else {
 		throw std::runtime_error("No Main key-word... \"SERVER\"");

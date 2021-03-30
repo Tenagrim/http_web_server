@@ -7,12 +7,13 @@
 #include <list>
 #include <map>
 #include <ServerInit.hpp>
-
-static char tokenPool[] = " {};/\t\n\r:";
+#include <TokenPool.hpp>
+#include <Utils.hpp>
 
 namespace ft {
 	class ConfigParser {
 	private:
+		TokenPool				_tokenPool;
 		unsigned int			_server_count;
 		std::list<std::string> _confile;
 		std::string		_conf;

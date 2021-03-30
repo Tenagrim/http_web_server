@@ -27,27 +27,27 @@ int main(int ac, char **av)
 	(void)ac; // FIXME
 	(void)av; // FIXME
 
-	ft::Dispatcher			dispatcher;
-	ft::FileManager			fmngr;
-	ft::ResponseBuilder		resp_builder(&fmngr);
-	ft::ResponseSender		sender(&dispatcher);
-	ft::Server				serv = ft::Server(&dispatcher, &sender, &resp_builder);
-
-	serv.start();
-
-	SERVER = &serv;
-	signal(SIGINT, &sigint_handler);
-
-	struct sockaddr addr;
-
-
-
-	while (1)
-	{
-		dispatcher.updateEvents();
-		dispatcher.handleEvents();
-		usleep(2 * 1000 * 1000);
-	}
+//	ft::Dispatcher			dispatcher;
+//	ft::FileManager			fmngr;
+//	ft::ResponseBuilder		resp_builder(&fmngr);
+//	ft::ResponseSender		sender(&dispatcher);
+//	ft::Server				serv = ft::Server(&dispatcher, &sender, &resp_builder);
+//
+//	serv.start();
+//
+//	SERVER = &serv;
+//	signal(SIGINT, &sigint_handler);
+//
+//	struct sockaddr addr;
+//
+//
+//
+//	while (1)
+//	{
+//		dispatcher.updateEvents();
+//		dispatcher.handleEvents();
+//		usleep(2 * 1000 * 1000);
+//	}
 
 
 
