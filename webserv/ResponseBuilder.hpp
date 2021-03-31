@@ -11,7 +11,7 @@
 #include <Header.hpp>
 #include <stdlib.h>
 #include <FileBody.hpp>
-
+#include <ErrorPager.hpp>
 
 #include <list>
 
@@ -23,6 +23,7 @@ namespace ft
 	{
 	private:
 		IFileManager		*_fmngr;
+		ErrorPager			_e_pager;
 		ResponseBuilder();
 		//bool				isFile(std::string const & uri);
 		int					findIndexFile(std::list<std::string> &priority);
