@@ -251,11 +251,17 @@ namespace ft
 		return (0);
 
 	}
+
 	IClient					*RequestReciever::getClient(int sock)
 	{
 		if (!_clients.count(sock))
 			throw std::runtime_error("No such client");
 		return(_clients[sock]);
+	}
+
+	int						RequestReciever::getPort(void)
+	{
+		return _port;
 	}
 
 }

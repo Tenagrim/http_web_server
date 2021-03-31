@@ -7,7 +7,7 @@
 #include <IResponseSender.hpp>
 #include <IResponseBuilder.hpp>
 #include <ResponseBuilder.hpp>
-
+#include <DispatcherEventArgs.hpp>
 #include <Request.hpp>
 
 #include <sys/socket.h>
@@ -54,9 +54,9 @@ namespace ft
 
 		//IRequestReciever		*_reciever;
 
-		RequestReciever			*_reciever;
+		//RequestReciever			*_reciever;
 		listener_map			_listener_map;
-
+		std::list<RequestReciever *>	_list_to_start;			
 
 		IFileManager			*_f_manager;
 		ILogger					*_logger;
@@ -69,8 +69,8 @@ namespace ft
 		void			clientEvent(Dispatcher_event_args &args);
 		void			clientEventRead(Dispatcher_event_args &args);
 		void			clientEventWrite(Dispatcher_event_args &args);
-	
 		Server();
+		Server(const Server &ref);
 	public:
 		enum server_flags
 		{
@@ -78,7 +78,6 @@ namespace ft
 		};
 		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
 		virtual ~Server();
-		Server(const Server &ref);
 
 		Server			&operator=(const Server &ref);
 		bool			hasFlag(unsigned int flag);
@@ -86,13 +85,14 @@ namespace ft
 		int				switchFlag(unsigned int flag);
 		IRequest		*getRequest(void);
 		int				sendResponce(const IResponse &resp);
-		int				acceptConnection();
+		int				acceptConnection(int sock);
 		int				processConnection();
+		RequestReciever	*getListener(int sock);	
 
 		void			gotEvent(Dispatcher_event_args args);
 		//void			readEvent(long socket);
 		//void			writeEvent(long socket);
-		int				getListenSock(void);
+//		int				getListenSock(void);
 
 		void			addListener(int port);
 

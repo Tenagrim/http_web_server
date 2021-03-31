@@ -130,28 +130,7 @@ namespace ft
 		m_put
 	};
 
-	enum disp_event_type
-	{
-		reading,
-		writing,
-		timeout,
-		conn_close
-	};
 
-	enum disp_event_target
-	{
-		client,
-		listener
-	};
-
-	struct Dispatcher_event_args
-	{
-		int					_fd;
-		disp_event_type		_type;
-		disp_event_target	_target;
-
-		Dispatcher_event_args(int __fd, disp_event_type __type, disp_event_target __targ) : _fd(__fd), _type(__type), _target(__targ){}
-	};
 	
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char *str);

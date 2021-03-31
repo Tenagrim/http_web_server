@@ -11,7 +11,8 @@ class Server;
 #include <Server.hpp>
 #include <webserv.hpp>
 #include <stack>
-
+#include <RequestReciever.hpp>
+#include <DispatcherEventArgs.hpp>
 #define UPDATE_DELAY 1000
 
 namespace ft
@@ -23,7 +24,7 @@ namespace ft
 	class Dispatcher
 	{
 	private:
-		typedef std::map<int, Server *>	fd_map;
+		typedef std::map<int, RequestReciever *> fd_map;
 		fd_map					_listener_map;
 		fd_map					_client_map;
 
@@ -52,12 +53,15 @@ namespace ft
 		Dispatcher();
 		~Dispatcher();
 		Dispatcher		&operator=(const Dispatcher &ref);
-
+/*
 		void			addListener(ft::Server *serv);			// LEGACY SHIT
 		void			addClient(ft::Server *serv, int sock);	// LEGACY SHIT
 
 		void			addListener(int sock);
 		void			addClient(int sock);
+	*/	
+		void			addListener(RequestReciever *recv, int sock);
+		void			addClient(RequestReciever *recv, int sock);
 
 		void			closeSock(int sock);
 		void			updateEvents();

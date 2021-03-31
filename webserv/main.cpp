@@ -25,12 +25,11 @@ void	sigint_handler(int sig)
 
 int main(int ac, char **av)
 {
-//	(void)ac; // FIXME
-//	(void)av; // FIXME
 
 //TODO: if you need to start server commit "Config Parser"
 //	ft::ConfigParser parser;
 //	ft::Server		serv = ft::Server();
+
 	(void)ac; // FIXME
 	(void)av; // FIXME
 
@@ -44,19 +43,14 @@ int main(int ac, char **av)
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
 	
-	//std::string req = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n";
-	
-	
-	// std::string req = "GET /some_shit.cpp HTTP/1.1\r\nHost: localhost\r\n\r\n";
+	serv.addListener(DEFAULT_PORT);
+	serv.addListener(93);
+	serv.addListener(97);
+	serv.addListener(85);
 
-	// ft::IRequest *request = new ft::Request(req);
-	
-	// ft::IResponse *resp = resp_builder.buildResponse(request);
-
-	// std::cout << "REQUEST: ===========================\n" << request->to_string() << "=====================\n";
-	// std::cout << "RESPONSE: ==========================\n" << resp->to_string() << "=====================\n";
 	dispatcher.connectToServer(&serv);
 	serv.start();
+
 	while (1)
 	{
 		dispatcher.updateEvents();
@@ -69,13 +63,4 @@ int main(int ac, char **av)
 	// TODO Закрывать соединение когда в сокете конец файла
 	// TODO починить сегу при SIGINT'e во время отправки файла
 
-	/*
-	std::string str("GET /trump.gif HTTP/1.1");
-	int pos = str.find(' ');
-	std::cout << "[" << str.substr(0, pos) << "]\n";
-	int o_pos = pos;
-	pos = str.find(' ', o_pos + 1);
-	std::cout << "o_pos:"  << o_pos << " pos: " << pos <<"\n";
-	std::cout << "[" << str.substr(o_pos + 1, pos - o_pos - 1) << "]\n";
-	*/
 }
