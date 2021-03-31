@@ -29,6 +29,14 @@ namespace ft
 		bool openBracket(std::list<std::string> &list);
 
 		bool argumentParse(std::list<std::string> &list);
+
+
+		unsigned int getId() const;
+
+		const std::string &getPath() const;
+
+		const argument_map &getLocationsArguments() const;
+
 	};
 }
 

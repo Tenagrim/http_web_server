@@ -15,7 +15,6 @@ ft::ServerInit::~ServerInit() {
 bool ft::ServerInit::parseInServer(std::list<std::string> tmp)
 {
 	bool state = false;
-	iterator it = tmp.begin();
 	ft::deleteCommit(tmp);
 	state = findListen(&tmp);
 	state = findServerName(&tmp);
@@ -79,6 +78,13 @@ void ft::ServerInit::getConf(std::list<string> &list)
 		}
 		std::cout<<"\n";
 	}
+	if (!_locations.empty()){
+		std::list<LocationInit *>::iterator loc_it = _locations.begin();
+		LocationInit *tmp = *loc_it;
+		std::cout<<tmp->getId()<<" - id location"<<std::endl;
+		std::cout<<tmp->getPath()<<" - PATH"<<std::endl;
+		delete tmp;
+	}
 	iterator it = list.begin();
 	for (; it != list.end(); ++it) {
 		std::cout<<*it;
@@ -131,9 +137,9 @@ bool ft::ServerInit::findLocations(ft::ServerInit::list *tmp)
 		delete location;
 		throw std::runtime_error("No key-word \"LOCATIONS\"");
 	}
-	_location_count++;
 	LocationInit *Location = new LocationInit(_location_count);
 	_locations.push_back(Location);
+	_location_count++;
 	state =  Location->InitParse(*location);
 	return state;
 }

@@ -47,3 +47,18 @@ bool ft::LocationInit::argumentParse(std::list<std::string> &list)
 
 	return state;
 }
+
+unsigned int ft::LocationInit::getId() const
+{
+	return _id;
+}
+
+const std::string &ft::LocationInit::getPath() const
+{
+	return _path;
+}
+
+const ft::LocationInit::argument_map &ft::LocationInit::getLocationsArguments() const
+{
+	return _locations_arguments;
+}
