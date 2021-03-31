@@ -29,7 +29,7 @@ int main(int ac, char **av)
 //	(void)av; // FIXME
 
 //TODO: if you need to start server commit "Config Parser"
-	ft::ConfigParser parser;
+//	ft::ConfigParser parser;
 //	ft::Server		serv = ft::Server();
 	(void)ac; // FIXME
 	(void)av; // FIXME
@@ -62,7 +62,6 @@ int main(int ac, char **av)
 		dispatcher.updateEvents();
 		dispatcher.handleEvents();
 		usleep(DISPATCHER_TICK_MICROS);
-		//usleep(1000);
 	}
 
 	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
