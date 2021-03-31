@@ -19,10 +19,11 @@ namespace ft {
 		unsigned int			_server_count;
 		std::list<std::string> _confile;
 		std::string		_conf;
-		std::list<ServerInit *> _server_list;
 		std::map<std::string, std::string>	_conf_param;
 		typedef std::list<std::string>::iterator iterator;
 		typedef std::list<std::string>::reverse_iterator reverse_iterator;
+
+		std::list<ServerInit *> _server_list;
 	public:
 		ConfigParser();
 		~ConfigParser();

@@ -17,7 +17,6 @@ bool ft::ServerInit::parseInServer(std::list<std::string> tmp)
 	bool state = false;
 	iterator it = tmp.begin();
 	ft::deleteCommit(tmp);
-	std::cout<<"\n";
 	state = findListen(&tmp);
 	state = findServerName(&tmp);
 	state = findLocations(&tmp);
@@ -123,21 +122,20 @@ bool ft::ServerInit::findServerName(list *tmp)
 
 bool ft::ServerInit::findLocations(ft::ServerInit::list *tmp)
 {
+//	TODO: Make Location Class
 	bool state = false;
 	iterator it = findInList(tmp, "location");
 	tmp->erase(++tmp->begin(), it);
 	list *location = ft::findAndCut(*tmp, "location");
-	if (location->empty())
+	if (location->empty()){
+		delete location;
 		throw std::runtime_error("No key-word \"LOCATIONS\"");
+	}
 	_location_count++;
 	LocationInit *Location = new LocationInit(_location_count);
 	_locations.push_back(Location);
-	iterator loc_it = location->begin();
-	for (; loc_it != location->end(); ++loc_it) {
-		std::cout<<*loc_it;
-	}
-	std::cout<<"\n";
-	return true;
+	state =  Location->InitParse(*location);
+	return state;
 }
 
 std::list<std::string> ft::ServerInit::copyContent(list &tmp, ft::ServerInit::iterator it, const std::string &stop)
