@@ -18,7 +18,8 @@ void	sigint_handler(int sig)
 	exit(2);
 }
 
-#define	DISPATCHER_TICK_MICROS (1 * 1000 * 1000)
+#define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)
+//								^ seconds
 
 
 int main(int ac, char **av)

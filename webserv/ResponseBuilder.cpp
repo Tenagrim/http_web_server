@@ -169,6 +169,6 @@ namespace ft
 		
 		//throw std::runtime_error("Need to send 404 (not implemented)");
 		//return new TextResponse("HTTP/1.1 404 NotFound\r\n\r\n");
-		return (_e_pager.getErrorPage(200));
+		return (_e_pager.getErrorPage(404));
 	}
 }
