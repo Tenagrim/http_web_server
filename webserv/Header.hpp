@@ -42,6 +42,7 @@ namespace ft
 		void				setURI(std::string const &new_uri);
 		void				setHeader(header_keys h_key, std::string const &header_value);
 		void				setCodeDescription(std::string const &new_descr);
+		unsigned long		size();
 
 	};
 

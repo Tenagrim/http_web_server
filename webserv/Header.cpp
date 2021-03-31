@@ -122,4 +122,10 @@ namespace ft
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()
 		return (ss.str());	
 	}
+
+	unsigned long		Header::size()
+	{
+		throw std::runtime_error("not implemented");
+		return (0);
+	}
 } // namespace ft

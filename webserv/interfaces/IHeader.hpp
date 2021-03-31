@@ -35,7 +35,7 @@ namespace ft
 		virtual void				setCodeDescription(std::string const &new_descr) = 0;
 		virtual void				setResponseCode(int new_code) = 0;
 		virtual void				setHeader(header_keys h_key, std::string const &header_value) = 0;
-
+		virtual unsigned long		size() = 0;
 		virtual ~IHeader(){}
 	};
 }

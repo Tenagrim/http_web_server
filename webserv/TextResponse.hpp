@@ -2,8 +2,13 @@
 #include <IResponse.hpp>
 #include <string>
 #include <TextBody.hpp>
+
 namespace ft
 {
+	// SHOULD INERHIT FROM BASIC RESPONSE
+
+
+	// BUT IT DON'T
 	class TextResponse : public IResponse
 	{
 	private:
@@ -24,8 +29,6 @@ namespace ft
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
 		unsigned long			size() const;
-
-
 	};
 
 }
