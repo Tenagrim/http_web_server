@@ -37,9 +37,10 @@ namespace ft
 
 	int Server::acceptConnection()
 	{
-		//int client_fd;
-		_reciever->accept_connection();
-		_dispatcher->addClient(this, _reciever->getListenSock());
+		int client_fd;
+		
+		client_fd = _reciever->accept_connection();
+		_dispatcher->addClient(client_fd);
 		return (1);
 	}
 
