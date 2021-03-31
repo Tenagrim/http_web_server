@@ -10,6 +10,7 @@
 #include <ServerInit.hpp>
 #include <TokenPool.hpp>
 #include <Utils.hpp>
+//#include <Utils.hpp>
 
 namespace ft {
 	class ConfigParser {
@@ -21,6 +22,7 @@ namespace ft {
 		std::list<ServerInit *> _server_list;
 		std::map<std::string, std::string>	_conf_param;
 		typedef std::list<std::string>::iterator iterator;
+		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 	public:
 		ConfigParser();
 		~ConfigParser();
@@ -28,11 +30,8 @@ namespace ft {
 		void openConfigFile(void);
 		bool initParsing(void);
 		bool startParse(void);
-		bool serverParse(iterator it);
-		bool InitServer(iterator it);
+		bool initServer(std::list<std::string> *tmp);
 
-
-		iterator is_Space(iterator it);
-		std::list<std::string> copyContent(iterator it, std::string const &stop);
+		bool findServer(std::list<std::string> &_list, std::string _str);
 	};
 }

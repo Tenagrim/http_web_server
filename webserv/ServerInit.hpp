@@ -5,16 +5,12 @@
 #include <exception>
 #include <list>
 #include <map>
+#include <Utils.hpp>
+#include <LocationInit.hpp>
 
 //#include <Utils.hpp>
 
 namespace ft {
-	static std::string tagsPool[] = {
-			"listen",
-			"server_name",
-			"location"
-	};
-
 	class ServerInit {
 	private:
 		typedef std::string							string;
@@ -26,7 +22,7 @@ namespace ft {
 		unsigned int			_id;
 		list_num				_listen;
 		list					_server_name;
-//		std::list<LocationInit *> _locations;
+		std::list<LocationInit *> _locations;
 
 
 		bool findServerName(list *tmp);
@@ -51,5 +47,6 @@ namespace ft {
 		bool findLocations(list *tmp);
 		std::list<std::string> copyContent(list &tmp,iterator it, std::string const &stop);
 
+		void parseInfoLine(std::list<std::string> &tmp);
 	};
 }

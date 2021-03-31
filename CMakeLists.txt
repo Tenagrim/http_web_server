@@ -63,4 +63,4 @@ add_executable(
         webserv/ServerInit.hpp
         webserv/TokenPool.cpp
         webserv/TokenPool.hpp
-        webserv/LocationInit.cpp webserv/LocationInit.hpp webserv/Utils.hpp webserv/utils/Utils.cpp)
+        webserv/LocationInit.cpp webserv/LocationInit.hpp webserv/Utils.hpp webserv/utils/Utils.cpp LocationInit.cpp LocationInit.hpp)

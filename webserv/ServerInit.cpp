@@ -10,51 +10,15 @@ ft::ServerInit::~ServerInit() {
 bool ft::ServerInit::parseInServer(std::list<std::string> tmp)
 {
 	bool state = false;
+	iterator it = tmp.begin();
+	ft::deleteCommit(tmp);
+	std::cout<<"\n";
 	state = findListen(&tmp);
 	state = findServerName(&tmp);
 	state = findLocations(&tmp);
 	std::cout<<string(30, '*')<<std::endl;
 	getConf();
 	return state;
-	enum States {
-		StartParse,
-		OpenBracket,
-		Listen,
-		ServerName,
-		Locations,
-		CloseBracket,
-		Error,
-		End,
-	};
-	States parse = StartParse;
-//	switch (parse) {
-//		case StartParse:
-//			if (!tmp.empty())
-//				parse = OpenBracket;
-//			else {
-//				throw std::runtime_error("No settings in SERVER");
-//				parse = Error;
-//			}
-//		case OpenBracket:
-//			if (*tmp.begin() == "}")
-//				parse = Listen;
-//			else {
-//				throw std::runtime_error("No Open Bracket....");
-//				parse = Error;
-//			}
-//		case Listen:
-//			if ((state = findListen(&tmp)))
-//				parse = ServerName;
-//			else
-//				parse = Error;
-//		case ServerName:
-//			if ((state = findServerName(&tmp)))
-//				parse = Locations;
-//			else
-//				parse = Error;
-//		case Locations:
-//			if ((state = findLocations(&tmp)))
-//	}
 }
 
 unsigned int ft::ServerInit::getId() const { return _id; }
@@ -99,6 +63,8 @@ bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
 		throw std::runtime_error("No \";\" after key-word LISTEN");
 	} else
 		state = true;
+//	Удаление обработоанной строки
+	*tmp = ft::findAndErase(*tmp, "listen", ";");
 	return state;
 }
 
@@ -147,6 +113,8 @@ bool ft::ServerInit::findServerName(list *tmp)
 		throw std::runtime_error("No \";\" after key-word SERVER_NAME");
 	} else
 		state = true;
+	//	Удаление обработоанной строки
+	*tmp = ft::findAndErase(*tmp, "server_name", ";");
 	return state;
 }
 
@@ -159,12 +127,17 @@ bool ft::ServerInit::findLocations(ft::ServerInit::list *tmp)
 	if (it == tmp->end())
 		throw std::runtime_error("No key-word \"LOCATIONS\"");
 	list locations = copyContent(*tmp, it, "location");
-	locations.unique();
 	iterator loc_it = locations.begin();
 	for (; loc_it != locations.end(); ++loc_it) {
 		std::cout<<*loc_it;
 	}
 	std::cout<<"\n";
+//	std::list<std::string> *location = ft::findAndCut(*tmp, "location");
+//	iterator loc_it = location->begin();
+//	for (; loc_it != location->end(); ++loc_it) {
+//		std::cout<<*loc_it;
+//	}
+//	std::cout<<"\n";
 	return true;
 }
 
@@ -177,4 +150,9 @@ std::list<std::string> ft::ServerInit::copyContent(list &tmp, ft::ServerInit::it
 	std::list<std::string> content_list;
 	content_list.assign(start, end);
 	return content_list;
+}
+
+void ft::ServerInit::parseInfoLine(std::list<std::string> &tmp)
+{
+	iterator it = tmp.begin();
 }
