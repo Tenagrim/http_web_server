@@ -51,6 +51,7 @@ bool ft::LocationInit::findKeyWord(std::list<std::string> &list)
 {
 	bool state = false;
 
+//	TODO: Stay Here
 	str_list_it it = list.begin();
 	for (size_t i = 0; i != LocationsKeyWord->size(); ++i) {
 		it = std::find(list.begin(), list.end(), LocationsKeyWord[i]);
