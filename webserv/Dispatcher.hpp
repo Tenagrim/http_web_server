@@ -38,6 +38,7 @@ namespace ft
 		int						_events;
 		unsigned int			_listening;
 		int						_max_fd;
+		Server					*_server;
 
 
 		void					handleListeners(void);
@@ -46,16 +47,23 @@ namespace ft
 		void					handleClientsWrite(void);
 		void					closeWhatNeed();
 		void					reallyCloseSock(int sock);
+		Dispatcher(const Dispatcher &ref);
 	public:
 		Dispatcher();
 		~Dispatcher();
-		Dispatcher(const Dispatcher &ref);
 		Dispatcher		&operator=(const Dispatcher &ref);
-		void			addListener(ft::Server *serv);
-		void			addClient(ft::Server *serv, int sock);
+
+		void			addListener(ft::Server *serv);			// LEGACY SHIT
+		void			addClient(ft::Server *serv, int sock);	// LEGACY SHIT
+
+		void			addListener(int sock);
+		void			addClient(int sock);
+
 		void			closeSock(int sock);
 		void			updateEvents();
 		void			handleEvents();
+
+		void			connectToServer(Server *serv);
 	};
 
 

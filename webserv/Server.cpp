@@ -12,6 +12,7 @@ namespace ft
 	Server::Server(Dispatcher *disp, IResponseSender *sender , IResponseBuilder *builder) : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT)), _resp_sender(sender), _resp_builder(builder)
 	{
 		_dispatcher = disp;
+		_flags = 0;
 	}
 	
 	Server::~Server()
@@ -36,6 +37,7 @@ namespace ft
 
 	int Server::acceptConnection()
 	{
+		//int client_fd;
 		_reciever->accept_connection();
 		_dispatcher->addClient(this, _reciever->getListenSock());
 		return (1);
@@ -170,12 +172,32 @@ namespace ft
 
 	void			Server::start(void)
 	{
+		RequestReciever *recv;
+		setFlag(is_running);
+
+		listener_map::iterator it; 
+		for (it = _listener_map.begin(); it != _listener_map.end(); it++)
+		{
+			recv = (*it).second;
+			recv->start();
+			_dispatcher->addListener(recv->getListenSock());
+
+		}
 		_reciever->start();
-		_dispatcher->addListener(this);
+		_dispatcher->addListener(_reciever->getListenSock());
+		// need loop here
 	}
 
 	void			Server::abort(void)
 	{
 		delete _reciever;
+	}
+	
+	void			Server::addListener(int port)
+	{
+			if(hasFlag(is_running))
+				throw std::runtime_error("Cannot add new listener into running server");
+			_listener_map[port] = new RequestReciever("localhost", port);
+			
 	}
 }

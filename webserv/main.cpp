@@ -38,9 +38,8 @@ int main(int ac, char **av)
 	ft::FileManager			fmngr;
 	ft::ResponseBuilder		resp_builder(&fmngr);
 	ft::ResponseSender		sender(&dispatcher);
-	ft::Server				serv = ft::Server(&dispatcher, &sender, &resp_builder);
+	ft::Server				serv(&dispatcher, &sender, &resp_builder);
 
-	serv.start();
 	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
@@ -56,7 +55,8 @@ int main(int ac, char **av)
 
 	// std::cout << "REQUEST: ===========================\n" << request->to_string() << "=====================\n";
 	// std::cout << "RESPONSE: ==========================\n" << resp->to_string() << "=====================\n";
-
+	dispatcher.connectToServer(&serv);
+	serv.start();
 	while (1)
 	{
 		dispatcher.updateEvents();
@@ -67,6 +67,7 @@ int main(int ac, char **av)
 	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
 	// TODO Раздельное чтение запроса
 	// TODO Закрывать соединение когда в сокете конец файла
+	// TODO починить сегу при SIGINT'e во время отправки файла
 
 	/*
 	std::string str("GET /trump.gif HTTP/1.1");

@@ -11,6 +11,7 @@ namespace ft
 		_listening = 0;
 		FD_ZERO(&_fd_set);
 		_max_fd = 0;
+		_server = 0;
 	}
 	Dispatcher::~Dispatcher()
 	{
@@ -31,6 +32,17 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Add_remove socks
+
+	void Dispatcher::addListener(int sock)
+	{
+		std::cout << "ADD LISTENER[" << sock << "]\n";
+		_listener_map[sock] = _server;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+
 	void Dispatcher::addListener(Server *serv)
 	{
 		int sock = serv->getListenSock();
@@ -40,12 +52,19 @@ namespace ft
 			_max_fd = sock;
 		FD_SET(sock, &_fd_set);
 		_listening++;
-			//#ifdef DEBUG
-			//	std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
-			//#endif
 	}
 
-	void Dispatcher::addClient(Server *serv, int sock)
+	void Dispatcher::addClient(int sock)
+	{
+		std::cout << "ADD CLIENT[" << sock << "]\n";
+		_client_map[sock] = _server;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+
+	void Dispatcher::addClient(Server *serv, int sock) // LEGACY SHIT
 	{
 		std::cout << "ADD CLIENT[" << sock << "]\n";
 		_client_map[sock] = serv;
@@ -116,6 +135,8 @@ namespace ft
 
 	void			Dispatcher::updateEvents()
 	{
+		if (!_server)
+			throw std::runtime_error("Not connected to server");
 		//#undef DEBUG
 
 			#ifdef DEBUG
@@ -162,7 +183,7 @@ namespace ft
 		for(it = _listener_map.begin();it != _listener_map.end() ;it++)
 		{	
 			if (FD_ISSET((*it).first, &_reading_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, reading, listener));
+				_server->gotEvent(Dispatcher_event_args((*it).first, reading, listener));
 		}
 	}
 
@@ -172,7 +193,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, reading, client));
+				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client));
 		}
 	}
 
@@ -182,7 +203,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, writing, client));
+				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client));
 		}
 	}
 
@@ -211,6 +232,10 @@ namespace ft
 		handleListeners();
 		handleClients();
 	}
-
 	#pragma endregion	
+
+	void			Dispatcher::connectToServer(Server *serv)
+	{
+		_server = serv;
+	}
 } // namespace ft
