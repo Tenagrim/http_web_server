@@ -41,9 +41,14 @@ namespace ft
 		//std::cout << "RESPONSE SENDER: WRITE SIZE: ["<< size <<"] CSTR SIZE:[" << ft_strlen((char*)(str.c_str())) << "]\n";
 
 		if (!client->headerSent())
+		{
 			sendHeader(resp->getHeader(), client);
+		}
 		else if (!client->bodySent())
+		{
+			std::cout << "SENDER: SEND BODY FOR URI: [" << client->getLastRequest()->getURI() << "]\n";
 			sendBody(resp->getBody(), client);
+		}
 		else
 			throw std::runtime_error("All is already sent, no need to call Sender");
 		return (1);
@@ -52,7 +57,7 @@ namespace ft
 	void			ResponseSender::sendHeader(IHeader *header, IClient *client)
 	{
 		std::string str;
-
+		
 		str = header->to_string();
 		write(client->getSock(), str.c_str(),str.size());
 		client->sendHeader();

@@ -1,6 +1,7 @@
 #include "ConfigParser.hpp"
 
-ft::ConfigParser::ConfigParser(): _server_count(0) {
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
+
 	openConfigFile();
 	if (!initParsing())
 		throw std::runtime_error("Can't Read Config File ... ");
@@ -9,6 +10,11 @@ ft::ConfigParser::ConfigParser(): _server_count(0) {
 }
 
 ft::ConfigParser::~ConfigParser() {
+	std::list<ServerInit *>::iterator it = _server_list.begin();
+	for (; it != _server_list.end(); ++it) {
+		delete *it;
+	}
+	_server_list.clear();
 }
 
 bool ft::ConfigParser::initParsing(void) {
@@ -16,14 +22,14 @@ bool ft::ConfigParser::initParsing(void) {
 	std::string line = " ";
 	std::string::iterator it = _conf.begin();
 	for (; it != _conf.end(); ++it) {
-		if(strchr(tokenPool, *it)) {
+		if(_tokenPool.checkInPool(*it)) {
 			if (!line.empty()){
 				_confile.push_back(line);
 				line.clear();
 			}
 			line.push_back(*it);
 		} else {
-			if (strchr(tokenPool, *(line.begin()))){
+			if (_tokenPool.checkInPool(*(line.begin()))) {
 				_confile.push_back(line);
 				line.clear();
 			}
@@ -33,11 +39,12 @@ bool ft::ConfigParser::initParsing(void) {
 	if (it == _conf.end()) {
 		state = true;
 	}
-	std::list<std::string>::iterator lit = _confile.begin();
-	for (; lit != _confile.end(); ++lit) {
-		std::cout<<">"<<*lit<<"<";
-	}
-	std::cout<<"\n";
+	_confile.unique();
+//	std::list<std::string>::iterator lit = _confile.begin();
+//	for (; lit != _confile.end(); ++lit) {
+//		std::cout<<">"<<*lit<<"<";
+//	}
+//	std::cout<<"\n";
 	return state;
 }
 
@@ -53,54 +60,43 @@ bool ft::ConfigParser::startParse(void)
 {
 	bool state = false;
 	iterator it = _confile.begin();
-	it = is_Space(it);
+	it = isSpace(it);
 	if (*it == "server") {
-		state = serverParse(it);
+		state = findServer(_confile, "server");
 	} else {
 		throw std::runtime_error("No Main key-word... \"SERVER\"");
 	}
 	return state;
 }
 
-bool ft::ConfigParser::serverParse(iterator it)
-{
-	bool state = false;
-	++it;
-	it = is_Space(it);
-	if (*it == "{") {
-		state = InitServer(it);
-	} else {
-		throw std::runtime_error("No Open Bracket....");
-	}
-	return state;
-}
-
-bool ft::ConfigParser::InitServer(iterator it)
+bool ft::ConfigParser::initServer(std::list<std::string> *tmp)
 {
 	bool state = false;
 	ServerInit *newServer = new ServerInit();
-	std::list<std::string> tmp = copyContent(it, "server");
 	_server_list.push_back(newServer);
 	newServer->setId(_server_count);
 	_server_count++;
-	state = newServer->parseInServer(tmp);
+	state = newServer->parseInServer(*tmp);
 	return state;
 }
 
-ft::ConfigParser::iterator ft::ConfigParser::is_Space(ft::ConfigParser::iterator it)
+bool ft::ConfigParser::findServer(std::list<std::string> &_list, std::string _str)
 {
-	while (*it == " " || *it == "\t" || *it == "\n" || *it == "\r")
-		++it;
-	return it;
-}
-
-std::list<std::string> ft::ConfigParser::copyContent(ft::ConfigParser::iterator it, std::string const &stop)
-{
-	iterator start = it;
-	while ((*it != stop) && (it != _confile.end()))
-		++it;
-	iterator end = it;
-	std::list<std::string> content_list;
-	content_list.assign(start, end);
-	return content_list;
+	bool state = false;
+	std::list<std::string> *tmp = ft::findAndCut(_list,_str);
+	iterator count = tmp->begin();
+	reverse_iterator recount = tmp->rbegin();
+	count = isSpace(count);
+	recount = isSpace(recount);
+	if (*count != "{")
+		throw std::runtime_error("No Open Bracket ...");
+	if (*recount != "}")
+		throw std::runtime_error("No Close Bracket ...");
+	for (; count != tmp->end(); ++count){
+		std::cout<<*count;
+	}
+	std::cout<<"\n";
+	state = initServer(tmp);
+	delete tmp;
+	return state;
 }

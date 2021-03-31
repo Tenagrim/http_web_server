@@ -2,23 +2,23 @@ cmake_minimum_required(VERSION 3.17)
 project(webserv)
 set(CMAKE_CXX_STANDARD 98)
 INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
-add_executable(
-        webserv
-        webserv/webserv.hpp
+#add_executable(
+#        webserv
+#        webserv/webserv.hpp
 #        webserv/main.cpp
-        webserv/trash/unitTester.cpp
-        webserv/Request.cpp
-        webserv/Server.cpp
+#        webserv/trash/unitTester.cpp
+#        webserv/Request.cpp
+#        webserv/Server.cpp
 #        webserv/ConfigParser.cpp
 #        webserv/ConfigParser.hpp
-        webserv/interfaces/IBody.hpp
-        webserv/interfaces/ICgiController.hpp
+#        webserv/interfaces/IBody.hpp
+#        webserv/interfaces/ICgiController.hpp
 #        webserv/interfaces/IConfigParser.hpp
 #        webserv/interfaces/IConfigValidator.hpp
-
-set(CMAKE_CXX_STANDARD 98)
-
-INCLUDE_DIRECTORIES(./webserv/interfaces)
+#
+#set(CMAKE_CXX_STANDARD 98)
+#
+#INCLUDE_DIRECTORIES(./webserv/interfaces)
 
 add_executable(
         webserv
@@ -53,13 +53,14 @@ add_executable(
         webserv/FileManager.cpp
         webserv/ResponseBuilder.cpp
         webserv/ResponseBuilder.hpp
-        webserv/ft_memcpy.cpp
-        webserv/trash/unitTester.cpp)
+        webserv/utils/ft_memcpy.cpp
+        webserv/trash/unitTester.cpp
 
 
         webserv/ConfigParser.cpp
         webserv/ConfigParser.hpp
         webserv/ServerInit.cpp
         webserv/ServerInit.hpp
-        webserv/Utils.cpp webserv/Utils.hpp
-        webserv/interfaces/IUtils.hpp)
+        webserv/TokenPool.cpp
+        webserv/TokenPool.hpp
+        webserv/LocationInit.cpp webserv/LocationInit.hpp webserv/Utils.hpp webserv/utils/Utils.cpp LocationInit.cpp LocationInit.hpp)

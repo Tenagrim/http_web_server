@@ -5,7 +5,9 @@ namespace ft
 	TextBody::TextBody()
 	{/* Illegal */}
 	TextBody::TextBody(std::string const &text) : _text(text)
-	{}
+	{
+		_content_type = "text/html";
+	}
 
 	TextBody::~TextBody()
 	{}
@@ -34,5 +36,4 @@ namespace ft
 	{
 		throw std::runtime_error("Not implemented");
 	}
-
 }

@@ -7,7 +7,7 @@
 #include <IResponseSender.hpp>
 #include <IResponseBuilder.hpp>
 #include <ResponseBuilder.hpp>
-
+#include <DispatcherEventArgs.hpp>
 #include <Request.hpp>
 
 #include <sys/socket.h>
@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include <webserv.hpp>
+#include <map>
 namespace ft
 {
 	class Dispatcher;
@@ -37,6 +38,7 @@ namespace ft
 	class Server
 	{
 	private:
+		typedef std::map<int, RequestReciever *>	listener_map;
 		unsigned int			_id;
 		unsigned int			_flags;
 		struct sockaddr_in		serv_addr;
@@ -52,26 +54,30 @@ namespace ft
 
 		//IRequestReciever		*_reciever;
 
-		RequestReciever			*_reciever;
+		//RequestReciever			*_reciever;
+		listener_map			_listener_map;
+		std::list<RequestReciever *>	_list_to_start;			
 
 		IFileManager			*_f_manager;
 		ILogger					*_logger;
 		ITimeMachine			*_t_machine;
 		IResponseSender			*_resp_sender;
 		IResponseBuilder		*_resp_builder;
-		//IRequestValidator		*_req_validator;
 		
 		void			close_sockets(void);
 		void			listenerEvent(Dispatcher_event_args &args);
 		void			clientEvent(Dispatcher_event_args &args);
 		void			clientEventRead(Dispatcher_event_args &args);
 		void			clientEventWrite(Dispatcher_event_args &args);
-	
 		Server();
+		Server(const Server &ref);
 	public:
+		enum server_flags
+		{
+			is_running = 1
+		};
 		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
 		virtual ~Server();
-		Server(const Server &ref);
 
 		Server			&operator=(const Server &ref);
 		bool			hasFlag(unsigned int flag);
@@ -79,13 +85,16 @@ namespace ft
 		int				switchFlag(unsigned int flag);
 		IRequest		*getRequest(void);
 		int				sendResponce(const IResponse &resp);
-		int				acceptConnection();
+		int				acceptConnection(int sock);
 		int				processConnection();
+		RequestReciever	*getListener(int sock);	
 
 		void			gotEvent(Dispatcher_event_args args);
 		//void			readEvent(long socket);
 		//void			writeEvent(long socket);
-		int				getListenSock(void);
+//		int				getListenSock(void);
+
+		void			addListener(int port);
 
 		//void			run(void);
 		void			start(void);

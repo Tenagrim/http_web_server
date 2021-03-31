@@ -18,6 +18,7 @@ namespace ft
 		std::string			to_string(void) const;
 		unsigned int		size(void) const;
 		BodyType			getType(void);
+	
 	};
 
 }

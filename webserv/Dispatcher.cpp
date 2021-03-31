@@ -11,7 +11,9 @@ namespace ft
 		_listening = 0;
 		FD_ZERO(&_fd_set);
 		_max_fd = 0;
+		_server = 0;
 	}
+
 	Dispatcher::~Dispatcher()
 	{
 	}
@@ -31,6 +33,37 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Add_remove socks
+
+	void			Dispatcher::addListener(RequestReciever *recv, int sock)
+	{
+		std::cout << "ADD LISTENER[" << sock << "]\n";
+		_listener_map[sock] = recv;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+
+	void			Dispatcher::addClient(RequestReciever *recv, int sock)
+	{
+		std::cout << "ADD CLIENT[" << sock << "]\n";
+		_client_map[sock] = recv;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+/*
+	void Dispatcher::addListener(int sock)
+	{
+		std::cout << "ADD LISTENER[" << sock << "]\n";
+		_listener_map[sock] = _server;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+
 	void Dispatcher::addListener(Server *serv)
 	{
 		int sock = serv->getListenSock();
@@ -40,12 +73,19 @@ namespace ft
 			_max_fd = sock;
 		FD_SET(sock, &_fd_set);
 		_listening++;
-			//#ifdef DEBUG
-			//	std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
-			//#endif
 	}
 
-	void Dispatcher::addClient(Server *serv, int sock)
+	void Dispatcher::addClient(int sock)
+	{
+		std::cout << "ADD CLIENT[" << sock << "]\n";
+		_client_map[sock] = _server;
+		if (sock > _max_fd)
+			_max_fd = sock;
+		FD_SET(sock, &_fd_set);
+		_listening++;
+	}
+
+	void Dispatcher::addClient(Server *serv, int sock) // LEGACY SHIT
 	{
 		std::cout << "ADD CLIENT[" << sock << "]\n";
 		_client_map[sock] = serv;
@@ -54,7 +94,7 @@ namespace ft
 		FD_SET(sock, &_fd_set);
 		_listening++;
 	}
-
+*/
 	void Dispatcher::closeSock(int sock)
 	{
 		_socks_to_close.push(sock);
@@ -84,14 +124,14 @@ namespace ft
 	{
 		if (_listener_map.count(sock))
 		{
-			_listener_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, listener));
+			_server->gotEvent(Dispatcher_event_args(sock, conn_close, listener, _listener_map[sock]));
 			_listener_map.erase(sock);
 			if (sock == _max_fd)
 				_max_fd = _listener_map.rbegin()->first;
 		}
 		else if (_client_map.count(sock))
 		{
-			_client_map[sock]->gotEvent(Dispatcher_event_args(sock, conn_close, client));
+			_server->gotEvent(Dispatcher_event_args(sock, conn_close, client, _client_map[sock]));
 			_client_map.erase(sock);
 			if (sock == _max_fd)
 			{
@@ -116,6 +156,8 @@ namespace ft
 
 	void			Dispatcher::updateEvents()
 	{
+		if (!_server)
+			throw std::runtime_error("Not connected to server");
 		//#undef DEBUG
 
 			#ifdef DEBUG
@@ -130,7 +172,7 @@ namespace ft
 				std::cout << "LISTENERS: \n";
 				it = _listener_map.begin();
 				for(; it != _listener_map.end(); it++)
-					std::cout << "[" << (*it).first << "] ";
+					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
 				std::cout << "\n";
 			#endif
 		_events = 0;
@@ -162,7 +204,7 @@ namespace ft
 		for(it = _listener_map.begin();it != _listener_map.end() ;it++)
 		{	
 			if (FD_ISSET((*it).first, &_reading_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, reading, listener));
+				_server->gotEvent(Dispatcher_event_args((*it).first, reading, listener, (*it).second));
 		}
 	}
 
@@ -172,7 +214,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, reading, client));
+				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client, (*it).second));
 		}
 	}
 
@@ -182,7 +224,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set))
-				(*it).second->gotEvent(Dispatcher_event_args((*it).first, writing, client));
+				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
 		}
 	}
 
@@ -211,6 +253,10 @@ namespace ft
 		handleListeners();
 		handleClients();
 	}
-
 	#pragma endregion	
+
+	void			Dispatcher::connectToServer(Server *serv)
+	{
+		_server = serv;
+	}
 } // namespace ft

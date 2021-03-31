@@ -77,6 +77,7 @@ namespace ft
 		void					sendResponce(Client *client); // REMOVE THIS LOGIC FROM HERE
 
 		void					start(void);
+		int						getPort(void);
 	};
 
 }

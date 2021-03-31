@@ -28,4 +28,9 @@ namespace ft
 	{
 		_written += value;
 	}
+
+	std::string const			&ABody::getContentType(void) const
+	{
+			return _content_type;
+	}
 }
