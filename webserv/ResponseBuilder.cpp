@@ -144,13 +144,15 @@ namespace ft
 			*/
 			return buildFromFile("index.html");
 		}
-		throw std::runtime_error("BUILD FROM DIR NOT FULLY IPLEENTED");
-		return(0);
+		//throw std::runtime_error("BUILD FROM DIR NOT FULLY IPLEENTED");
+		//return(0);
+		return _e_pager.getErrorPage(404);
 	}
 
 	IResponse			*ResponseBuilder::buildResponse(IRequest	*request)
 	{
-		_fmngr->setRoot("resources");   // HARDCODED SERVER ROOT
+		_fmngr->setRoot("resources/sites/particles");   // HARDCODED SERVER ROOT
+		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse	*res = 0;
 
 		std::cout << "URI ::::::::::: ["<< request->getURI() <<"]\n";

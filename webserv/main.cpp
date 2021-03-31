@@ -1,7 +1,7 @@
 #include <Server.hpp>
 #include <ConfigParser.hpp>
 
-#include <signal.h> // FIXME
+#include <signal.h> 
 #include <Dispatcher.hpp>
 #include <FileManager.hpp>
 #include <ResponseBuilder.hpp>
@@ -73,9 +73,11 @@ int main(int ac, char **av)
 		usleep(DISPATCHER_TICK_MICROS);
 	}
 
-	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader
-	// TODO Раздельное чтение запроса
-	// TODO Закрывать соединение когда в сокете конец файла
-	// TODO починить сегу при SIGINT'e во время отправки файла
+	// TODO: классы-наследники от Header: ReaponseHeader и  RequestHeader
+	// TODO: Раздельное чтение запроса
+	// TODO: Закрывать соединение когда в сокете конец файла
+	// TODO: починить сегу при SIGINT'e во время отправки файла
+	// TODO: УТЕЧКА ДЕСКРИПТОРОВ!!!!!!
+	// TODO: Отследить единоновременые события чтения и записи
 
 }
