@@ -20,6 +20,7 @@ namespace ft {
 		typedef std::list<int>						list_num;
 
 		unsigned int			_id;
+		unsigned int			_location_count;
 		list_num				_listen;
 		list					_server_name;
 		std::list<LocationInit *> _locations;
@@ -36,17 +37,13 @@ namespace ft {
 		void setId(unsigned int id);
 
 		bool parseInServer(std::list<std::string> tmp);
-		iterator is_backSpace(iterator it);
 		iterator findInList(list *_list,std::string const &string);
 
-
-		void getConf(void);
+		void getConf(std::list<std::string> &list);
 		iterator is_Space(iterator it);
 		bool is_digit(string const &str);
 
 		bool findLocations(list *tmp);
 		std::list<std::string> copyContent(list &tmp,iterator it, std::string const &stop);
-
-		void parseInfoLine(std::list<std::string> &tmp);
 	};
 }

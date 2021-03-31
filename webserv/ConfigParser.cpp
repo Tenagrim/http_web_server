@@ -10,6 +10,11 @@ ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
 }
 
 ft::ConfigParser::~ConfigParser() {
+	std::list<ServerInit *>::iterator it = _server_list.begin();
+	for (; it != _server_list.end(); ++it) {
+		delete *it;
+	}
+	_server_list.clear();
 }
 
 bool ft::ConfigParser::initParsing(void) {
@@ -90,8 +95,8 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, std::string _st
 	for (; count != tmp->end(); ++count){
 		std::cout<<*count;
 	}
-	state = initServer(tmp);
 	std::cout<<"\n";
+	state = initServer(tmp);
 	delete tmp;
 	return state;
 }

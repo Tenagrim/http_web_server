@@ -1,5 +1,7 @@
-//
-// Created by Practiss Catrina on 3/30/21.
-//
+#include <LocationInit.hpp>
 
-#include "LocationInit.hpp"
+ft::LocationInit::LocationInit(int id): _id(id) {
+}
+
+ft::LocationInit::~LocationInit() {
+}
