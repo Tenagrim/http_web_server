@@ -154,3 +154,17 @@ std::list<std::string> ft::ServerInit::copyContent(list &tmp, ft::ServerInit::it
 	content_list.assign(start, end);
 	return content_list;
 }
+
+std::list<int>					&ft::ServerInit::getListenPorts(void)
+{
+	return _listen;
+}
+
+std::list<ft::LocationInit *>		&ft::ServerInit::getLocationInits(void)
+{
+	return _locations;
+}
+std::list<std::string>			&ft::ServerInit::getServerNames(void)
+{
+	return _server_name;
+}
