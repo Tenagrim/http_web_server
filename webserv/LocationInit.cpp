@@ -43,8 +43,19 @@ bool ft::LocationInit::openBracket(std::list<std::string> &list)
 bool ft::LocationInit::argumentParse(std::list<std::string> &list)
 {
 	bool state = false;
+	state = findKeyWord(list);
+	return state;
+}
 
+bool ft::LocationInit::findKeyWord(std::list<std::string> &list)
+{
+	bool state = false;
 
+	str_list_it it = list.begin();
+	for (size_t i = 0; i != LocationsKeyWord->size(); ++i) {
+		it = std::find(list.begin(), list.end(), LocationsKeyWord[i]);
+
+	}
 	return state;
 }
 

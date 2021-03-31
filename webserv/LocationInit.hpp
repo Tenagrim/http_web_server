@@ -7,6 +7,17 @@
 
 namespace ft
 {
+
+	static std::string LocationsKeyWord[] = {
+			"alias",
+			"limit_except",
+			"client_max_body_size",
+			"error_page",
+			"autoindex",
+			"index",
+			"auth_basic"
+	};
+
 	class LocationInit
 	{
 	private:
@@ -37,6 +48,7 @@ namespace ft
 
 		const argument_map &getLocationsArguments() const;
 
+		bool findKeyWord(std::list<std::string> &list);
 	};
 }
 
