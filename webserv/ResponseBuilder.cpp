@@ -35,6 +35,7 @@ namespace ft
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
 		res->setHeader(h_content_length,  ss.str());
+		//std::string type = 
 		return res;
 	}
 	int					ResponseBuilder::findIndexFile(std::list<std::string> &priority)

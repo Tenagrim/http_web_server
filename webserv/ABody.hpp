@@ -5,8 +5,10 @@ namespace ft
 {
 	class ABody : public IBody
 	{
+	protected:
+		std::string			_content_type;
 	private:
-		unsigned long _written;
+		unsigned long		_written;
 
 		ABody &operator=(const ABody &ref);
 		ABody(const ABody &ref);
@@ -18,8 +20,10 @@ namespace ft
 		virtual std::string			to_string(void) const = 0;
 		virtual unsigned int		size(void) const = 0;
 		virtual BodyType			getType(void) = 0;
-		unsigned long			getWritten();
-		void					setWritten(unsigned long value);
+
+		std::string const			&getContentType(void) const;
+		unsigned long				getWritten();
+		void						setWritten(unsigned long value);
 	};
 
 }
