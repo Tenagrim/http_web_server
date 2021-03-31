@@ -153,10 +153,10 @@ namespace ft
 		Dispatcher_event_args(int __fd, disp_event_type __type, disp_event_target __targ) : _fd(__fd), _type(__type), _target(__targ){}
 	};
 	
-
-
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char *str);
 	std::string			getHeaderKey(header_keys_enum key);
 	std::string			getMethodStr(const methods_enum key);
+	std::string			getCodeDescr(int code);
+	std::string			to_string(int num);
 }

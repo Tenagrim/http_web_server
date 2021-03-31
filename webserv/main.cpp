@@ -19,6 +19,10 @@ void	sigint_handler(int sig)
 	exit(2);
 }
 
+#define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)
+//								^ seconds
+
+
 int main(int ac, char **av)
 {
 //	(void)ac; // FIXME
@@ -57,7 +61,8 @@ int main(int ac, char **av)
 	{
 		dispatcher.updateEvents();
 		dispatcher.handleEvents();
-		usleep(2 * 1000 * 1000);
+		usleep(DISPATCHER_TICK_MICROS);
+		//usleep(1000);
 	}
 
 	// TODO классы-наследники от Header: ReaponseHeader и  RequestHeader

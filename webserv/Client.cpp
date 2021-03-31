@@ -21,7 +21,13 @@ namespace ft
 
 	Client::~Client()
 	{
-		close(_sock);
+		int ret;
+		ret = close(_sock);
+		#ifdef DEBUG
+		std::cout << "CLIENT: CLOSING SOCKET[" << _sock << "]\n";
+		if (ret == -1)
+			std::cout << "CLIENT: FAILED TO CLOSE SOCKET [" << _sock << "]\n";
+		#endif
 		if (_last_request)
 			delete _last_request;
 		if (_response)
