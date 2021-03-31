@@ -42,29 +42,14 @@ int main(int ac, char **av)
 	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-<<<<<<< HEAD
-	
-	//std::string req = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n";
-	
-=======
->>>>>>> gshona
 	
 	serv.addListener(DEFAULT_PORT);
 	serv.addListener(93);
 	serv.addListener(97);
 	serv.addListener(85);
 
-<<<<<<< HEAD
-	// ft::IRequest *request = new ft::Request(req);
-	
-	// ft::IResponse *resp = resp_builder.buildResponse(request);
-
-	// std::cout << "REQUEST: ===========================\n" << request->to_string() << "=====================\n";
-	// std::cout << "RESPONSE: ==========================\n" << resp->to_string() << "=====================\n";
-=======
 	dispatcher.connectToServer(&serv);
 	serv.start();
->>>>>>> gshona
 
 	while (1)
 	{
