@@ -18,7 +18,7 @@ namespace ft
 		IHeader					*getHeader(void);
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
-		unsigned long			size();
+		unsigned long			size() const;
 	};
 
 

@@ -45,7 +45,7 @@ namespace ft
 		return	_header->to_string() + _body->to_string();
 	}
 
-	unsigned long			BasicResponse::size()
+	unsigned long			BasicResponse::size() const
 	{
 		return (_header->size() + _body->size());
 	}

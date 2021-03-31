@@ -158,4 +158,5 @@ namespace ft
 	std::string			getHeaderKey(header_keys_enum key);
 	std::string			getMethodStr(const methods_enum key);
 	std::string			getCodeDescr(int code);
+	std::string			to_string(int num);
 }
