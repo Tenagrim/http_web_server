@@ -2,8 +2,6 @@
 
 namespace ft
 {
-	
-
 	FakeRequestValidator::FakeRequestValidator()
 	{
 	}
@@ -25,6 +23,10 @@ namespace ft
 		return true;
 	}
 	bool		FakeRequestValidator::isValid(std::string const &line)
+	{
+		return true;
+	}
+	bool		FakeRequestValidator::isValid(const IRequest &req)
 	{
 		return true;
 	}

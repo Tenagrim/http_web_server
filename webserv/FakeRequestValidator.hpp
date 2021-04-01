@@ -3,7 +3,7 @@
 namespace ft
 {
 
-	class FakeRequestValidator
+	class FakeRequestValidator : public IRequestValidator
 	{
 	private:
 	public:
