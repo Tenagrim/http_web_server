@@ -1,5 +1,6 @@
 #pragma once
 #include <ABody.hpp>
+#include <stdexcept>
 namespace ft
 {
 	class TextBody : public ABody

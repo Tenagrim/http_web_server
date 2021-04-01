@@ -112,7 +112,7 @@ namespace ft
 			reallyCloseSock(sock);
 			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
 				std::cout << "[" << (*it).first << "] ";
-				std::cout << "\n";
+			std::cout << "\n";
 			std::cout << " CLOSED[" << sock<< "]\n";
 			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
 			_socks_to_close.pop();

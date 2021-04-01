@@ -4,6 +4,7 @@
 #include <string>
 #include <Utils.hpp>
 #include <map>
+#include <algorithm>
 
 namespace ft
 {

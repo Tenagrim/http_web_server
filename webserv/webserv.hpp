@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include <stdexcept>
 namespace ft
 {
 	static const char webpage_header[] =

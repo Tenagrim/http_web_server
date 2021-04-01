@@ -20,6 +20,7 @@
 #include <map>
 
 #include <errno.h>
+#include <cstring> // For strerror
 
 #include <TextResponse.hpp> // TEPORARILY
 

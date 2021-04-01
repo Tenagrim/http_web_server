@@ -106,7 +106,7 @@ namespace ft
 			sendFileBody(dynamic_cast<FileBody*>(body), client);
 		else
 			throw std::runtime_error("RESPONSE SENDER: WRONG TYPE OF BODY GOT");
-			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
+		std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		if (body->size() == body->getWritten())
 			client->sendBody();
 	}
