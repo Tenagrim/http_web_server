@@ -25,13 +25,13 @@ void	sigint_handler(int sig)
 
 int main(int ac, char **av)
 {
+	(void)ac; // FIXME:
+	(void)av; // FIXME:
 
 //TODO: if you need to start server commit "Config Parser"
 //	ft::ConfigParser parser;
 //	ft::Server		serv = ft::Server();
-
-	(void)ac; // FIXME
-	(void)av; // FIXME
+////////// PRIMARY PART ///////////////////////////////////////////////////////////////
 
 	ft::Dispatcher			dispatcher;
 	ft::FileManager			fmngr;
@@ -57,7 +57,10 @@ int main(int ac, char **av)
 		dispatcher.handleEvents();
 		usleep(DISPATCHER_TICK_MICROS);
 	}
+////////////////////////////////////////////////////////////////////////////////
 
+
+////// TODO: LIST////////////////////////////////////////////////////////////////////
 	// TODO: классы-наследники от Header: ReaponseHeader и  RequestHeader
 	// TODO: Раздельное чтение запроса
 	// TODO: Закрывать соединение когда в сокете конец файла
