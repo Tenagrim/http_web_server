@@ -15,8 +15,9 @@ ft::Server	*SERVER;
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	std::cout <<  "\n\nSIGINT catched\nABORTING...\n";
 	SERVER->abort();
-	printf("\n\nSIGINT catched\n\n");
+	std::cout <<  "SERVER STOPPED\n\n" ;
 	exit(2);
 }
 

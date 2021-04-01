@@ -13,14 +13,20 @@ namespace ft
 		std::string _version;
 		std::map<std::string, std::string> _headers;
 
+		IHeader		*_header;
+		IBody		*_body;
 		
 		Request();
 
+		Request(const Request &ref);
 	public:
 		Request(std::string const &req_text);
 		virtual ~Request();
-		Request(const Request &ref);
+		Request(IHeader *head, IBody *body);
 
+		IHeader					*getHeader(void);
+		IBody					*getBody(void);
+		
 		Request					&operator=(const Request &ref);
 		std::string				&getHeaderValue(std::string const &header);
 		std::map<std::string, std::string> &getHeaders(void);
