@@ -22,7 +22,6 @@
 
 namespace ft
 {
-
 	class ABuildPolicy
 	{
 	protected:
