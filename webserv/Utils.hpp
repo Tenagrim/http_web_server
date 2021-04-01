@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <algorithm> // For std::find
 
 namespace ft
 {

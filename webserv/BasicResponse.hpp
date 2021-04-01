@@ -1,5 +1,6 @@
 #pragma once
 #include <IResponse.hpp>
+#include <stdexcept>
 namespace ft
 {
 

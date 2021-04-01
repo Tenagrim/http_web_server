@@ -1,4 +1,5 @@
 #include <string>
+#include <stdexcept>
 namespace ft
 {
 	std::string		getCodeDescr(int code)
