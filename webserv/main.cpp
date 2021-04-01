@@ -11,52 +11,7 @@
 #include <Request.hpp>
 #include <defines.hpp>
 
-ft::Server	*SERVER;
-void	sigint_handler(int sig)
-{
-	(void)sig;
-	SERVER->abort();
-	printf("\n\nSIGINT catched\n\n");
-	exit(2);
-}
-
-
-
-int main(int ac, char **av)
-{
-//TODO: if you need to start server commit "Config Parser"
-	ft::ConfigParser parser;
-	std::list<ft::ServerInit *> server_list = parser.getServerList();
-//	ft::Server		serv = ft::Server();
-
-//	(void)ac; // FIXME
-//	(void)av; // FIXME
-//
-//	ft::Dispatcher			dispatcher;
-//	ft::FileManager			fmngr;
-//	ft::ResponseBuilder		resp_builder(&fmngr);
-//	ft::ResponseSender		sender(&dispatcher);
-//	ft::Server				serv(&dispatcher, &sender, &resp_builder);
-//
-//
-//	SERVER = &serv;
-//	signal(SIGINT, &sigint_handler);
-//
-//	serv.addListener(DEFAULT_PORT);
-//	serv.addListener(93);
-//	serv.addListener(97);
-//	serv.addListener(85);
-//
-//	dispatcher.connectToServer(&serv);
-//	serv.start();
-//
-//	while (1)
-//	{
-//		dispatcher.updateEvents();
-//		dispatcher.handleEvents();
-//		usleep(DISPATCHER_TICK_MICROS);
-//	}
-
+////// TODO: LIST////////////////////////////////////////////////////////////////////
 	// TODO: классы-наследники от Header: ReaponseHeader и  RequestHeader
 	// TODO: Раздельное чтение запроса
 	// TODO: Закрывать соединение когда в сокете конец файла
@@ -72,6 +27,53 @@ int main(int ac, char **av)
 	// TODO: Засунуть в бод тип контента
 	// TODO: Fake Request Validator 
 	// TODO: УТЕЧКА ПАМЯТИ !!!!!!!!!!!!!!!
+	// TODO: Засунуть  диспетчера в сервер
+	// TODO: Несколько билдеров по методам
+	// TODO: Раскидать файлы по папкам
+	// TODO:
 	// TODO: 
-	// TODO: 
+
+
+ft::Server	*SERVER;
+
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	std::cout <<  "\n\nSIGINT catched\nABORTING...\n";
+	//SERVER->abort();
+	SERVER->stop();
+	std::cout <<  "SERVER STOPPED\n\n" ;
+	exit(2);
+}
+
+
+
+int main(int ac, char **av)
+{
+	(void)ac; // FIXME:
+	(void)av; // FIXME:
+
+//TODO: if you need to start server commit "Config Parser"
+//	ft::ConfigParser parser;
+//	ft::Server		serv = ft::Server();
+////////// PRIMARY PART ///////////////////////////////////////////////////////////////
+
+	ft::FileManager			fmngr;
+	ft::ResponseBuilder		resp_builder(&fmngr);
+
+	ft::Server				serv(&resp_builder);
+
+
+	SERVER = &serv;
+	signal(SIGINT, &sigint_handler);
+
+	serv.addListener(DEFAULT_PORT);
+	serv.addListener(93);
+	serv.addListener(97);
+	serv.addListener(85);
+
+	serv.start();
+
+////////////////////////////////////////////////////////////////////////////////
+
 }
