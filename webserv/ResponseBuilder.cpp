@@ -57,8 +57,9 @@ namespace ft
 		std::stringstream	ss;
 		std::string			str;
 		std::ifstream		fin(_fmngr->getFullPath(filename), std::ios::binary);
-
-		std::cout << "BODY FROM FILE: ["<< filename <<"]\n";
+		#ifdef DEBUG
+			std::cout << "BODY FROM FILE: ["<< filename <<"]\n";
+		#endif
 
 		if (!fin.good())
 			throw std::runtime_error("Cannot open file: " + filename);
@@ -69,7 +70,9 @@ namespace ft
 		ss << fin.rdbuf();
 		str = ss.str();
 
-		std::cout << "SIZE:"<< str.size() <<"\n";
+		#ifdef DEBUG
+			std::cout << "SIZE:"<< str.size() <<"\n";
+		#endif
 		//buff = new char[size + 1];
 		//ret = read(fd, buff, size);
 		//buff[ret] = 0;
@@ -82,11 +85,13 @@ namespace ft
 
 	FileBody			*ResponseBuilder::buildFileBody(std::string const &filename)
 	{
-		std::cout << "BUILDER: BUILD FILE BODY ["<< filename <<"]\n";
-		
+		#ifdef DEBUG
+			std::cout << "BUILDER: BUILD FILE BODY ["<< filename <<"]\n";
+		#endif	
 		FileBody *res = new FileBody(_fmngr->getFileSize(filename), _fmngr->getFd(filename), _fmngr->getFullPath(filename));
-		std::cout << "BUILDER: BUILDING COMPLETED ["<<res->size() <<"] ["<< res->getFd() <<"] ["<< _fmngr->getFullPath(filename) <<"]\n";
-		//std::cout << "BUILDER: RESPONSE TEXT: ==============\n" << res->to_string() << "=============================\n";
+		#ifdef DEBUG
+			std::cout << "BUILDER: BUILDING COMPLETED ["<<res->size() <<"] ["<< res->getFd() <<"] ["<< _fmngr->getFullPath(filename) <<"]\n";
+		#endif
 		return (res);
 	}
 
@@ -95,7 +100,9 @@ namespace ft
 		std::string type;
 
 		type = _fmngr->getContentType(filename);
-		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
+		#ifdef DEBUG
+			std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
+		#endif
 		if (type.find("text") != std::string::npos)
 			return (buildTextBody(filename));
 		else
@@ -108,7 +115,9 @@ namespace ft
 		IBody			*body;
 		IHeader			*header;
 		
-		std::cout << "BUILDER: BUILD FROM FILE: ["<< filename <<"]\n";
+		#ifdef DEBUG
+			std::cout << "BUILDER: BUILD FROM FILE: ["<< filename <<"]\n";
+		#endif
 		
 		body = bodyFromFile(filename);
 		header = buildHeader(200, "OK", body);
@@ -133,19 +142,11 @@ namespace ft
 		//_fmngr->setRoot(request->getURI());
 		if (_fmngr->isFileExisting("index.html"))
 		{
-			std::cout << "FILE EXISTS\n";
-			/*
-			IBody		*body = bodyFromFile("index.html");
-			IHeader		*header = buildHeader(200, "OK", body);
-			res = new TextResponse(header->to_string() + body->to_string());
-			delete header;
-			delete body;
-			return (res);
-			*/
+			#ifdef DEBUG
+				std::cout << "FILE EXISTS\n";
+			#endif
 			return buildFromFile("index.html");
 		}
-		//throw std::runtime_error("BUILD FROM DIR NOT FULLY IPLEENTED");
-		//return(0);
 		return _e_pager.getErrorPage(404);
 	}
 
@@ -154,24 +155,25 @@ namespace ft
 		_fmngr->setRoot("resources/sites/particles");   // HARDCODED SERVER ROOT
 		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse	*res = 0;
-
-		std::cout << "URI ::::::::::: ["<< request->getURI() <<"]\n";
+		#ifdef DEBUG
+			std::cout << "URI ::::::::::: ["<< request->getURI() <<"]\n";
+		#endif
 
 		if (_fmngr->isADirectory(request->getURI()))
 			return (buildFromDir(request));
 
 		if (_fmngr->isFileExisting(request->getURI()))
 		{
+			#ifdef DEBUG
 			std::cout << "FILE EXISTS\n";
+			#endif
 			res = buildFromFile(request->getURI());
 
 			return res;
 		}
-		else
-			std::cout << "FILE NOT EXISTS\n";
-		
-		//throw std::runtime_error("Need to send 404 (not implemented)");
-		//return new TextResponse("HTTP/1.1 404 NotFound\r\n\r\n");
+			#ifdef DEBUG
+				std::cout << "FILE NOT EXISTS\n";
+			#endif
 		return (_e_pager.getErrorPage(404));
 	}
 }

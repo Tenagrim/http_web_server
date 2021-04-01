@@ -20,7 +20,6 @@ void	sigint_handler(int sig)
 	exit(2);
 }
 
-//								^ seconds
 
 
 int main(int ac, char **av)
@@ -71,8 +70,8 @@ int main(int ac, char **av)
 	// TODO: Перейти на евенты (чтоб по-взрослому было)
 	// TODO: Красивое логгирование
 	// TODO: Засунуть в бод тип контента
-	// TODO: 
-	// TODO: 
+	// TODO: Fake Request Validator 
+	// TODO: УТЕЧКА ПАМЯТИ !!!!!!!!!!!!!!!
 	// TODO: 
 	// TODO: 
 }

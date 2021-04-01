@@ -36,7 +36,9 @@ namespace ft
 
 	void			Dispatcher::addListener(RequestReciever *recv, int sock)
 	{
-		std::cout << "ADD LISTENER[" << sock << "]\n";
+		#ifdef DEBUG
+			std::cout << "ADD LISTENER[" << sock << "]\n";
+		#endif
 		_listener_map[sock] = recv;
 		if (sock > _max_fd)
 			_max_fd = sock;
@@ -46,55 +48,16 @@ namespace ft
 
 	void			Dispatcher::addClient(RequestReciever *recv, int sock)
 	{
-		std::cout << "ADD CLIENT[" << sock << "]\n";
+		#ifdef DEBUG
+			std::cout << "ADD CLIENT[" << sock << "]\n";
+		#endif
 		_client_map[sock] = recv;
 		if (sock > _max_fd)
 			_max_fd = sock;
 		FD_SET(sock, &_fd_set);
 		_listening++;
 	}
-/*
-	void Dispatcher::addListener(int sock)
-	{
-		std::cout << "ADD LISTENER[" << sock << "]\n";
-		_listener_map[sock] = _server;
-		if (sock > _max_fd)
-			_max_fd = sock;
-		FD_SET(sock, &_fd_set);
-		_listening++;
-	}
 
-	void Dispatcher::addListener(Server *serv)
-	{
-		int sock = serv->getListenSock();
-		std::cout << "ADD LISTENER[" << sock << "]\n";
-		_listener_map[sock] = serv;
-		if (sock > _max_fd)
-			_max_fd = sock;
-		FD_SET(sock, &_fd_set);
-		_listening++;
-	}
-
-	void Dispatcher::addClient(int sock)
-	{
-		std::cout << "ADD CLIENT[" << sock << "]\n";
-		_client_map[sock] = _server;
-		if (sock > _max_fd)
-			_max_fd = sock;
-		FD_SET(sock, &_fd_set);
-		_listening++;
-	}
-
-	void Dispatcher::addClient(Server *serv, int sock) // LEGACY SHIT
-	{
-		std::cout << "ADD CLIENT[" << sock << "]\n";
-		_client_map[sock] = serv;
-		if (sock > _max_fd)
-			_max_fd = sock;
-		FD_SET(sock, &_fd_set);
-		_listening++;
-	}
-*/
 	void Dispatcher::closeSock(int sock)
 	{
 		_socks_to_close.push(sock);
@@ -104,18 +67,22 @@ namespace ft
 	{
 		int sock;
 		if (!_socks_to_close.empty())
+		#ifdef DEBUG
 		std::cout << "CLOSING SOCKETS";
+		#endif
 		while (!_socks_to_close.empty())
 		{
 			sock = _socks_to_close.top();
-			std::cout << " CLOSING[" << sock<< "]\n";
 			reallyCloseSock(sock);
+			_socks_to_close.pop();
+		#ifdef DEBUG
+			std::cout << " CLOSING[" << sock<< "]\n";
 			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
 				std::cout << "[" << (*it).first << "] ";
 			std::cout << "\n";
 			std::cout << " CLOSED[" << sock<< "]\n";
 			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
-			_socks_to_close.pop();
+		#endif
 		}
 		
 	}

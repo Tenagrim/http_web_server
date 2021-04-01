@@ -130,8 +130,11 @@ namespace ft
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
 			IRequest	*request = args._reciever->getRequest(args._fd);
-			std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
-			std::cout << request->to_string() << "===========================\n";
+			(void)request;
+			#ifdef DEBUG
+				std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
+				std::cout << request->to_string() << "===========================\n";
+			#endif
 	}
 
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
@@ -142,11 +145,15 @@ namespace ft
 		{
 			IResponse		*resp;
 			IClient			*client;
-			std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+			#ifdef DEBUG
+				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+			#endif
 			client = args._reciever->getClient(args._fd);
 			if (client->getLastRequest() && client->getLastRequest()->getText().size() == 0)
 			{
+				#ifdef DEBUG
 				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
+				#endif
 				_dispatcher->closeSock(client->getSock());
 				return;
 			}
@@ -158,16 +165,17 @@ namespace ft
 			}
 			else
 				resp = client->getLastResponse();
-			std::cout << "RESPONSE SENT: ================\n";
 			_resp_sender->sendResponce(resp, client);
-			//std::cout << resp->to_string() << "\n";
-			std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
-			std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
+			#ifdef DEBUG
+				std::cout << "RESPONSE SENT: ================\n";	
+				std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
+				std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
+			#endif
 			if (client->requestReceived() && !client->needsResponce())
 				_dispatcher->closeSock(client->getSock());
-
-
-			std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
+			#ifdef DEBUG
+				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
+			#endif
 		}
 	}
 
@@ -178,27 +186,16 @@ namespace ft
 		//RequestReciever *recv;
 		setFlag(is_running);
 
-
+		std::cout << "SERVER: IS STARITING\nLISTENING:\n";
 		for(std::list<RequestReciever*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 		{
 			(*it)->start();
 			_listener_map[(*it)->getListenSock()] = *it;
 			_dispatcher->addListener((*it), (*it)->getListenSock());
+			std::cout << "["<< (*it)->getListenSock() << "|"<< (*it)->getPort() <<"] ";
 		}
-
+		std::cout << "\n";
 		_list_to_start.clear();
-		/*
-		listener_map::iterator it; 
-		for (it = _listener_map.begin(); it != _listener_map.end(); it++)
-		{
-			recv = (*it).second;
-			recv->start();
-			_dispatcher->addListener(recv, recv->getListenSock());
-
-		}
-		*/
-		//_reciever->start();
-		//_dispatcher->addListener(_reciever->getListenSock());
 	}
 
 	void			Server::abort(void)
@@ -209,7 +206,9 @@ namespace ft
 	
 	void			Server::addListener(int port)
 	{
-		std::cout << "SERVER: ADD LISTENER";
+		#ifdef DEBUG
+			std::cout << "SERVER: ADD LISTENER";
+		#endif
 			if(hasFlag(is_running))
 				throw std::runtime_error("Cannot add new listener into running server");
 			//_listener_map[port] = new RequestReciever("localhost", port);	

@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/param.h>
-
+#include <defines.hpp>
 #include <iostream>
 namespace ft
 {
@@ -59,7 +59,7 @@ namespace ft
 		file = getPath(filename);
 		
 		#ifdef DEBUG
-		std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
+			std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
 		#endif
 
 		return !stat(file.c_str(), &statbuf);
@@ -144,12 +144,7 @@ namespace ft
 		file = getPath(filename);
 		fd = open(file.c_str(), _acess);
 		#ifdef DEBUG
-		std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
-
-		//char buff[10];
-		//read(fd, buff, 9);
-		//buff[9] = 0;
-		//std::cout << "CONT: [" << buff<< "]\n";
+			std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
 		#endif
 		if (fd < 0)
 			throw CannotOpenFile();
@@ -199,9 +194,9 @@ namespace ft
 		if (new_root[0] != '/')
 			slash += '/';
 		this->_root = dir + slash + new_root;
-		//if (_root.back() != '/')
-		//	_root += '/';
-		std::cout << "set root: " << _root << std::endl;
+		#ifdef DEBUG
+			std::cout << "set root: " << _root << std::endl;
+		#endif
 	}
 
 	const char *FileManager::CannotOpenFile::what() const throw() {

@@ -21,8 +21,10 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include <webserv.hpp>
 #include <map>
+
+#include <webserv.hpp>
+#include <defines.hpp>
 namespace ft
 {
 	class Dispatcher;

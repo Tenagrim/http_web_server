@@ -1,6 +1,6 @@
 
 
-#define DEBUG 1					// Define this for debug logs to stdout
+//#define DEBUG 1					// Define this for debug logs to stdout
 #define UPDATE_DELAY 1000
 
 #define DEFAULT_PORT			83
