@@ -19,7 +19,4 @@ namespace ft
 		ErrorPager	&operator=(const ErrorPager &ref);
 		IResponse	*getErrorPage(int code);
 	};
-
-
-
 } // namespace ft

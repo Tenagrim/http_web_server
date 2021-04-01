@@ -24,17 +24,10 @@
 
 #include <TextResponse.hpp> // TEPORARILY
 
-#define DEBUG 1
+#include <defines.hpp>
 
 namespace ft
 {
-
-	#define DEFAULT_PORT			83
-	#define DEFAULT_HOST			"localhost"
-	#define DEFAULT_CONN_QUEUE		10
-	#define READ_BUFF_SIZE			2048
-	#define DEFAULT_CLIENT_DELAY	1000 * 1000 * 5
-	#define CHECK_SOCKET_DELAY		100
 
 	class RequestReciever : public IRequestReciever
 	{

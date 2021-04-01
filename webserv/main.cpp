@@ -9,6 +9,7 @@
 
 
 #include <Request.hpp>
+#include <defines.hpp>
 
 ft::Server	*SERVER;
 void	sigint_handler(int sig)
@@ -19,7 +20,6 @@ void	sigint_handler(int sig)
 	exit(2);
 }
 
-#define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)
 //								^ seconds
 
 
@@ -67,4 +67,12 @@ int main(int ac, char **av)
 	// TODO: Autoindexer
 	// TODO: Раскидать проект по папкам, настроить мейкфайл
 	// TODO: Кастомные еррор-пейджи из конфига
+	// TODO: Раздельное чтение 
+	// TODO: Перейти на евенты (чтоб по-взрослому было)
+	// TODO: Красивое логгирование
+	// TODO: Засунуть в бод тип контента
+	// TODO: 
+	// TODO: 
+	// TODO: 
+	// TODO: 
 }

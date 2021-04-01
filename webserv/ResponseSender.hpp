@@ -4,7 +4,7 @@
 #include <TextBody.hpp>
 #include <FileBody.hpp>
 
-#define READ_BODY_ONE_TIME 200000
+#include <defines.hpp>
 
 namespace ft
 {

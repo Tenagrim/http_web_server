@@ -15,8 +15,6 @@
 
 #include <list>
 
-#define ERROR_PAGES_DIR nginx-error-pages
-
 namespace ft
 {
 	class ResponseBuilder : public IResponseBuilder

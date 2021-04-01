@@ -4,9 +4,7 @@
 #include <string>
 #include <fstream>
 
-#ifndef DEBUG
-#define DEBUG
-#endif
+#include <defines.hpp>
 
 #ifdef DEBUG	
 # include <iostream>

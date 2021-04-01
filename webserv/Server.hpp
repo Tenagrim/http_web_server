@@ -30,45 +30,32 @@ namespace ft
 #include <Dispatcher.hpp>
 namespace ft
 {
-//class Server;
-
-
-	static const char default_hostname[] = "localhost";
-
 	class Server
 	{
 	private:
 		typedef std::map<int, RequestReciever *>	listener_map;
-		unsigned int			_id;
-		unsigned int			_flags;
-		struct sockaddr_in		serv_addr;
-		struct hostent			*server;
-		std::string				hostname;
-		int sockfd,				port, rc, pid, err, status, client_fd;
+		unsigned int					_id;
+		unsigned int					_flags;
+		struct sockaddr_in				serv_addr;
+		struct hostent					*server;
+		std::string						hostname;
 
-		int					process();
-		int 				ft_sendfile(int out_fd, std::string const &filename);
-		unsigned int		get_file_size(std::string const &filename);
+		Dispatcher						*_dispatcher;
 
-		Dispatcher				*_dispatcher;
-
-		//IRequestReciever		*_reciever;
-
-		//RequestReciever			*_reciever;
-		listener_map			_listener_map;
+		listener_map					_listener_map;
 		std::list<RequestReciever *>	_list_to_start;			
 
-		IFileManager			*_f_manager;
-		ILogger					*_logger;
-		ITimeMachine			*_t_machine;
-		IResponseSender			*_resp_sender;
-		IResponseBuilder		*_resp_builder;
+		IFileManager					*_f_manager;
+		ILogger							*_logger;
+		ITimeMachine					*_t_machine;
+		IResponseSender					*_resp_sender;
+		IResponseBuilder				*_resp_builder;
 		
-		void			close_sockets(void);
-		void			listenerEvent(Dispatcher_event_args &args);
-		void			clientEvent(Dispatcher_event_args &args);
-		void			clientEventRead(Dispatcher_event_args &args);
-		void			clientEventWrite(Dispatcher_event_args &args);
+		void							close_sockets(void);
+		void							listenerEvent(Dispatcher_event_args &args);
+		void							clientEvent(Dispatcher_event_args &args);
+		void							clientEventRead(Dispatcher_event_args &args);
+		void							clientEventWrite(Dispatcher_event_args &args);
 		Server();
 		Server(const Server &ref);
 	public:
@@ -76,28 +63,25 @@ namespace ft
 		{
 			is_running = 1
 		};
+
 		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
 		virtual ~Server();
 
-		Server			&operator=(const Server &ref);
-		bool			hasFlag(unsigned int flag);
-		int				setFlag(unsigned int flag);
-		int				switchFlag(unsigned int flag);
-		IRequest		*getRequest(void);
-		int				sendResponce(const IResponse &resp);
-		int				acceptConnection(int sock);
-		int				processConnection();
-		RequestReciever	*getListener(int sock);	
+		Server							&operator=(const Server &ref);
+		bool							hasFlag(unsigned int flag);
+		int								setFlag(unsigned int flag);
+		int								switchFlag(unsigned int flag);
+		IRequest						*getRequest(void);
+		int								sendResponce(const IResponse &resp);
+		int								acceptConnection(int sock);
+		int								processConnection();
+		RequestReciever					*getListener(int sock);	
 
-		void			gotEvent(Dispatcher_event_args args);
-		//void			readEvent(long socket);
-		//void			writeEvent(long socket);
-//		int				getListenSock(void);
+		void							gotEvent(Dispatcher_event_args args);
 
-		void			addListener(int port);
+		void							addListener(int port);
 
-		//void			run(void);
-		void			start(void);
-		void			abort(void);
+		void							start(void);
+		void							abort(void);
 	};
 }
