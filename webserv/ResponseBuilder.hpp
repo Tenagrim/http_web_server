@@ -1,6 +1,9 @@
 #pragma once
 #include <IResponseBuilder.hpp>
 #include <IFileManager.hpp>
+#include <ITimeMachine.hpp>
+
+#include <FakeTimeMachine.hpp>
 
 #include <TextResponse.hpp>
 #include <TextBody.hpp>
@@ -15,6 +18,8 @@
 
 #include <list>
 
+#include <defines.hpp>
+
 namespace ft
 {
 	class ResponseBuilder : public IResponseBuilder
@@ -22,8 +27,9 @@ namespace ft
 	private:
 		IFileManager		*_fmngr;
 		ErrorPager			_e_pager;
-		ResponseBuilder();
-		//bool				isFile(std::string const & uri);
+		//static ITimeMachine const	&_t_machine;
+		ITimeMachine		*_t_machine;
+		
 		int					findIndexFile(std::list<std::string> &priority);
 
 		IResponse			*buildFromDir(IRequest *request);
@@ -40,10 +46,11 @@ namespace ft
 		TextBody			*buildTextBody(std::string const &filename);
 		FileBody			*buildFileBody(std::string const &filename);
 
+		ResponseBuilder(const ResponseBuilder &ref);
+		ResponseBuilder();
 	public:
 		ResponseBuilder(IFileManager	*mngr);
 		virtual ~ResponseBuilder();
-		ResponseBuilder(const ResponseBuilder &ref);
 		ResponseBuilder		&operator=(const ResponseBuilder &ref);
 
 

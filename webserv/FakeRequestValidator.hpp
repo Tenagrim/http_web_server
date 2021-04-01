@@ -18,7 +18,7 @@ namespace ft
 		
 		
 		//optional
-		bool isValid(const IRequest &req, std::string const &http_version);
+		//bool isValid(const IRequest &req, std::string const &http_version);
 	};
 
 } // namespace ft

@@ -28,7 +28,7 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Getters
-	std::string const	&Header::getHeaderValue(header_keys_enum key)
+	std::string const	&Header::getHeader(std::string const & key)
 	{
 		if (!_header_map.count(key))
 			throw std::runtime_error("Header not exists");
@@ -86,7 +86,8 @@ namespace ft
 		_uri = new_uri;
 	}
 
-	void				Header::setHeader(header_keys h_key, std::string const &header_value)
+	void				Header::setHeader(std::string const & h_key, std::string const &header_value)
+
 	{
 		_header_map[h_key] = header_value;
 	}
@@ -117,7 +118,7 @@ namespace ft
 			throw std::runtime_error("Unknown type of header");
 		header_map::iterator it;
 		for (it = _header_map.begin(); it != _header_map.end(); it++)
-			ss << getHeaderKey((*it).first) << ": " << (*it).second << "\r\n";
+			ss << (*it).first << ": " << (*it).second << "\r\n";
 		ss << "\r\n";
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()
 		return (ss.str());	

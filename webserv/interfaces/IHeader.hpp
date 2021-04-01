@@ -22,7 +22,6 @@ namespace ft
 		virtual std::string			to_string(void)= 0;
 
 		virtual MessageType			getType(void) const = 0;
-		virtual std::string const	&getHeaderValue(header_keys_enum key) = 0;
 		virtual int					getResponseCode(void) const = 0;
 		virtual std::string			&getURI(void) = 0;
 		virtual std::string			&getHTTPVersion(void) = 0;
@@ -34,7 +33,10 @@ namespace ft
 		virtual void				setURI(std::string const &new_uri) = 0;
 		virtual void				setCodeDescription(std::string const &new_descr) = 0;
 		virtual void				setResponseCode(int new_code) = 0;
-		virtual void				setHeader(header_keys h_key, std::string const &header_value) = 0;
+//		virtual void				setHeader(header_keys h_key, std::string const &header_value) = 0;
+		virtual void				setHeader( std::string const &header_key, std::string const &header_value) = 0;
+		virtual std::string const	&getHeader(std::string const &key) = 0;
+
 		virtual unsigned long		size() = 0;
 		virtual ~IHeader(){}
 	};

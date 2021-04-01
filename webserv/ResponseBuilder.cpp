@@ -1,14 +1,19 @@
 #include <ResponseBuilder.hpp>
 namespace ft
 {
+	//ITimeMachine const &ResponseBuilder::_t_machine = FakeTimeMachine();
+
 	#pragma region Copilen
 	ResponseBuilder::ResponseBuilder()
 	{/*  Illegal */}
-	ResponseBuilder::ResponseBuilder(IFileManager *mngr) : _fmngr(mngr)
+
+	ResponseBuilder::ResponseBuilder(IFileManager *mngr) : _fmngr(mngr), _t_machine(new FakeTimeMachine())
 	{}
 
 	ResponseBuilder::~ResponseBuilder()
-	{}
+	{
+		delete _t_machine;
+	}
 
 	ResponseBuilder::ResponseBuilder(const ResponseBuilder &ref)
 	{
@@ -34,7 +39,12 @@ namespace ft
 		res->setCodeDescription(descr);
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
-		res->setHeader(h_content_length,  ss.str());
+		res->setHeader("Content-Length",  ss.str());
+		res->setHeader("Date",  _t_machine->getTimestamp());
+		res->setHeader("Connection", "keep-alive");
+		res->setHeader("Content-Type", body->getContentType());
+		res->setHeader("Server", DEFAULT_SERVER_HEADER);
+
 		//std::string type = 
 		return res;
 	}
@@ -98,15 +108,18 @@ namespace ft
 	IBody				*ResponseBuilder::bodyFromFile(std::string const &filename)
 	{
 		std::string type;
+		IBody		*res;
 
 		type = _fmngr->getContentType(filename);
 		#ifdef DEBUG
 			std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 		#endif
 		if (type.find("text") != std::string::npos)
-			return (buildTextBody(filename));
+			res = buildTextBody(filename);
 		else
-			return (buildFileBody(filename));
+			res = buildFileBody(filename);
+		res->setContentType(type);
+		return (res);
 	}
 
 	IResponse			*ResponseBuilder::buildFromFile(std::string const &filename)

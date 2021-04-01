@@ -18,6 +18,7 @@ namespace ft
 
 	RequestReciever::~RequestReciever()
 	{
+		delete _validator;
 		close_connections();
 		close(_main_socket);
 	}
@@ -203,21 +204,6 @@ namespace ft
 
 		return (request);
 	}
-
-/*
-	void					RequestReciever::sendResponce(Client *client)
-	{
-		write(client->getSock(), webpage_header, sizeof(webpage_header));
-		#ifdef DEBUG
-			std::cout << "HEADER SEND ["<< client->getSock() <<"]\n";
-		#endif
-		write(client->getSock(), webpage_body, sizeof(webpage_body));
-		#ifdef DEBUG
-			std::cout << "RESPONSE SEND ["<< client->getSock() <<"]\n";
-		#endif
-
-	}
-*/
 
 	int					RequestReciever::writeEvent(int sock)
 	{

@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <cstring> // For strerror
 
-#include <TextResponse.hpp> // TEPORARILY
+//#include <TextResponse.hpp> // TEPORARILY
 
 #include <defines.hpp>
 #include <IRequestValidator.hpp>
@@ -69,8 +69,6 @@ namespace ft
 		
 		int						writeEvent(int sock);
 		
-//		void					sendResponce(Client *client); // REMOVE THIS LOGIC FROM HERE
-
 		void					start(void);
 		int						getPort(void);
 	};
