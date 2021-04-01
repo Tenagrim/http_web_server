@@ -31,6 +31,10 @@ namespace ft
 
 	std::string const			&ABody::getContentType(void) const
 	{
-			return _content_type;
+		return _content_type;
+	}
+	void					ABody::setContentType(std::string const &type)
+	{
+		_content_type = type;
 	}
 }

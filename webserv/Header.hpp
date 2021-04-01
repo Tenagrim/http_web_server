@@ -9,7 +9,7 @@ namespace ft
 	class Header : public IHeader
 	{
 	private:
-		typedef std::map<header_keys_enum, std::string>	header_map;
+		typedef std::map<std::string, std::string>	header_map;
 		//std::map<header_keys_enum, std::string>				_header_map;
 		header_map										_header_map;
 		methods_enum									_method;
@@ -27,7 +27,6 @@ namespace ft
 		
 		std::string			to_string(void);
 		
-		std::string const	&getHeaderValue(header_keys_enum key);
 		MessageType			getType(void) const;
 		int					getResponseCode(void) const;
 		std::string			&getURI(void);
@@ -40,8 +39,11 @@ namespace ft
 		void				setMethod(methods_enum new_meth);
 		void				setResponseCode(int new_code);
 		void				setURI(std::string const &new_uri);
-		void				setHeader(header_keys h_key, std::string const &header_value);
 		void				setCodeDescription(std::string const &new_descr);
+		
+		void				setHeader( std::string const &header_key, std::string const &header_value);
+		std::string const	&getHeader(std::string const &key);
+		
 		unsigned long		size();
 
 	};

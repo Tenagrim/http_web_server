@@ -2,12 +2,17 @@
 #include <string>
 #include <map>
 #include <ostream>
+#include <IHeader.hpp>
+#include <IBody.hpp>
 
 namespace ft
 {
 	class IRequest
 	{
 	public:
+		virtual IHeader					*getHeader(void) = 0;
+		virtual IBody					*getBody(void) = 0;
+		
 		virtual std::string				&getHeaderValue(std::string const &header) = 0;
 		virtual std::map<std::string, std::string> &getHeaders(void) = 0;
 		virtual std::string				&getMethod(void) = 0; // GET / POST

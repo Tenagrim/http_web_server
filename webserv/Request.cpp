@@ -5,13 +5,10 @@
 namespace ft
 {
 	Request::Request()
-	{
-		throw std::runtime_error("No implementation");
-	}
+	{/* Illegal */}
 
 	Request::~Request()
-	{
-	}
+	{}
 
 	Request::Request(const Request &ref)
 	{
@@ -40,10 +37,16 @@ namespace ft
 		_version = _text.substr(prev_pos + 1, pos - prev_pos - 1);
 		_version.erase(_version.find_last_not_of("\r") + 1);
 
+		_header = 0;
+		_body = 0;
+
 		//std::cout << "\nURI: [" << _uri  << "]\n";
 		//std::cout << "method: [" << _method  << "]\n";
 		//std::cout << "version: [" << _version  << "]  len: "<< _version.size() <<"\n\n";
 	}
+
+	Request::Request(IHeader *head, IBody *body) : _header(head), _body(body)
+	{}
 
 	std::string &Request::getHeaderValue(std::string const &header)
 	{
@@ -58,7 +61,7 @@ namespace ft
 
 	std::string &Request::getMethod(void)
 	{
-		throw std::runtime_error("No implementation");
+		return _method;
 	}
 
 	std::string &Request::getURI(void)
@@ -79,5 +82,13 @@ namespace ft
 	std::string				Request::to_string(void) const
 	{
 		return (_text);
+	}
+	IHeader					*Request::getHeader(void)
+	{
+		return _header;
+	}
+	IBody					*Request::getBody(void)
+	{
+		return _body;
 	}
 }

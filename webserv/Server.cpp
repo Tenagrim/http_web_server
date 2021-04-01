@@ -7,15 +7,19 @@ namespace ft
 	Server::Server()// : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
 	{/* Illegal */}
 
-	Server::Server(Dispatcher *disp, IResponseSender *sender , IResponseBuilder *builder) : _resp_sender(sender), _resp_builder(builder)
+	Server::Server(IResponseBuilder *builder) : _resp_builder(builder)
 	{
-		_dispatcher = disp;
+		_dispatcher = new Dispatcher();
+		_dispatcher->connectToServer(this);
+		_resp_sender = new ResponseSender(_dispatcher);
 		_flags = 0;
 	}
 	
 	Server::~Server()
 	{
 		abort();
+		delete _dispatcher;
+		delete _resp_sender;
 	}
 
 	Server::Server(const Server &ref) //: _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
@@ -196,8 +200,16 @@ namespace ft
 		}
 		std::cout << "\n";
 		_list_to_start.clear();
-	}
 
+		_dispatcher->start();
+	}
+	
+	void							Server::stop(void)
+	{
+		if (!_dispatcher)
+			throw std::runtime_error("No connection to dispatcher");
+		_dispatcher->stop();
+	}
 	void			Server::abort(void)
 	{
 		for (listener_map::iterator it = _listener_map.begin(); it != _listener_map.end(); it++)
@@ -225,4 +237,5 @@ namespace ft
 			throw std::runtime_error("No such listener: " + ft::to_string(sock));
 		return _listener_map[sock];
 	}
+
 }

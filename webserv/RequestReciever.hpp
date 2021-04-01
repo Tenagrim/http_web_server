@@ -22,10 +22,11 @@
 #include <errno.h>
 #include <cstring> // For strerror
 
-#include <TextResponse.hpp> // TEPORARILY
+//#include <TextResponse.hpp> // TEPORARILY
 
 #include <defines.hpp>
-
+#include <IRequestValidator.hpp>
+#include <FakeRequestValidator.hpp>
 namespace ft
 {
 
@@ -41,20 +42,20 @@ namespace ft
 		std::string			_host;
 		int					_port;
 		int 				_queue;				// only default
-		//Client				*_client;
 		fd_map				_clients;
 
 		void				open_main_socket();
 		void				init_sockaddr();
 		void				bind_main_socket();
 		void				listen_main_socket();
-		//void				unlink_main_socket();
+
+		IRequestValidator	*_validator;
 		
 		RequestReciever();
+		RequestReciever(const RequestReciever &ref);
 	public:
 		RequestReciever(std::string const &host, int port);
 		virtual ~RequestReciever();
-		RequestReciever(const RequestReciever &ref);
 
 		RequestReciever 		&operator=(const RequestReciever &ref);
 		IRequest				*getRequest(Client *client);
@@ -68,8 +69,6 @@ namespace ft
 		
 		int						writeEvent(int sock);
 		
-		void					sendResponce(Client *client); // REMOVE THIS LOGIC FROM HERE
-
 		void					start(void);
 		int						getPort(void);
 	};

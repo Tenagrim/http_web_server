@@ -18,10 +18,6 @@ class Server;
 
 namespace ft
 {
-
-
-
-
 	class Dispatcher
 	{
 	private:
@@ -41,6 +37,7 @@ namespace ft
 		unsigned int			_listening;
 		int						_max_fd;
 		Server					*_server;
+		bool					_run;
 
 
 		void					handleListeners(void);
@@ -69,6 +66,10 @@ namespace ft
 		void			handleEvents();
 
 		void			connectToServer(Server *serv);
+
+		void			start(void);
+		void			stop(void);
+
 	};
 
 
