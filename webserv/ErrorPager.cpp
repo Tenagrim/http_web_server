@@ -56,7 +56,12 @@ namespace ft
 		head->setHTTPV("HTTP/1.1");
 		head->setResponseCode(code);
 		head->setCodeDescription(descr);
-		IBody	*body = getErrPageBody(code, descr);		
+		IBody	*body = getErrPageBody(code, descr);
+		head->setHeader("Content-Length", ft::to_string(body->size()));
+		head->setHeader("Date", _t_machine.getTimestamp());
+		head->setHeader("Connection", "close");
+		head->setHeader("Content-Type", "text/html");
+		head->setHeader("Server", DEFAULT_SERVER_HEADER);
 		return (new BasicResponse(head, body));
 	}
 	

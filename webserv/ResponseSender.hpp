@@ -1,5 +1,10 @@
 #pragma once
 #include <IResponseSender.hpp>
+namespace ft
+{
+	class Dispatcher;
+} // namespace ft
+
 #include <Dispatcher.hpp>
 #include <TextBody.hpp>
 #include <FileBody.hpp>

@@ -7,6 +7,7 @@ namespace ft
 {
 	class ITimeMachine
 	{
+		public:
 		// get current time as string as presented in http header "Date" or "Last-Modified"
 		//
 		// Date: Sat, 27 Mar 2021 03:09:18 GMT

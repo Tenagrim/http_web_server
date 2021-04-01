@@ -22,6 +22,7 @@ namespace ft
 		virtual BodyType			getType(void) = 0;
 
 		std::string const			&getContentType(void) const;
+		void						setContentType(std::string const &type);
 		unsigned long				getWritten();
 		void						setWritten(unsigned long value);
 	};

@@ -24,7 +24,9 @@ namespace ft
 		virtual BodyType				getType(void) = 0;
 		virtual unsigned long			getWritten() = 0;
 		virtual void					setWritten(unsigned long value) = 0;
+
 		virtual std::string const		&getContentType(void) const = 0;
+		virtual void					setContentType(std::string const &type) = 0;
 
 		virtual ~IBody(){}
 	};

@@ -30,7 +30,7 @@
 	// TODO: Засунуть  диспетчера в сервер
 	// TODO: Несколько билдеров по методам
 	// TODO: Раскидать файлы по папкам
-	// TODO:
+	// TODO: 
 	// TODO: 
 
 
@@ -63,10 +63,10 @@ int main(int ac, char **av)
 
 	ft::Server				serv(&resp_builder);
 
-
+	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-
+	
 	serv.addListener(DEFAULT_PORT);
 	serv.addListener(93);
 	serv.addListener(97);

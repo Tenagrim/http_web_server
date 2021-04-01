@@ -6,16 +6,19 @@ namespace ft
 
 	RequestReciever::RequestReciever() : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
 	{
+		_validator = 0;
 		throw std::runtime_error("No implementation");
 	}
 
 	RequestReciever::RequestReciever(std::string const &host, int port) : _host(host), _port(port), _queue(DEFAULT_CONN_QUEUE)
 	{
+		_validator = new FakeRequestValidator();
 		_client_max_id = 0;
 	}
 
 	RequestReciever::~RequestReciever()
 	{
+		delete _validator;
 		close_connections();
 		close(_main_socket);
 	}
@@ -48,7 +51,7 @@ namespace ft
 			/* code */
 			bind_main_socket();
 		}
-		catch(const std::exception& e)        // FIXME   REMOVE THIS SHIT OUT HERE !!!!
+		catch(const std::exception& e)        // FIXME:   REMOVE THIS SHIT OUT HERE !!!!
 		{
 			std::cerr << e.what() << '\n';
 			_port++;
@@ -79,14 +82,6 @@ namespace ft
 		_sockaddr.sin_port = htons(_port);
 	}
 
-/*
-	void				RequestReciever::unlink_main_socket()
-	{
-		int ret;
-
-		//ret = unlink
-	}
-*/	
 	void			RequestReciever::bind_main_socket(void)
 	{
 		int ret;
@@ -127,7 +122,6 @@ namespace ft
 				std::cout << "MAIN SOCKET LISTENED\n";
 			#endif
 	}
-
 	#pragma endregion // INITIALIZE
 
 	#pragma region Getters
@@ -211,20 +205,6 @@ namespace ft
 		return (request);
 	}
 
-	void					RequestReciever::sendResponce(Client *client)
-	{
-		write(client->getSock(), webpage_header, sizeof(webpage_header));
-		#ifdef DEBUG
-			std::cout << "HEADER SEND ["<< client->getSock() <<"]\n";
-		#endif
-		write(client->getSock(), webpage_body, sizeof(webpage_body));
-		#ifdef DEBUG
-			std::cout << "RESPONSE SEND ["<< client->getSock() <<"]\n";
-		#endif
-
-	}
-
-
 	int					RequestReciever::writeEvent(int sock)
 	{
 		if (!_clients.count(sock))
@@ -238,7 +218,6 @@ namespace ft
 			#ifdef DEBUG
 				std::cout << "RECIEVER: NEED RESPONSE TO CLIENT\n";
 			#endif
-			//_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
 			return (1);
 		}
 		#ifdef DEBUG
