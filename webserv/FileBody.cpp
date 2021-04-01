@@ -11,6 +11,7 @@ namespace ft
 
 	FileBody::~FileBody()
 	{
+		if (_fd != -1)
 		close(_fd);
 	}
 

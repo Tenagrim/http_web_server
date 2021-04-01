@@ -38,9 +38,9 @@ namespace ft
 	#pragma region Initialize
 	void			RequestReciever::start()
 	{
-			#ifdef DEBUG
-				std::cout << "======== STARTING +++++++++++++=\n";
-			#endif
+		#ifdef DEBUG
+			std::cout << "======== STARTING +++++++++++++=\n";
+		#endif
 		open_main_socket();
 		init_sockaddr();
 		try
@@ -55,12 +55,11 @@ namespace ft
 			open_main_socket();
 			init_sockaddr();
 			bind_main_socket();
-		}
-		
+		}		
 		listen_main_socket();
-			#ifdef DEBUG
-				std::cout << "======== STARTED +++++++++++++=\n";
-			#endif
+		#ifdef DEBUG
+			std::cout << "======== STARTED +++++++++++++=\n";
+		#endif
 	}
 
 	void			RequestReciever::open_main_socket(void)
@@ -150,19 +149,9 @@ namespace ft
 		unsigned int	addrlen;
 		int				_client_fd;
 			
-			#ifdef DEBUG
-				std::cout << "ATTEMPT TO ACCEPT CONNECTION\n";
-			#endif
-		
-		/*
-		if ( _client)
-		{ 
-			#ifdef DEBUG
-				std::cout << "ALREADY CONNNECTED\n";
-			#endif
-			return 0;
-		}
-		*/
+		#ifdef DEBUG
+			std::cout << "ATTEMPT TO ACCEPT CONNECTION\n";
+		#endif
 
 		addrlen = sizeof(_main_socket);
 		_client_fd = accept(_main_socket, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
@@ -173,9 +162,9 @@ namespace ft
 
 		_clients[_client_fd] = new Client(_client_max_id++, _client_fd);
 
-			#ifdef DEBUG
-				std::cout << "CONNECTION ACCEPTED\n";
-			#endif
+		#ifdef DEBUG
+			std::cout << "CONNECTION ACCEPTED\n";
+		#endif
 		return _client_fd;
 	}
 	
@@ -183,7 +172,6 @@ namespace ft
 	{
 		if (!_clients.count(sock))
 			throw std::runtime_error("Can t close: No such connection");
-
 		delete	_clients[sock];
 		_clients.erase(sock);
 	}
@@ -200,8 +188,6 @@ namespace ft
 
 	IRequest				*RequestReciever::getRequest(int sock)
 	{
-		//if (_client->getSock() != sock)
-		//	throw std::runtime_error("No client with this sock");
 		return getRequest(_clients[sock]);
 	}
 
@@ -228,9 +214,13 @@ namespace ft
 	void					RequestReciever::sendResponce(Client *client)
 	{
 		write(client->getSock(), webpage_header, sizeof(webpage_header));
-		std::cout << "HEADER SEND ["<< client->getSock() <<"]\n";
+		#ifdef DEBUG
+			std::cout << "HEADER SEND ["<< client->getSock() <<"]\n";
+		#endif
 		write(client->getSock(), webpage_body, sizeof(webpage_body));
-		std::cout << "RESPONSE SEND ["<< client->getSock() <<"]\n";
+		#ifdef DEBUG
+			std::cout << "RESPONSE SEND ["<< client->getSock() <<"]\n";
+		#endif
 
 	}
 
@@ -240,16 +230,21 @@ namespace ft
 		if (!_clients.count(sock))
 			throw std::runtime_error("No such client");
 		
-		std::cout << "RECIEVER: WRITE EVENT\n";
+		#ifdef DEBUG
+			std::cout << "RECIEVER: WRITE EVENT\n";
+		#endif
 		if (_clients[sock]->needsResponce())
 		{
-			std::cout << "RECIEVER: NEED RESPONSE TO CLIENT\n";
+			#ifdef DEBUG
+				std::cout << "RECIEVER: NEED RESPONSE TO CLIENT\n";
+			#endif
 			//_clients[sock]->unsetFlag(Client::state_flags, Client::need_response);
 			return (1);
 		}
-		std::cout << "RECIEVER: NO NEED RESPONSE TO CLIENT\n";
+		#ifdef DEBUG
+			std::cout << "RECIEVER: NO NEED RESPONSE TO CLIENT\n";
+		#endif
 		return (0);
-
 	}
 
 	IClient					*RequestReciever::getClient(int sock)

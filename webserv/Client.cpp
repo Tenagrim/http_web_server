@@ -1,6 +1,5 @@
 #include <Client.hpp>
-
-#define DEBUG
+#include <defines.hpp>
 
 #ifdef DEBUG
 # include <iostream>
@@ -133,7 +132,9 @@ namespace ft
 			#endif
 			return false;
 		}
-		std::cout << "CLIENT: NEED TO RESPONSE\n";
+		#ifdef DEBUG
+			std::cout << "CLIENT: NEED TO RESPONSE\n";
+		#endif
 		return true;
 	}
 	bool			Client::requestReceived(void)

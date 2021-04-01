@@ -1,5 +1,5 @@
 #include <ServerInit.hpp>
-#include "ServerInit.hpp"
+//#include "ServerInit.hpp"
 
 ft::ServerInit::ServerInit(): _id(0),_location_count(0) {
 }
