@@ -1,10 +1,11 @@
 #include <ServerInit.hpp>
 //#include "ServerInit.hpp"
 
-ft::ServerInit::ServerInit(): _id(0),_location_count(0) {
+ft::ServerInit::ServerInit(int id): _id(id), _location_count(0) {
 }
 
 ft::ServerInit::~ServerInit() {
+//	TODO; Double Free
 	std::list<LocationInit *>::iterator it = _locations.begin();
 	for (; it != _locations.end(); ++it) {
 		delete *it;
@@ -12,7 +13,7 @@ ft::ServerInit::~ServerInit() {
 	_locations.clear();
 }
 
-bool ft::ServerInit::parseInServer(std::list<std::string> tmp)
+bool ft::ServerInit::parseInServer(std::list<std::string> &tmp)
 {
 	bool state = false;
 	ft::deleteCommit(tmp);
@@ -23,10 +24,6 @@ bool ft::ServerInit::parseInServer(std::list<std::string> tmp)
 	getConf(tmp);
 	return state;
 }
-
-unsigned int ft::ServerInit::getId() const { return _id; }
-
-void ft::ServerInit::setId(unsigned int id) { _id = id; }
 
 ft::ServerInit::iterator ft::ServerInit::findInList(ft::ServerInit::list *_list,std::string const &string)
 {
@@ -66,30 +63,7 @@ bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
 
 void ft::ServerInit::getConf(std::list<string> &list)
 {
-	if (!_listen.empty()) {
-		for(iterator_num it = _listen.begin(); it != _listen.end(); ++it) {
-			std::cout<<*it;
-		}
-		std::cout<<"\n";
-	}
-	if (!_server_name.empty()) {
-		for (iterator it = _server_name.begin(); it != _server_name.end(); ++it) {
-			std::cout<<*it;
-		}
-		std::cout<<"\n";
-	}
-	if (!_locations.empty()){
-		std::list<LocationInit *>::iterator loc_it = _locations.begin();
-		LocationInit *tmp = *loc_it;
-		std::cout<<tmp->getId()<<" - id location"<<std::endl;
-		std::cout<<tmp->getPath()<<" - PATH"<<std::endl;
-		delete tmp;
-	}
-	iterator it = list.begin();
-	for (; it != list.end(); ++it) {
-		std::cout<<*it;
-	}
-	std::cout<<"\n";
+
 }
 
 ft::ServerInit::iterator ft::ServerInit::is_Space(iterator it)
@@ -126,33 +100,29 @@ bool ft::ServerInit::findServerName(list *tmp)
 	return state;
 }
 
-bool ft::ServerInit::findLocations(ft::ServerInit::list *tmp)
+bool ft::ServerInit::findLocations(std::list<std::string> *tmp)
 {
-//	TODO: Make Location Class
 	bool state = false;
-	iterator it = findInList(tmp, "location");
-	tmp->erase(++tmp->begin(), it);
-	list *location = ft::findAndCut(*tmp, "location");
-	if (location->empty()){
-		delete location;
-		throw std::runtime_error("No key-word \"LOCATIONS\"");
-	}
-	LocationInit *Location = new LocationInit(_location_count);
-	_locations.push_back(Location);
-	_location_count++;
-	state =  Location->InitParse(*location);
-	return state;
-}
+	iterator start = tmp->begin();
 
-std::list<std::string> ft::ServerInit::copyContent(list &tmp, ft::ServerInit::iterator it, const std::string &stop)
-{
-	iterator start = it;
-	while ((*it != stop) && (it != tmp.end()))
-		++it;
-	iterator end = it;
-	std::list<std::string> content_list;
-	content_list.assign(start, end);
-	return content_list;
+	while (start != tmp->end()){
+		start = std::find(tmp->begin(), tmp->end(), "location");
+		if (*start != "location" && _location_count == 0) {
+			throw std::runtime_error("No one LOCATION");
+			break;
+		}
+		else if (start != tmp->end()){
+			tmp->erase(start);
+			iterator end = std::find(++start, tmp->end(), "location");
+			std::list<std::string> *location = new std::list<std::string>;
+			location->splice(location->begin(), *tmp, ++start, end);
+			LocationInit *Location = new LocationInit(_location_count);
+			_locations.push_back(Location);
+			_location_count++;
+			state =  Location->InitParse(*location);
+		}
+	}
+	return state;
 }
 
 std::list<int>					&ft::ServerInit::getListenPorts(void)
@@ -167,4 +137,13 @@ std::list<ft::LocationInit *>		&ft::ServerInit::getLocationInits(void)
 std::list<std::string>			&ft::ServerInit::getServerNames(void)
 {
 	return _server_name;
+}
+
+unsigned int ft::ServerInit::getId() const { return _id; }
+
+void ft::ServerInit::setId(unsigned int id) { _id = id; }
+
+unsigned int ft::ServerInit::getLocationCount() const
+{
+	return _location_count;
 }

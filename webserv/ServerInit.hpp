@@ -8,8 +8,6 @@
 #include <Utils.hpp>
 #include <LocationInit.hpp>
 
-//#include <Utils.hpp>
-
 namespace ft {
 	class ServerInit {
 	private:
@@ -30,13 +28,12 @@ namespace ft {
 		bool findListen(list *tmp);
 
 	public:
-		ServerInit();
+		ServerInit(int id);
 		~ServerInit();
 
-		unsigned int getId() const;
 		void setId(unsigned int id);
 
-		bool parseInServer(std::list<std::string> tmp);
+		bool parseInServer(std::list<std::string> &tmp);
 		iterator findInList(list *_list,std::string const &string);
 
 		void getConf(std::list<std::string> &list);
@@ -44,12 +41,12 @@ namespace ft {
 		bool is_digit(string const &str);
 
 		bool findLocations(list *tmp);
-		std::list<std::string> copyContent(list &tmp,iterator it, std::string const &stop);
 
 		////// Sorry, i need getters /////////////
+		unsigned int getId() const;
+		unsigned int getLocationCount() const;
 		std::list<int>					&getListenPorts(void);
-		std::list<LocationInit *>		&getLocationInits(void);
 		std::list<std::string>			&getServerNames(void);
-
+		std::list<LocationInit *>		&getLocationInits(void);
 	};
 }
