@@ -61,7 +61,7 @@ namespace ft
 
 	std::string &Request::getMethod(void)
 	{
-		throw std::runtime_error("No implementation");
+		return _method;
 	}
 
 	std::string &Request::getURI(void)
