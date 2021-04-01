@@ -27,6 +27,9 @@
 	// TODO: Засунуть в бод тип контента
 	// TODO: Fake Request Validator 
 	// TODO: УТЕЧКА ПАМЯТИ !!!!!!!!!!!!!!!
+	// TODO: Засунуть  диспетчера в сервер
+	// TODO: Несколько билдеров по методам
+	// TODO: Раскидать файлы по папкам
 	// TODO: 
 	// TODO: 
 
@@ -37,7 +40,8 @@ void	sigint_handler(int sig)
 {
 	(void)sig;
 	std::cout <<  "\n\nSIGINT catched\nABORTING...\n";
-	SERVER->abort();
+	//SERVER->abort();
+	SERVER->stop();
 	std::cout <<  "SERVER STOPPED\n\n" ;
 	exit(2);
 }
@@ -54,11 +58,10 @@ int main(int ac, char **av)
 //	ft::Server		serv = ft::Server();
 ////////// PRIMARY PART ///////////////////////////////////////////////////////////////
 
-	ft::Dispatcher			dispatcher;
 	ft::FileManager			fmngr;
 	ft::ResponseBuilder		resp_builder(&fmngr);
-	ft::ResponseSender		sender(&dispatcher);
-	ft::Server				serv(&dispatcher, &sender, &resp_builder);
+
+	ft::Server				serv(&resp_builder);
 
 	
 	SERVER = &serv;
@@ -69,15 +72,8 @@ int main(int ac, char **av)
 	serv.addListener(97);
 	serv.addListener(85);
 
-	dispatcher.connectToServer(&serv);
 	serv.start();
 
-	while (1)
-	{
-		dispatcher.updateEvents();
-		dispatcher.handleEvents();
-		usleep(DISPATCHER_TICK_MICROS);
-	}
 ////////////////////////////////////////////////////////////////////////////////
 
 }

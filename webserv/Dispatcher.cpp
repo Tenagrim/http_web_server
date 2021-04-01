@@ -12,6 +12,7 @@ namespace ft
 		FD_ZERO(&_fd_set);
 		_max_fd = 0;
 		_server = 0;
+		_run = false;
 	}
 
 	Dispatcher::~Dispatcher()
@@ -123,8 +124,6 @@ namespace ft
 
 	void			Dispatcher::updateEvents()
 	{
-		if (!_server)
-			throw std::runtime_error("Not connected to server");
 		//#undef DEBUG
 
 			#ifdef DEBUG
@@ -225,5 +224,22 @@ namespace ft
 	void			Dispatcher::connectToServer(Server *serv)
 	{
 		_server = serv;
+	}
+	void			Dispatcher::start(void)
+	{
+		if (!_server)
+			throw std::runtime_error("Not connected to server");
+		_run = true;
+		while (_run)
+		{
+			updateEvents();
+			handleEvents();
+			usleep(DISPATCHER_TICK_MICROS);
+		}
+		
+	}
+	void			Dispatcher::stop(void)
+	{
+		_run = false;
 	}
 } // namespace ft

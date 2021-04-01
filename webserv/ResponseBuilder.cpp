@@ -32,14 +32,14 @@ namespace ft
 
 	IHeader				*ResponseBuilder::buildHeader(int ret_code, std::string descr, IBody *body)
 	{
-		std::stringstream ss;
+		//std::stringstream ss;
 		IHeader *res = new Header(response);
 		
-		ss << body->size();
+		//ss << body->size();
 		res->setCodeDescription(descr);
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
-		res->setHeader("Content-Length",  ss.str());
+		res->setHeader("Content-Length",  ft::to_string(body->size()));
 		res->setHeader("Date",  _t_machine->getTimestamp());
 		res->setHeader("Connection", "keep-alive");
 		res->setHeader("Content-Type", body->getContentType());

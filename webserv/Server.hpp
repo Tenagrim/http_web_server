@@ -23,6 +23,9 @@
 #include <fstream>
 #include <map>
 
+#include <ResponseSender.hpp>
+#include <ResponseBuilder.hpp>
+
 #include <webserv.hpp>
 #include <defines.hpp>
 namespace ft
@@ -66,7 +69,7 @@ namespace ft
 			is_running = 1
 		};
 
-		Server(Dispatcher *disp, IResponseSender *resp, IResponseBuilder *bulder);
+		Server(IResponseBuilder *bulder);
 		virtual ~Server();
 
 		Server							&operator=(const Server &ref);
@@ -84,6 +87,7 @@ namespace ft
 		void							addListener(int port);
 
 		void							start(void);
+		void							stop(void);
 		void							abort(void);
 	};
 }
