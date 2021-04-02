@@ -12,7 +12,7 @@ namespace ft
 
 	RequestReciever::RequestReciever(std::string const &host, int port) : _host(host), _port(port), _queue(DEFAULT_CONN_QUEUE)
 	{
-		_validator = new FakeRequestValidator();
+		_validator = new FakeFakeRequestValidator();
 		_client_max_id = 0;
 	}
 
