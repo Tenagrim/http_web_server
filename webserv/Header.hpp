@@ -4,6 +4,7 @@
 #include <IHeader.hpp>
 #include <sstream>
 #include <runtime_error.hpp>
+#include <defines.hpp>
 
 namespace ft
 {

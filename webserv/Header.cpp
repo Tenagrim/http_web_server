@@ -5,10 +5,10 @@ namespace ft
 	
 
 	#pragma region Copilen
-	Header::Header()
+	Header::Header() : _http_v(DEFAULT_HTTPV)
 	{}
 
-	Header::Header(MessageType type) : _type(type)
+	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type)
 	{}
 
 	Header::~Header()

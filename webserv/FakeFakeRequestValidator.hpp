@@ -3,14 +3,14 @@
 namespace ft
 {
 
-	class FakeRequestValidator : public IRequestValidator
+	class FakeFakeRequestValidator : public IRequestValidator
 	{
 	private:
 	public:
-		FakeRequestValidator();
-		virtual ~FakeRequestValidator();
-		FakeRequestValidator(const FakeRequestValidator &ref);
-		FakeRequestValidator &operator=(const FakeRequestValidator &ref);
+		FakeFakeRequestValidator();
+		virtual ~FakeFakeRequestValidator();
+		FakeFakeRequestValidator(const FakeFakeRequestValidator &ref);
+		FakeFakeRequestValidator &operator=(const FakeFakeRequestValidator &ref);
 		
 		int		isValid(const IRequest &req);
 		int		isValid(std::string const &line);
