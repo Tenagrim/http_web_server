@@ -55,7 +55,8 @@ namespace ft
 		void				listen_main_socket();
 
 		typedef				std::string::size_type strPos;
-		void				headerBuilder(const std::string &text, Header *header);
+		void headerBuilder(const std::string &text, IHeader *header,
+						   Client::req_read_states &state);
 
 		RequestReciever();
 		RequestReciever(const RequestReciever &ref);
@@ -83,6 +84,16 @@ namespace ft
 		void readHeader(Client *client, char *buff);
 
 		void readBody(Client *client, char *buff);
+
+		void firstLine(std::string const &line, IHeader *header,
+					   Client::req_read_states &state);
+		void fillMethod(const std::string &line, IHeader *header);
+		void fillUrl(const std::string &line, IHeader *header);
+		void checkHttp(const std::string &line, IHeader *header);
+
+
+		void fillHeader(std::string subLine, IHeader *header,
+						Client::req_read_states &states);
 	};
 
 }

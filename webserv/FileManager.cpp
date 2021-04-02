@@ -156,41 +156,6 @@ namespace ft
 		return fd;
 	}
 
-	int				FileManager::getFdReadOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdWriteOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_WRONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdReadWrite(const std::string &filename) {
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDWR);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
 	void            FileManager::setRoot(const std::string &new_root) {
 		char 		dir[MAXPATHLEN];
 

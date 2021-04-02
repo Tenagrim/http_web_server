@@ -58,8 +58,8 @@ namespace ft
 		FakeRequestValidator(const FakeRequestValidator &ref);
 		FakeRequestValidator &operator=(const FakeRequestValidator &ref);
 
-		bool isValid(const IRequest &req);
-		bool isValid(std::string const &line);
+//		bool isValid(const IRequest &req);
+//		bool isValid(std::string const &line);
 		void reset(void);
 
 

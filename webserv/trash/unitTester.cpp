@@ -7,10 +7,10 @@
 
 int main() {
 	ft::FileManager file;
-	ft::FakeRequestValidator val;
+//	ft::FakeRequestValidator val;
 
-	val.fillUrl("POST /users/sign_in HTTP/1.1\r\n");
-	val.checkHttp("POST /users/sign_in HTTP/1.1\r\n");
+//	val.fillUrl("POST /users/sign_in HTTP/1.1\r\n");
+//	val.checkHttp("POST /users/sign_in HTTP/1.1\r\n");
 
 //	try {
 //////	isFileExisting

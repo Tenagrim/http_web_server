@@ -37,7 +37,7 @@ namespace ft
 		time_t			getCTime(std::string const &filename);
 
 			// open file & returns it's descriptor
-		int				getFd(std::string const &filename, int _acess);
+		int				getFd(std::string const &filename, unsigned int _acess);
 		//std::ifstream	getIfstream(std::string const &filename);
 
 		void			setRoot(std::string const &new_root);

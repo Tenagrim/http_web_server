@@ -166,7 +166,7 @@ namespace ft
 		return _read_buff;
 	}
 
-	Client::req_read_states Client::getStates() const {
+	Client::req_read_states &Client::getStates() {
 		return _states;
 	}
 

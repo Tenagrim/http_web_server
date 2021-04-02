@@ -39,6 +39,8 @@ namespace ft
 		virtual bool 				isValid() = 0;
 		virtual void 				makeInvalid() = 0;
 		virtual unsigned long		size() = 0;
+		virtual bool				isHeadAlreadyExist(header_keys key) = 0;
+
 		virtual ~IHeader(){}
 	};
 }

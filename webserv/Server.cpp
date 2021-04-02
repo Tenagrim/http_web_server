@@ -153,7 +153,8 @@ namespace ft
 				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
 			#endif
 			client = args._reciever->getClient(args._fd);
-			if (client->getLastRequest() && client->getLastRequest()->getText().size() == 0)
+//			FIXME normal size check
+			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
 				#ifdef DEBUG
 				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
@@ -161,7 +162,7 @@ namespace ft
 				_dispatcher->closeSock(client->getSock());
 				return;
 			}
-
+*/
 			if (!client->getLastResponse())
 			{
 				resp = _resp_builder->buildResponse(client->getLastRequest());

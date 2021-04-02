@@ -8,7 +8,7 @@ namespace ft
 	Header::Header()
 	{}
 
-	Header::Header(MessageType type) : _type(type), isValid(true)
+	Header::Header(MessageType type) : _type(type), _isValid(true)
 	{}
 
 	Header::~Header()

@@ -68,9 +68,9 @@ int main(int ac, char **av)
 	signal(SIGINT, &sigint_handler);
 	
 	serv.addListener(DEFAULT_PORT);
-	serv.addListener(93);
-	serv.addListener(97);
-	serv.addListener(85);
+//	serv.addListener(93);
+//	serv.addListener(97);
+//	serv.addListener(85);
 
 	serv.start();
 

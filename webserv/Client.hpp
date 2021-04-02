@@ -42,7 +42,6 @@ namespace ft
 			s_end_reading
 		};
 
-		req_read_states getStates() const;
 
 		enum write_flags
 		{
@@ -58,7 +57,8 @@ namespace ft
 		Client(int id, int sock);
 		virtual ~Client();
 		Client			&operator=(const Client &ref);
-		
+
+		req_read_states &getStates();
 		int				getSock(void) const;
 		struct timeval	const &getLastEventTime() const;
 
