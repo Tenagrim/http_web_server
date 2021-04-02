@@ -25,13 +25,13 @@ namespace ft
 	Server::Server(const Server &ref) //: _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
 	{
 		(void)ref;
-		throw std::runtime_error("no implementation");
+		throw ft::runtime_error("no implementation");
 	}
 
 	Server &Server::operator=(const Server &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("no implementation");
+		throw ft::runtime_error("no implementation");
 		return (*this);
 	}
 
@@ -50,7 +50,7 @@ namespace ft
 	int Server::sendResponce(const IResponse &resp)
 	{
 		(void)resp;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (-1);
 	}
 
@@ -95,7 +95,7 @@ namespace ft
 		else if (args._target == client)
 			clientEvent(args);
 		else
-			throw std::runtime_error("Wrong event type");
+			throw ft::runtime_error("Wrong event type");
 	}
 
 	void			Server::listenerEvent(Dispatcher_event_args &args)
@@ -111,10 +111,10 @@ namespace ft
 				_dispatcher->addClient(_reciever, sock);
 			}
 			else
-				throw std::runtime_error("Got wrong listener sock");
+				throw ft::runtime_error("Got wrong listener sock");
 		}
 		else
-			throw std::runtime_error("SERVER: LISTENER EVENT: Got wrong event target");
+			throw ft::runtime_error("SERVER: LISTENER EVENT: Got wrong event target");
 	}
 
 	void			Server::clientEvent(Dispatcher_event_args &args)
@@ -127,7 +127,7 @@ namespace ft
 		else if (args._type == conn_close)
 			_reciever->close_connection(args._fd);
 		else
-			throw std::runtime_error("Got wrong event target");
+			throw ft::runtime_error("Got wrong event target");
 	}
 
 
@@ -207,7 +207,7 @@ namespace ft
 	void							Server::stop(void)
 	{
 		if (!_dispatcher)
-			throw std::runtime_error("No connection to dispatcher");
+			throw ft::runtime_error("No connection to dispatcher");
 		_dispatcher->stop();
 	}
 	void			Server::abort(void)
@@ -222,11 +222,11 @@ namespace ft
 			std::cout << "SERVER: ADD LISTENER";
 		#endif
 			if(hasFlag(is_running))
-				throw std::runtime_error("Cannot add new listener into running server");
+				throw ft::runtime_error("Cannot add new listener into running server");
 			//_listener_map[port] = new RequestReciever("localhost", port);	
 			for(std::list<RequestReciever*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 				if ((*it)->getPort() == port)
-					throw std::runtime_error("Cannot add listener with same port:" + ft::to_string(port));
+					throw ft::runtime_error("Cannot add listener with same port:" + ft::to_string(port));
 			_list_to_start.push_back(new RequestReciever("localhost", port));
 
 	}
@@ -234,7 +234,7 @@ namespace ft
 	RequestReciever		*Server::getListener(int sock)
 	{
 		if (!_listener_map.count(sock))
-			throw std::runtime_error("No such listener: " + ft::to_string(sock));
+			throw ft::runtime_error("No such listener: " + ft::to_string(sock));
 		return _listener_map[sock];
 	}
 

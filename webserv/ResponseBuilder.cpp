@@ -24,13 +24,13 @@ namespace ft
 	ResponseBuilder::ResponseBuilder(const ResponseBuilder &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 	}
 
 	ResponseBuilder &ResponseBuilder::operator=(const ResponseBuilder &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 		return (*this);
 	}
 	#pragma endregion
@@ -40,7 +40,7 @@ namespace ft
 		std::string const & method = request->getMethod();
 
 		if (!_policies.size())
-			throw std::runtime_error("BUILDER HAS NO BUILD POLICIES");
+			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
 		if (_policies.count(method))
 		{

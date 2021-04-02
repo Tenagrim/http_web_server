@@ -43,18 +43,18 @@ bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
 	iterator it = tmp->begin();
 	it = findInList(tmp,"listen");
 	if (it == tmp->end())
-		throw std::runtime_error("No key-word \"LISTEN\"");
+		throw ft::runtime_error("No key-word \"LISTEN\"");
 	while (*it != ";" || it == tmp->end()) {
 		if (*it == "\n") break;
 		it = is_Space(++it);
 		if (!is_digit(*it))
-			throw std::runtime_error("Argument in LISTEN is not a digit...");
+			throw ft::runtime_error("Argument in LISTEN is not a digit...");
 		int i = std::stoi(*it);
 		_listen.push_back(i);
 		++it;
 	}
 	if (*it != ";") {
-		throw std::runtime_error("No \";\" after key-word LISTEN");
+		throw ft::runtime_error("No \";\" after key-word LISTEN");
 	} else
 		state = true;
 //	Удаление обработоанной строки
@@ -112,7 +112,7 @@ bool ft::ServerInit::findServerName(list *tmp)
 	iterator it = tmp->begin();
 	it = findInList(tmp,"server_name");
 	if (it == tmp->end())
-		throw std::runtime_error("No key-word \"SERVER_NAME\"");
+		throw ft::runtime_error("No key-word \"SERVER_NAME\"");
 	while (*it != ";" || it == tmp->end()) {
 		if (*it == "\n") break;
 		it = is_Space(++it);
@@ -120,7 +120,7 @@ bool ft::ServerInit::findServerName(list *tmp)
 		++it;
 	}
 	if (*it != ";") {
-		throw std::runtime_error("No \";\" after key-word SERVER_NAME");
+		throw ft::runtime_error("No \";\" after key-word SERVER_NAME");
 	} else
 		state = true;
 	//	Удаление обработоанной строки

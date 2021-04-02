@@ -19,6 +19,7 @@
 
 #include <defines.hpp>
 #include <list>
+#include <runtime_error.hpp>
 
 namespace ft
 {

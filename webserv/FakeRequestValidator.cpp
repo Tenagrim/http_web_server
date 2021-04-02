@@ -28,15 +28,20 @@ namespace ft
 		return true;
 	}
 	*/
-	bool		FakeRequestValidator::isValid(std::string const &line)
+	int		FakeRequestValidator::isValid(std::string const &line)
 	{
 		(void)line;
-		return true;
+		return 1;
 	}
-	bool		FakeRequestValidator::isValid(const IRequest &req)
+	int		FakeRequestValidator::isValid(char const *line)
+	{
+		(void)line;
+		return 1;
+	}
+	int		FakeRequestValidator::isValid(const IRequest &req)
 	{
 		(void)req;
-		return true;
+		return 1;
 	}
 
 	void		FakeRequestValidator::reset(void)

@@ -43,7 +43,7 @@ namespace ft
 	{
 		(void)priority;
 		int fd = 0;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 		return fd;
 	}
 
@@ -62,7 +62,7 @@ namespace ft
 #endif
 
 		if (!fin.good())
-			throw std::runtime_error("Cannot open file: " + filename);
+			throw ft::runtime_error("Cannot open file: " + filename);
 
 		//fd = _fmngr->getFd(filename, 0);
 		//size = _fmngr->getFileSize(filename);
@@ -135,7 +135,7 @@ namespace ft
 	IResponse *ABuildPolicy::buildAutoindex(IRequest *request)
 	{
 		(void)request;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 		return (0);
 	}
 

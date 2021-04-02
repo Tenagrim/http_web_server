@@ -4,9 +4,9 @@ ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile() {
 
 	openConfigFile();
 	if (!initParsing())
-		throw std::runtime_error("Can't Read Config File ... ");
+		throw ft::runtime_error("Can't Read Config File ... ");
 	if (!startParse())
-		throw std::runtime_error("Mistake in config file...");
+		throw ft::runtime_error("Mistake in config file...");
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -51,7 +51,7 @@ void ft::ConfigParser::openConfigFile(void)
 {
 	std::ifstream fin("./conf/mywebserv.conf");
 	if (!fin.is_open())
-		throw std::runtime_error("Can not open file ....");
+		throw ft::runtime_error("Can not open file ....");
 	std::getline(fin, _conf, '\0');
 }
 

@@ -22,7 +22,7 @@ namespace ft
 	}
 	int					TextBody::getFd(void)
 	{
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 	}
 	std::string			TextBody::to_string(void) const
 	{
@@ -34,6 +34,6 @@ namespace ft
 	}
 	BodyType			TextBody::getType(void)
 	{
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 	}
 }

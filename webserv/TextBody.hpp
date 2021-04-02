@@ -1,6 +1,6 @@
 #pragma once
 #include <ABody.hpp>
-#include <stdexcept>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class TextBody : public ABody

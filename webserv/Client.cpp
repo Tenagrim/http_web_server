@@ -36,13 +36,13 @@ namespace ft
 	Client::Client(const Client &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No ipleentation");
+		throw ft::runtime_error("No ipleentation");
 	}
 
 	Client &Client::operator=(const Client &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No ipleentation");
+		throw ft::runtime_error("No ipleentation");
 		return (*this);
 	}
 	#pragma endregion /// Copilen
@@ -59,7 +59,7 @@ namespace ft
 		case  state_flags:return(_state_flags); break;
 		case  read_flags:return(_read_flags); break;
 		case  write_flags:return(_write_flags); break;
-		default: throw std::runtime_error("Wrong flag type"); break;
+		default: throw ft::runtime_error("Wrong flag type"); break;
 		}
 	}
 

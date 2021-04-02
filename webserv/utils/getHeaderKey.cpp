@@ -1,4 +1,5 @@
 #include <webserv.hpp>
+#include <runtime_error.hpp>
 namespace ft
 {
 	std::string			getHeaderKey(header_keys_enum key)
@@ -23,7 +24,7 @@ namespace ft
 		case h_transfer_encoding: return("Transfer-Encoding"); break;
 		case h_user_agent: return("User-Agent"); break;
 		case h_www_authenticate: return("WWW-Authenticate"); break;
-		default: throw std::runtime_error("Unrecognized header key"); break;
+		default: throw ft::runtime_error("Unrecognized header key"); break;
 		}
 	}
 }

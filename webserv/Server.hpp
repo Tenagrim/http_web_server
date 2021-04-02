@@ -28,6 +28,7 @@
 
 #include <webserv.hpp>
 #include <defines.hpp>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class Dispatcher;

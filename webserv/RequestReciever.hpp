@@ -25,6 +25,7 @@
 //#include <TextResponse.hpp> // TEPORARILY
 
 #include <defines.hpp>
+#include <runtime_error.hpp>
 #include <IRequestValidator.hpp>
 #include <FakeRequestValidator.hpp>
 namespace ft
