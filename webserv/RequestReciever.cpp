@@ -187,7 +187,6 @@ namespace ft {
 	IRequest *RequestReciever::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
-		IRequest *pRequest;
 
 		if (client->getStates() == Client::s_not_begin)
 			client->setLastRequest(new BasicRequest());
@@ -203,22 +202,13 @@ namespace ft {
 			case Client::s_body_reading: readBody(client, buff); break;
 //			default: throw ft::runtime_error("" + __LINE__);
 		}
-
-		IHeader *header = new Header(request);
+//		TODO read body
 		IBody *body;
 
-//		request = new BasicRequest(p_head, 0);
-//
-//		client->setFlag(Client::read_flags, Client::r_head_end);
-//		client->setFlag(Client::read_flags, Client::r_body_beginned);
-//
-//		pRequest = new Request(ss.str());
-
 		client->setFlag(Client::read_flags, Client::r_end);
-		client->setLastRequest(pRequest);
 
 
-		return (pRequest);
+		return (nullptr);
 	}
 
 	void RequestReciever::readHeader(Client *client, char *buff) {
@@ -280,15 +270,13 @@ namespace ft {
 		strPos pos1 = 0, pos2;
 
 		while ((pos2 = text.find("\r\n", pos1)) != std::string::npos) {
-			subLine = text.substr(pos1, pos2);
+			subLine = text.substr(pos1, pos2 - pos1);
 			pos1 = pos2 + 2;
 			switch (state) {
 				case Client::s_start_header_reading: firstLine(subLine, header,state); break;
 				case Client::s_header_reading: fillHeader(subLine, header, state); break;
 					break;
 			}
-
-
 		}
 	}
 
@@ -334,19 +322,25 @@ namespace ft {
 		int i = 0;
 		header_keys a;
 		std::string head;
+		std::string key;
 
 //		TODO
-		head = subLine.substr(0, subLine.size() - subLine.find(':'));
+		head = subLine.substr(0, subLine.find(':'));
 		do {
 			a = static_cast<header_keys>(i);
 			i++;
 		}
-		while (head != getHeaderKey(a));
+		while (!(key = getHeaderKey(a)).empty() && key != head);
+		if (key.empty())
+			return ;
 		if (header->isHeadAlreadyExist(a)) {
 			header->makeInvalid();
 			return ;
 		}
-		subLine = subLine.substr(subLine.find(' ') + 1);
+		subLine = subLine.substr(subLine.find(':') + 1);
+		while (subLine[0] == ' ') {
+			subLine.erase(0, 1);
+		}
 		header->setHeader(a, subLine);
 	}
 
