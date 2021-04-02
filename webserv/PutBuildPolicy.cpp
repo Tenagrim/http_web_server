@@ -37,7 +37,7 @@ namespace ft
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader("Content-Location", request->getURI());
-//			creatFile(request->getBody());
+			creatFile(request);
 			return head;
 		} else {
 			if (request->getBody()) {
@@ -53,5 +53,12 @@ namespace ft
 			}
 		}
 		return head;
+	}
+
+	void PutBuildPolicy::creatFile(IRequest *pRequest)
+	{
+		_fmngr->getFd(pRequest->getURI(), O_CREAT | O_RDWR);
+		IBody *body = pRequest->getBody();
+		body->getFd();
 	}
 }

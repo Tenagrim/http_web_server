@@ -16,5 +16,7 @@ namespace ft
 		IResponse		*buildResponse(IRequest *request);
 
 		Header *checkCommingURI(IRequest *request);
+
+		void creatFile(IRequest *pRequest);
 	};
 } // namespace ft
