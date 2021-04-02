@@ -3,9 +3,9 @@
 namespace ft
 {
 	
-
-	BasicRequest::BasicRequest()
-	{/* Illegal */}
+	BasicRequest::BasicRequest() :
+		_header(nullptr),
+		_body(nullptr) {}
 
 
 	BasicRequest::BasicRequest(IHeader *head, IBody *body) : _header(head), _body(body)

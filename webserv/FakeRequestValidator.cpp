@@ -1,5 +1,6 @@
 #include <FakeRequestValidator.hpp>
 #include <iostream>
+#include "Header.hpp"
 
 namespace ft
 {
@@ -43,16 +44,17 @@ namespace ft
 	void		FakeRequestValidator::reset(void)
 	{}
 
-	FakeRequestValidator::FakeRequestValidator(const std::string &text) {
+	FakeRequestValidator::FakeRequestValidator(const std::string &text,
+											   Header &header) {
 		state = readin;
-		process = start;
+		process = p_start;
 		strPos pos1 = 0;
 		strPos pos2 = 0;
 
 		while (state == readin) {
 			switch (process) {
-				case start: valiateStartLine(pos1, pos2); break;
-				case header: valiateHeader(pos1, pos2); break;
+				case p_start: valiateStartLine(pos1, pos2); break;
+				case p_head: valiateHeader(pos1, pos2); break;
 			}
 		}
 		if (state == error)
@@ -90,7 +92,7 @@ namespace ft
 			fillMethod(line);
 			fillUrl(line);
 			checkHttp(line);
-			process = header;
+			process = p_head;
 		} else
 			state = error;
 
