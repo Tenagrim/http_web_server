@@ -67,6 +67,8 @@ namespace ft
 		void			sendHeader(void);
 		void			sendBody(void);
 
+		char			**getReadBuff(void);
+
 	private:
 		int					_id;
 		int					_sock;
@@ -76,6 +78,8 @@ namespace ft
 		struct timeval		_last_event;
 		IRequest			*_last_request;
 		IResponse			*_response;
+
+		char				*_read_buff;
 
 		Client();
 		Client(const Client &ref);

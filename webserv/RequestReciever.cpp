@@ -1,5 +1,7 @@
 #include <RequestReciever.hpp>
 
+
+#include <Header.hpp>
 namespace ft
 {
 	#pragma region Copilen
@@ -190,13 +192,14 @@ namespace ft
 		char				buff[READ_BUFF_SIZE];
 		std::stringstream	ss;
 		int					n;
-		IRequest			*request;
+		IRequest			*reques;
 
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 		buff[n] = 0;
 		ss << buff;
 
-		IHeader *header = 0; // Выход с валидатора
+		IHeader *header = new Header(request); // Выход с валидатора
+		header->setHeader(getHeaderKey(h_accept_charsets), "Value");
 		IBody *body;
 
 		//request = new BasicRequest(header, 0);
@@ -204,13 +207,13 @@ namespace ft
 		client->setFlag(Client::read_flags, Client::r_head_end);
 		client->setFlag(Client::read_flags, Client::r_body_beginned);
 
-		request = new Request(ss.str());
+		reques = new Request(ss.str());
 
 		client->setFlag(Client::read_flags, Client::r_end);
-		client->setLastRequest(request);
+		client->setLastRequest(reques);
 
 
-		return (request);
+		return (reques);
 	}
 
 	int					RequestReciever::writeEvent(int sock)

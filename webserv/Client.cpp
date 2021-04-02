@@ -159,5 +159,8 @@ namespace ft
 		setFlag(write_flags, w_body);
 	}
 
-
+	char			**Client::getReadBuff(void)
+	{
+		return &_read_buff;
+	}
 }
