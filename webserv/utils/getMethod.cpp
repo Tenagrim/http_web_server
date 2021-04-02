@@ -1,7 +1,7 @@
 #include <webserv.hpp>
 namespace ft
 {
-	std::string			getMethodStr(methods_enum key)
+	std::string			getMethodStr(const methods_enum key)
 	{
 		switch (key)
 		{
