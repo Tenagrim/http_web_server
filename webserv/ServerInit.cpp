@@ -19,6 +19,7 @@ bool ft::ServerInit::parseInServer(std::list<std::string> &tmp)
 	ft::deleteCommit(tmp);
 	state = findListen(&tmp);
 	state = findServerName(&tmp);
+	state = findRoot(&tmp);
 	state = findLocations(&tmp);
 	std::cout<<string(30, '*')<<std::endl;
 	getConf(tmp);
@@ -58,6 +59,32 @@ bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
 		state = true;
 //	Удаление обработоанной строки
 	*tmp = ft::findAndErase(*tmp, "listen", ";");
+	return state;
+}
+
+bool ft::ServerInit::findRoot(std::list<std::string> *tmp)
+{
+	bool state = false;
+	iterator it = tmp->begin();
+	it = std::find(it, tmp->end(), "root");
+	if (*it != "root")
+		throw std::runtime_error("No \"ROOT\" key-word");
+	else{
+		iterator end = std::find(it, tmp->end(), "\n");
+		std::list<std::string> *root = new std::list<std::string>;
+		root->splice(root->begin(), *tmp, it, end);
+		root->pop_front();
+		iterator rit = root->begin();
+		rit = is_Space(rit);
+		reverse_iterator rev_it = root->rbegin();
+		rev_it = isSpace(rev_it);
+		if (*(rev_it) != ";")
+			throw std::runtime_error("no \";\" after key-word ROOT");
+		_root = *rit;
+		if (_root.empty() || _root == ";")
+			throw std::runtime_error("nothing in root path");
+		delete root;
+	}
 	return state;
 }
 
@@ -147,3 +174,9 @@ unsigned int ft::ServerInit::getLocationCount() const
 {
 	return _location_count;
 }
+
+const std::string &ft::ServerInit::getRoot() const
+{
+	return _root;
+}
+

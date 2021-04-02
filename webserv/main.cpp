@@ -54,8 +54,7 @@ int main(int ac, char **av)
 	(void)av; // FIXME:
 
 //TODO: if you need to start server commit "Config Parser"
-//	ft::ConfigParser parser;
-//	ft::Server		serv = ft::Server();
+	ft::ConfigParser parser;
 ////////// PRIMARY PART ///////////////////////////////////////////////////////////////
 
 	ft::FileManager			fmngr;
@@ -63,14 +62,32 @@ int main(int ac, char **av)
 
 	ft::Server				serv(&resp_builder);
 
-	
+
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-	
-	serv.addListener(DEFAULT_PORT);
-	serv.addListener(93);
-	serv.addListener(97);
-	serv.addListener(85);
+
+//	serv.addListener(DEFAULT_PORT);
+//	serv.addListener(93);
+//	serv.addListener(97);
+//	serv.addListener(85);
+
+	std::list<ft::ServerInit *> serv_list = parser.getServerList();
+	std::list<ft::ServerInit *>::iterator serv_it = serv_list.begin();
+
+	std::list<int> list_listner;
+	list_listner.splice(list_listner.begin(), (*serv_it)->getListenPorts(), (*serv_it)->getListenPorts().begin(),
+					 (*serv_it)->getListenPorts().end());
+	serv_it++;
+	list_listner.splice(list_listner.end(), (*serv_it)->getListenPorts(), (*serv_it)->getListenPorts().begin(),
+						(*serv_it)->getListenPorts().end());
+
+	list_listner.sort();
+	list_listner.unique();
+
+	std::list<int>::iterator it = list_listner.begin();
+	for (; it != list_listner.end(); ++it){
+		serv.addListener(*it);
+	}
 
 	serv.start();
 

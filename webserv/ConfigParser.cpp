@@ -99,7 +99,7 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start
 	count = isSpace(count);
 	recount = isSpace(recount);
 	if (*count != "{")
-		throw std::runtime_error("No Open Bracket ...");
+		throw std::runtime_error("No Open Bracket after SERVER key word...");
 	if (*recount != "}")
 		throw std::runtime_error("No Close Bracket ...");
 	state = initServer(tmp);

@@ -21,21 +21,17 @@ namespace ft {
 		std::map<std::string, std::string>	_conf_param;
 		typedef std::list<std::string>::iterator iterator;
 		typedef std::list<std::string>::reverse_iterator reverse_iterator;
-
 		std::list<ServerInit *> _server_list;
-	public:
-		ConfigParser();
-		~ConfigParser();
-
-		unsigned int getServerCount() const;
-
-		const std::list<ServerInit *> &getServerList() const;
 
 		void openConfigFile(void);
 		bool initParsing(void);
 		bool startParse(void);
 		bool initServer(std::list<std::string> *tmp);
-
 		bool findServer(std::list<std::string> &_list, iterator &start);
+	public:
+		ConfigParser();
+		~ConfigParser();
+		unsigned int getServerCount() const;
+		const std::list<ServerInit *> &getServerList() const;
 	};
 }
