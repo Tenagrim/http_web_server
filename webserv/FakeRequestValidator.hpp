@@ -2,6 +2,7 @@
 #include <IRequestValidator.hpp>
 #include <map>
 #include <webserv.hpp>
+#include "Header.hpp"
 
 namespace ft
 {
@@ -23,7 +24,7 @@ namespace ft
 							 "Accept-Encoding: gzip, deflate, br\r\n"
 							 "Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7\r\n"
 							 "Cookie: _intra_42_session_production=a0572979de861f48a6d42db6760396cc\r\n"
-							 "\n"
+							 "\r\n"
 							 "utf8=%E2%9C%93&authenticity_token=aBAFvYQbRaXzg1TZVfz%2BUCCRitzIjKbHJyZUHhvW%2FN%2B3Eu27O5cLGIQ%2BzIbbvybKzCNptiNBuwpqI9KOH7nuWA%3D%3D&user%5Blogin%5D=sadolph&user%5Bpassword%5D=11111111%2Fkazan&commit=Sign+in";
 
 	enum state {
@@ -32,8 +33,8 @@ namespace ft
 		error
 	};
 	enum process {
-		start,
-		header
+		p_start,
+		p_head
 	};
 
 	class FakeRequestValidator : public IRequestValidator
@@ -51,7 +52,8 @@ namespace ft
 	public:
 		void fillMethod(std::string const &line);
 		FakeRequestValidator();
-		FakeRequestValidator(std::string const &text);
+		FakeRequestValidator(const std::string &text,
+							 Header &header);
 		virtual ~FakeRequestValidator();
 		FakeRequestValidator(const FakeRequestValidator &ref);
 		FakeRequestValidator &operator=(const FakeRequestValidator &ref);

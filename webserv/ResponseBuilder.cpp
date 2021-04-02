@@ -9,14 +9,14 @@ namespace ft
 
 	ResponseBuilder::ResponseBuilder(IFileManager *mngr) : _t_machine(new FakeTimeMachine())
 	{
-		_policies["GET"] = new GetBuildPolicy(mngr, _t_machine);
-		_policies["POST"] = new PostBuildPolicy(mngr, _t_machine);
-		_policies["PUT"] = new PutBuildPolicy(mngr, _t_machine);
+		_policies[m_get] = new GetBuildPolicy(mngr, _t_machine);
+		_policies[m_post] = new PostBuildPolicy(mngr, _t_machine);
+		_policies[m_put] = new PutBuildPolicy(mngr, _t_machine);
 	}
 
 	ResponseBuilder::~ResponseBuilder()
 	{
-		for(policy_map::iterator it = _policies.begin(); it!= _policies.end(); it++)
+		for (policy_map::iterator it = _policies.begin(); it!= _policies.end(); it++)
 			delete (*it).second;
 		//delete _t_machine;
 	}
@@ -37,9 +37,9 @@ namespace ft
 
 	IResponse			*ResponseBuilder::buildResponse(IRequest	*request)
 	{
-		std::string const & method = request->getMethod();
+		ft::methods_enum method = request->getHeader()->getMethod();
 
-		if (!_policies.size())
+		if (_policies.empty())
 			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
 		if (_policies.count(method))

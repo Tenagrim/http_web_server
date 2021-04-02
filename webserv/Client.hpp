@@ -40,6 +40,8 @@ namespace ft
 			s_end_reading
 		};
 
+		req_read_states getStates() const;
+
 		enum write_flags
 		{
 			w_head = 1,
@@ -68,6 +70,7 @@ namespace ft
 		
 		void			setLastResponse(IResponse *response);
 		IResponse		*getLastResponse(void);
+		std::string &	getReadBuff(void);
 
 		bool			requestReceived(void);
 		bool			headerSent(void);
@@ -75,8 +78,7 @@ namespace ft
 
 		void			sendHeader(void);
 		void			sendBody(void);
-
-		char			**getReadBuff(void);
+		void			setStates(req_read_states states);
 
 	private:
 		int					_id;
@@ -87,8 +89,8 @@ namespace ft
 		struct timeval		_last_event;
 		IRequest			*_last_request;
 		IResponse			*_response;
+		std::string 		_read_buff;
 		req_read_states		_states;
-		char				*_read_buff;
 
 		Client();
 		Client(const Client &ref);

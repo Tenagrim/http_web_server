@@ -53,7 +53,7 @@ int main(int ac, char **av)
 	(void)ac; // FIXME:
 	(void)av; // FIXME:
 
-//TODO: if you need to start server commit "Config Parser"
+//TODO: if you need to p_start server commit "Config Parser"
 //	ft::ConfigParser parser;
 //	ft::Server		serv = ft::Server();
 ////////// PRIMARY PART ///////////////////////////////////////////////////////////////

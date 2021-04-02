@@ -53,7 +53,8 @@ namespace ft
 		void				bind_main_socket();
 		void				listen_main_socket();
 
-		IRequestValidator	*_validator;
+//		Change class RequestValidator into private member function
+//		IRequestValidator	*_validator;
 		
 		RequestReciever();
 		RequestReciever(const RequestReciever &ref);
@@ -77,6 +78,10 @@ namespace ft
 		
 		void					start(void);
 		int						getPort(void);
+
+		void readHeader(Client *client, char *buff);
+
+		void readBody(Client *client, char *buff);
 	};
 
 }
