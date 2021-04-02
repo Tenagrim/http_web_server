@@ -7,6 +7,7 @@
 #include <map>
 #include <Utils.hpp>
 #include <LocationInit.hpp>
+#include <runtime_error.hpp>
 
 //#include <Utils.hpp>
 

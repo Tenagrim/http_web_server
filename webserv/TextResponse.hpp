@@ -2,6 +2,7 @@
 #include <IResponse.hpp>
 #include <string>
 #include <TextBody.hpp>
+#include <runtime_error.hpp>
 
 namespace ft
 {

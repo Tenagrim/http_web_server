@@ -25,8 +25,12 @@
 //#include <TextResponse.hpp> // TEPORARILY
 
 #include <defines.hpp>
+#include <runtime_error.hpp>
 #include <IRequestValidator.hpp>
-#include <FakeRequestValidator.hpp>
+#include <FakeFakeRequestValidator.hpp>
+
+#include <BasicRequest.hpp>
+
 namespace ft
 {
 
@@ -58,8 +62,10 @@ namespace ft
 		virtual ~RequestReciever();
 
 		RequestReciever 		&operator=(const RequestReciever &ref);
+
 		IRequest				*getRequest(Client *client);
 		IRequest				*getRequest(int sock);
+
 		int						getId();
 		int						accept_connection();
 		void					close_connection(int sock);

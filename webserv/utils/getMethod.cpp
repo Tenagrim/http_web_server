@@ -1,4 +1,5 @@
 #include <webserv.hpp>
+#include <runtime_error.hpp>
 namespace ft
 {
 	std::string			getMethodStr(const methods_enum key)
@@ -8,7 +9,7 @@ namespace ft
 		case m_get: return("GET"); break;
 		case m_post: return("POST"); break;
 		case m_put: return("PUT"); break;
-		default: throw std::runtime_error("Unknown method"); break;
+		default: throw ft::runtime_error("Unknown method"); break;
 		}
 	}
 }

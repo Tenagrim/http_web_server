@@ -17,13 +17,13 @@ namespace ft
 	ResponseSender::ResponseSender(const ResponseSender &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	ResponseSender &ResponseSender::operator=(const ResponseSender &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (*this);
 	}
 	#pragma endregion
@@ -43,7 +43,7 @@ namespace ft
 			sendBody(resp->getBody(), client);
 		}
 		else
-			throw std::runtime_error("All is already sent, no need to call Sender");
+			throw ft::runtime_error("All is already sent, no need to call Sender");
 		return (1);
 	}
 	
@@ -68,7 +68,7 @@ namespace ft
 		if (ret != -1)
 			body->setWritten(ret);
 		else
-			throw std::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
+			throw ft::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
 		#ifdef DEBUG
 		std::cout << "SENDER: TEXT BODY SENT\n";
 		#endif
@@ -82,7 +82,7 @@ namespace ft
 		char	*buff = new char [READ_BODY_ONE_TIME];
 		int ret;
 		if (!buff)
-			throw std::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
+			throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
 		#ifdef DEBUG
 			std::cout << "SENDER: BEGIN READING\n";
 		#endif
@@ -102,13 +102,13 @@ namespace ft
 	void			ResponseSender::sendBody(IBody *body, IClient *client)
 	{
 		if (!body)
-			throw std::runtime_error("RESPONSE SENDER: NULL BODY GOT");
+			throw ft::runtime_error("RESPONSE SENDER: NULL BODY GOT");
 		if (dynamic_cast<TextBody*>(body))
 			sendTextBody(dynamic_cast<TextBody*>(body), client);
 		else if (dynamic_cast<FileBody*>(body))
 			sendFileBody(dynamic_cast<FileBody*>(body), client);
 		else
-			throw std::runtime_error("RESPONSE SENDER: WRONG TYPE OF BODY GOT");
+			throw ft::runtime_error("RESPONSE SENDER: WRONG TYPE OF BODY GOT");
 		#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif

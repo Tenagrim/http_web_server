@@ -3,6 +3,7 @@
 #include <webserv.hpp>
 #include <IHeader.hpp>
 #include <sstream>
+#include <runtime_error.hpp>
 
 namespace ft
 {
@@ -10,7 +11,9 @@ namespace ft
 	{
 	private:
 		typedef std::map<std::string, std::string>	header_map;
+
 		//std::map<header_keys_enum, std::string>				_header_map;
+		
 		header_map										_header_map;
 		methods_enum									_method;
 		std::string										_uri;

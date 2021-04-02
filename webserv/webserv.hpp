@@ -32,7 +32,7 @@ namespace ft
 		m_put
 	};	
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
-	unsigned long		ft_strlen(char *str);
+	unsigned long		ft_strlen(char const *str);
 	std::string			getHeaderKey(header_keys_enum key);
 	std::string			getMethodStr(const methods_enum key);
 	std::string			getCodeDescr(int code);

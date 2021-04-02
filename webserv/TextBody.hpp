@@ -1,6 +1,6 @@
 #pragma once
 #include <ABody.hpp>
-#include <stdexcept>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class TextBody : public ABody
@@ -16,6 +16,7 @@ namespace ft
 		TextBody &operator=(const TextBody &ref);
 
 		int					getFd(void);
+		int					getInputFd(void);
 		std::string			to_string(void) const;
 		unsigned int		size(void) const;
 		BodyType			getType(void);

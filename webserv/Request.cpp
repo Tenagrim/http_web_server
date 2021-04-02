@@ -13,13 +13,13 @@ namespace ft
 	Request::Request(const Request &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	Request &Request::operator=(const Request &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (*this);
 	}
 
@@ -51,12 +51,12 @@ namespace ft
 	std::string &Request::getHeaderValue(std::string const &header)
 	{
 		(void)header;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	std::map<std::string, std::string> &Request::getHeaders(void)
 	{
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	std::string &Request::getMethod(void)

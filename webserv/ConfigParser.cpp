@@ -4,9 +4,9 @@ ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
 
 	openConfigFile();
 	if (!initParsing())
-		throw std::runtime_error("Can't Read Config File ... ");
+		throw ft::runtime_error("Can't Read Config File ... ");
 	if (!startParse())
-		throw std::runtime_error("Mistake in config file...");
+		throw ft::runtime_error("Mistake in config file...");
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -52,7 +52,7 @@ void ft::ConfigParser::openConfigFile(void)
 {
 	std::ifstream fin("./conf/mywebserv.conf");
 	if (!fin.is_open())
-		throw std::runtime_error("Can not open file ....");
+		throw ft::runtime_error("Can not open file ....");
 	std::getline(fin, _conf, '\0');
 }
 
@@ -64,7 +64,7 @@ bool ft::ConfigParser::startParse(void)
 	if (*it == "server") {
 		state = findServer(_confile, "server");
 	} else {
-		throw std::runtime_error("No Main key-word... \"SERVER\"");
+		throw ft::runtime_error("No Main key-word... \"SERVER\"");
 	}
 	return state;
 }
@@ -89,9 +89,9 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, std::string _st
 	count = isSpace(count);
 	recount = isSpace(recount);
 	if (*count != "{")
-		throw std::runtime_error("No Open Bracket ...");
+		throw ft::runtime_error("No Open Bracket ...");
 	if (*recount != "}")
-		throw std::runtime_error("No Close Bracket ...");
+		throw ft::runtime_error("No Close Bracket ...");
 	for (; count != tmp->end(); ++count){
 		std::cout<<*count;
 	}

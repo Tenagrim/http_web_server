@@ -21,7 +21,7 @@ namespace ft
 	FileBody &FileBody::operator=(const FileBody &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (*this);
 	}
 
@@ -57,6 +57,11 @@ namespace ft
 	}
 	BodyType			FileBody::getType(void)
 	{
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
+	}
+
+	int					FileBody::getInputFd(void)
+	{
+		return _inp_fd;
 	}
 }

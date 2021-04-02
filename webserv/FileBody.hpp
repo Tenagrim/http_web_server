@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <sstream>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class FileBody : public ABody
@@ -10,6 +11,7 @@ namespace ft
 	private:
 		unsigned int	_size;
 		int				_fd;
+		int				_inp_fd;
 		std::string		_path;
 
 		FileBody();
@@ -22,6 +24,7 @@ namespace ft
 		FileBody &operator=(const FileBody &ref);
 
 		int					getFd(void);
+		int					getInputFd(void);
 		std::string			to_string(void) const;
 		unsigned int		size(void) const;
 		BodyType			getType(void);

@@ -5,6 +5,7 @@
 #include <Utils.hpp>
 #include <map>
 #include <algorithm>
+#include <runtime_error.hpp>
 
 namespace ft
 {

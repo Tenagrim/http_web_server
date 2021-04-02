@@ -33,9 +33,9 @@ bool ft::LocationInit::openBracket(std::list<std::string> &list)
 	it = isSpace(it);
 	reit = isSpace(reit);
 	if (*it != "{")
-		throw std::runtime_error("No Open Bracket ...");
+		throw ft::runtime_error("No Open Bracket ...");
 	if (*reit != "}")
-		throw std::runtime_error("No Close Bracket ...");
+		throw ft::runtime_error("No Close Bracket ...");
 	state = true;
 	return state;
 }

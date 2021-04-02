@@ -31,7 +31,7 @@ namespace ft
 	std::string const	&Header::getHeader(std::string const & key)
 	{
 		if (!_header_map.count(key))
-			throw std::runtime_error("Header not exists");
+			throw ft::runtime_error("Header not exists");
 		return _header_map[key];
 	}
 
@@ -115,7 +115,7 @@ namespace ft
 			ss << _http_v << " " << _resp_code << " " << _code_descr << "\r\n";
 		}
 		else
-			throw std::runtime_error("Unknown type of header");
+			throw ft::runtime_error("Unknown type of header");
 		header_map::iterator it;
 		for (it = _header_map.begin(); it != _header_map.end(); it++)
 			ss << (*it).first << ": " << (*it).second << "\r\n";
@@ -126,7 +126,7 @@ namespace ft
 
 	unsigned long		Header::size()
 	{
-		throw std::runtime_error("not implemented");
+		throw ft::runtime_error("not implemented");
 		return (0);
 	}
 } // namespace ft
