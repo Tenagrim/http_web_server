@@ -47,5 +47,13 @@ namespace ft
 		return	_header->to_string() + _body->to_string();
 	}
 
+	void BasicRequest::setBody(IBody *body) {
+		_body = body;
+	}
+
+	void BasicRequest::setHeader(IHeader *header) {
+		_header = header;
+	}
+
 
 } // namespace ft
