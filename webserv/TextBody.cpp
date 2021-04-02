@@ -36,4 +36,9 @@ namespace ft
 	{
 		throw ft::runtime_error("Not implemented");
 	}
+	int					TextBody::getInputFd(void)
+	{
+		throw ft::runtime_error("Not implemented");
+		return -1;
+	}
 }

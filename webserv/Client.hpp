@@ -24,8 +24,11 @@ namespace ft
 			r_first_line = 1,
 			r_headers = 2,
 			r_breakline = 4,
-			r_body = 8,
-			r_end = 16
+			r_head_end = 8,
+			r_body = 16,
+			r_end = 32,
+			r_body_beginned = 64,
+			r_body_ended = 128
 		};
 		
 		enum write_flags

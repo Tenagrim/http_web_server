@@ -196,6 +196,14 @@ namespace ft
 		buff[n] = 0;
 		ss << buff;
 
+		IHeader *header = 0; // Выход с валидатора
+		IBody *body;
+
+		//request = new BasicRequest(header, 0);
+		
+		client->setFlag(Client::read_flags, Client::r_head_end);
+		client->setFlag(Client::read_flags, Client::r_body_beginned);
+
 		request = new Request(ss.str());
 
 		client->setFlag(Client::read_flags, Client::r_end);
