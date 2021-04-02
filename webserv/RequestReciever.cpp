@@ -6,7 +6,7 @@ namespace ft
 
 	RequestReciever::RequestReciever() : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
 	{
-		_validator = 0;
+		_validator = nullptr;
 		throw ft::runtime_error("No implementation");
 	}
 
@@ -65,7 +65,7 @@ namespace ft
 		#endif
 	}
 
-	void			RequestReciever::open_main_socket(void)
+	void			RequestReciever::open_main_socket()
 	{
 		_main_socket = socket(AF_INET, SOCK_STREAM, 0);
 		if (_main_socket == -1)
@@ -75,14 +75,14 @@ namespace ft
 			#endif
 	}
 	
-	void			RequestReciever::init_sockaddr(void)
+	void			RequestReciever::init_sockaddr()
 	{	
 		_sockaddr.sin_family = AF_INET;
 		_sockaddr.sin_addr.s_addr = INADDR_ANY;
 		_sockaddr.sin_port = htons(_port);
 	}
 
-	void			RequestReciever::bind_main_socket(void)
+	void			RequestReciever::bind_main_socket()
 	{
 		int ret;
 

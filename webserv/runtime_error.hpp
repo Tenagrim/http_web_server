@@ -8,7 +8,7 @@ class runtime_error : public std::exception
 	private:
 		std::string _waht;
 	public:
-		runtime_error(std::string const &what);
+		explicit runtime_error(std::string const &what);
 		runtime_error();
 		virtual ~runtime_error() _NOEXCEPT;
 		runtime_error(const runtime_error &ref);

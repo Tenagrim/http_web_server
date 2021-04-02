@@ -8,7 +8,7 @@ namespace ft
 	ABody::~ABody()
 	{}
 
-	ABody::ABody(const ABody &ref)
+	ABody::ABody(const ABody &ref) : _written(0)
 	{
 		(void)ref;
 	}
@@ -29,7 +29,7 @@ namespace ft
 		_written += value;
 	}
 
-	std::string const			&ABody::getContentType(void) const
+	std::string const			&ABody::getContentType() const
 	{
 		return _content_type;
 	}

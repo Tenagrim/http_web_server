@@ -103,7 +103,7 @@ namespace ft
 			_client_map.erase(sock);
 			if (sock == _max_fd)
 			{
-				if (_client_map.size())
+				if (!_client_map.empty())
 					_max_fd = _client_map.rbegin()->first;
 				else if (_listener_map.size())
 					_max_fd = _listener_map.rbegin()->first;
