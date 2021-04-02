@@ -5,6 +5,8 @@
 #include <IRequest.hpp>
 #include <IResponse.hpp>
 #include <IClient.hpp>
+#include <defines.hpp>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class Client : public IClient

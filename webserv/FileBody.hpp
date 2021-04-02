@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <sstream>
+#include <runtime_error.hpp>
 namespace ft
 {
 	class FileBody : public ABody

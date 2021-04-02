@@ -24,25 +24,25 @@ namespace ft
 	TextResponse::TextResponse(const TextResponse &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	TextResponse &TextResponse::operator=(const TextResponse &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (*this);
 	}
 
 	unsigned int			TextResponse::getCode(void)
 	{
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (200);
 	}
 	
 	std::string				TextResponse::getHTTPVersion(void)
 	{
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return std::string("NULL");
 	}
 	IHeader					*TextResponse::getHeader(void)

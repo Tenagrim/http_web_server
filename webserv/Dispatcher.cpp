@@ -22,13 +22,13 @@ namespace ft
 	Dispatcher::Dispatcher(const Dispatcher &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 	}
 
 	Dispatcher &Dispatcher::operator=(const Dispatcher &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("Not implemented");
+		throw ft::runtime_error("Not implemented");
 		return (*this);
 	}
 	#pragma endregion
@@ -112,7 +112,7 @@ namespace ft
 			}
 		}
 		else
-			throw std::runtime_error("requested sock not found to delete it");
+			throw ft::runtime_error("requested sock not found to delete it");
 
 		FD_CLR(sock, &_fd_set);
 		_listening--;
@@ -143,7 +143,7 @@ namespace ft
 			#endif
 		_events = 0;
 		if (_listening == 0)
-			throw std::runtime_error("No have fd to dispatch");
+			throw ft::runtime_error("No have fd to dispatch");
 		ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
 		ft_memcpy(&_writing_set, &_fd_set, sizeof(_fd_set));
 		//FD_ZERO(&_writing_set);
@@ -228,7 +228,7 @@ namespace ft
 	void			Dispatcher::start(void)
 	{
 		if (!_server)
-			throw std::runtime_error("Not connected to server");
+			throw ft::runtime_error("Not connected to server");
 		_run = true;
 		while (_run)
 		{

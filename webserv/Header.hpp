@@ -3,6 +3,7 @@
 #include <webserv.hpp>
 #include <IHeader.hpp>
 #include <sstream>
+#include <runtime_error.hpp>
 
 namespace ft
 {

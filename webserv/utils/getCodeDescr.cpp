@@ -1,5 +1,5 @@
 #include <string>
-#include <stdexcept>
+#include <runtime_error.hpp>
 namespace ft
 {
 	std::string		getCodeDescr(int code)
@@ -51,7 +51,7 @@ namespace ft
 		case 504: return ("Gateway Timeout"); break;
 		case 505: return ("HTTP Version Not Supported"); break;
 		
-		default: throw std::runtime_error("Urecognized response code"); break;
+		default: throw ft::runtime_error("Urecognized response code"); break;
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace ft
 	RequestReciever::RequestReciever() : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
 	{
 		_validator = 0;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	RequestReciever::RequestReciever(std::string const &host, int port) : _host(host), _port(port), _queue(DEFAULT_CONN_QUEUE)
@@ -26,13 +26,13 @@ namespace ft
 	RequestReciever::RequestReciever(const RequestReciever &ref) : _host(DEFAULT_HOST), _port(DEFAULT_PORT)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 	}
 
 	RequestReciever &RequestReciever::operator=(const RequestReciever &ref)
 	{
 		(void)ref;
-		throw std::runtime_error("No implementation");
+		throw ft::runtime_error("No implementation");
 		return (*this);
 	}
 
@@ -69,7 +69,7 @@ namespace ft
 	{
 		_main_socket = socket(AF_INET, SOCK_STREAM, 0);
 		if (_main_socket == -1)
-			throw std::runtime_error("Failed to create socket");
+			throw ft::runtime_error("Failed to create socket");
 			#ifdef DEBUG
 				std::cout << "MAIN SOCKET OPENED\n";
 			#endif
@@ -88,7 +88,7 @@ namespace ft
 
 		ret = bind(_main_socket, (struct sockaddr*)&_sockaddr, sizeof(_sockaddr));  // may be another sizeof
 		if (ret == -1)
-			throw std::runtime_error(std::string("\nUnable to bind socket: \n" + std::string(strerror(errno))));
+			throw ft::runtime_error(std::string("\nUnable to bind socket: \n" + std::string(strerror(errno))));
 			#ifdef DEBUG
 				std::cout << "MAIN SOCKET BINDED\n";
 			#endif
@@ -100,7 +100,7 @@ namespace ft
 		int enable = 1;
 
 		if (fcntl(_main_socket, F_SETFL, O_NONBLOCK) == -1)
-			throw std::runtime_error("FCNTL NONBLOCK FAILED");
+			throw ft::runtime_error("FCNTL NONBLOCK FAILED");
 			
 			#ifdef DEBUG
 				std::cout << "MAIN SOCKET SET TO NONBLOCKING\n";
@@ -108,7 +108,7 @@ namespace ft
 		
 		ret = setsockopt(_main_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
 		if (ret < 0)
-			throw std::runtime_error("setsockopt(SO_REUSEADDR) failed");
+			throw ft::runtime_error("setsockopt(SO_REUSEADDR) failed");
 			
 			#ifdef DEBUG
 				std::cout << "SETSOCKOPT TO MAIN SOCKET\n";
@@ -116,7 +116,7 @@ namespace ft
 			
 		ret = listen(_main_socket, _queue);
 		if (ret < 0)
-			throw std::runtime_error(std::string("\nUnable to listen socket: \n" + std::string(strerror(errno))));
+			throw ft::runtime_error(std::string("\nUnable to listen socket: \n" + std::string(strerror(errno))));
 			
 			#ifdef DEBUG
 				std::cout << "MAIN SOCKET LISTENED\n";
@@ -150,7 +150,7 @@ namespace ft
 		addrlen = sizeof(_main_socket);
 		_client_fd = accept(_main_socket, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
 		if (_client_fd < 0)
-			throw std::runtime_error(std::string("\nUnable accept main socket: \n" + std::string(strerror(errno))));
+			throw ft::runtime_error(std::string("\nUnable accept main socket: \n" + std::string(strerror(errno))));
 
 		//_client = new Client(_client_max_id++, _client_fd);
 
@@ -165,7 +165,7 @@ namespace ft
 	void					RequestReciever::close_connection(int sock)
 	{
 		if (!_clients.count(sock))
-			throw std::runtime_error("Can t close: No such connection");
+			throw ft::runtime_error("Can t close: No such connection");
 		delete	_clients[sock];
 		_clients.erase(sock);
 	}
@@ -208,7 +208,7 @@ namespace ft
 	int					RequestReciever::writeEvent(int sock)
 	{
 		if (!_clients.count(sock))
-			throw std::runtime_error("No such client");
+			throw ft::runtime_error("No such client");
 		
 		#ifdef DEBUG
 			std::cout << "RECIEVER: WRITE EVENT\n";
@@ -229,7 +229,7 @@ namespace ft
 	IClient					*RequestReciever::getClient(int sock)
 	{
 		if (!_clients.count(sock))
-			throw std::runtime_error("No such client");
+			throw ft::runtime_error("No such client");
 		return(_clients[sock]);
 	}
 
