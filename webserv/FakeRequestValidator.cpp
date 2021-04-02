@@ -53,15 +53,10 @@ namespace ft
 			switch (process) {
 				case start: valiateStartLine(pos1, pos2); break;
 				case header: valiateHeader(pos1, pos2); break;
-				case body:
-//				TODO body
-//				write Content-Length symbols into file, start from pos2
-					break;
 			}
 		}
 		if (state == error)
-//			TODO requests without body - valid case
-			throw std::runtime_error("RequestValidator: no body");
+			throw std::runtime_error("RequestValidator: invalid request");
 	}
 
 //	TODO REPLACE ALL REQ (using for tests) INTO REQUEST TEXT
@@ -82,11 +77,8 @@ namespace ft
 				throw std::runtime_error("RequestValidator: the header field is duplicate");
 			line = line.substr(line.find(' ') + 1);
 			_header.insert(std::pair<header_keys, std::string>(a, line));
-		} else if ((pos2 = req.find('\n', pos1)) != std::string::npos) {
-			pos2++;
-			process = body;
 		} else
-			state = error;
+			state = endRead;
 	}
 
 	void FakeRequestValidator::valiateStartLine(strPos &pos1, strPos &pos2) {

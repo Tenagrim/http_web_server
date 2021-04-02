@@ -33,8 +33,7 @@ namespace ft
 	};
 	enum process {
 		start,
-		header,
-		body
+		header
 	};
 
 	class FakeRequestValidator : public IRequestValidator
@@ -48,9 +47,6 @@ namespace ft
 		methods_enum _method;
 		std::string _url;
 		std::map<header_keys, std::string> _header;
-		std::string _body;
-//		TODO do we need it?
-//		bool isBody;
 
 	public:
 		void fillMethod(std::string const &line);
