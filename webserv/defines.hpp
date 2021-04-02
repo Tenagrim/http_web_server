@@ -1,6 +1,9 @@
 
 
 //#define DEBUG 1					// Define this for debug logs to stdout
+	
+//#define USER					"gshona"
+
 #define UPDATE_DELAY 1000
 
 #define DEFAULT_PORT			83
@@ -10,6 +13,10 @@
 #define DEFAULT_CLIENT_DELAY	1000 * 1000 * 5
 #define CHECK_SOCKET_DELAY		100
 #define DEFAULT_SERVER_HEADER	"pst/1.1.0"
+
+#define FM_RW_BUFF				1024
+
+#define FM_DEFAULT_ROOT			"/Users/gshona/Desktop"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
 

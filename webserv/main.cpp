@@ -59,7 +59,7 @@ int main(int ac, char **av)
 ////////// PRIMARY PART ///////////////////////////////////////////////////////////////
 
 	ft::FileManager			fmngr;
-	ft::ResponseBuilder		resp_builder(&fmngr);
+	ft::ResponseBuilder		resp_builder;
 
 	ft::Server				serv(&resp_builder);
 

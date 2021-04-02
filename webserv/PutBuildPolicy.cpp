@@ -5,8 +5,6 @@ namespace ft
 	PutBuildPolicy::PutBuildPolicy()
 	{
 	}
-	PutBuildPolicy::PutBuildPolicy(IFileManager *mngr, ITimeMachine *machine) : ABuildPolicy(mngr,machine)
-	{}
 
 	PutBuildPolicy::~PutBuildPolicy()
 	{

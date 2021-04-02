@@ -2,14 +2,13 @@
 
 namespace ft
 {
-	GetBuildPolicy::GetBuildPolicy()
-	{/* Illegal */}
 
 	GetBuildPolicy::~GetBuildPolicy()
 	{}
 
-	GetBuildPolicy::GetBuildPolicy(IFileManager *mngr, ITimeMachine *machine) : ABuildPolicy(mngr, machine)
-	{}
+	GetBuildPolicy::GetBuildPolicy()
+	{
+	}
 
 	GetBuildPolicy::GetBuildPolicy(const GetBuildPolicy &ref)
 	{(void)ref; /* Illegal */}
@@ -22,17 +21,17 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-		_fmngr->setRoot("resources/sites/particles"); // HARDCODED SERVER ROOT
+		_fmngr.setRoot("/Users/gshona/Desktop/webserv/webserv/resources/sites/particles"); // HARDCODED SERVER ROOT
 		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse *res = 0;
 		#ifdef DEBUG
 			std::cout << "URI ::::::::::: [" << request->getURI() << "]\n";
 		#endif
 
-		if (_fmngr->isADirectory(request->getURI()))
+		if (_fmngr.isADirectory(request->getURI()))
 			return (buildFromDir(request));
 
-		if (_fmngr->isFileExisting(request->getURI()))
+		if (_fmngr.isFileExisting(request->getURI()))
 		{
 			#ifdef DEBUG
 				std::cout << "FILE EXISTS\n";
