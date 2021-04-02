@@ -1,5 +1,4 @@
 #include <FileManager.hpp>
-
 namespace ft
 {
 
@@ -53,7 +52,7 @@ namespace ft
 		file = getPath(filename);
 		
 		#ifdef DEBUG
-			std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
+		std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
 		#endif
 
 		return !stat(file.c_str(), &statbuf);
@@ -138,43 +137,13 @@ namespace ft
 		file = getPath(filename);
 		fd = open(file.c_str(), _acess);
 		#ifdef DEBUG
-			std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+		std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+
+		//char buff[10];
+		//read(fd, buff, 9);
+		//buff[9] = 0;
+		//std::cout << "CONT: [" << buff<< "]\n";
 		#endif
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdReadOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdWriteOnly(std::string const &filename)
-	{
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_WRONLY);
-		if (fd < 0)
-			throw CannotOpenFile();
-		return fd;
-	}
-
-	int				FileManager::getFdReadWrite(const std::string &filename) {
-		int fd;
-		std::string file;
-
-		file = _root + filename;
-		fd = open(file.c_str(), O_RDWR);
 		if (fd < 0)
 			throw CannotOpenFile();
 		return fd;

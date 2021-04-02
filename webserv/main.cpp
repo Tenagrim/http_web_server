@@ -1,11 +1,9 @@
 #include <Server.hpp>
 #include <ConfigParser.hpp>
 
-#include <signal.h> 
-#include <Dispatcher.hpp>
+#include <signal.h>
 #include <FileManager.hpp>
 #include <ResponseBuilder.hpp>
-#include <ResponseSender.hpp>
 
 
 #include <Request.hpp>

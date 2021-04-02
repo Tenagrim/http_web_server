@@ -49,9 +49,7 @@ namespace ft
 		int				getFd(std::string const &filename, unsigned int _acess = O_RDONLY);
 
 		//std::ifstream	getIfstream(std::string const &filename);
-		int				getFdReadOnly(std::string const &filename);
-		int				getFdWriteOnly(std::string const &filename);
-		int				getFdReadWrite(std::string const &filename);
+
 		void			setRoot(std::string const &new_root);
 		int				copyFdToFile(std::string const &filrname, int input_fd);	
 		std::string		getFullPath(std::string const &filename);

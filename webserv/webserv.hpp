@@ -5,7 +5,7 @@ namespace ft
 {
 	typedef enum header_keys
 	{
-		h_accept_charsets,
+		h_accept_charsets = 0,
 		h_accept_language,
 		h_allow,
 		h_authorization,
@@ -27,7 +27,7 @@ namespace ft
 
 	enum methods_enum
 	{
-		m_get,
+		m_get = 0,
 		m_post,
 		m_put
 	};	

@@ -28,12 +28,9 @@
 #include <runtime_error.hpp>
 #include <IRequestValidator.hpp>
 #include <FakeFakeRequestValidator.hpp>
-<<<<<<< HEAD
 
 #include <BasicRequest.hpp>
 
-=======
->>>>>>> master
 namespace ft
 {
 
