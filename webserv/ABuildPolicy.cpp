@@ -4,17 +4,20 @@ namespace ft
 {
 	
 
-	ABuildPolicy::ABuildPolicy()
-	{/* Illegal */}
 
-	ABuildPolicy::~ABuildPolicy()
-	{}
 
 	ABuildPolicy::ABuildPolicy(const ABuildPolicy &ref)
 	{ (void)ref; /* Illegal */}
 
-	ABuildPolicy::ABuildPolicy(IFileManager *mngr, ITimeMachine *machine) : _fmngr(mngr), _t_machine(machine)
-	{}
+	ABuildPolicy::ABuildPolicy()
+	{
+		_t_machine = new FakeTimeMachine();
+	}
+
+	ABuildPolicy::~ABuildPolicy()
+	{
+		delete _t_machine;
+	}
 	ABuildPolicy &ABuildPolicy::operator=(const ABuildPolicy &ref)
 	{
 		(void)ref;
@@ -56,7 +59,7 @@ namespace ft
 		TextBody *res;
 		std::stringstream ss;
 		std::string str;
-		std::ifstream fin(_fmngr->getFullPath(filename), std::ios::binary);
+		std::ifstream fin(_fmngr.getFullPath(filename), std::ios::binary);
 #ifdef DEBUG
 		std::cout << "BODY FROM FILE: [" << filename << "]\n";
 #endif
@@ -88,7 +91,7 @@ namespace ft
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILD FILE BODY [" << filename << "]\n";
 #endif
-		FileBody *res = new FileBody(_fmngr->getFileSize(filename), _fmngr->getFd(filename), _fmngr->getFullPath(filename));
+		FileBody *res = new FileBody(_fmngr.getFileSize(filename), _fmngr.getFd(filename), _fmngr.getFullPath(filename));
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILDING COMPLETED [" << res->size() << "] [" << res->getFd() << "] [" << _fmngr->getFullPath(filename) << "]\n";
 #endif
@@ -100,7 +103,7 @@ namespace ft
 		std::string type;
 		IBody *res;
 
-		type = _fmngr->getContentType(filename);
+		type = _fmngr.getContentType(filename);
 #ifdef DEBUG
 		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 #endif
@@ -143,7 +146,7 @@ namespace ft
 	{
 		(void)request; // FIXME
 		//_fmngr->setRoot(request->getURI());
-		if (_fmngr->isFileExisting("index.html"))
+		if (_fmngr.isFileExisting("index.html"))
 		{
 #ifdef DEBUG
 			std::cout << "FILE EXISTS\n";

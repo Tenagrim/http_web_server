@@ -6,11 +6,10 @@ namespace ft
 	class GetBuildPolicy : public ABuildPolicy
 	{
 	private:
-		GetBuildPolicy();
 		GetBuildPolicy(const GetBuildPolicy &ref);
 	public:
-		GetBuildPolicy(IFileManager *mngr, ITimeMachine *machine);
-		~GetBuildPolicy();
+		GetBuildPolicy();
+		virtual ~GetBuildPolicy();
 		GetBuildPolicy	&operator=(const GetBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
 	};

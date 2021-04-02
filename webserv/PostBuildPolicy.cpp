@@ -5,9 +5,7 @@ namespace ft
 	PostBuildPolicy::PostBuildPolicy()
 	{
 	}
-	PostBuildPolicy::PostBuildPolicy(IFileManager *mngr, ITimeMachine *machine) : ABuildPolicy(mngr,machine)
-	{}
-
+	
 	PostBuildPolicy::~PostBuildPolicy()
 	{
 	}

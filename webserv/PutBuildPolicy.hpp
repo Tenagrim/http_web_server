@@ -6,11 +6,10 @@ namespace ft
 	class PutBuildPolicy : public ABuildPolicy
 	{
 	private:
-		PutBuildPolicy();
 		PutBuildPolicy(const PutBuildPolicy &ref);
 
 	public:
-		PutBuildPolicy(IFileManager *mngr, ITimeMachine *machine);
+		PutBuildPolicy();
 		virtual ~PutBuildPolicy();
 		PutBuildPolicy &operator=(const PutBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);

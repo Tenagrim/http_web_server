@@ -24,9 +24,8 @@ namespace ft
 		policy_map			_policies;
 
 		ResponseBuilder(const ResponseBuilder &ref);
-		ResponseBuilder();
 	public:
-		ResponseBuilder(IFileManager	*mngr);
+		ResponseBuilder();
 		virtual ~ResponseBuilder();
 		ResponseBuilder		&operator=(const ResponseBuilder &ref);
 

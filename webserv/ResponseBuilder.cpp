@@ -4,14 +4,12 @@ namespace ft
 	//ITimeMachine const &ResponseBuilder::_t_machine = FakeTimeMachine();
 
 	#pragma region Copilen
-	ResponseBuilder::ResponseBuilder()
-	{/*  Illegal */}
 
-	ResponseBuilder::ResponseBuilder(IFileManager *mngr) : _t_machine(new FakeTimeMachine())
+	ResponseBuilder::ResponseBuilder() : _t_machine(new FakeTimeMachine())
 	{
-		_policies["GET"] = new GetBuildPolicy(mngr, _t_machine);
-		_policies["POST"] = new PostBuildPolicy(mngr, _t_machine);
-		_policies["PUT"] = new PutBuildPolicy(mngr, _t_machine);
+		_policies["GET"] = new GetBuildPolicy();
+		_policies["POST"] = new PostBuildPolicy();
+		_policies["PUT"] = new PutBuildPolicy();
 	}
 
 	ResponseBuilder::~ResponseBuilder()

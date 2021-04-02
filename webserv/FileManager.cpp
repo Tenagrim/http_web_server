@@ -1,21 +1,15 @@
 #include <FileManager.hpp>
-#include <sys/stat.h>
-#include <fstream>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/param.h>
-#include <defines.hpp>
-#include <iostream>
+
 namespace ft
 {
 
 	FileManager::FileManager()
 	{
-		char 		dir[MAXPATHLEN];
+		//char 		dir[MAXPATHLEN];
 
-		getcwd(dir, MAXPATHLEN);
-		this->_root = dir;
-		std::cout << "root: " << _root << std::endl;
+		//getcwd(dir, MAXPATHLEN);
+		this->_root = FM_DEFAULT_ROOT;
+		//std::cout << "root: " << _root << std::endl;
 	}
 
 	FileManager::~FileManager()
@@ -136,7 +130,7 @@ namespace ft
 			throw CannotOpenFile();
 	}
 */
-	int				FileManager::getFd(std::string const &filename, unsigned int _acess = O_RDONLY)
+	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
 	{
 		int fd;
 		std::string file;
@@ -187,6 +181,9 @@ namespace ft
 	}
 
 	void            FileManager::setRoot(const std::string &new_root) {
+		_root = new_root;
+		
+		/*
 		char 		dir[MAXPATHLEN];
 
 		getcwd(dir, MAXPATHLEN);
@@ -197,6 +194,7 @@ namespace ft
 		#ifdef DEBUG
 			std::cout << "set root: " << _root << std::endl;
 		#endif
+		*/
 	}
 
 	std::string FileManager::getRoot()
@@ -210,5 +208,30 @@ namespace ft
 
 	const char *FileManager::NoSuchType::what() const throw() {
 		return "FileManager: getContentType: Nginx doesn't support this file type";
+	}
+
+	std::string const		&FileManager::getRoot(void)
+	{
+			return _root;
+	}	
+	int				FileManager::copyFdToFile(std::string const &filename, int input_fd)
+	{
+		char	buff[FM_RW_BUFF];
+		int		readed = 1, written;
+		int 	fd;
+
+		std::string file = getPath(filename);
+
+		fd = open(file.c_str(), O_CREAT | O_RDWR, 0666);
+		if (fd < 0)
+			throw CannotOpenFile();
+		do
+		{
+			readed = read(input_fd, buff, FM_RW_BUFF);
+			written = write(fd, buff, readed);
+			if (readed != written)
+				throw ft::runtime_error("An error in rewriting file");
+		} while (readed != 0);
+		return fd;
 	}
 }
