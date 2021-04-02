@@ -15,6 +15,7 @@ namespace ft
 		_write_flags = 0;
 		_last_request = 0;
 		_response = 0;
+		_states = s_not_begin;
 	}
 
 	Client::~Client()
