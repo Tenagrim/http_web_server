@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/param.h>
-#include <defines.hpp>
+
 #include <iostream>
 namespace ft
 {
@@ -59,7 +59,7 @@ namespace ft
 		file = getPath(filename);
 		
 		#ifdef DEBUG
-			std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
+		std::cout << "FILE MANAGER: IS FILE EXISTS: [" << file << "]\n";
 		#endif
 
 		return !stat(file.c_str(), &statbuf);
@@ -136,7 +136,7 @@ namespace ft
 			throw CannotOpenFile();
 	}
 */
-	int				FileManager::getFd(std::string const &filename, unsigned int _acess = O_RDONLY)
+	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
 	{
 		int fd;
 		std::string file;
@@ -144,7 +144,12 @@ namespace ft
 		file = getPath(filename);
 		fd = open(file.c_str(), _acess);
 		#ifdef DEBUG
-			std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+		std::cout << "FILE MANAGER: GET FD: [" << fd << "] ["<< file << "]\n";
+
+		//char buff[10];
+		//read(fd, buff, 9);
+		//buff[9] = 0;
+		//std::cout << "CONT: [" << buff<< "]\n";
 		#endif
 		if (fd < 0)
 			throw CannotOpenFile();
@@ -194,9 +199,9 @@ namespace ft
 		if (new_root[0] != '/')
 			slash += '/';
 		this->_root = dir + slash + new_root;
-		#ifdef DEBUG
-			std::cout << "set root: " << _root << std::endl;
-		#endif
+		//if (_root.back() != '/')
+		//	_root += '/';
+		std::cout << "set root: " << _root << std::endl;
 	}
 
 	const char *FileManager::CannotOpenFile::what() const throw() {
