@@ -1,6 +1,6 @@
 
 
-//#define DEBUG 1					// Define this for debug logs to stdout
+#define DEBUG 1					// Define this for debug logs to stdout
 	
 //#define USER					"gshona"
 
@@ -16,7 +16,7 @@
 
 #define FM_RW_BUFF				1024
 
-#define FM_DEFAULT_ROOT			"/Users/gshona/Desktop"
+#define FM_DEFAULT_ROOT			"/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
 

@@ -30,8 +30,9 @@ namespace ft
 
 	Header *PutBuildPolicy::checkCommingURI(IRequest *request)
 	{
+		std::cout<<_fmngr.getRoot()<<std::endl;
 		Header *head = new Header(response);
-		if (!_fmngr->isFileExisting(request->getURI())) {
+		if (!_fmngr.isFileExisting(request->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader("Content-Location", request->getURI());
@@ -55,8 +56,8 @@ namespace ft
 
 	void PutBuildPolicy::creatFile(IRequest *pRequest)
 	{
-		_fmngr->getFd(pRequest->getURI(), O_CREAT | O_RDWR);
+		_fmngr.getFd(pRequest->getURI(), O_CREAT | O_RDWR);
 		IBody *body = pRequest->getBody();
-		body->getFd();
+		_fmngr.copyFdToFile(pRequest->getURI(), body->getFd());
 	}
 }

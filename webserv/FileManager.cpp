@@ -197,10 +197,6 @@ namespace ft
 		*/
 	}
 
-	std::string FileManager::getRoot()
-	{
-		return _root;
-	}
 
 	const char *FileManager::CannotOpenFile::what() const throw() {
 		return "FileManager: Cannot open file";
@@ -213,7 +209,8 @@ namespace ft
 	std::string const		&FileManager::getRoot(void)
 	{
 			return _root;
-	}	
+	}
+
 	int				FileManager::copyFdToFile(std::string const &filename, int input_fd)
 	{
 		char	buff[FM_RW_BUFF];
