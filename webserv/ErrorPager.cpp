@@ -57,11 +57,11 @@ namespace ft
 		head->setResponseCode(code);
 		head->setCodeDescription(descr);
 		IBody	*body = getErrPageBody(code, descr);
-		head->setHeader("Content-Length", ft::to_string(body->size()));
-		head->setHeader("Date", _t_machine.getTimestamp());
-		head->setHeader("Connection", "close");
-		head->setHeader("Content-Type", "text/html");
-		head->setHeader("Server", DEFAULT_SERVER_HEADER);
+		head->setHeader(h_content_length, ft::to_string(body->size()));
+		head->setHeader(h_date, _t_machine.getTimestamp());
+//		head->setHeader(h_conn, "close");
+		head->setHeader(h_content_type, "text/html");
+		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
 		return (new BasicResponse(head, body));
 	}
 	

@@ -40,7 +40,7 @@ namespace ft
 	class FakeRequestValidator : public IRequestValidator
 	{
 	private:
-		typedef typename std::string::size_type strPos;
+		typedef std::string::size_type strPos;
 		void valiateStartLine(strPos &pos1, strPos &pos2);
 		void valiateHeader(strPos &pos1, strPos &pos2);
 		enum state state;

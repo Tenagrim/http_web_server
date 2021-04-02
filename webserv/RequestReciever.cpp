@@ -7,18 +7,18 @@ namespace ft {
 
 	RequestReciever::RequestReciever() : _host(DEFAULT_HOST),
 										 _port(DEFAULT_PORT) {
-		_validator = 0;
+//		_validator = 0;
 		throw ft::runtime_error("No implementation");
 	}
 
 	RequestReciever::RequestReciever(std::string const &host, int port) : _host(
 			host), _port(port), _queue(DEFAULT_CONN_QUEUE) {
-		_validator = new FakeFakeRequestValidator();
+//		_validator = new FakeFakeRequestValidator();
 		_client_max_id = 0;
 	}
 
 	RequestReciever::~RequestReciever() {
-		delete _validator;
+//		delete _validator;
 		close_connections();
 		close(_main_socket);
 	}
@@ -190,7 +190,7 @@ namespace ft {
 		IRequest *pRequest;
 
 		if (client->getStates() == Client::s_not_begin)
-			client->setLastRequest(new Request());
+			client->setLastRequest(new BasicRequest());
 
 		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
@@ -201,18 +201,18 @@ namespace ft {
 			case Client::s_header_reading: readHeader(client, buff); break;
 			case Client::s_start_body_reading: readBody(client, buff); break;
 			case Client::s_body_reading: readBody(client, buff); break;
-			case default: throw ft::runtime_error("" + __LINE__);
+//			default: throw ft::runtime_error("" + __LINE__);
 		}
 
 		IHeader *header = new Header(request);
 		IBody *body;
 
 //		request = new BasicRequest(p_head, 0);
-
-		client->setFlag(Client::read_flags, Client::r_head_end);
-		client->setFlag(Client::read_flags, Client::r_body_beginned);
-
-		pRequest = new Request(ss.str());
+//
+//		client->setFlag(Client::read_flags, Client::r_head_end);
+//		client->setFlag(Client::read_flags, Client::r_body_beginned);
+//
+//		pRequest = new Request(ss.str());
 
 		client->setFlag(Client::read_flags, Client::r_end);
 		client->setLastRequest(pRequest);
@@ -228,9 +228,12 @@ namespace ft {
 		client->setStates(Client::s_header_reading);
 		client->getReadBuff().append(buff);
 		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos) {
-//			client->setLastRequest(new BasicRequest())
-//			FakeRequestValidator(const std::string &text, Header &header);
 //			TODO write part of body to it's fd
+//			null - terminate string
+			if (!client->getLastRequest()->getHeader()->isValid()) {
+				client->setStates(Client::s_end_reading);
+				client->setFlag(Client::read_flags, Client::r_end);
+			}
 			client->setStates(Client::s_header_reading);
 		}
 	}
@@ -238,7 +241,6 @@ namespace ft {
 	void RequestReciever::readBody(Client *client, char *buff) {
 		std::string reqHeader;
 
-		if ()
 	}
 
 	int RequestReciever::writeEvent(int sock) {
@@ -268,6 +270,29 @@ namespace ft {
 
 	int RequestReciever::getPort() {
 		return _port;
+	}
+
+	void RequestReciever::headerBuilder(const std::string &text, Header *header) {
+		std::string subLine;
+		int i = 0;
+		header_keys a;
+		strPos pos1 = 0, pos2;
+
+		while ((pos2 = req.find("\r\n", pos1)) != std::string::npos) {
+			subLine = req.substr(pos1, pos2);
+			pos1 = pos2 + 2;
+			do {
+				a = static_cast<header_keys>(i);
+				i++;
+			}
+			while (subLine != getHeaderKey(a));
+			if (header->isHeadAlreadyExist(a)) {
+				header->makeInvalid();
+				return ;
+			}
+			subLine = subLine.substr(subLine.find(' ') + 1);
+			header->setHeader(a, subLine);
+		}
 	}
 
 }
