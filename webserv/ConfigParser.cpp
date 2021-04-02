@@ -93,7 +93,14 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start
 
 	std::list<std::string> *tmp = new std::list<std::string>;
 	iterator end = std::find(start, _list.end(), "server");
+	if (*end != "server") {
+		reverse_iterator r_end = std::find(_list.rbegin(), _list.rend(), "}");
+		++r_end;
+		r_end = std::find(_list.rbegin(), _list.rend(), "}");
+		end = r_end.base();
+	}
 	tmp->splice(tmp->begin(), _list, start, end);
+	state = initServer(tmp);
 	iterator count = tmp->begin();
 	reverse_iterator recount = tmp->rbegin();
 	count = isSpace(count);
@@ -102,7 +109,6 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start
 		throw std::runtime_error("No Open Bracket after SERVER key word...");
 	if (*recount != "}")
 		throw std::runtime_error("No Close Bracket ...");
-	state = initServer(tmp);
 	delete tmp;
 	return state;
 }

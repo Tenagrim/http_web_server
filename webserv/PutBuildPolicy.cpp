@@ -58,6 +58,6 @@ namespace ft
 	{
 		_fmngr.getFd(pRequest->getURI(), O_CREAT | O_RDWR);
 		IBody *body = pRequest->getBody();
-		_fmngr.copyFdToFile(pRequest->getURI(), body->getFd());
+		_fmngr.copyFdToFile(pRequest->getURI(), pRequest->getBody()->getFd());
 	}
 }
