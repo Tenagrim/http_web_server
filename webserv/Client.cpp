@@ -1,5 +1,4 @@
 #include <Client.hpp>
-#include <defines.hpp>
 
 #ifdef DEBUG
 # include <iostream>
