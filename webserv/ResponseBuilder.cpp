@@ -7,9 +7,9 @@ namespace ft
 	ResponseBuilder::ResponseBuilder()
 	{/*  Illegal */}
 
-	ResponseBuilder::ResponseBuilder(IFileManager *mngr) : _t_machine(new FakeTimeMachine())
+	ResponseBuilder::ResponseBuilder()
 	{
-		_policies[m_get] = new GetBuildPolicy(mngr, _t_machine);
+		_policies[m_get] = new GetBuildPolicy(mngr, );
 		_policies[m_post] = new PostBuildPolicy(mngr, _t_machine);
 		_policies[m_put] = new PutBuildPolicy(mngr, _t_machine);
 	}
