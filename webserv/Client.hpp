@@ -35,7 +35,9 @@ namespace ft
 		enum req_read_states
 		{
 			s_not_begin,
+			s_start_header_reading,
 			s_header_reading,
+			s_start_body_reading,
 			s_body_reading,
 			s_end_reading
 		};

@@ -22,6 +22,8 @@ namespace ft
 //		virtual std::string				&getText(void) = 0;
 		
 		virtual std::string				to_string(void) const = 0;
+		virtual void					setBody(IBody *body) = 0;
+		virtual void					setHeader(IHeader *header) = 0;
 
 
 		virtual ~IRequest(){};

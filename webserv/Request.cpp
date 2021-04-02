@@ -4,8 +4,9 @@
 
 namespace ft
 {
-	Request::Request()
-	{/* Illegal */}
+	Request::Request() :
+		_header(nullptr),
+		_body(nullptr) {}
 
 	Request::~Request()
 	{}
@@ -90,5 +91,13 @@ namespace ft
 	IBody					*Request::getBody(void)
 	{
 		return _body;
+	}
+
+	void Request::setHeader(IHeader *header) {
+		_header = header;
+	}
+
+	void Request::setBody(IBody *body) {
+		_body = body;
 	}
 }

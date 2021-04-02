@@ -189,16 +189,19 @@ namespace ft {
 		int n;
 		IRequest *pRequest;
 
-		if (client->getStates() == Client::s_not_begin) {
-			client->
-		}
-		client->setStates(Client::s_header_reading);
+		if (client->getStates() == Client::s_not_begin)
+			client->setLastRequest(new Request());
+
+		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 		buff[n] = 0;
 		switch (client->getStates()) {
+			case Client::s_start_header_reading: readHeader(client, buff); break;
 			case Client::s_header_reading: readHeader(client, buff); break;
+			case Client::s_start_body_reading: readBody(client, buff); break;
 			case Client::s_body_reading: readBody(client, buff); break;
+			case default: throw ft::runtime_error("" + __LINE__);
 		}
 
 		IHeader *header = new Header(request);
@@ -219,17 +222,12 @@ namespace ft {
 	}
 
 	void RequestReciever::readHeader(Client *client, char *buff) {
-		std::string reqHeader;
-		IHeader *pHead;
+		if (client->getStates() == Client::s_start_header_reading)
+			client->getLastRequest()->setHeader(new Header(response));
 
-		if (client->getStates() == Client::s_not_begin) {
-			pHead = new Header(response);
-		} else {
-
-		}
-		reqHeader = client->getReadBuff();
-		reqHeader.append(buff);
-		if (reqHeader.find("\r\n\r\n") != std::string::npos) {
+		client->setStates(Client::s_header_reading);
+		client->getReadBuff().append(buff);
+		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos) {
 //			client->setLastRequest(new BasicRequest())
 //			FakeRequestValidator(const std::string &text, Header &header);
 //			TODO write part of body to it's fd
