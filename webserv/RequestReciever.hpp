@@ -59,8 +59,10 @@ namespace ft
 		virtual ~RequestReciever();
 
 		RequestReciever 		&operator=(const RequestReciever &ref);
+
 		IRequest				*getRequest(Client *client);
 		IRequest				*getRequest(int sock);
+
 		int						getId();
 		int						accept_connection();
 		void					close_connection(int sock);

@@ -5,6 +5,7 @@
 
 #include <FakeTimeMachine.hpp>
 #include <IRequest.hpp>
+#include <FileManager.hpp>
 
 #include <TextResponse.hpp>
 #include <TextBody.hpp>
@@ -26,9 +27,9 @@ namespace ft
 	class ABuildPolicy
 	{
 	protected:
-		IFileManager *_fmngr;
-		ErrorPager _e_pager;
-		ITimeMachine *_t_machine;
+		FileManager		_fmngr;
+		ErrorPager		_e_pager;
+		ITimeMachine	*_t_machine;
 
 		int findIndexFile(std::list<std::string> &priority);
 
@@ -44,11 +45,10 @@ namespace ft
 		TextBody *buildTextBody(std::string const &filename);
 		FileBody *buildFileBody(std::string const &filename);
 
-		ABuildPolicy();
 		ABuildPolicy(const ABuildPolicy &ref);
 
 	public:
-		ABuildPolicy(IFileManager *mngr, ITimeMachine *machine);
+		ABuildPolicy();
 		virtual ~ABuildPolicy();
 		ABuildPolicy &operator=(const ABuildPolicy &ref);
 		virtual IResponse *buildResponse(IRequest *request) = 0;
