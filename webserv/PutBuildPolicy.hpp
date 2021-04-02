@@ -14,5 +14,7 @@ namespace ft
 		virtual ~PutBuildPolicy();
 		PutBuildPolicy &operator=(const PutBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
+
+		Header *checkCommingURI(IRequest *request);
 	};
 } // namespace ft

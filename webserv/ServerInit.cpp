@@ -17,10 +17,10 @@ bool ft::ServerInit::parseInServer(std::list<std::string> &tmp)
 {
 	bool state = false;
 	ft::deleteCommit(tmp);
+	state = findLocations(&tmp);
 	state = findListen(&tmp);
 	state = findServerName(&tmp);
 	state = findRoot(&tmp);
-	state = findLocations(&tmp);
 	std::cout<<string(30, '*')<<std::endl;
 	getConf(tmp);
 	return state;
@@ -84,6 +84,7 @@ bool ft::ServerInit::findRoot(std::list<std::string> *tmp)
 		if (_root.empty() || _root == ";")
 			throw std::runtime_error("nothing in root path");
 		delete root;
+		state = true;
 	}
 	return state;
 }
