@@ -10,7 +10,7 @@ class runtime_error : public std::exception
 	public:
 		runtime_error(std::string const &what);
 		runtime_error();
-		virtual ~runtime_error();
+		virtual ~runtime_error() _NOEXCEPT ;
 		runtime_error(const runtime_error &ref);
 		runtime_error &operator=(const runtime_error &ref);
 		const char* what() const throw();
