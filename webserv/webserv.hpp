@@ -29,8 +29,9 @@ namespace ft
 	{
 		m_get = 0,
 		m_post,
-		m_put
-	};	
+		m_put,
+		m_undefined
+	};
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char const *str);
 	std::string			getHeaderKey(header_keys_enum key);

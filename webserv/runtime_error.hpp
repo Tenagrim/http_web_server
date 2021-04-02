@@ -6,7 +6,7 @@ namespace ft
 	class runtime_error
 	{
 	private:
-		std::string _waht;
+		std::string _what;
 	public:
 		runtime_error(std::string const &what);
 		runtime_error();

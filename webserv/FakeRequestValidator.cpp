@@ -1,5 +1,6 @@
 #include <FakeRequestValidator.hpp>
 #include <iostream>
+#include "Header.hpp"
 
 namespace ft
 {
@@ -29,12 +30,12 @@ namespace ft
 		return true;
 	}
 	*/
-	int FakeRequestValidator::isValid(std::string const &line)
+	bool		FakeRequestValidator::isValid(std::string const &line)
 	{
 		(void)line;
 		return true;
 	}
-	int FakeRequestValidator::isValid(const IRequest &req)
+	bool		FakeRequestValidator::isValid(const IRequest &req)
 	{
 		(void)req;
 		return true;
@@ -43,25 +44,21 @@ namespace ft
 	void		FakeRequestValidator::reset(void)
 	{}
 
-	FakeRequestValidator::FakeRequestValidator(const std::string &text) {
+	FakeRequestValidator::FakeRequestValidator(const std::string &text,
+											   Header &header) {
 		state = readin;
-		process = start;
+		process = p_start;
 		strPos pos1 = 0;
 		strPos pos2 = 0;
 
 		while (state == readin) {
 			switch (process) {
-				case start: valiateStartLine(pos1, pos2); break;
-				case header: valiateHeader(pos1, pos2); break;
-				case body:
-//				TODO body
-//				write Content-Length symbols into file, start from pos2
-					break;
+				case p_start: valiateStartLine(pos1, pos2); break;
+				case p_head: valiateHeader(pos1, pos2); break;
 			}
 		}
 		if (state == error)
-//			TODO requests without body - valid case
-			throw std::runtime_error("RequestValidator: no body");
+			throw std::runtime_error("RequestValidator: invalid request");
 	}
 
 //	TODO REPLACE ALL REQ (using for tests) INTO REQUEST TEXT
@@ -82,11 +79,8 @@ namespace ft
 				throw std::runtime_error("RequestValidator: the header field is duplicate");
 			line = line.substr(line.find(' ') + 1);
 			_header.insert(std::pair<header_keys, std::string>(a, line));
-		} else if ((pos2 = req.find('\n', pos1)) != std::string::npos) {
-			pos2++;
-			process = body;
 		} else
-			state = error;
+			state = endRead;
 	}
 
 	void FakeRequestValidator::valiateStartLine(strPos &pos1, strPos &pos2) {
@@ -98,7 +92,7 @@ namespace ft
 			fillMethod(line);
 			fillUrl(line);
 			checkHttp(line);
-			process = header;
+			process = p_head;
 		} else
 			state = error;
 

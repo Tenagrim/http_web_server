@@ -1,5 +1,5 @@
 #include <Client.hpp>
-
+#include <BasicRequest.hpp>
 #ifdef DEBUG
 # include <iostream>
 #endif
@@ -15,6 +15,8 @@ namespace ft
 		_write_flags = 0;
 		_last_request = 0;
 		_response = 0;
+		_states = s_not_begin;
+		_last_request = new BasicRequest();
 	}
 
 	Client::~Client()
@@ -159,8 +161,17 @@ namespace ft
 		setFlag(write_flags, w_body);
 	}
 
-	char			**Client::getReadBuff(void)
+	std::string & Client::getReadBuff(void)
 	{
-		return &_read_buff;
+		return _read_buff;
 	}
+
+	Client::req_read_states Client::getStates() const {
+		return _states;
+	}
+
+	void Client::setStates(Client::req_read_states states) {
+		_states = states;
+	}
+
 }

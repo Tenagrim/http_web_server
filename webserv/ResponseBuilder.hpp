@@ -13,7 +13,7 @@ namespace ft
 	class ResponseBuilder : public IResponseBuilder
 	{
 	private:
-		typedef std::map<std::string, ABuildPolicy*> policy_map;
+		typedef std::map<methods_enum, ABuildPolicy*> policy_map;
 		//IFileManager		*_fmngr;
 		ITimeMachine		*_t_machine;
 

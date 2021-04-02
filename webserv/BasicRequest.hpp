@@ -8,11 +8,11 @@ namespace ft
 	class BasicRequest : public IRequest
 	{
 	private:
-		BasicRequest();
 		BasicRequest(const BasicRequest &ref);
 		IHeader	*_header;
 		IBody	*_body;
 	public:
+		BasicRequest();
 		IHeader					*getHeader(void);
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
