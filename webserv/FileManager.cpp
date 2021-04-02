@@ -199,6 +199,11 @@ namespace ft
 		#endif
 	}
 
+	std::string FileManager::getRoot()
+	{
+		return _root;
+	}
+
 	const char *FileManager::CannotOpenFile::what() const throw() {
 		return "FileManager: Cannot open file";
 	}

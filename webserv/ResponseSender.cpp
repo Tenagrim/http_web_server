@@ -101,8 +101,12 @@ namespace ft
 
 	void			ResponseSender::sendBody(IBody *body, IClient *client)
 	{
-		if (!body)
-			throw ft::runtime_error("RESPONSE SENDER: NULL BODY GOT");
+//		TODO:Some something when no BODY;
+		if (!body) {
+			client->sendBody();
+			return;
+		}
+//			throw ft::runtime_error("RESPONSE SENDER: NULL BODY GOT");
 		if (dynamic_cast<TextBody*>(body))
 			sendTextBody(dynamic_cast<TextBody*>(body), client);
 		else if (dynamic_cast<FileBody*>(body))

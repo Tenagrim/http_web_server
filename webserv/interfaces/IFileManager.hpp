@@ -28,8 +28,9 @@ namespace ft
 			virtual int				getFdReadWrite(std::string const &filename) = 0;
 			virtual void			setRoot(std::string const &new_root) = 0;
 			virtual std::string		getFullPath(std::string const &filename) = 0;
+			virtual std::string		getRoot() = 0;
 			//virtual std::ifstream	getIfstream(std::string const &filename) = 0;
 
-			virtual ~IFileManager(){}	
+			virtual ~IFileManager(){}
 	};
 }

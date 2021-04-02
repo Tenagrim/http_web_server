@@ -24,7 +24,8 @@ namespace ft
 	IResponse		*PutBuildPolicy::buildResponse(IRequest *request)
 	{
 		(void) request;
-		BasicResponse *response = new BasicResponse(checkCommingURI(request), NULL);
+		Header *head = checkCommingURI(request);
+		BasicResponse *response = new BasicResponse(head, NULL);
 		return response;
 		return _e_pager.getErrorPage(404);
 	}
@@ -33,20 +34,22 @@ namespace ft
 	{
 		Header *head = new Header(response);
 		if (!_fmngr->isFileExisting(request->getURI())) {
-			head->setHTTPV(request->getHTTPVersion());
 			head->setResponseCode(201);
+			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader("Content-Location", request->getURI());
+//			creatFile(request->getBody());
 			return head;
 		} else {
 			if (request->getBody()) {
-				head->setHTTPV(request->getHTTPVersion());
 				head->setResponseCode(200);
+				head->setCodeDescription(ft::getCodeDescr(200));
+//				mutantExistingFile(request->getBody());
 				return head;
 			} else {
-				head->setHTTPV(request->getHTTPVersion());
 				head->setResponseCode(204);
+				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader("Content-Location", request->getURI());
-//			mutantExistingFile(request);
+				return head;
 			}
 		}
 		return head;

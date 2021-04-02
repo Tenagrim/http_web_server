@@ -44,6 +44,7 @@ namespace ft
 		int				getFdReadWrite(std::string const &filename);
 		void			setRoot(std::string const &new_root);
 		std::string		getFullPath(std::string const &filename);
+		std::string		getRoot();
 
 		class CannotOpenFile : public std::exception { const char * what() const throw(); };
 		class NoSuchType : public std::exception { const char * what() const throw(); };
