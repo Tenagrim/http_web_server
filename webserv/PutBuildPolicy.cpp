@@ -23,6 +23,7 @@ namespace ft
 
 	IResponse		*PutBuildPolicy::buildResponse(IRequest *request)
 	{
+		(void) request;
 		BasicResponse *response = new BasicResponse(checkCommingURI(request), NULL);
 		return response;
 		return _e_pager.getErrorPage(404);
@@ -30,7 +31,6 @@ namespace ft
 
 	Header *PutBuildPolicy::checkCommingURI(IRequest *request)
 	{
-		(void) request;
 		Header *head = new Header(response);
 		if (!_fmngr->isFileExisting(request->getURI())) {
 			head->setHTTPV(request->getHTTPVersion());
