@@ -42,12 +42,13 @@ namespace ft
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
-//				mutantExistingFile(request->getBody());
+				mutantExistingFile(request);
 				return head;
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader("Content-Location", request->getURI());
+				truncExistingFile(request);
 				return head;
 			}
 		}
@@ -56,8 +57,24 @@ namespace ft
 
 	void PutBuildPolicy::creatFile(IRequest *pRequest)
 	{
-		_fmngr.getFd(pRequest->getURI(), O_CREAT | O_RDWR);
-		IBody *body = pRequest->getBody();
-		_fmngr.copyFdToFile(pRequest->getURI(), pRequest->getBody()->getFd());
+		int fd = ft::temporaryBody("<p>Новый файл</p>");
+		//		IBody *body = pRequest->getBody();
+		_fmngr.copyFdToFile(pRequest->getURI(), fd);
+		//		Пока что я закрываю FD
+		close(fd);
+	}
+
+	void PutBuildPolicy::mutantExistingFile(IRequest *pRequest)
+	{
+		int fd = ft::temporaryBody("<p>Новый новый файл</p>");
+		//		IBody *body = pRequest->getBody();
+		_fmngr.copyFdToFile(pRequest->getURI(), fd);
+		//		Пока что я закрываю FD
+		close(fd);
+	}
+
+	void PutBuildPolicy::truncExistingFile(IRequest *pRequest)
+	{
+		_fmngr.getFd(pRequest->getURI(), O_TRUNC);
 	}
 }

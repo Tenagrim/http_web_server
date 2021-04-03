@@ -22,6 +22,8 @@
 #include <list>
 #include <runtime_error.hpp>
 
+#include <Utils.hpp>
+
 namespace ft
 {
 	class ABuildPolicy
