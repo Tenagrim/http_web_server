@@ -37,19 +37,16 @@ namespace ft
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader("Content-Location", request->getURI());
 			creatFile(request);
-			return head;
 		} else {
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
 				mutantExistingFile(request);
-				return head;
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader("Content-Location", request->getURI());
 				truncExistingFile(request);
-				return head;
 			}
 		}
 		return head;
