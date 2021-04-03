@@ -38,7 +38,7 @@ namespace ft
 		else if (!client->bodySent())
 		{
 			#ifdef DEBUG
-			std::cout << "SENDER: SEND BODY FOR URI: [" << client->getLastRequest()->getURI() << "]\n";
+			std::cout << "SENDER: SEND BODY FOR URI: [" << client->getLastRequest()->getHeader()->getURI() << "]\n";
 			#endif
 			sendBody(resp->getBody(), client);
 		}

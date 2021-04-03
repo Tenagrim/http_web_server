@@ -24,7 +24,7 @@ namespace ft
 		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse *res = 0;
 		#ifdef DEBUG
-			std::cout << "URI ::::::::::: [" << request->getURI() << "]\n";
+			std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
 		#endif
 
 		if (_fmngr.isADirectory(request->getHeader()->getURI()))
