@@ -24,8 +24,9 @@ namespace ft
 		(void) request;
 		Header *head = checkCommingURI(request);
 		BasicResponse *response = new BasicResponse(head, NULL);
+		if (response == nullptr)
+			return _e_pager.getErrorPage(404);
 		return response;
-		return _e_pager.getErrorPage(404);
 	}
 
 	Header *PutBuildPolicy::checkCommingURI(IRequest *request)
@@ -63,7 +64,7 @@ namespace ft
 
 	void PutBuildPolicy::mutantExistingFile(IRequest *pRequest)
 	{
-		int fd = ft::temporaryBody("<p>Новый новый файл</p>");
+		int fd = ft::temporaryBody("<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>Тег H1 и H2</title>\n</head>\n<body>\n\n<h1>Lorem ipsum dolor sit amet</h1>\n<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diem \nnonummy nibh euismod tincidunt ut lacreet dolore magna \naliguam erat volutpat.</p>\n\n</body>\n</html>");
 		//		IBody *body = pRequest->getBody();
 		_fmngr.copyFdToFile(pRequest->getURI(), fd);
 		//		Пока что я закрываю FD

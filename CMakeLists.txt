@@ -11,4 +11,4 @@ add_executable(
         webserv
         ${COM_DIR}
         ${UTILS_DIR}
-)
+        webserv/HeadBuildPolicy.cpp webserv/HeadBuildPolicy.hpp)
