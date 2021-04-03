@@ -48,9 +48,9 @@ namespace ft {
 		std::list<std::string> copyContent(list &tmp,iterator it, std::string const &stop);
 
 		////// Sorry, i need getters /////////////
-		std::list<int>					&getListenPorts(void);
-		std::list<LocationInit *>		&getLocationInits(void);
-		std::list<std::string>			&getServerNames(void);
+		std::list<int>					&getListenPorts();
+		std::list<LocationInit *>		&getLocationInits();
+		std::list<std::string>			&getServerNames();
 
 	};
 }

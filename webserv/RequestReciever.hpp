@@ -60,27 +60,6 @@ namespace ft
 
 		RequestReciever();
 		RequestReciever(const RequestReciever &ref);
-	public:
-		RequestReciever(std::string const &host, int port);
-		virtual ~RequestReciever();
-
-		RequestReciever 		&operator=(const RequestReciever &ref);
-
-		IRequest				*getRequest(Client *client);
-		IRequest				*getRequest(int sock);
-
-		int						getId();
-		int						accept_connection();
-		void					close_connection(int sock);
-		void					close_connections(void);
-		int						getListenSock();
-		IClient					*getClient(int sock);
-		
-		int						writeEvent(int sock);
-		
-		void					start(void);
-		int						getPort(void);
-
 		void readHeader(Client *client, char *buff);
 
 		void readBody(Client *client, char *buff);
@@ -94,6 +73,27 @@ namespace ft
 
 		void fillHeader(std::string subLine, IHeader *header,
 						Client::req_read_states &states);
+	public:
+		RequestReciever(std::string const &host, int port);
+		virtual ~RequestReciever();
+
+		RequestReciever 		&operator=(const RequestReciever &ref);
+
+		IRequest				*getRequest(Client *client);
+		IRequest				*getRequest(int sock);
+
+		int						getId();
+		int						accept_connection();
+		void					close_connection(int sock);
+		void					close_connections();
+		int						getListenSock();
+		IClient					*getClient(int sock);
+
+		int						writeEvent(int sock);
+
+		void					start(void);
+		int						getPort(void);
+
 	};
 
 }

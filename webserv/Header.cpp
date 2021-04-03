@@ -118,7 +118,7 @@ namespace ft
 			throw ft::runtime_error("Unknown type of header");
 		header_map::iterator it;
 		for (it = _header_map.begin(); it != _header_map.end(); it++)
-			ss << (*it).first << ": " << (*it).second << "\r\n";
+			ss <<ft::getHeaderKey( (*it).first) << ": " << (*it).second << "\r\n";
 		ss << "\r\n";
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()
 		return (ss.str());

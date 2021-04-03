@@ -206,8 +206,8 @@ namespace ft {
 		}
 //		TODO read body
 		IBody *body;
-
-		client->setFlag(Client::read_flags, Client::r_end);
+		if (client->getStates() == Client::s_header_readed)
+			client->setFlag(Client::read_flags, Client::r_end);
 
 
 		return (nullptr);
@@ -227,7 +227,7 @@ namespace ft {
 				client->setStates(Client::s_end_reading);
 				client->setFlag(Client::read_flags, Client::r_end);
 			}
-			client->setStates(Client::s_header_reading);
+			client->setStates(Client::s_header_readed);
 		}
 	}
 
