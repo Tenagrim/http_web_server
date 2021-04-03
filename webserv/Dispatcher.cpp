@@ -103,7 +103,7 @@ namespace ft
 			_client_map.erase(sock);
 			if (sock == _max_fd)
 			{
-				if (_client_map.size())
+				if (!_client_map.empty())
 					_max_fd = _client_map.rbegin()->first;
 				else if (_listener_map.size())
 					_max_fd = _listener_map.rbegin()->first;
@@ -151,7 +151,7 @@ namespace ft
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
 			#endif
-		if (_client_map.size() == 0)
+		if (_client_map.empty())
 			_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
 		else
 			_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
@@ -164,7 +164,7 @@ namespace ft
 	}
 
 
-	void					Dispatcher::handleListeners(void)
+	void					Dispatcher::handleListeners()
 	{
 		fd_map::iterator it;
 		for(it = _listener_map.begin();it != _listener_map.end() ;it++)
@@ -174,7 +174,7 @@ namespace ft
 		}
 	}
 
-	void					Dispatcher::handleClientsRead(void)
+	void					Dispatcher::handleClientsRead()
 	{
 		fd_map::iterator it;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
@@ -184,7 +184,7 @@ namespace ft
 		}
 	}
 
-	void					Dispatcher::handleClientsWrite(void)
+	void					Dispatcher::handleClientsWrite()
 	{
 		fd_map::iterator it;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
@@ -194,7 +194,7 @@ namespace ft
 		}
 	}
 
-	void					Dispatcher::handleClients(void)
+	void					Dispatcher::handleClients()
 	{
 		handleClientsRead();
 		handleClientsWrite();

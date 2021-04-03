@@ -1,5 +1,4 @@
 #include <RequestReciever.hpp>
-#include <RequestReciever.hpp>
 
 #include <Header.hpp>
 namespace ft {
@@ -63,22 +62,25 @@ namespace ft {
 #endif
 	}
 
-	void RequestReciever::open_main_socket(void) {
+	void			RequestReciever::open_main_socket()
+	{
 		_main_socket = socket(AF_INET, SOCK_STREAM, 0);
 		if (_main_socket == -1)
 			throw ft::runtime_error("Failed to create socket");
-#ifdef DEBUG
-		std::cout << "MAIN SOCKET OPENED\n";
-#endif
+			#ifdef DEBUG
+				std::cout << "MAIN SOCKET OPENED\n";
+			#endif
 	}
 
-	void RequestReciever::init_sockaddr(void) {
+	void			RequestReciever::init_sockaddr()
+	{
 		_sockaddr.sin_family = AF_INET;
 		_sockaddr.sin_addr.s_addr = INADDR_ANY;
 		_sockaddr.sin_port = htons(_port);
 	}
 
-	void RequestReciever::bind_main_socket(void) {
+	void			RequestReciever::bind_main_socket()
+	{
 		int ret;
 
 		ret = bind(_main_socket, (struct sockaddr *) &_sockaddr,

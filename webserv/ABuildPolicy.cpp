@@ -89,7 +89,7 @@ namespace ft
 #endif
 		FileBody *res = new FileBody(_fmngr.getFileSize(filename), _fmngr.getFd(filename), _fmngr.getFullPath(filename));
 #ifdef DEBUG
-		std::cout << "BUILDER: BUILDING COMPLETED [" << res->size() << "] [" << res->getFd() << "] [" << _fmngr->getFullPath(filename) << "]\n";
+		std::cout << "BUILDER: BUILDING COMPLETED [" << res->size() << "] [" << res->getFd() << "] [" << _fmngr.getFullPath(filename) << "]\n";
 #endif
 		return (res);
 	}

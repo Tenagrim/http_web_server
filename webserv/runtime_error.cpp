@@ -7,7 +7,7 @@ namespace ft
 	runtime_error::runtime_error() : _what("Uncaught exception")
 	{}
 	
-	runtime_error::~runtime_error()
+	runtime_error::~runtime_error() _NOEXCEPT
 	{}
 	
 	runtime_error::runtime_error(const runtime_error &ref) : _what(ref._what)

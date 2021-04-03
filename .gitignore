@@ -8,4 +8,3 @@ webserv/log.txt
 *pthread_kill
 .idea
 cmake-build-debug
-CMakeLists.txt
