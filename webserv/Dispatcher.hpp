@@ -26,6 +26,7 @@ namespace ft
 		fd_map					_client_map;
 
 		std::stack<int>			_socks_to_close;
+		unsigned int 			_delay;
 	//	td::map<int, Server *>			_listener_map;
 	//	td::map<int, Server *>				_client_map;
 		
@@ -46,6 +47,8 @@ namespace ft
 		void					handleClientsWrite(void);
 		void					closeWhatNeed();
 		void					reallyCloseSock(int sock);
+		void 					wakeUp();
+		void 					sleep();
 		Dispatcher(const Dispatcher &ref);
 	public:
 		Dispatcher();

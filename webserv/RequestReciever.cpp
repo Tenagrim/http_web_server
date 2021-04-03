@@ -218,7 +218,9 @@ namespace ft {
 			client->getLastRequest()->setHeader(new Header(response));
 
 		client->getReadBuff().append(buff);
-		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos) {
+		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos ||
+			client->getReadBuff().find("\n\n") != std::string::npos )
+		{
 //			TODO write part of body to it's fd
 //			null - terminate string
 			headerBuilder(client->getReadBuff(),
@@ -229,6 +231,8 @@ namespace ft {
 			}
 			client->setStates(Client::s_header_readed);
 		}
+		else
+			client->setStates(Client::s_header_reading);
 	}
 
 	void RequestReciever::readBody(Client *client, char *buff) {
