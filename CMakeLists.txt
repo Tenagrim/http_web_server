@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 98)
 
 INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
 
+
 add_executable(
         webserv
         ./webserv/ABody.cpp
@@ -55,7 +56,11 @@ add_executable(
         ./webserv/interfaces/ITimeMachine.hpp
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
-        ./webserv/main.cpp
+
+#        ./webserv/main.cpp
+        ./webserv/body_reader_test.cpp
+
+
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
         ./webserv/PostBuildPolicy.hpp
@@ -94,4 +99,4 @@ add_executable(
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
       webserv/BodyReader.cpp webserv/BodyReader.hpp
-)
+        webserv/body_reader_test.cpp)

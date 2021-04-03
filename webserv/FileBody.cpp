@@ -25,7 +25,7 @@ namespace ft
 		return (*this);
 	}
 
-	std::string		FileBody::readFile(void) const
+	std::string		FileBody::readFile() const
 	{
 
 		std::stringstream	ss;
@@ -39,28 +39,28 @@ namespace ft
 			return ("CAN\'T READ FILE BODY");
 	}
 
-	int					FileBody::getFd(void)
+	int					FileBody::getFd()
 	{
 		return(_fd);
 	}
 
-	std::string			FileBody::to_string(void) const
+	std::string			FileBody::to_string() const
 	{
 		if (_path == "no")
 			return ("DO\'NT READ MY FD");
 		else
 			return(readFile());
 	}
-	unsigned int		FileBody::size(void) const
+	unsigned int		FileBody::size() const
 	{
 		return _size;
 	}
-	BodyType			FileBody::getType(void)
+	BodyType			FileBody::getType()
 	{
 		throw ft::runtime_error("Not implemented");
 	}
 
-	int					FileBody::getInputFd(void)
+	int					FileBody::getInputFd()
 	{
 		return _inp_fd;
 	}

@@ -156,7 +156,7 @@ namespace ft {
 					"\nUnable accept main socket: \n" +
 					std::string(strerror(errno))));
 
-		//_client = new Client(_client_max_id++, _client_fd);
+		//_client = new Client(_client_max_id++, _input_fd);
 
 		_clients[_client_fd] = new Client(_client_max_id++, _client_fd);
 

@@ -4,41 +4,80 @@
 
 #ifndef WEBSERV_BODYREADER_HPP
 #define WEBSERV_BODYREADER_HPP
+
 #include <IHeader.hpp>
 #include <unistd.h>
 #include <runtime_error.hpp>
 #include <errno.h>
+#define  LEN_CHUNKED -1
+
+#define MIN_NUM_SIZE 4
+
 namespace ft {
-	enum content_encoding
-			{
-				length,
-				chunked
-			};
 	class BodyReader {
+
+
+		enum r_state
+		{
+			s_remains,
+			s_len,
+			s_block,
+			s_end
+		};
+
 	private:
-		char 				*_remainder_of_header;
-		int 				_chunk_len;
-		content_encoding	_encoding;
+		r_state 			_state;
+
+		std::string 		_remainder_of_header;
+
+		std::string 		_block_size;
+		char 				_last_readed;
+		int 				_block_size_i;
+		char 				*_read_buff;
 		int 				_output_fd;
 		int 				_pipe[2];
-		bool 				_opened;
+		bool 				_ended;
+		int 				_readed_size;
+		int 				_input_fd;
+		int 				_content_length;
+
+		int 				readWriteBlock(int size, int offset =0);
+
 		void 				openPipe();
-		void 				handle_rem();
+
+		int 				readRem();
+		int 				readChunkLen();
+		int 				readChunk();
+
+
+		void 				write_block(const char *buff, int len, int offset = 0 );
+
+		int 				getBlockLen();
+
+		void 				endReading();
+
 
 		BodyReader(const BodyReader &ref);
+		BodyReader();
 	public:
 		void setRemainderOfHeader(char *remainderOfHeader);
 
-		void setEncoding(content_encoding encoding);
-		BodyReader();
+		// CLIENT fd , ENCODING: LEN_CHUNKED or Content-length
+		BodyReader(int input_fd, int content_length, std::string remainder = "");
+
+
 		~BodyReader();
 		// TODO: Complete copilen form
-		int readBody(int & fd);
 
-		int getChunkLen() const;
+		//return values:  0 - end of body, 1 - readed
+		int readBody();
 
-		void setChunkLen(int chunkLen);
+		int get_resultFd() const;
+		unsigned int	getSize() const;
+
+
 	};
 
 }
+
 #endif //WEBSERV_BODYREADER_HPP
