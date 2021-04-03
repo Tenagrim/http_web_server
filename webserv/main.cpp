@@ -64,7 +64,8 @@ int main(int ac, char **av)
 	
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
-	
+	signal(SIGTERM, &sigint_handler);
+
 	serv.addListener(DEFAULT_PORT);
 //	serv.addListener(93);
 //	serv.addListener(97);
