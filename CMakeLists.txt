@@ -93,4 +93,5 @@ add_executable(
         ./webserv/utils/Utils.cpp
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
+      webserv/BodyReader.cpp webserv/BodyReader.hpp
 )
