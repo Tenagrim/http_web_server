@@ -1,5 +1,5 @@
 #include <Server.hpp>
-
+#include <runtime_error.hpp>
 namespace ft
 {
 	#pragma region Copilen
@@ -147,12 +147,14 @@ namespace ft
 		//RequestReciever	*_reciever = _listener_map[args._fd];
 		if (args._reciever->writeEvent(args._fd))
 		{
-			IResponse		*resp;
-			IClient			*client;
+			IResponse *resp = NULL;
+			Client			*client;
 			#ifdef DEBUG
 				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
 			#endif
-			client = args._reciever->getClient(args._fd);
+			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
+			if (!client)
+				throw ft::runtime_error("Unknown type of client");
 //			FIXME normal size check
 			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
@@ -163,6 +165,11 @@ namespace ft
 				return;
 			}
 */
+			//if (args.)
+			if (client->getStates() == Client::s_start_body_reading) {
+				client->setFlag(Client::read_flags, Client::r_end);
+				return;
+			}
 			if (!client->getLastResponse())
 			{
 				resp = _resp_builder->buildResponse(client->getLastRequest());

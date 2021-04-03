@@ -22,7 +22,8 @@ namespace ft
 		h_server,
 		h_transfer_encoding,
 		h_user_agent,
-		h_www_authenticate
+		h_www_authenticate,
+		h_connection
 	};
 
 	enum methods_enum

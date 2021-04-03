@@ -36,15 +36,26 @@ namespace ft
 	IResponse			*ResponseBuilder::buildResponse(IRequest	*request)
 	{
 		ft::methods_enum method = request->getHeader()->getMethod();
+		IResponse	*resp = nullptr;
 
 		if (_policies.empty())
 			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
-		if (_policies.count(method))
-		{
-			return (_policies[method]->buildResponse(request));
-		}
+#ifdef DEBUG_REQ_PRINT
+		if (request->getHeader()->isValid())
+			std::cout<< "==================\n" << request->to_string() << "=================================\n";
+#endif
+		if(!request->getHeader()->isValid())
+			resp = ((*(_policies.begin())).second->buildErrorPage(400));
+		else if (_policies.count(method))
+			resp =_policies[method]->buildResponse(request);
 		else
-			return ((*(_policies.begin())).second->buildErrorPage(501));
+			resp =(*(_policies.begin())).second->buildErrorPage(501);
+
+#ifdef DEBUG_RESP_PRINT
+		std::cout<< "==================\n" << resp->to_string() << "=================================\n";
+#endif
+		return resp;
+
 	}
 }

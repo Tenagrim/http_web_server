@@ -24,6 +24,7 @@ namespace ft
 		case h_transfer_encoding: return("Transfer-Encoding"); break;
 		case h_user_agent: return("User-Agent"); break;
 		case h_www_authenticate: return("WWW-Authenticate"); break;
+		case h_connection: return("Connection"); break;
 		default: return ""; break;
 		}
 	}

@@ -26,7 +26,7 @@ namespace ft
 		Header();
 
 	public:
-		Header(MessageType type);
+		explicit Header(MessageType type);
 		~Header();
 		Header(const Header &ref);
 		Header				&operator=(const Header &ref);

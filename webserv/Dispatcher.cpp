@@ -184,8 +184,10 @@ namespace ft
 		fd_map::iterator it;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
-			if (FD_ISSET((*it).first, &_reading_set))
+			if (FD_ISSET((*it).first, &_reading_set)) {
 				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client, (*it).second));
+				FD_CLR((*it).first, &_writing_set);
+			}
 		}
 	}
 
@@ -216,7 +218,6 @@ namespace ft
 			return ;
 		}
 
-
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: HANDLING EVENTS\n";
 			#endif
@@ -241,7 +242,6 @@ namespace ft
 			handleEvents();
 			usleep(_delay);
 		}
-		
 	}
 	void			Dispatcher::stop()
 	{

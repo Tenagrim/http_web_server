@@ -195,41 +195,76 @@ namespace ft {
 
 		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
+
+
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 		buff[n] = 0;
+
+
+	//	if (client->getStates() == Client::s_header_readed)
+	//		client->setFlag(Client::read_flags, Client::r_end);
+
 		switch (client->getStates()) {
 			case Client::s_start_header_reading: readHeader(client, buff); break;
 			case Client::s_header_reading: readHeader(client, buff); break;
-			case Client::s_start_body_reading: readBody(client, buff); break;
-			case Client::s_body_reading: readBody(client, buff); break;
+			case Client::s_header_readed: readBody(client, buff); break;
+			//case Client::s_start_body_reading: readBody(client, buff); break;
+			//case Client::s_body_reading: readBody(client, buff); break;
 //			default: throw ft::runtime_error("" + __LINE__);
 		}
 //		TODO read body
 		IBody *body;
-		if (client->getStates() == Client::s_header_readed)
-			client->setFlag(Client::read_flags, Client::r_end);
 
 
 		return (nullptr);
 	}
 
+
+
 	void RequestReciever::readHeader(Client *client, char *buff) {
+		int end_pos;
+		int ending;
 		if (client->getStates() == Client::s_start_header_reading)
-			client->getLastRequest()->setHeader(new Header(response));
+			client->getLastRequest()->setHeader(new Header(request));
 
 		client->getReadBuff().append(buff);
-		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos ||
-			client->getReadBuff().find("\n\n") != std::string::npos )
+
+		end_pos = client->getReadBuff().find("\r\n\r\n");
+		ending = 4;
+		if (end_pos == std::string::npos) {
+			end_pos = client->getReadBuff().find("\n\n");
+			ending = 2;
+		}
+
+		if (end_pos != std::string::npos)
 		{
 //			TODO write part of body to it's fd
 //			null - terminate string
 			headerBuilder(client->getReadBuff(),
 						  client->getLastRequest()->getHeader(), client->getStates());
+
 			if (!client->getLastRequest()->getHeader()->isValid()) {
 				client->setStates(Client::s_end_reading);
 				client->setFlag(Client::read_flags, Client::r_end);
 			}
 			client->setStates(Client::s_header_readed);
+
+			/*
+			if (client->getLastRequest()->getHeader()->isValid() &&
+				methodNeedsBody(client->getLastRequest()->getHeader()->getMethod()))
+			{
+				std::cout<< "NEED BODY\n";
+					client->setStates(Client::s_start_body_reading);
+
+				//if(end_pos + ending == client->getReadBuff().size())
+				//	client->setStates(Client::s_start_body_reading);
+				//else
+				client->setFlag(Client::read_flags, Client::r_end);
+			}
+			else
+			 */
+				client->setFlag(Client::read_flags, Client::r_end);
+
 		}
 		else
 			client->setStates(Client::s_header_reading);
@@ -237,6 +272,7 @@ namespace ft {
 
 	void RequestReciever::readBody(Client *client, char *buff) {
 		std::string reqHeader;
+
 
 	}
 
@@ -275,9 +311,12 @@ namespace ft {
 		std::string subLine;
 		strPos pos1 = 0, pos2;
 
-		while ((pos2 = text.find("\r\n", pos1)) != std::string::npos) {
+
+
+		while ((pos2 = text.find("\n", pos1)) != std::string::npos && header->isValid()) {
 			subLine = text.substr(pos1, pos2 - pos1);
-			pos1 = pos2 + 2;
+			subLine.erase(std::remove(subLine.begin(), subLine.end(), '\r'), subLine.end());
+			pos1 = pos2 + 1;
 			switch (state) {
 				case Client::s_start_header_reading: firstLine(subLine, header,state); break;
 				case Client::s_header_reading: fillHeader(subLine, header, state); break;
@@ -320,7 +359,8 @@ namespace ft {
 
 		http = line.substr(line.rfind(' ') + 1, 8);
 		if (http != "HTTP/1.1")
-			throw std::runtime_error("RequestValidator: invalid HTTP version");
+			//throw std::runtime_error("RequestValidator: invalid HTTP version");
+			header->makeInvalid();
 	}
 
 	void RequestReciever::fillHeader(std::string subLine, IHeader *header,
@@ -348,6 +388,10 @@ namespace ft {
 			subLine.erase(0, 1);
 		}
 		header->setHeader(a, subLine);
+	}
+
+	bool RequestReciever::methodNeedsBody(methods_enum method) {
+		return (method == m_post || method == m_put);
 	}
 
 }

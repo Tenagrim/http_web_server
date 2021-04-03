@@ -73,6 +73,7 @@ namespace ft
 
 		void fillHeader(std::string subLine, IHeader *header,
 						Client::req_read_states &states);
+		bool methodNeedsBody(methods_enum method);
 	public:
 		RequestReciever(std::string const &host, int port);
 		virtual ~RequestReciever();

@@ -15,7 +15,7 @@ namespace ft
 	private:
 		typedef std::map<methods_enum, ABuildPolicy*> policy_map;
 		//IFileManager		*_fmngr;
-		ITimeMachine		*_t_machine;
+		//ITimeMachine		*_t_machine;
 
 		//GetBuildPolicy		_get_build_pol;	
 		//PostBuildPolicy		_post_build_pol;	

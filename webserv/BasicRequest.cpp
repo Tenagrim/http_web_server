@@ -44,7 +44,12 @@ namespace ft
 
 	std::string				BasicRequest::to_string(void) const
 	{
-		return	_header->to_string() + _body->to_string();
+		if (_header && _body)
+			return	_header->to_string() + _body->to_string();
+		else if (_header)
+			return _header->to_string();
+		else
+			return "";
 	}
 
 	void BasicRequest::setBody(IBody *body) {
