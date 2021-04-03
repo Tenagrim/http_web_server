@@ -2,7 +2,7 @@
 #include <runtime_error.hpp>
 namespace ft
 {
-	std::string			getHeaderKey(header_keys_enum key)
+	std::string			getHeaderKey(header_keys key)
 	{
 		switch (key)
 		{

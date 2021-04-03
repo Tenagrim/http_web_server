@@ -1,5 +1,5 @@
 #include <RequestReciever.hpp>
-#include <FakeRequestValidator.hpp>
+#include <RequestReciever.hpp>
 
 #include <Header.hpp>
 namespace ft {
@@ -7,18 +7,18 @@ namespace ft {
 
 	RequestReciever::RequestReciever() : _host(DEFAULT_HOST),
 										 _port(DEFAULT_PORT) {
-		_validator = 0;
+//		_validator = 0;
 		throw ft::runtime_error("No implementation");
 	}
 
 	RequestReciever::RequestReciever(std::string const &host, int port) : _host(
 			host), _port(port), _queue(DEFAULT_CONN_QUEUE) {
-		_validator = new FakeFakeRequestValidator();
+//		_validator = new FakeFakeRequestValidator();
 		_client_max_id = 0;
 	}
 
 	RequestReciever::~RequestReciever() {
-		delete _validator;
+//		delete _validator;
 		close_connections();
 		close(_main_socket);
 	}
@@ -49,7 +49,7 @@ namespace ft {
 			/* code */
 			bind_main_socket();
 		}
-		catch (const std::exception &e)        // FIXME:   REMOVE THIS SHIT OUT HERE !!!!
+		catch (const ft::runtime_error &e)        // FIXME:   REMOVE THIS SHIT OUT HERE !!!!
 		{
 			std::cerr << e.what() << '\n';
 			_port++;
@@ -187,10 +187,9 @@ namespace ft {
 	IRequest *RequestReciever::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
-		IRequest *pRequest;
 
 		if (client->getStates() == Client::s_not_begin)
-			client->setLastRequest(new Request());
+			client->setLastRequest(new BasicRequest());
 
 		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
@@ -201,36 +200,31 @@ namespace ft {
 			case Client::s_header_reading: readHeader(client, buff); break;
 			case Client::s_start_body_reading: readBody(client, buff); break;
 			case Client::s_body_reading: readBody(client, buff); break;
-			case default: throw ft::runtime_error("" + __LINE__);
+//			default: throw ft::runtime_error("" + __LINE__);
 		}
-
-		IHeader *header = new Header(request);
+//		TODO read body
 		IBody *body;
 
-//		request = new BasicRequest(p_head, 0);
-
-		client->setFlag(Client::read_flags, Client::r_head_end);
-		client->setFlag(Client::read_flags, Client::r_body_beginned);
-
-		pRequest = new Request(ss.str());
-
 		client->setFlag(Client::read_flags, Client::r_end);
-		client->setLastRequest(pRequest);
 
 
-		return (pRequest);
+		return (nullptr);
 	}
 
 	void RequestReciever::readHeader(Client *client, char *buff) {
 		if (client->getStates() == Client::s_start_header_reading)
 			client->getLastRequest()->setHeader(new Header(response));
 
-		client->setStates(Client::s_header_reading);
 		client->getReadBuff().append(buff);
 		if (client->getReadBuff().find("\r\n\r\n") != std::string::npos) {
-//			client->setLastRequest(new BasicRequest())
-//			FakeRequestValidator(const std::string &text, Header &header);
 //			TODO write part of body to it's fd
+//			null - terminate string
+			headerBuilder(client->getReadBuff(),
+						  client->getLastRequest()->getHeader(), client->getStates());
+			if (!client->getLastRequest()->getHeader()->isValid()) {
+				client->setStates(Client::s_end_reading);
+				client->setFlag(Client::read_flags, Client::r_end);
+			}
 			client->setStates(Client::s_header_reading);
 		}
 	}
@@ -238,7 +232,6 @@ namespace ft {
 	void RequestReciever::readBody(Client *client, char *buff) {
 		std::string reqHeader;
 
-		if ()
 	}
 
 	int RequestReciever::writeEvent(int sock) {
@@ -268,6 +261,87 @@ namespace ft {
 
 	int RequestReciever::getPort() {
 		return _port;
+	}
+
+	void
+	RequestReciever::headerBuilder(const std::string &text, IHeader *header,
+								Client::req_read_states &state) {
+		std::string subLine;
+		strPos pos1 = 0, pos2;
+
+		while ((pos2 = text.find("\r\n", pos1)) != std::string::npos) {
+			subLine = text.substr(pos1, pos2 - pos1);
+			pos1 = pos2 + 2;
+			switch (state) {
+				case Client::s_start_header_reading: firstLine(subLine, header,state); break;
+				case Client::s_header_reading: fillHeader(subLine, header, state); break;
+					break;
+			}
+		}
+	}
+
+	void RequestReciever::firstLine(std::string const &line, IHeader *header,
+								 Client::req_read_states &state) {
+		fillMethod(line, header);
+		fillUrl(line, header);
+		checkHttp(line, header);
+		state = Client::s_header_reading;
+	}
+
+	void RequestReciever::fillMethod(const std::string &line, IHeader *header) {
+		std::string method;
+		int i = 0;
+		methods_enum a;
+
+		method = line.substr(0, line.find(' '));
+		do {
+			a = static_cast<methods_enum>(i);
+			i++;
+		}
+		while (method != getMethodStr(a));
+		header->setMethod(a);
+	}
+
+	void RequestReciever::fillUrl(const std::string &line, IHeader *header) {
+		strPos a = line.find(' ') + 1;
+		strPos b = line.rfind(' ');
+
+		header->setURI(line.substr(a, b - a));
+	}
+
+	void RequestReciever::checkHttp(const std::string &line, IHeader *header) {
+		std::string http;
+
+		http = line.substr(line.rfind(' ') + 1, 8);
+		if (http != "HTTP/1.1")
+			throw std::runtime_error("RequestValidator: invalid HTTP version");
+	}
+
+	void RequestReciever::fillHeader(std::string subLine, IHeader *header,
+								  Client::req_read_states &states) {
+		int i = 0;
+		header_keys a;
+		std::string head;
+		std::string key;
+
+//		TODO
+		head = subLine.substr(0, subLine.find(':'));
+		do {
+			a = static_cast<header_keys>(i);
+			i++;
+		}
+		while (!(key = getHeaderKey(a)).empty() && key != head);
+		if (key.empty())
+			return ;
+		if (header->isHeadAlreadyExist(a)) {
+			header->makeInvalid();
+			return ;
+		}
+		subLine = subLine.substr(subLine.find(':') + 1);
+		while (subLine[0] == ' ') {
+			subLine.erase(0, 1);
+		}
+		header->setHeader(a, subLine);
 	}
 
 }

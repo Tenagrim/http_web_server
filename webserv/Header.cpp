@@ -8,7 +8,7 @@ namespace ft
 	Header::Header() : _http_v(DEFAULT_HTTPV)
 	{}
 
-	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type)
+	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type), _isValid(true)
 	{}
 
 	Header::~Header()
@@ -28,7 +28,7 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Getters
-	std::string const	&Header::getHeader(std::string const & key)
+	std::string const	&Header::getHeader(header_keys key)
 	{
 		if (!_header_map.count(key))
 			throw ft::runtime_error("Header not exists");
@@ -86,10 +86,10 @@ namespace ft
 		_uri = new_uri;
 	}
 
-	void				Header::setHeader(std::string const & h_key, std::string const &header_value)
+	void				Header::setHeader(header_keys key, std::string const &header_value)
 
 	{
-		_header_map[h_key] = header_value;
+		_header_map[key] = header_value;
 	}
 	
 	void				Header::setResponseCode(int new_code)
@@ -121,7 +121,7 @@ namespace ft
 			ss << (*it).first << ": " << (*it).second << "\r\n";
 		ss << "\r\n";
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()
-		return (ss.str());	
+		return (ss.str());
 	}
 
 	unsigned long		Header::size()
@@ -129,4 +129,17 @@ namespace ft
 		throw ft::runtime_error("not implemented");
 		return (0);
 	}
+
+	bool Header::isHeadAlreadyExist(header_keys key) {
+		return _header_map.count(key);
+	}
+
+	bool Header::isValid() {
+		return _isValid;
+	}
+
+	void Header::makeInvalid() {
+		_isValid = false;
+	}
+
 } // namespace ft

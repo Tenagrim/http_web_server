@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.17)
 project(webserv)
 set(CMAKE_CXX_STANDARD 98)
+
 INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
+
 add_executable(
         webserv
         ./webserv/ABody.cpp
@@ -22,10 +24,10 @@ add_executable(
         ./webserv/DispatcherEventArgs.hpp
         ./webserv/ErrorPager.cpp
         ./webserv/ErrorPager.hpp
-        ./webserv/FakeFakeRequestValidator.cpp
-        ./webserv/FakeFakeRequestValidator.hpp
-        ./webserv/FakeRequestValidator.cpp
-        ./webserv/FakeRequestValidator.hpp
+#        ./webserv/FakeFakeRequestValidator.cpp
+#        ./webserv/FakeFakeRequestValidator.hpp
+#        ./webserv/FakeRequestValidator.cpp
+#        ./webserv/FakeRequestValidator.hpp
         ./webserv/FakeTimeMachine.cpp
         ./webserv/FakeTimeMachine.hpp
         ./webserv/FileBody.cpp
@@ -79,8 +81,8 @@ add_executable(
         ./webserv/TextResponse.hpp
         ./webserv/TokenPool.cpp
         ./webserv/TokenPool.hpp
-        ./webserv/trash/reader.cpp
-        ./webserv/trash/unitTester.cpp
+#        ./webserv/trash/reader.cpp
+#        ./webserv/trash/unitTester.cpp
         ./webserv/utils/ft_memcpy.cpp
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp

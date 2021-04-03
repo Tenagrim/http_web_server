@@ -30,6 +30,7 @@
 #include <FakeFakeRequestValidator.hpp>
 
 #include <BasicRequest.hpp>
+#include "Header.hpp"
 
 namespace ft
 {
@@ -53,9 +54,10 @@ namespace ft
 		void				bind_main_socket();
 		void				listen_main_socket();
 
-//		Change class RequestValidator into private member function
-//		IRequestValidator	*_validator;
-		
+		typedef				std::string::size_type strPos;
+		void headerBuilder(const std::string &text, IHeader *header,
+						   Client::req_read_states &state);
+
 		RequestReciever();
 		RequestReciever(const RequestReciever &ref);
 	public:
@@ -82,6 +84,16 @@ namespace ft
 		void readHeader(Client *client, char *buff);
 
 		void readBody(Client *client, char *buff);
+
+		void firstLine(std::string const &line, IHeader *header,
+					   Client::req_read_states &state);
+		void fillMethod(const std::string &line, IHeader *header);
+		void fillUrl(const std::string &line, IHeader *header);
+		void checkHttp(const std::string &line, IHeader *header);
+
+
+		void fillHeader(std::string subLine, IHeader *header,
+						Client::req_read_states &states);
 	};
 
 }

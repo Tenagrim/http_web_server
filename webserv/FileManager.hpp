@@ -14,6 +14,7 @@
 #include <iostream>
 #include <runtime_error.hpp>
 
+#include <defines.hpp>
 
 #ifdef DEBUG	
 # include <iostream>
@@ -36,13 +37,13 @@ namespace ft
 		bool			isADirectory(std::string const &filename);
 		unsigned int	getFileSize(std::string const &filename);
 
-		// as in http header content-type
+			// as in http header content-type
 		std::string		getContentType(std::string const &filename);
 
-		// Last modification time
+			// Last modification time
 		time_t			getMTime(std::string const &filename);
 
-		// Last change time
+			// Last change time
 		time_t			getCTime(std::string const &filename);
 
 		// open file & returns it's descriptor
@@ -51,7 +52,7 @@ namespace ft
 		//std::ifstream	getIfstream(std::string const &filename);
 
 		void			setRoot(std::string const &new_root);
-		int				copyFdToFile(std::string const &filrname, int input_fd);	
+		int				copyFdToFile(std::string const &filrname, int input_fd);
 		std::string		getFullPath(std::string const &filename);
 
 		std::string const &getRoot(void);

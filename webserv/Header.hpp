@@ -11,7 +11,7 @@ namespace ft
 	class Header : public IHeader
 	{
 	private:
-		typedef std::map<std::string, std::string>	header_map;
+		typedef std::map<header_keys, std::string>	header_map;
 
 		//std::map<header_keys_enum, std::string>				_header_map;
 		
@@ -22,7 +22,9 @@ namespace ft
 		std::string										_code_descr;
 		int												_resp_code;
 		MessageType										_type;
+		bool 											_isValid;
 		Header();
+
 	public:
 		Header(MessageType type);
 		~Header();
@@ -44,10 +46,14 @@ namespace ft
 		void				setResponseCode(int new_code);
 		void				setURI(std::string const &new_uri);
 		void				setCodeDescription(std::string const &new_descr);
-		
-		void				setHeader( std::string const &header_key, std::string const &header_value);
-		std::string const	&getHeader(std::string const &key);
-		
+
+		void				setHeader(header_keys key, std::string const &header_value);
+		std::string const	&getHeader(header_keys key);
+//		header_map			&getHeaderMap() const;
+		bool				isHeadAlreadyExist(header_keys key);
+		bool 				isValid();
+		void 				makeInvalid();
+
 		unsigned long		size();
 
 	};
