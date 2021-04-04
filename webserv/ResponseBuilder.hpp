@@ -5,6 +5,8 @@
 #include <GetBuildPolicy.hpp>
 #include <PostBuildPolicy.hpp>
 #include <PutBuildPolicy.hpp>
+//Config List
+#include <ServerInit.hpp>
 #include <defines.hpp>
 #include <map>
 
@@ -22,6 +24,7 @@ namespace ft
 		//PostBuildPolicy		_post_build_pol;	
 
 		policy_map			_policies;
+		std::list<ServerInit *>	*_serv_list;
 
 		ResponseBuilder(const ResponseBuilder &ref);
 	public:
@@ -30,6 +33,11 @@ namespace ft
 		ResponseBuilder		&operator=(const ResponseBuilder &ref);
 
 		IResponse			*buildResponse(IRequest	*request);
+		void				getConfigLists(std::list<ServerInit *> *_list);
+
+		ServerInit *findCorrectConfig(IRequest *request);
+
+		ServerInit *checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config);
 	};
 
 }

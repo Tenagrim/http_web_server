@@ -22,6 +22,18 @@ namespace ft
 	IResponse		*PostBuildPolicy::buildResponse(IRequest *request)
 	{
 		(void) request;
-		return _e_pager.getErrorPage(501);
+		IHeader *head = AcceptingData(request);
+		IResponse *response = new BasicResponse(head, NULL);
+		return response;
+	}
+
+	IHeader *PostBuildPolicy::AcceptingData(IRequest *pRequest)
+	{
+		std::cout<<pRequest->getText()<<std::endl;
+		IHeader *head = new Header(response);
+		head->setHTTPV(pRequest->getHTTPVersion());
+		head->setResponseCode(405);
+		head->setCodeDescription(ft::getCodeDescr(405));
+		return head;
 	}
 }

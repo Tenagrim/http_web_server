@@ -22,17 +22,17 @@ namespace ft
 	IResponse		*PutBuildPolicy::buildResponse(IRequest *request)
 	{
 		(void) request;
-		Header *head = checkCommingURI(request);
-		BasicResponse *response = new BasicResponse(head, NULL);
-		if (response == nullptr)
+		IHeader *head = checkCommingURI(request);
+		if (head == nullptr)
 			return _e_pager.getErrorPage(404);
+		BasicResponse *response = new BasicResponse(head, NULL);
 		return response;
 	}
 
-	Header *PutBuildPolicy::checkCommingURI(IRequest *request)
+	IHeader *PutBuildPolicy::checkCommingURI(IRequest *request)
 	{
 		std::cout<<_fmngr.getRoot()<<std::endl;
-		Header *head = new Header(response);
+		IHeader *head = new Header(response);
 		if (!_fmngr.isFileExisting(request->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));

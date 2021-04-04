@@ -62,7 +62,6 @@ int main(int ac, char **av)
 
 	ft::Server				serv(&resp_builder);
 
-
 	SERVER = &serv;
 	signal(SIGINT, &sigint_handler);
 
@@ -73,6 +72,8 @@ int main(int ac, char **av)
 
 	std::list<ft::ServerInit *> serv_list = parser.getServerList();
 	std::list<ft::ServerInit *>::iterator serv_it = serv_list.begin();
+//Config Lists in Response
+	resp_builder.getConfigLists(&serv_list);
 
 	std::list<int> list_listner;
 	list_listner.splice(list_listner.begin(), (*serv_it)->getListenPorts(), (*serv_it)->getListenPorts().begin(),
