@@ -1,4 +1,4 @@
-#include <RequestReciever.hpp>
+#include <RequestReceiver.hpp>
 #include <webserv.hpp>
 #include <Header.hpp>
 #include <HeaderMaker.hpp>
@@ -6,31 +6,31 @@
 namespace ft {
 #pragma region Copilen
 
-	RequestReciever::RequestReciever() : _host(DEFAULT_HOST),
+	RequestReceiver::RequestReceiver() : _host(DEFAULT_HOST),
 										 _port(DEFAULT_PORT) {
 //		_validator = 0;
 		throw ft::runtime_error("No implementation");
 	}
 
-	RequestReciever::RequestReciever(std::string const &host, int port) : _host(
+	RequestReceiver::RequestReceiver(std::string const &host, int port) : _host(
 			host), _port(port), _queue(DEFAULT_CONN_QUEUE) {
 //		_validator = new FakeFakeRequestValidator();
 		_client_max_id = 0;
 	}
 
-	RequestReciever::~RequestReciever() {
+	RequestReceiver::~RequestReceiver() {
 //		delete _validator;
 		close_connections();
 		close(_main_socket);
 	}
 
-	RequestReciever::RequestReciever(const RequestReciever &ref) : _host(
+	RequestReceiver::RequestReceiver(const RequestReceiver &ref) : _host(
 			DEFAULT_HOST), _port(DEFAULT_PORT) {
 		(void) ref;
 		throw ft::runtime_error("No implementation");
 	}
 
-	RequestReciever &RequestReciever::operator=(const RequestReciever &ref) {
+	RequestReceiver &RequestReceiver::operator=(const RequestReceiver &ref) {
 		(void) ref;
 		throw ft::runtime_error("No implementation");
 		return (*this);
@@ -40,7 +40,7 @@ namespace ft {
 
 #pragma region Initialize
 
-	void RequestReciever::start() {
+	void RequestReceiver::start() {
 #ifdef DEBUG
 		std::cout << "======== STARTING +++++++++++++=\n";
 #endif
@@ -64,7 +64,7 @@ namespace ft {
 #endif
 	}
 
-	void			RequestReciever::open_main_socket()
+	void			RequestReceiver::open_main_socket()
 	{
 		_main_socket = socket(AF_INET, SOCK_STREAM, 0);
 		if (_main_socket == -1)
@@ -74,14 +74,14 @@ namespace ft {
 			#endif
 	}
 
-	void			RequestReciever::init_sockaddr()
+	void			RequestReceiver::init_sockaddr()
 	{
 		_sockaddr.sin_family = AF_INET;
 		_sockaddr.sin_addr.s_addr = INADDR_ANY;
 		_sockaddr.sin_port = htons(_port);
 	}
 
-	void			RequestReciever::bind_main_socket()
+	void			RequestReceiver::bind_main_socket()
 	{
 		int ret;
 
@@ -95,7 +95,7 @@ namespace ft {
 #endif
 	}
 
-	void RequestReciever::listen_main_socket() {
+	void RequestReceiver::listen_main_socket() {
 		int ret;
 		int enable = 1;
 
@@ -130,11 +130,11 @@ namespace ft {
 
 #pragma region Getters
 
-	int RequestReciever::getId() {
+	int RequestReceiver::getId() {
 		return (_id);
 	}
 
-	int RequestReciever::getListenSock() {
+	int RequestReceiver::getListenSock() {
 		return _main_socket;
 	}
 
@@ -142,7 +142,7 @@ namespace ft {
 
 #pragma region Connections
 
-	int RequestReciever::accept_connection() {
+	int RequestReceiver::accept_connection() {
 		unsigned int addrlen;
 		int _client_fd;
 
@@ -168,14 +168,14 @@ namespace ft {
 		return _client_fd;
 	}
 
-	void RequestReciever::close_connection(int sock) {
+	void RequestReceiver::close_connection(int sock) {
 		if (!_clients.count(sock))
 			throw ft::runtime_error("Can t close: No such connection");
 		delete _clients[sock];
 		_clients.erase(sock);
 	}
 
-	void RequestReciever::close_connections(void) {
+	void RequestReceiver::close_connections(void) {
 		fd_map::iterator it;
 		for (it = _clients.begin(); it != _clients.end(); it++)
 			close_connection((*it).first);
@@ -184,11 +184,11 @@ namespace ft {
 #pragma endregion
 
 
-	IRequest *RequestReciever::getRequest(int sock) {
+	IRequest *RequestReceiver::getRequest(int sock) {
 		return getRequest(_clients[sock]);
 	}
 
-	IRequest *RequestReciever::getRequest(Client *client) {
+	IRequest *RequestReceiver::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
 
@@ -224,7 +224,7 @@ namespace ft {
 		return (nullptr);
 	}
 
-	int RequestReciever::writeEvent(int sock) {
+	int RequestReceiver::writeEvent(int sock) {
 		if (!_clients.count(sock))
 			throw ft::runtime_error("No such client");
 
@@ -243,13 +243,13 @@ namespace ft {
 		return (0);
 	}
 
-	IClient *RequestReciever::getClient(int sock) {
+	IClient *RequestReceiver::getClient(int sock) {
 		if (!_clients.count(sock))
 			throw ft::runtime_error("No such client");
 		return (_clients[sock]);
 	}
 
-	int RequestReciever::getPort() {
+	int RequestReceiver::getPort() {
 		return _port;
 	}
 

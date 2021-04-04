@@ -11,7 +11,7 @@ class Server;
 #include <Server.hpp>
 #include <webserv.hpp>
 #include <stack>
-#include <RequestReciever.hpp>
+#include <RequestReceiver.hpp>
 #include <DispatcherEventArgs.hpp>
 
 #include <defines.hpp>
@@ -21,7 +21,7 @@ namespace ft
 	class Dispatcher
 	{
 	private:
-		typedef std::map<int, RequestReciever *> fd_map;
+		typedef std::map<int, RequestReceiver *> fd_map;
 		fd_map					_listener_map;
 		fd_map					_client_map;
 
@@ -61,8 +61,8 @@ namespace ft
 		void			addListener(int sock);
 		void			addClient(int sock);
 	*/	
-		void			addListener(RequestReciever *recv, int sock);
-		void			addClient(RequestReciever *recv, int sock);
+		void			addListener(RequestReceiver *recv, int sock);
+		void			addClient(RequestReceiver *recv, int sock);
 
 		void			closeSock(int sock);
 		void			updateEvents();

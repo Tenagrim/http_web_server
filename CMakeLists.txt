@@ -63,8 +63,8 @@ add_executable(
         ./webserv/PutBuildPolicy.hpp
         ./webserv/Request.cpp
         ./webserv/Request.hpp
-        ./webserv/RequestReciever.cpp
-        ./webserv/RequestReciever.hpp
+        webserv/RequestReceiver.cpp
+        webserv/RequestReceiver.hpp
         ./webserv/ResponseBuilder.cpp
         ./webserv/ResponseBuilder.hpp
         ./webserv/ResponseSender.cpp

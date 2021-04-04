@@ -35,7 +35,7 @@
 namespace ft
 {
 
-	class RequestReciever : public IRequestReciever
+	class RequestReceiver : public IRequestReciever
 	{
 	private:
 		typedef				std::map<int, Client *> fd_map;
@@ -49,8 +49,8 @@ namespace ft
 		int 				_queue;				// only default
 		fd_map				_clients;
 
-		RequestReciever();
-		RequestReciever(const RequestReciever &ref);
+		RequestReceiver();
+		RequestReceiver(const RequestReceiver &ref);
 
 		void				open_main_socket();
 		void				init_sockaddr();
@@ -69,10 +69,10 @@ namespace ft
 		bool methodNeedsBody(methods_enum method);
 
 	public:
-		RequestReciever(std::string const &host, int port);
-		virtual ~RequestReciever();
+		RequestReceiver(std::string const &host, int port);
+		virtual ~RequestReceiver();
 
-		RequestReciever 		&operator=(const RequestReciever &ref);
+		RequestReceiver 		&operator=(const RequestReceiver &ref);
 
 		IRequest				*getRequest(Client *client);
 		IRequest				*getRequest(int sock);
