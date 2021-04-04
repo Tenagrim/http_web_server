@@ -32,17 +32,17 @@ namespace ft
 		return (*this);
 	}
 
-	IHeader					*BasicRequest::getHeader(void)
+	IHeader					*BasicRequest::getHeader()
 	{
 		return _header;
 	}
 
-	IBody					*BasicRequest::getBody(void)
+	IBody					*BasicRequest::getBody()
 	{
 		return _body;
 	}
 
-	std::string				BasicRequest::to_string(void) const
+	std::string				BasicRequest::to_string() const
 	{
 		if (_header && _body)
 			return	_header->to_string() + _body->to_string();
