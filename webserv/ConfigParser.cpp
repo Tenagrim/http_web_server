@@ -7,6 +7,8 @@ ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile() {
 		throw ft::runtime_error("Can't Read Config File ... ");
 	if (!startParse())
 		throw ft::runtime_error("Mistake in config file...");
+	if (!checkConfig())
+		throw ft::runtime_error("In config file you have duplicate construct...");
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -121,4 +123,68 @@ unsigned int ft::ConfigParser::getServerCount() const
 const std::list<ft::ServerInit *> &ft::ConfigParser::getServerList() const
 {
 	return _server_list;
+}
+
+bool ft::ConfigParser::checkConfig()
+{
+	bool res = false;
+	std::list<ServerInit *>::iterator it = _server_list.begin();
+	while (it != _server_list.end()) {
+		ServerInit *server = it.operator*();
+		int i = checkHostname(server);
+		int y = checkPorts(server);
+		if (i + y == 2){
+			res = false;
+			break;
+		}
+		res = true;
+		++it;
+	}
+	return res;
+}
+
+int ft::ConfigParser::checkHostname(ft::ServerInit *server)
+{
+	int i = 0;
+	std::list<int> *list = &server->getListenPorts();
+	std::list<int>::iterator it = list->begin();
+	std::list<ServerInit *>::iterator sit = _server_list.begin();
+	for (; sit != _server_list.end(); ++sit) {
+		if (server == sit.operator*()){ break; }
+		else {
+			std::list<int> list2 = (*sit)->getListenPorts();
+			std::list<int>::iterator it2 = list2.begin();
+			for (; it != list->end(); ++it){
+				it2 = list2.begin();
+				for(; it2 != list2.end(); ++it2) {
+					if (*it == *it2)
+						i = 1;
+				}
+			}
+		}
+	}
+	return i;
+}
+
+int ft::ConfigParser::checkPorts(ft::ServerInit *server)
+{
+	int y = 0;
+	std::list<std::string> *list = &server->getServerNames();
+	std::list<std::string>::iterator it = list->begin();
+	std::list<ServerInit *>::iterator sit = _server_list.begin();
+	for (; sit != _server_list.end(); ++sit) {
+		if (server == sit.operator*()){ break; }
+		else {
+			std::list<std::string> list2 = (*sit)->getServerNames();
+			std::list<std::string>::iterator it2 = list2.begin();
+			for (; it != list->end(); ++it){
+				it2 = list2.begin();
+				for(; it2 != list2.end(); ++it2) {
+					if (*it == *it2)
+						y = 1;
+				}
+			}
+		}
+	}
+	return y;
 }

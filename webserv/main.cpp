@@ -73,12 +73,9 @@ int main(int ac, char **av)
 //Config Lists in Response
 	resp_builder.getConfigLists(&serv_list);
 
-	std::list<int> list_listner;
-	list_listner.splice(list_listner.begin(), (*serv_it)->getListenPorts(), (*serv_it)->getListenPorts().begin(),
-					 (*serv_it)->getListenPorts().end());
+	std::list<int> list_listner = (*serv_it)->getListenPorts();
 	serv_it++;
-	list_listner.splice(list_listner.end(), (*serv_it)->getListenPorts(), (*serv_it)->getListenPorts().begin(),
-						(*serv_it)->getListenPorts().end());
+	list_listner.insert(list_listner.end(), (*serv_it)->getListenPorts().begin(), (*serv_it)->getListenPorts().end());
 
 	list_listner.sort();
 	list_listner.unique();
