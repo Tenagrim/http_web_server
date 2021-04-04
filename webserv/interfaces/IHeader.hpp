@@ -35,11 +35,12 @@ namespace ft
 		virtual void				setResponseCode(int new_code) = 0;
 //		virtual void				setHeader(header_keys h_key, std::string const &header_value) = 0;
 		virtual void				setHeader(header_keys header_key, std::string const &header_value) = 0;
-		virtual std::string const	&getHeader(header_keys key) = 0;
+		virtual std::string const	&getHeader(header_keys key) const = 0;
 		virtual bool 				isValid() = 0;
 		virtual void 				makeInvalid() = 0;
 		virtual unsigned long		size() = 0;
-		virtual bool				isHeadAlreadyExist(header_keys key) = 0;
+		virtual bool				isHeadAlreadyExist(header_keys key) const = 0;
+		virtual bool				isFieldInHeader(header_keys key) const = 0;
 
 		virtual ~IHeader(){}
 	};

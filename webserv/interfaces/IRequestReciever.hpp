@@ -7,7 +7,7 @@ namespace ft
 	class IRequestReciever
 	{
 	public:
-		virtual IRequest		*getRequest(Client *client)=0;
+		virtual void getRequest(Client *client)=0;
 		virtual int				getId()=0;
 
 		virtual ~IRequestReciever(){}

@@ -8,7 +8,11 @@ namespace ft
 {
 	#pragma region Copilen
 
-	Client::Client(int id,int sock) : _id(id), _sock(sock)
+	Client::Client(int id,int sock) :
+		_id(id),
+		_sock(sock),
+		_b_reader(),
+		_last_request()
 	{
 		_state_flags = 0;
 		_read_flags = 0;
@@ -166,12 +170,24 @@ namespace ft
 		return _read_buff;
 	}
 
-	Client::req_read_states &Client::getStates() {
+	Client::req_r_states &Client::getStates() {
 		return _states;
 	}
 
-	void Client::setStates(Client::req_read_states states) {
+	void Client::setStates(Client::req_r_states states) {
 		_states = states;
+	}
+
+	void Client::resizeReadBuff(std::string::size_type pos) {
+		_read_buff.resize(pos);
+	}
+
+	BodyReader *Client::getBReader() const {
+		return _b_reader;
+	}
+
+	void Client::setBReader(BodyReader *bReader) {
+		_b_reader = bReader;
 	}
 
 	void Client::updateEventTime() {

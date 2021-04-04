@@ -4,8 +4,8 @@
 	
 //#define USER					"gshona"
 
-//#define DEBUG_REQ_PRINT 1
-//#define DEBUG_RESP_PRINT 1
+#define DEBUG_REQ_PRINT 1
+#define DEBUG_RESP_PRINT 1
 
 #define UPDATE_DELAY 1000
 

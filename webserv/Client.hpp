@@ -8,6 +8,8 @@
 #include <defines.hpp>
 #include <runtime_error.hpp>
 #include <webserv.hpp>
+#include "BodyReader.hpp"
+
 namespace ft
 {
 	class Client : public IClient
@@ -33,7 +35,7 @@ namespace ft
 			r_begin = 256
 		};
 
-		enum req_read_states
+		enum req_r_states
 		{
 			s_not_begin,
 			s_start_header_reading,
@@ -60,7 +62,7 @@ namespace ft
 		virtual ~Client();
 		Client			&operator=(const Client &ref);
 
-		req_read_states &getStates();
+		req_r_states	&getStates();
 		int				getSock(void) const;
 		struct timeval	const &getLastEventTime() const;
 
@@ -75,6 +77,7 @@ namespace ft
 		void			setLastResponse(IResponse *response);
 		IResponse		*getLastResponse(void);
 		std::string &	getReadBuff(void);
+		void			resizeReadBuff(std::string::size_type pos);
 
 		bool			requestReceived(void);
 		bool			headerSent(void);
@@ -82,7 +85,9 @@ namespace ft
 
 		void			sendHeader(void);
 		void			sendBody(void);
-		void			setStates(req_read_states states);
+		void			setStates(req_r_states states);
+		BodyReader		*getBReader() const;
+		void			setBReader(BodyReader *bReader);
 
 		void 			updateEventTime();
 		unsigned long	getUsecsFromLastEvent();
@@ -97,11 +102,13 @@ namespace ft
 		IRequest			*_last_request;
 		IResponse			*_response;
 		std::string 		_read_buff;
-		req_read_states		_states;
+		req_r_states		_states;
+		BodyReader			*_b_reader;
 
 		Client();
 		Client(const Client &ref);
 		int				&getflags(client_flags type);
+
 	};
 
 

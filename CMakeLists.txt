@@ -68,8 +68,8 @@ add_executable(
         ./webserv/PutBuildPolicy.hpp
         ./webserv/Request.cpp
         ./webserv/Request.hpp
-        ./webserv/RequestReciever.cpp
-        ./webserv/RequestReciever.hpp
+        webserv/RequestReceiver.cpp
+        webserv/RequestReceiver.hpp
         ./webserv/ResponseBuilder.cpp
         ./webserv/ResponseBuilder.hpp
         ./webserv/ResponseSender.cpp
@@ -87,7 +87,7 @@ add_executable(
         ./webserv/TokenPool.cpp
         ./webserv/TokenPool.hpp
 #        ./webserv/trash/reader.cpp
-#        ./webserv/trash/unitTester.cpp
+#        ./webserv/trash/testerReqReceiver.cpp
         ./webserv/utils/ft_memcpy.cpp
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
@@ -98,7 +98,18 @@ add_executable(
         ./webserv/utils/Utils.cpp
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
+        ./webserv/BodyReader.cpp
+        ./webserv/BodyReader.hpp
+        ./webserv/utils/isNumber.cpp
+        ./webserv/HeaderMaker.cpp
+        ./webserv/HeaderMaker.hpp
+        ./webserv/utils/strToLower.cpp
+        ./webserv/utils/fdToString.cpp
+        ./webserv/utils/ft_strcmp.cpp
+
         webserv/BodyReader.cpp
         webserv/BodyReader.hpp
     #    webserv/body_reader_test.cpp
-        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp webserv/utils/get_time_udiff.cpp)
+        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp webserv/utils/get_time_udiff.cpp
+
+)

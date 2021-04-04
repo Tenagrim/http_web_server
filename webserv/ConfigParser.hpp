@@ -33,5 +33,10 @@ namespace ft {
 		~ConfigParser();
 		unsigned int getServerCount() const;
 		const std::list<ServerInit *> &getServerList() const;
+		bool checkConfig();
+
+		int checkHostname(ServerInit *server);
+
+		int checkPorts(ServerInit *server);
 	};
 }

@@ -84,20 +84,62 @@ namespace ft
 	ServerInit *ResponseBuilder::findCorrectConfig(IRequest *request)
 	{
 		std::list<ServerInit *>::iterator it = _serv_list->begin();
-		ServerInit *server = NULL;
-		for (; it != _serv_list->end(); ++it){
-			if ((server = checkServer(request, it)))
+		++it;
+		ServerInit *server = _serv_list->front();
+		for (; it != _serv_list->end(); it++){
+			if ((checkServer(request, it))) {
+				server = it.operator*();
 				break;
+			}
 		}
 		return server;
 	}
 
-	ServerInit *ResponseBuilder::checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config)
+	bool ResponseBuilder::checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config)
 	{
-		ServerInit *server;
+		bool state = false;
+		ServerInit *server = NULL;
 		server = config.operator*();
-		std::cout<<server->getRoot()<<std::endl;
-		std::list<int> ports = (*config)->getListenPorts();
-		return NULL;
+//		if ()
+		state = checkServerName(pRequest, server);
+		state = checkPort(pRequest, server);
+		return state;
+	}
+
+	bool ResponseBuilder::checkPort(IRequest *pRequest, ServerInit *pServer)
+	{
+		bool state = true;
+		std::list<int> list = pServer->getListenPorts();
+		std::list<int>::iterator it;
+		int port = findPort(pRequest);
+		it = std::find(list.begin(), list.end(), port);
+		if (it == list.end())
+			state = false;
+		return state;
+	}
+
+	bool ResponseBuilder::checkServerName(IRequest *pRequest, ServerInit *pServer)
+	{
+		bool state = true;
+		std::list<std::string> list = pServer->getServerNames();
+		std::list<std::string>::iterator it;
+		it = std::find(list.begin(), list.end(), pRequest->getHeader()->getHeader(h_host));
+		if (it == list.end())
+			state = false;
+		return state;
+	}
+
+	int ResponseBuilder::findPort(IRequest *pRequest)
+	{
+		int res = 0;
+		std::string tmp = pRequest->getHeader()->getHeader(h_host);
+		size_t pos = tmp.find(':');
+		if (pos == std::string::npos)
+			res = 80;
+		else {
+			res = strtol(tmp.c_str()+pos+1, NULL, 10);
+		}
+		std::cout<<res<<std::endl;
+		return res;
 	}
 }

@@ -32,6 +32,7 @@ namespace ft
 		m_get = 0,
 		m_post,
 		m_put,
+		m_head,
 		m_undefined
 	};
 
@@ -48,4 +49,6 @@ namespace ft
 
 	unsigned long	get_time_udiff(struct timeval *t1, struct timeval *t2);
 
+	bool				isNumber(std::string s);
+	std::string 		strToLower(const std::string & s);
 }
