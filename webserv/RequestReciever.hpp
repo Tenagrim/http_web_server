@@ -49,31 +49,28 @@ namespace ft
 		int 				_queue;				// only default
 		fd_map				_clients;
 
+		RequestReciever();
+		RequestReciever(const RequestReciever &ref);
+
 		void				open_main_socket();
 		void				init_sockaddr();
 		void				bind_main_socket();
 		void				listen_main_socket();
 
 		typedef				std::string::size_type strPos;
-		void headerBuilder(const std::string &text, IHeader *header,
-						   Client::req_read_states &state);
+		void				headerBuilder(const std::string &text, IHeader *header, Client::req_read_states &state);
 
-		RequestReciever();
-		RequestReciever(const RequestReciever &ref);
-		void readHeader(Client *client, char *buff);
+		void				readHeader(Client *client, char *buff);
+		void				firstLine(std::string const &line, IHeader *header, Client::req_read_states &state);
+		void				fillHeader(std::string subLine, IHeader *header, Client::req_read_states &states);
 
-		void readBody(Client *client, char *buff);
+		void				readBody(Client *client, char *buff);
+		void				fillMethod(const std::string &line, IHeader *header);
+		void				fillUrl(const std::string &line, IHeader *header);
+		void				checkHttp(const std::string &line, IHeader *header);
 
-		void firstLine(std::string const &line, IHeader *header,
-					   Client::req_read_states &state);
-		void fillMethod(const std::string &line, IHeader *header);
-		void fillUrl(const std::string &line, IHeader *header);
-		void checkHttp(const std::string &line, IHeader *header);
-
-
-		void fillHeader(std::string subLine, IHeader *header,
-						Client::req_read_states &states);
 		bool methodNeedsBody(methods_enum method);
+
 	public:
 		RequestReciever(std::string const &host, int port);
 		virtual ~RequestReciever();

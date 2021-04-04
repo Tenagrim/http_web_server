@@ -174,4 +174,8 @@ namespace ft
 		_states = states;
 	}
 
+	void Client::resizeReadBuff(std::string::size_type pos) {
+		_read_buff.resize(pos);
+	}
+
 }

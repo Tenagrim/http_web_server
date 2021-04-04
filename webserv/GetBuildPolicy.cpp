@@ -20,7 +20,7 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-		_fmngr.setRoot("/Users/gshona/Desktop/webserv/webserv/resources/sites/particles"); // HARDCODED SERVER ROOT
+		_fmngr.setRoot("/Users/sadolph/21/webserv/webserv/resources/sites/particles"); // HARDCODED SERVER ROOT
 		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse *res = 0;
 		#ifdef DEBUG

@@ -236,10 +236,15 @@ namespace ft {
 			ending = 2;
 		}
 
+		std::string bodyPart;
 		if (end_pos != std::string::npos)
 		{
-//			TODO write part of body to it's fd
-//			null - terminate string
+			if (client->getReadBuff().size() > end_pos + ending) {
+//				TODO bodyPart remain for bodyReader
+				bodyPart = client->getReadBuff().substr(end_pos + ending);
+			}
+			client->resizeReadBuff(end_pos + ending / 2);
+			std::string::size_type s = client->getReadBuff().size();
 			headerBuilder(client->getReadBuff(),
 						  client->getLastRequest()->getHeader(), client->getStates());
 
@@ -310,21 +315,28 @@ namespace ft {
 								Client::req_read_states &state) {
 		std::string subLine;
 		strPos pos1 = 0, pos2;
+		int ending;
 
-
-
-		while ((pos2 = text.find("\n", pos1)) != std::string::npos && header->isValid()) {
+		while (header->isValid()) {
+			pos2 = text.find("\r\n", pos1);
+			ending = 2;
+			if (pos2 == std::string::npos) {
+				pos2 = text.find("\n", pos1);
+				ending = 1;
+				if (pos2 == std::string::npos)
+					break ;
+			}
 			subLine = text.substr(pos1, pos2 - pos1);
 			subLine.erase(std::remove(subLine.begin(), subLine.end(), '\r'), subLine.end());
-			pos1 = pos2 + 1;
+			pos1 = pos2 + ending;
 			switch (state) {
 				case Client::s_start_header_reading: firstLine(subLine, header,state); break;
 				case Client::s_header_reading: fillHeader(subLine, header, state); break;
-					break;
 			}
 		}
 	}
-
+//	GET / HTTP/1.1rnHost: localhost:84rnUser-Agent: Go-http-client/1.1rnAccept-Encoding: gziprn
+//	POST / HTTP/1.1rnHost: localhost:83rnUser-Agent: Go-http-client/1.1rnTransfer-Encoding: chunkedrnContent-Type: test/filernAccept-Encoding: gziprn
 	void RequestReciever::firstLine(std::string const &line, IHeader *header,
 								 Client::req_read_states &state) {
 		fillMethod(line, header);
@@ -370,7 +382,6 @@ namespace ft {
 		std::string head;
 		std::string key;
 
-//		TODO
 		head = subLine.substr(0, subLine.find(':'));
 		do {
 			a = static_cast<header_keys>(i);

@@ -74,6 +74,7 @@ namespace ft
 		void			setLastResponse(IResponse *response);
 		IResponse		*getLastResponse(void);
 		std::string &	getReadBuff(void);
+		void			resizeReadBuff(std::string::size_type pos);
 
 		bool			requestReceived(void);
 		bool			headerSent(void);
