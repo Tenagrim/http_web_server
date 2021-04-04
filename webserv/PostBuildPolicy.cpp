@@ -29,9 +29,9 @@ namespace ft
 
 	IHeader *PostBuildPolicy::AcceptingData(IRequest *pRequest)
 	{
-		std::cout<<pRequest->getText()<<std::endl;
+		std::cout<<pRequest->getHeader()->to_string()<<std::endl;
 		IHeader *head = new Header(response);
-		head->setHTTPV(pRequest->getHTTPVersion());
+		head->setHTTPV(pRequest->getHeader()->getHTTPVersion());
 		head->setResponseCode(405);
 		head->setCodeDescription(ft::getCodeDescr(405));
 		return head;
