@@ -11,12 +11,12 @@ ft::BodyReader::BodyReader()
 unsigned int ft::BodyReader::_max_id;
 
 ft::BodyReader::BodyReader(int input_fd, int content_length, std::string rem) :
-		_remainder_of_header(rem), _last_readed(), _block_size_i(content_length),
-		_read_buff(),
+		_remainder_of_header(rem), _last_readed(), _block_size_i(0),
+		_read_buff(0),
 		_output_fd(-1),
 		_ended(false),
 		_written_size(0),
-		_input_fd(input_fd), _offset(0)
+		_input_fd(input_fd), _offset(0), _content_length(content_length)
 {
 
 	if (!rem.empty())
@@ -78,6 +78,8 @@ int ft::BodyReader::endReading(int ret) {
 }
 
 int ft::BodyReader::readBody() {
+	if (_content_length != LEN_CHUNKED)
+		return (readByLen());
 	int ret;
 	if (_state == s_remains) {
 		ret = readRem();
@@ -273,5 +275,25 @@ ft::IBody *ft::BodyReader::getBody() {
 	if (!_ended)
 		throw ft::runtime_error("Body was not fully readed\n");
 	return new FileBody(_filename);
+}
+
+int ft::BodyReader::readByLen()
+{
+	int ret;
+	_read_buff = (char*)malloc(_content_length);
+	if (!_read_buff)
+		throw ft::runtime_error("Malloc failed");
+	ret = read(_input_fd, _read_buff, _content_length);
+	if (ret == -1)
+		throw ft::runtime_error("READ FAILED");
+	if (ret != _content_length) {
+		free(_read_buff);
+		_read_buff = 0;
+		return endReading(-1);
+	}
+	ret = write(_output_fd, _read_buff, _content_length);
+	if (ret == -1)
+		throw ft::runtime_error("WRITE FAILED");
+	return (endReading(0));
 }
 

@@ -12,7 +12,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <FileBody.hpp>
+
 #define  LEN_CHUNKED -1
+//#define  B_READER_BUFF_SIZE
 
 #define MIN_NUM_SIZE 4
 
@@ -46,7 +48,7 @@ namespace ft {
 		int 				_written_size;
 		int 				_input_fd;
 		int 				_offset;
-		//int 				_conrent_length;
+		int 				_content_length;
 
 		int 				readWriteBlock(int size, int offset =0);
 		void 				openFile();
@@ -60,6 +62,7 @@ namespace ft {
 		void 				write_block(const char *buff, int len, int offset = 0 );
 		int 				endReading(int ret);
 
+		int 				readByLen();
 		BodyReader(const BodyReader &ref);
 		BodyReader();
 	public:
@@ -83,7 +86,6 @@ namespace ft {
 		unsigned int	getSize() const;
 
 	};
-
 }
 
 #endif //WEBSERV_BODYREADER_HPP
