@@ -57,8 +57,8 @@ add_executable(
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
 
-#        ./webserv/main.cpp
-        ./webserv/body_reader_test.cpp
+        ./webserv/main.cpp
+#        ./webserv/body_reader_test.cpp
 
 
         ./webserv/OutOperators.cpp
@@ -100,5 +100,5 @@ add_executable(
         ./webserv/webserv.hpp
         webserv/BodyReader.cpp
         webserv/BodyReader.hpp
-        webserv/body_reader_test.cpp
+    #    webserv/body_reader_test.cpp
         webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp)
