@@ -37,7 +37,11 @@ namespace ft
 
 		ServerInit *findCorrectConfig(IRequest *request);
 
-		ServerInit *checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config);
+		bool checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config);
+
+		bool checkPort(IRequest *pRequest, ServerInit *pServer);
+
+		bool checkServerName(IRequest *pRequest, ServerInit *pServer);
 	};
 
 }
