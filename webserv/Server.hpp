@@ -3,7 +3,7 @@
 #include <IFileManager.hpp>
 #include <ITimeMachine.hpp>
 #include <ILogger.hpp>
-#include <RequestReciever.hpp>
+#include <RequestReceiver.hpp>
 #include <IResponseSender.hpp>
 #include <IResponseBuilder.hpp>
 #include <ResponseBuilder.hpp>
@@ -39,7 +39,7 @@ namespace ft
 	class Server
 	{
 	private:
-		typedef std::map<int, RequestReciever *>	listener_map;
+		typedef std::map<int, RequestReceiver *>	listener_map;
 		unsigned int					_id;
 		unsigned int					_flags;
 		struct sockaddr_in				serv_addr;
@@ -49,7 +49,7 @@ namespace ft
 		Dispatcher						*_dispatcher;
 
 		listener_map					_listener_map;
-		std::list<RequestReciever *>	_list_to_start;			
+		std::list<RequestReceiver *>	_list_to_start;
 
 		IFileManager					*_f_manager;
 		ILogger							*_logger;
@@ -81,7 +81,7 @@ namespace ft
 		int								sendResponce(const IResponse &resp);
 		int								acceptConnection(int sock);
 		int								processConnection();
-		RequestReciever					*getListener(int sock);	
+		RequestReceiver					*getListener(int sock);
 
 		void							gotEvent(Dispatcher_event_args args);
 

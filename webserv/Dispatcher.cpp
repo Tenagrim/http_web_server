@@ -36,7 +36,7 @@ namespace ft
 
 	#pragma region Add_remove socks
 
-	void			Dispatcher::addListener(RequestReciever *recv, int sock)
+	void			Dispatcher::addListener(RequestReceiver *recv, int sock)
 	{
 		#ifdef DEBUG
 			std::cout << "ADD LISTENER[" << sock << "]\n";
@@ -48,7 +48,7 @@ namespace ft
 		_listening++;
 	}
 
-	void			Dispatcher::addClient(RequestReciever *recv, int sock)
+	void			Dispatcher::addClient(RequestReceiver *recv, int sock)
 	{
 		#ifdef DEBUG
 			std::cout << "ADD CLIENT[" << sock << "]\n";
@@ -156,9 +156,10 @@ namespace ft
 			_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
 		else
 			_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
-
-		if (!_events)
+		if (!_events) {
 			sleep();
+			BodyReader::reset();
+		}
 		else
 			wakeUp();
 			#ifdef DEBUG

@@ -17,7 +17,7 @@ namespace ft
 		virtual ~ABody();
 
 		virtual int					getFd() = 0;
-		virtual std::string			to_string() const = 0;
+		virtual std::string			to_string() = 0;
 		virtual unsigned int		size() const = 0;
 		virtual BodyType			getType() = 0;
 

@@ -34,7 +34,7 @@
 namespace ft
 {
 
-	class RequestReciever : public IRequestReciever
+	class RequestReceiver : public IRequestReciever
 	{
 	private:
 		typedef				std::map<int, Client *> fd_map;
@@ -48,36 +48,20 @@ namespace ft
 		int 				_queue;				// only default
 		fd_map				_clients;
 
+		RequestReceiver();
+		RequestReceiver(const RequestReceiver &ref);
+
 		void				open_main_socket();
 		void				init_sockaddr();
 		void				bind_main_socket();
 		void				listen_main_socket();
 
-		typedef				std::string::size_type strPos;
-		void headerBuilder(const std::string &text, IHeader *header,
-						   Client::req_read_states &state);
 
-		RequestReciever();
-		RequestReciever(const RequestReciever &ref);
-		void readHeader(Client *client, char *buff);
-
-		void readBody(Client *client, char *buff);
-
-		void firstLine(std::string const &line, IHeader *header,
-					   Client::req_read_states &state);
-		void fillMethod(const std::string &line, IHeader *header);
-		void fillUrl(const std::string &line, IHeader *header);
-		void checkHttp(const std::string &line, IHeader *header);
-
-
-		void fillHeader(std::string subLine, IHeader *header,
-						Client::req_read_states &states);
-		bool methodNeedsBody(methods_enum method);
 	public:
-		RequestReciever(std::string const &host, int port);
-		virtual ~RequestReciever();
+		RequestReceiver(std::string const &host, int port);
+		virtual ~RequestReceiver();
 
-		RequestReciever 		&operator=(const RequestReciever &ref);
+		RequestReceiver 		&operator=(const RequestReceiver &ref);
 
 		IRequest				*getRequest(Client *client);
 		IRequest				*getRequest(int sock);

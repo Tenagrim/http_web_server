@@ -62,10 +62,13 @@ namespace ft
 	{
 		struct stat statbuf = {};
 		std::string file;
+		int ret;
 
 		file = getPath(filename);
 		//file = _root + filename;
-		stat(file.c_str(), &statbuf);
+		ret = stat(file.c_str(), &statbuf);
+		if (ret == -1)
+			throw ft::runtime_error("Stat failed: filename:" + filename);
 		return statbuf.st_size;
 	}
 

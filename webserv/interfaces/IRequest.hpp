@@ -25,6 +25,9 @@ namespace ft
 		virtual void					setBody(IBody *body) = 0;
 		virtual void					setHeader(IHeader *header) = 0;
 
+		virtual int 					getPort() = 0;
+		virtual void 					setPort(int port) = 0;
+
 
 		virtual ~IRequest(){};
 	};

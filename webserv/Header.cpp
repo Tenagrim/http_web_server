@@ -130,7 +130,7 @@ namespace ft
 		return (0);
 	}
 
-	bool Header::isHeadAlreadyExist(header_keys key) {
+	bool Header::isHeadAlreadyExist(header_keys key) const {
 		return _header_map.count(key);
 	}
 
@@ -140,6 +140,10 @@ namespace ft
 
 	void Header::makeInvalid() {
 		_isValid = false;
+	}
+
+	bool Header::isFieldInHeader(header_keys key) const {
+		return _header_map.count(key);
 	}
 
 } // namespace ft

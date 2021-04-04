@@ -2,20 +2,13 @@
 
 namespace ft
 {
-	FileBody::FileBody()
+	FileBody::FileBody() : _size(0)
 	{/* Illegal */}
-	FileBody::FileBody(unsigned int size, int opened_fd) :_size(size), _fd(opened_fd), _path("no")
-	{}
-	FileBody::FileBody(unsigned int size, int opened_fd, std::string const &path) :_size(size), _fd(opened_fd), _path(path)
-	{}
 
 	FileBody::~FileBody()
-	{
-		if (_fd != -1)
-		close(_fd);
-	}
+	{}
 
-	FileBody::FileBody(const FileBody &ref)
+	FileBody::FileBody(const FileBody &ref) : _size(0)
 	{/* Illegal */ (void)ref; }
 
 	FileBody &FileBody::operator=(const FileBody &ref)
@@ -25,11 +18,11 @@ namespace ft
 		return (*this);
 	}
 
-	std::string		FileBody::readFile(void) const
+	std::string		FileBody::readFile() const
 	{
 
 		std::stringstream	ss;
-		std::ifstream		fin(_path, std::ios::binary);
+		std::ifstream		fin(_filename, std::ios::binary);
 		if (fin.good())
 		{
 			ss << fin.rdbuf();
@@ -39,29 +32,41 @@ namespace ft
 			return ("CAN\'T READ FILE BODY");
 	}
 
-	int					FileBody::getFd(void)
+	int					FileBody::getFd()
 	{
-		return(_fd);
+		int ret;
+		ret = open(_filename.c_str(), O_RDONLY, 0666);
+		if (ret == -1)
+			throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
+		return(ret);
 	}
 
-	std::string			FileBody::to_string(void) const
+	std::string			FileBody::to_string()
 	{
-		if (_path == "no")
-			return ("DO\'NT READ MY FD");
-		else
-			return(readFile());
+		int fd = getFd();
+		std::string  res = ft::fdToString(fd);
+		close(fd);
+		return (res);
 	}
-	unsigned int		FileBody::size(void) const
+
+	unsigned int		FileBody::size() const
 	{
 		return _size;
 	}
-	BodyType			FileBody::getType(void)
+
+	BodyType			FileBody::getType()
 	{
 		throw ft::runtime_error("Not implemented");
 	}
 
-	int					FileBody::getInputFd(void)
+	FileBody::FileBody(const std::string &path) : _filename(path)
 	{
-		return _inp_fd;
+		int ret;
+
+		struct stat statbuf = {};
+		ret = stat(_filename.c_str(), &statbuf);
+		if (ret == -1)
+			throw ft::runtime_error("Stat failed: filename:" + _filename);
+		_size = statbuf.st_size;
 	}
 }

@@ -166,12 +166,16 @@ namespace ft
 		return _read_buff;
 	}
 
-	Client::req_read_states &Client::getStates() {
+	Client::req_r_states &Client::getStates() {
 		return _states;
 	}
 
-	void Client::setStates(Client::req_read_states states) {
+	void Client::setStates(Client::req_r_states states) {
 		_states = states;
+	}
+
+	void Client::resizeReadBuff(std::string::size_type pos) {
+		_read_buff.resize(pos);
 	}
 
 }

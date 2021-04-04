@@ -24,7 +24,7 @@ namespace ft
 	{
 		throw ft::runtime_error("Not implemented");
 	}
-	std::string			TextBody::to_string(void) const
+	std::string			TextBody::to_string(void)
 	{
 		return _text;
 	}

@@ -13,8 +13,6 @@ namespace ft
 	private:
 		typedef std::map<header_keys, std::string>	header_map;
 
-		//std::map<header_keys_enum, std::string>				_header_map;
-		
 		header_map										_header_map;
 		methods_enum									_method;
 		std::string										_uri;
@@ -49,10 +47,10 @@ namespace ft
 
 		void				setHeader(header_keys key, std::string const &header_value);
 		std::string const	&getHeader(header_keys key);
-//		header_map			&getHeaderMap() const;
-		bool				isHeadAlreadyExist(header_keys key);
+		bool				isHeadAlreadyExist(header_keys key) const;
 		bool 				isValid();
 		void 				makeInvalid();
+		bool 				isFieldInHeader(header_keys key) const;
 
 		unsigned long		size();
 
