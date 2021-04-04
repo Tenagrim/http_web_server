@@ -20,6 +20,7 @@ namespace ft
 		_last_request = 0;
 		_response = 0;
 		_states = s_not_begin;
+		updateEventTime();
 	}
 
 	Client::~Client()
@@ -196,7 +197,6 @@ namespace ft
 	unsigned long Client::getUsecsFromLastEvent() {
 		struct timeval tv;
 		gettimeofday(&tv, NULL);
-		return (ft::get_time_udiff(&tv, &_last_event));
+		return (ft::get_time_udiff(&_last_event, &tv));
 	}
-
 }

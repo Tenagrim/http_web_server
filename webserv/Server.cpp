@@ -190,7 +190,10 @@ namespace ft
 		}
 		else
 		{
-			if (client->getUsecsFromLastEvent() > CLIENT_TIMEOUT_MICROS) {
+
+			unsigned  long diff = client->getUsecsFromLastEvent();
+			std::cout << "CLIENT DIFF: " << diff <<"\n";
+			if ( diff > CLIENT_TIMEOUT_MICROS) {
 				if (!client->getLastRequest())
 					client->setLastRequest(new BasicRequest());
 				if (!client->getLastRequest()->getHeader())
@@ -198,6 +201,7 @@ namespace ft
 				client->getLastRequest()->getHeader()->makeInvalid();
 				client->setFlag(Client::read_flags, Client::r_end);
 			}
+
 		}
 	}
 

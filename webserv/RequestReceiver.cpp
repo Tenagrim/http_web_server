@@ -193,7 +193,7 @@ namespace ft {
 		int n;
 		int bodyRet;
 		std::string bodyPart;
-
+		client->updateEventTime();
 		if (client->getStates() == Client::s_not_begin) {
 			client->setLastRequest(new BasicRequest());
 			client->getLastRequest()->setPort(_port);
