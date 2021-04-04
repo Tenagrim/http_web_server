@@ -100,19 +100,21 @@ namespace ft
 		bool state = false;
 		ServerInit *server = NULL;
 		server = config.operator*();
-//		state = checkPort(pRequest, server);
+		if ()
 		state = checkServerName(pRequest, server);
+		state = checkPort(pRequest, server);
 		return state;
 	}
 
 	bool ResponseBuilder::checkPort(IRequest *pRequest, ServerInit *pServer)
 	{
 		bool state = true;
-//		std::list<int> list = pServer->getListenPorts();
-//		std::list<int>::iterator it;
-//		it = std::find(list.begin(), list.end(), pRequest->getHeader()."get Port");
-//		if (it == list.end())
-//			state = false;
+		std::list<int> list = pServer->getListenPorts();
+		std::list<int>::iterator it;
+		int port = findPort(pRequest);
+		it = std::find(list.begin(), list.end(), );
+		if (it == list.end())
+			state = false;
 		return state;
 	}
 
@@ -125,5 +127,19 @@ namespace ft
 		if (it == list.end())
 			state = false;
 		return state;
+	}
+
+	int ResponseBuilder::findPort(IRequest *pRequest)
+	{
+		int res = 0;
+		std::string tmp = pRequest->getHeader()->getHeader(h_host);
+		size_t pos = tmp.find(':');
+		if (pos == std::string::npos)
+			res = 80;
+		else {
+			res = strtol(tmp.c_str()+pos+1, NULL, 10);
+		}
+		std::cout<<res<<std::endl;
+		return res;
 	}
 }

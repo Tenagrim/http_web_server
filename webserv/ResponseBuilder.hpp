@@ -42,6 +42,8 @@ namespace ft
 		bool checkPort(IRequest *pRequest, ServerInit *pServer);
 
 		bool checkServerName(IRequest *pRequest, ServerInit *pServer);
+
+		int findPort(IRequest *pRequest);
 	};
 
 }
