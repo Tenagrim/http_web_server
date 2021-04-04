@@ -7,8 +7,10 @@
 #include <IClient.hpp>
 #include <defines.hpp>
 #include <runtime_error.hpp>
-#include <webserv.hpp>
 #include "BodyReader.hpp"
+
+#include <webserv.hpp>
+
 
 namespace ft
 {
@@ -89,9 +91,6 @@ namespace ft
 		BodyReader		*getBReader() const;
 		void			setBReader(BodyReader *bReader);
 
-		void 			updateEventTime();
-		unsigned long	getUsecsFromLastEvent();
-
 	private:
 		int					_id;
 		int					_sock;
@@ -108,7 +107,6 @@ namespace ft
 		Client();
 		Client(const Client &ref);
 		int				&getflags(client_flags type);
-
 	};
 
 

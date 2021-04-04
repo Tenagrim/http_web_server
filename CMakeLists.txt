@@ -87,7 +87,7 @@ add_executable(
         ./webserv/TokenPool.cpp
         ./webserv/TokenPool.hpp
 #        ./webserv/trash/reader.cpp
-#        ./webserv/trash/testerReqReceiver.cpp
+#        ./webserv/trash/unitTester.cpp
         ./webserv/utils/ft_memcpy.cpp
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
@@ -106,10 +106,5 @@ add_executable(
         ./webserv/utils/strToLower.cpp
         ./webserv/utils/fdToString.cpp
         ./webserv/utils/ft_strcmp.cpp
-
-        webserv/BodyReader.cpp
-        webserv/BodyReader.hpp
-    #    webserv/body_reader_test.cpp
-        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp webserv/utils/get_time_udiff.cpp
-
 )
+

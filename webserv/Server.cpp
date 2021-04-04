@@ -151,10 +151,10 @@ namespace ft
 			if (!client)
 				throw ft::runtime_error("Unknown type of client");
 
-		//RequestReceiver	*_reciever = _listener_map[args._fd];
+		//RequestReciever	*_reciever = _listener_map[args._fd];
 		if (args._reciever->writeEvent(args._fd))
 		{
-//			FIXME normal size check (if there are no request)
+//			FIXME normal size check
 			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
 				#ifdef DEBUG
@@ -205,7 +205,7 @@ namespace ft
 
 	void			Server::start(void)
 	{
-		//RequestReceiver *recv;
+		//RequestReciever *recv;
 		setFlag(is_running);
 
 		std::cout << "SERVER: IS STARITING\nLISTENING:\n";

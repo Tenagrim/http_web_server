@@ -35,8 +35,6 @@ namespace ft
 		m_head,
 		m_undefined
 	};
-
-
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char const *str);
 	std::string			getHeaderKey(header_keys key);
@@ -46,9 +44,9 @@ namespace ft
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
 	std::string 		fdToString(int fd);
+	bool				isNumber(std::string s);
+	std::string 		strToLower(const std::string & s);
 
 	unsigned long	get_time_udiff(struct timeval *t1, struct timeval *t2);
 
-	bool				isNumber(std::string s);
-	std::string 		strToLower(const std::string & s);
 }

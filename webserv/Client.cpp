@@ -20,7 +20,6 @@ namespace ft
 		_last_request = 0;
 		_response = 0;
 		_states = s_not_begin;
-		_last_request = new BasicRequest();
 	}
 
 	Client::~Client()
