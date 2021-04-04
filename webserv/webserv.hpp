@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <stdexcept>
+#include <sys/time.h>
 namespace ft
 {
 	enum header_keys
@@ -33,6 +34,8 @@ namespace ft
 		m_put,
 		m_undefined
 	};
+
+
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char const *str);
 	std::string			getHeaderKey(header_keys key);
@@ -42,5 +45,7 @@ namespace ft
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
 	std::string 		fdToString(int fd);
+
+	unsigned long	get_time_udiff(struct timeval *t1, struct timeval *t2);
 
 }

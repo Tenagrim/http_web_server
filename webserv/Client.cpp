@@ -117,11 +117,11 @@ namespace ft
 		_response = response;
 	}
 
-	IResponse		*Client::getLastResponse(void)
+	IResponse		*Client::getLastResponse()
 	{
 		return _response;
 	}
-	bool			Client::needsResponce(void)
+	bool			Client::needsResponce()
 	{
 		if (!hasFlag(read_flags, r_end))
 			return (false);
@@ -138,30 +138,30 @@ namespace ft
 		#endif
 		return true;
 	}
-	bool			Client::requestReceived(void)
+	bool			Client::requestReceived()
 	{
 		return(hasFlag(read_flags, r_end));
 	}
-	bool			Client::headerSent(void)
+	bool			Client::headerSent()
 	{
 		return(hasFlag(write_flags, w_head));
 	}
-	bool			Client::bodySent(void)
+	bool			Client::bodySent()
 	{
 		return(hasFlag(write_flags, w_body));
 	}
 	
-	void			Client::sendHeader(void)
+	void			Client::sendHeader()
 	{
 		setFlag(write_flags, w_head);
 	}
 
-	void	Client::sendBody(void)
+	void	Client::sendBody()
 	{
 		setFlag(write_flags, w_body);
 	}
 
-	std::string & Client::getReadBuff(void)
+	std::string & Client::getReadBuff()
 	{
 		return _read_buff;
 	}
@@ -172,6 +172,16 @@ namespace ft
 
 	void Client::setStates(Client::req_read_states states) {
 		_states = states;
+	}
+
+	void Client::updateEventTime() {
+		gettimeofday(&_last_event, NULL);
+	}
+
+	unsigned long Client::getUsecsFromLastEvent() {
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return (ft::get_time_udiff(&tv, &_last_event));
 	}
 
 }

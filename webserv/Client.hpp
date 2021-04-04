@@ -7,6 +7,7 @@
 #include <IClient.hpp>
 #include <defines.hpp>
 #include <runtime_error.hpp>
+#include <webserv.hpp>
 namespace ft
 {
 	class Client : public IClient
@@ -82,6 +83,9 @@ namespace ft
 		void			sendHeader(void);
 		void			sendBody(void);
 		void			setStates(req_read_states states);
+
+		void 			updateEventTime();
+		unsigned long	getUsecsFromLastEvent();
 
 	private:
 		int					_id;

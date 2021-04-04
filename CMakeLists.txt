@@ -101,4 +101,4 @@ add_executable(
         webserv/BodyReader.cpp
         webserv/BodyReader.hpp
     #    webserv/body_reader_test.cpp
-        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp)
+        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp webserv/utils/get_time_udiff.cpp)
