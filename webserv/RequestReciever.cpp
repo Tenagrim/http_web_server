@@ -1,6 +1,8 @@
 #include <RequestReciever.hpp>
-
+#include <webserv.hpp>
 #include <Header.hpp>
+#include <HeaderMaker.hpp>
+
 namespace ft {
 #pragma region Copilen
 
@@ -196,89 +198,30 @@ namespace ft {
 		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
 
-
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 		buff[n] = 0;
 
-
-	//	if (client->getStates() == Client::s_header_readed)
-	//		client->setFlag(Client::read_flags, Client::r_end);
+//		FIXME is it for body reading?
+//		if (client->getStates() == Client::s_header_readed)
+//			client->setFlag(Client::read_flags, Client::r_end);
 
 		switch (client->getStates()) {
-			case Client::s_start_header_reading: readHeader(client, buff); break;
-			case Client::s_header_reading: readHeader(client, buff); break;
-			case Client::s_header_readed: readBody(client, buff); break;
-			//case Client::s_start_body_reading: readBody(client, buff); break;
-			//case Client::s_body_reading: readBody(client, buff); break;
-//			default: throw ft::runtime_error("" + __LINE__);
+			case Client::s_start_header_reading:
+				HeaderMaker::readHeader(client, buff);
+				break;
+			case Client::s_header_reading:
+				HeaderMaker::readHeader(client, buff);
+				break;
+			case Client::s_header_readed:
+				HeaderMaker::validateHeader(client->getLastResponse()->getHeader());
+				break;
+//		TODO where is read body?
+//			case Client::s_header_readed: readBody(client, buff); break;
 		}
-//		TODO read body
-		IBody *body;
+//		IBody *body;
 
-
+//		FIXME it isn't work fine with getRequest(int sock) method
 		return (nullptr);
-	}
-
-
-
-	void RequestReciever::readHeader(Client *client, char *buff) {
-		int end_pos;
-		int ending;
-		if (client->getStates() == Client::s_start_header_reading)
-			client->getLastRequest()->setHeader(new Header(request));
-
-		client->getReadBuff().append(buff);
-
-		end_pos = client->getReadBuff().find("\r\n\r\n");
-		ending = 4;
-		if (end_pos == std::string::npos) {
-			end_pos = client->getReadBuff().find("\n\n");
-			ending = 2;
-		}
-
-		std::string bodyPart;
-		if (end_pos != std::string::npos)
-		{
-			if (client->getReadBuff().size() > end_pos + ending) {
-//				TODO bodyPart remain for bodyReader
-				bodyPart = client->getReadBuff().substr(end_pos + ending);
-			}
-			client->resizeReadBuff(end_pos + ending / 2);
-			std::string::size_type s = client->getReadBuff().size();
-			headerBuilder(client->getReadBuff(),
-						  client->getLastRequest()->getHeader(), client->getStates());
-
-			if (!client->getLastRequest()->getHeader()->isValid()) {
-				client->setStates(Client::s_end_reading);
-				client->setFlag(Client::read_flags, Client::r_end);
-			}
-			client->setStates(Client::s_header_readed);
-
-			/*
-			if (client->getLastRequest()->getHeader()->isValid() &&
-				methodNeedsBody(client->getLastRequest()->getHeader()->getMethod()))
-			{
-				std::cout<< "NEED BODY\n";
-					client->setStates(Client::s_start_body_reading);
-
-				//if(end_pos + ending == client->getReadBuff().size())
-				//	client->setStates(Client::s_start_body_reading);
-				//else
-				client->setFlag(Client::read_flags, Client::r_end);
-			}
-			else
-			 */
-				client->setFlag(Client::read_flags, Client::r_end);
-
-		}
-		else
-			client->setStates(Client::s_header_reading);
-	}
-
-	void RequestReciever::readBody(Client *client, char *buff) {
-		std::string reqHeader;
-
-
 	}
 
 	int RequestReciever::writeEvent(int sock) {
@@ -310,99 +253,8 @@ namespace ft {
 		return _port;
 	}
 
-	void
-	RequestReciever::headerBuilder(const std::string &text, IHeader *header,
-								Client::req_read_states &state) {
-		std::string subLine;
-		strPos pos1 = 0, pos2;
-		int ending;
-
-		while (header->isValid()) {
-			pos2 = text.find("\r\n", pos1);
-			ending = 2;
-			if (pos2 == std::string::npos) {
-				pos2 = text.find("\n", pos1);
-				ending = 1;
-				if (pos2 == std::string::npos)
-					break ;
-			}
-			subLine = text.substr(pos1, pos2 - pos1);
-			subLine.erase(std::remove(subLine.begin(), subLine.end(), '\r'), subLine.end());
-			pos1 = pos2 + ending;
-			switch (state) {
-				case Client::s_start_header_reading: firstLine(subLine, header,state); break;
-				case Client::s_header_reading: fillHeader(subLine, header, state); break;
-			}
-		}
-	}
 //	GET / HTTP/1.1rnHost: localhost:84rnUser-Agent: Go-http-client/1.1rnAccept-Encoding: gziprn
 //	POST / HTTP/1.1rnHost: localhost:83rnUser-Agent: Go-http-client/1.1rnTransfer-Encoding: chunkedrnContent-Type: test/filernAccept-Encoding: gziprn
-	void RequestReciever::firstLine(std::string const &line, IHeader *header,
-								 Client::req_read_states &state) {
-		fillMethod(line, header);
-		fillUrl(line, header);
-		checkHttp(line, header);
-		state = Client::s_header_reading;
-	}
 
-	void RequestReciever::fillMethod(const std::string &line, IHeader *header) {
-		std::string method;
-		int i = 0;
-		methods_enum a;
-
-		method = line.substr(0, line.find(' '));
-		do {
-			a = static_cast<methods_enum>(i);
-			i++;
-		}
-		while (method != getMethodStr(a));
-		header->setMethod(a);
-	}
-
-	void RequestReciever::fillUrl(const std::string &line, IHeader *header) {
-		strPos a = line.find(' ') + 1;
-		strPos b = line.rfind(' ');
-
-		header->setURI(line.substr(a, b - a));
-	}
-
-	void RequestReciever::checkHttp(const std::string &line, IHeader *header) {
-		std::string http;
-
-		http = line.substr(line.rfind(' ') + 1, 8);
-		if (http != "HTTP/1.1")
-			//throw std::runtime_error("RequestValidator: invalid HTTP version");
-			header->makeInvalid();
-	}
-
-	void RequestReciever::fillHeader(std::string subLine, IHeader *header,
-								  Client::req_read_states &states) {
-		int i = 0;
-		header_keys a;
-		std::string head;
-		std::string key;
-
-		head = subLine.substr(0, subLine.find(':'));
-		do {
-			a = static_cast<header_keys>(i);
-			i++;
-		}
-		while (!(key = getHeaderKey(a)).empty() && key != head);
-		if (key.empty())
-			return ;
-		if (header->isHeadAlreadyExist(a)) {
-			header->makeInvalid();
-			return ;
-		}
-		subLine = subLine.substr(subLine.find(':') + 1);
-		while (subLine[0] == ' ') {
-			subLine.erase(0, 1);
-		}
-		header->setHeader(a, subLine);
-	}
-
-	bool RequestReciever::methodNeedsBody(methods_enum method) {
-		return (method == m_post || method == m_put);
-	}
 
 }

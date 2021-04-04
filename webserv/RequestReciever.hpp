@@ -57,14 +57,11 @@ namespace ft
 		void				bind_main_socket();
 		void				listen_main_socket();
 
-		typedef				std::string::size_type strPos;
-		void				headerBuilder(const std::string &text, IHeader *header, Client::req_read_states &state);
 
 		void				readHeader(Client *client, char *buff);
-		void				firstLine(std::string const &line, IHeader *header, Client::req_read_states &state);
-		void				fillHeader(std::string subLine, IHeader *header, Client::req_read_states &states);
+		void				firstLine(std::string const &line, IHeader *header, Client::req_r_states &state);
+		void				fillHeader(std::string subLine, IHeader *header, Client::req_r_states &states);
 
-		void				readBody(Client *client, char *buff);
 		void				fillMethod(const std::string &line, IHeader *header);
 		void				fillUrl(const std::string &line, IHeader *header);
 		void				checkHttp(const std::string &line, IHeader *header);
@@ -92,6 +89,7 @@ namespace ft
 		void					start(void);
 		int						getPort(void);
 
+		void validateHeader(IHeader *header);
 	};
 
 }

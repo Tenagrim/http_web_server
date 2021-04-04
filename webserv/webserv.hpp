@@ -40,4 +40,6 @@ namespace ft
 	std::string			getCodeDescr(int code);
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
+	bool				isNumber(std::string s);
+
 }

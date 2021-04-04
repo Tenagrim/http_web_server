@@ -94,4 +94,4 @@ add_executable(
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
       webserv/BodyReader.cpp webserv/BodyReader.hpp
-)
+        webserv/utils/isNumber.cpp webserv/HeaderMaker.cpp webserv/HeaderMaker.hpp)
