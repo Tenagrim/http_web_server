@@ -59,4 +59,9 @@ namespace ft
 	{
 		throw ft::runtime_error("Not implemented");
 	}
+
+	int					FileBody::getInputFd(void)
+	{
+		return _inp_fd;
+	}
 }

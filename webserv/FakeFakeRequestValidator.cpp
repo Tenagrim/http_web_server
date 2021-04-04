@@ -35,7 +35,8 @@ namespace ft
 	}
 	int		FakeFakeRequestValidator::isValid(char const *line)
 	{
-		(void)line;
+		if (line[0] == '\r' && ft::ft_strlen(line) == 1)
+		return (1);
 		return 1;
 	}
 	int		FakeFakeRequestValidator::isValid(const IRequest &req)

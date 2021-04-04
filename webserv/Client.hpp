@@ -24,10 +24,26 @@ namespace ft
 			r_first_line = 1,
 			r_headers = 2,
 			r_breakline = 4,
-			r_body = 8,
-			r_end = 16
+			r_head_begin = 8,
+			r_head_end = 16,
+			r_end = 32,
+			r_body_begin = 64,
+			r_body_end = 128,
+			r_begin = 256
 		};
-		
+
+		enum req_read_states
+		{
+			s_not_begin,
+			s_start_header_reading,
+			s_header_reading,
+			s_header_readed,
+			s_start_body_reading,
+			s_body_reading,
+			s_end_reading
+		};
+
+
 		enum write_flags
 		{
 			w_head = 1,
@@ -42,7 +58,8 @@ namespace ft
 		Client(int id, int sock);
 		virtual ~Client();
 		Client			&operator=(const Client &ref);
-		
+
+		req_read_states &getStates();
 		int				getSock(void) const;
 		struct timeval	const &getLastEventTime() const;
 
@@ -56,6 +73,7 @@ namespace ft
 		
 		void			setLastResponse(IResponse *response);
 		IResponse		*getLastResponse(void);
+		std::string &	getReadBuff(void);
 
 		bool			requestReceived(void);
 		bool			headerSent(void);
@@ -63,6 +81,7 @@ namespace ft
 
 		void			sendHeader(void);
 		void			sendBody(void);
+		void			setStates(req_read_states states);
 
 	private:
 		int					_id;
@@ -73,6 +92,8 @@ namespace ft
 		struct timeval		_last_event;
 		IRequest			*_last_request;
 		IResponse			*_response;
+		std::string 		_read_buff;
+		req_read_states		_states;
 
 		Client();
 		Client(const Client &ref);

@@ -16,12 +16,12 @@ namespace ft
 		ABody();
 		virtual ~ABody();
 
-		virtual int					getFd(void) = 0;
-		virtual std::string			to_string(void) const = 0;
-		virtual unsigned int		size(void) const = 0;
-		virtual BodyType			getType(void) = 0;
+		virtual int					getFd() = 0;
+		virtual std::string			to_string() const = 0;
+		virtual unsigned int		size() const = 0;
+		virtual BodyType			getType() = 0;
 
-		std::string const			&getContentType(void) const;
+		std::string const			&getContentType() const;
 		void						setContentType(std::string const &type);
 		unsigned long				getWritten();
 		void						setWritten(unsigned long value);

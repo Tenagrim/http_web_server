@@ -17,10 +17,14 @@ namespace ft
 		IHeader		*_header;
 		IBody		*_body;
 		
-		Request();
 
 		Request(const Request &ref);
 	public:
+		Request();
+
+		void setBody(IBody *body);
+		void setHeader(IHeader *header);
+
 		Request(std::string const &req_text);
 		virtual ~Request();
 		Request(IHeader *head, IBody *body);

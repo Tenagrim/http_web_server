@@ -13,6 +13,7 @@ namespace ft
 		_max_fd = 0;
 		_server = 0;
 		_run = false;
+		_delay = DISPATCHER_WAKE_DELAY;
 	}
 
 	Dispatcher::~Dispatcher()
@@ -103,9 +104,9 @@ namespace ft
 			_client_map.erase(sock);
 			if (sock == _max_fd)
 			{
-				if (_client_map.size())
+				if (!_client_map.empty())
 					_max_fd = _client_map.rbegin()->first;
-				else if (_listener_map.size())
+				else if (!_listener_map.empty())
 					_max_fd = _listener_map.rbegin()->first;
 				else
 					_max_fd = 0;
@@ -155,7 +156,11 @@ namespace ft
 			_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
 		else
 			_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
-			
+
+		if (!_events)
+			sleep();
+		else
+			wakeUp();
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: EVENTS UPDATET. GOT: " << _events << "\n";
 			#endif
@@ -179,8 +184,10 @@ namespace ft
 		fd_map::iterator it;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
-			if (FD_ISSET((*it).first, &_reading_set))
+			if (FD_ISSET((*it).first, &_reading_set)) {
 				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client, (*it).second));
+				FD_CLR((*it).first, &_writing_set);
+			}
 		}
 	}
 
@@ -211,7 +218,6 @@ namespace ft
 			return ;
 		}
 
-
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: HANDLING EVENTS\n";
 			#endif
@@ -225,7 +231,7 @@ namespace ft
 	{
 		_server = serv;
 	}
-	void			Dispatcher::start(void)
+	void			Dispatcher::start()
 	{
 		if (!_server)
 			throw ft::runtime_error("Not connected to server");
@@ -234,12 +240,21 @@ namespace ft
 		{
 			updateEvents();
 			handleEvents();
-			usleep(DISPATCHER_TICK_MICROS);
+			usleep(_delay);
 		}
-		
 	}
-	void			Dispatcher::stop(void)
+	void			Dispatcher::stop()
 	{
 		_run = false;
+	}
+
+	void Dispatcher::wakeUp() {
+		//std::cout<< "WAKING UP\n";
+	_delay = DISPATCHER_WAKE_DELAY;
+	}
+
+	void Dispatcher::sleep() {
+		//std::cout<< "SLEEPING\n";
+		_delay = DISPATCHER_SLEEP_DELAY;
 	}
 } // namespace ft

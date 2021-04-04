@@ -2,10 +2,6 @@
 
 namespace ft
 {
-	
-
-
-
 	ABuildPolicy::ABuildPolicy(const ABuildPolicy &ref)
 	{ (void)ref; /* Illegal */}
 
@@ -33,11 +29,11 @@ namespace ft
 		res->setCodeDescription(descr);
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
-		res->setHeader("Content-Length", ft::to_string(body->size()));
-		res->setHeader("Date", _t_machine->getTimestamp());
-		res->setHeader("Connection", "keep-alive");
-		res->setHeader("Content-Type", body->getContentType());
-		res->setHeader("Server", DEFAULT_SERVER_HEADER);
+		res->setHeader(h_content_length, ft::to_string(body->size()));
+		res->setHeader(h_date, _t_machine->getTimestamp());
+//		res->setHeader(h_connec, "keep-alive");
+		res->setHeader(h_content_type, body->getContentType());
+		res->setHeader(h_server, DEFAULT_SERVER_HEADER);
 
 		//std::string type =
 		return res;

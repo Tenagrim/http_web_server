@@ -28,6 +28,10 @@
 #include <runtime_error.hpp>
 #include <IRequestValidator.hpp>
 #include <FakeFakeRequestValidator.hpp>
+
+#include <BasicRequest.hpp>
+#include "Header.hpp"
+
 namespace ft
 {
 
@@ -50,10 +54,26 @@ namespace ft
 		void				bind_main_socket();
 		void				listen_main_socket();
 
-		IRequestValidator	*_validator;
-		
+		typedef				std::string::size_type strPos;
+		void headerBuilder(const std::string &text, IHeader *header,
+						   Client::req_read_states &state);
+
 		RequestReciever();
 		RequestReciever(const RequestReciever &ref);
+		void readHeader(Client *client, char *buff);
+
+		void readBody(Client *client, char *buff);
+
+		void firstLine(std::string const &line, IHeader *header,
+					   Client::req_read_states &state);
+		void fillMethod(const std::string &line, IHeader *header);
+		void fillUrl(const std::string &line, IHeader *header);
+		void checkHttp(const std::string &line, IHeader *header);
+
+
+		void fillHeader(std::string subLine, IHeader *header,
+						Client::req_read_states &states);
+		bool methodNeedsBody(methods_enum method);
 	public:
 		RequestReciever(std::string const &host, int port);
 		virtual ~RequestReciever();
@@ -66,14 +86,15 @@ namespace ft
 		int						getId();
 		int						accept_connection();
 		void					close_connection(int sock);
-		void					close_connections(void);
+		void					close_connections();
 		int						getListenSock();
 		IClient					*getClient(int sock);
-		
+
 		int						writeEvent(int sock);
-		
+
 		void					start(void);
 		int						getPort(void);
+
 	};
 
 }

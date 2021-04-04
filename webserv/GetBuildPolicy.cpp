@@ -2,7 +2,6 @@
 
 namespace ft
 {
-
 	GetBuildPolicy::~GetBuildPolicy()
 	{}
 
@@ -25,18 +24,18 @@ namespace ft
 		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
 		IResponse *res = 0;
 		#ifdef DEBUG
-			std::cout << "URI ::::::::::: [" << request->getURI() << "]\n";
+			std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
 		#endif
 
-		if (_fmngr.isADirectory(request->getURI()))
+		if (_fmngr.isADirectory(request->getHeader()->getURI()))
 			return (buildFromDir(request));
 
-		if (_fmngr.isFileExisting(request->getURI()))
+		if (_fmngr.isFileExisting(request->getHeader()->getURI()))
 		{
 			#ifdef DEBUG
 				std::cout << "FILE EXISTS\n";
 			#endif
-			res = buildFromFile(request->getURI());
+			res = buildFromFile(request->getHeader()->getURI());
 
 			return res;
 		}

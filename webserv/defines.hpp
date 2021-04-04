@@ -4,6 +4,9 @@
 	
 //#define USER					"gshona"
 
+//#define DEBUG_REQ_PRINT 1
+//#define DEBUG_RESP_PRINT 1
+
 #define UPDATE_DELAY 1000
 
 #define DEFAULT_PORT			83
@@ -19,13 +22,17 @@
 #define FM_DEFAULT_ROOT			"/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
-
 #define READ_BODY_ONE_TIME 200000
 
+
 #ifdef DEBUG // DON T TOUCH THIS !!
-# define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)
+//# define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)
+#define DISPATCHER_SLEEP_DELAY (2 * 1000 * 1000)
+#define DISPATCHER_WAKE_DELAY (0.5 * 1000 * 1000)
 #endif
 
 #ifndef DEBUG
-	# define	DISPATCHER_TICK_MICROS (1000)
+//	# define	DISPATCHER_TICK_MICROS (1000)
+#define DISPATCHER_SLEEP_DELAY 200000
+#define DISPATCHER_WAKE_DELAY 1000
 #endif

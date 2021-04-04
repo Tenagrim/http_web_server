@@ -2,7 +2,6 @@
 #include <string>
 #include <time.h>
 #include <fstream>
-#include <fcntl.h>
 namespace ft
 {
 	class IFileManager
@@ -22,10 +21,8 @@ namespace ft
 			virtual time_t			getCTime(std::string const &filename) = 0;
 
 			// open file & returns it's descriptor
-			virtual int				getFd(std::string const &filename, unsigned int acess = O_RDONLY) = 0;
-			virtual int				getFdReadOnly(std::string const &filename) = 0;
-			virtual int				getFdWriteOnly(std::string const &filename) = 0;
-			virtual int				getFdReadWrite(std::string const &filename) = 0;
+			virtual int				getFd(std::string const &filename, unsigned int acess) = 0;
+
 			virtual void			setRoot(std::string const &new_root) = 0;
 			virtual std::string		getFullPath(std::string const &filename) = 0;
 			virtual std::string		getRoot() = 0;

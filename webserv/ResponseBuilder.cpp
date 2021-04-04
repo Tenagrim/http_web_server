@@ -5,16 +5,16 @@ namespace ft
 
 	#pragma region Copilen
 
-	ResponseBuilder::ResponseBuilder() : _t_machine(new FakeTimeMachine())
+	ResponseBuilder::ResponseBuilder()
 	{
-		_policies["GET"] = new GetBuildPolicy();
-		_policies["POST"] = new PostBuildPolicy();
-		_policies["PUT"] = new PutBuildPolicy();
+		_policies[m_get] = new GetBuildPolicy();
+		_policies[m_post] = new PostBuildPolicy();
+		_policies[m_put] = new PutBuildPolicy();
 	}
 
 	ResponseBuilder::~ResponseBuilder()
 	{
-		for(policy_map::iterator it = _policies.begin(); it!= _policies.end(); it++)
+		for (policy_map::iterator it = _policies.begin(); it!= _policies.end(); it++)
 			delete (*it).second;
 		//delete _t_machine;
 	}
@@ -35,9 +35,10 @@ namespace ft
 
 	IResponse			*ResponseBuilder::buildResponse(IRequest	*request)
 	{
-		std::string const & method = request->getMethod();
+		ft::methods_enum method = request->getHeader()->getMethod();
+		IResponse	*resp = nullptr;
 
-		if (!_policies.size())
+		if (_policies.empty())
 			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
 		if (_policies.count(method))
@@ -54,8 +55,22 @@ namespace ft
 
 			return policy->buildResponse(request);
 		}
+#ifdef DEBUG_REQ_PRINT
+		if (request->getHeader()->isValid())
+			std::cout<< "==================\n" << request->to_string() << "=================================\n";
+#endif
+		if(!request->getHeader()->isValid())
+			resp = ((*(_policies.begin())).second->buildErrorPage(400));
+		else if (_policies.count(method))
+			resp =_policies[method]->buildResponse(request);
 		else
-			return ((*(_policies.begin())).second->buildErrorPage(501));
+			resp =(*(_policies.begin())).second->buildErrorPage(501);
+
+#ifdef DEBUG_RESP_PRINT
+		std::cout<< "==================\n" << resp->to_string() << "=================================\n";
+#endif
+		return resp;
+
 	}
 
 	void ResponseBuilder::getConfigLists(std::list<ServerInit *> *_list)
