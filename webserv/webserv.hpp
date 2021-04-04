@@ -42,5 +42,6 @@ namespace ft
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
 	std::string 		fdToString(int fd);
-
+	bool				isNumber(std::string s);
+	std::string 		strToLower(const std::string & s);
 }

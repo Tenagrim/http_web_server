@@ -36,7 +36,7 @@ namespace ft
 
 	#pragma region Add_remove socks
 
-	void			Dispatcher::addListener(RequestReciever *recv, int sock)
+	void			Dispatcher::addListener(RequestReceiver *recv, int sock)
 	{
 		#ifdef DEBUG
 			std::cout << "ADD LISTENER[" << sock << "]\n";
@@ -48,7 +48,7 @@ namespace ft
 		_listening++;
 	}
 
-	void			Dispatcher::addClient(RequestReciever *recv, int sock)
+	void			Dispatcher::addClient(RequestReceiver *recv, int sock)
 	{
 		#ifdef DEBUG
 			std::cout << "ADD CLIENT[" << sock << "]\n";

@@ -4,7 +4,7 @@ namespace ft
 {
 	#pragma region Copilen
 
-	Server::Server()// : _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	Server::Server()// : _reciever(new RequestReceiver(DEFAULT_HOST, DEFAULT_PORT))
 	{/* Illegal */}
 
 	Server::Server(IResponseBuilder *builder) : _resp_builder(builder)
@@ -22,7 +22,7 @@ namespace ft
 		delete _resp_sender;
 	}
 
-	Server::Server(const Server &ref) //: _reciever(new RequestReciever(DEFAULT_HOST, DEFAULT_PORT))
+	Server::Server(const Server &ref) //: _reciever(new RequestReceiver(DEFAULT_HOST, DEFAULT_PORT))
 	{
 		(void)ref;
 		throw ft::runtime_error("no implementation");
@@ -40,7 +40,7 @@ namespace ft
 	int Server::acceptConnection(int sock)
 	{
 		int client_fd;
-		RequestReciever	*recv = getListener(sock);
+		RequestReceiver	*recv = getListener(sock);
 
 		client_fd = _listener_map[sock]->accept_connection();
 		_dispatcher->addClient(recv, client_fd);
@@ -102,7 +102,7 @@ namespace ft
 	{
 		int sock;
 
-		RequestReciever	*_reciever = getListener(args._fd);
+		RequestReceiver	*_reciever = getListener(args._fd);
 		if (args._type == reading)
 		{
 			if (args._fd == _reciever->getListenSock())
@@ -119,7 +119,7 @@ namespace ft
 
 	void			Server::clientEvent(Dispatcher_event_args &args)
 	{
-		RequestReciever	*_reciever = args._reciever;
+		RequestReceiver	*_reciever = args._reciever;
 		if (args._type == reading)
 			clientEventRead(args);
 		else if (args._type == writing)
@@ -144,7 +144,7 @@ namespace ft
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
 	{
 
-		//RequestReciever	*_reciever = _listener_map[args._fd];
+		//RequestReceiver	*_reciever = _listener_map[args._fd];
 		if (args._reciever->writeEvent(args._fd))
 		{
 			IResponse *resp = NULL;
@@ -195,11 +195,11 @@ namespace ft
 
 	void			Server::start(void)
 	{
-		//RequestReciever *recv;
+		//RequestReceiver *recv;
 		setFlag(is_running);
 
 		std::cout << "SERVER: IS STARITING\nLISTENING:\n";
-		for(std::list<RequestReciever*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
+		for(std::list<RequestReceiver*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 		{
 			(*it)->start();
 			_listener_map[(*it)->getListenSock()] = *it;
@@ -231,15 +231,15 @@ namespace ft
 		#endif
 			if(hasFlag(is_running))
 				throw ft::runtime_error("Cannot add new listener into running server");
-			//_listener_map[port] = new RequestReciever("localhost", port);	
-			for(std::list<RequestReciever*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
+			//_listener_map[port] = new RequestReceiver("localhost", port);
+			for(std::list<RequestReceiver*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 				if ((*it)->getPort() == port)
 					throw ft::runtime_error("Cannot add listener with same port:" + ft::to_string(port));
-			_list_to_start.push_back(new RequestReciever("localhost", port));
+			_list_to_start.push_back(new RequestReceiver("localhost", port));
 
 	}
 
-	RequestReciever		*Server::getListener(int sock)
+	RequestReceiver		*Server::getListener(int sock)
 	{
 		if (!_listener_map.count(sock))
 			throw ft::runtime_error("No such listener: " + ft::to_string(sock));
