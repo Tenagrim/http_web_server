@@ -41,5 +41,6 @@ namespace ft
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
 	bool				isNumber(std::string s);
+	std::string 		strToLower(const std::string & s);
 
 }

@@ -86,7 +86,7 @@ namespace ft {
 		do {
 			a = static_cast<header_keys>(i);
 			i++;
-		} while (!(key = getHeaderKey(a)).empty() && key != head);
+		} while (!(key = getHeaderKey(a)).empty() && strToLower(key) != strToLower(head));
 		if (key.empty())
 			return;
 		if (header->isHeadAlreadyExist(a)) {

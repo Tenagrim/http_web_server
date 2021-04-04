@@ -253,8 +253,7 @@ namespace ft {
 		return _port;
 	}
 
-//	GET / HTTP/1.1rnHost: localhost:84rnUser-Agent: Go-http-client/1.1rnAccept-Encoding: gziprn
-//	POST / HTTP/1.1rnHost: localhost:83rnUser-Agent: Go-http-client/1.1rnTransfer-Encoding: chunkedrnContent-Type: test/filernAccept-Encoding: gziprn
-
+//	GET / HTTP/1.1\r\nHost: localhost:83\r\nUser-Agent: Go-http-client/1.1\r\nAccept-Encoding: gzip\r\n\r\n
+//	POST / HTTP/1.1\r\nHost: localhost:83\r\nUser-Agent: Go-http-client/1.1\r\nTransfer-Encoding: chunked\r\nContent-Type: test/file\r\nAccept-Encoding: gzip\r\n\r\n0\r\n\r\n
 
 }

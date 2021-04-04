@@ -58,16 +58,6 @@ namespace ft
 		void				listen_main_socket();
 
 
-		void				readHeader(Client *client, char *buff);
-		void				firstLine(std::string const &line, IHeader *header, Client::req_r_states &state);
-		void				fillHeader(std::string subLine, IHeader *header, Client::req_r_states &states);
-
-		void				fillMethod(const std::string &line, IHeader *header);
-		void				fillUrl(const std::string &line, IHeader *header);
-		void				checkHttp(const std::string &line, IHeader *header);
-
-		bool methodNeedsBody(methods_enum method);
-
 	public:
 		RequestReceiver(std::string const &host, int port);
 		virtual ~RequestReceiver();
@@ -89,7 +79,6 @@ namespace ft
 		void					start(void);
 		int						getPort(void);
 
-		void validateHeader(IHeader *header);
 	};
 
 }
