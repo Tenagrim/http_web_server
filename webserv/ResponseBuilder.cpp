@@ -100,7 +100,7 @@ namespace ft
 		bool state = false;
 		ServerInit *server = NULL;
 		server = config.operator*();
-		if ()
+//		if ()
 		state = checkServerName(pRequest, server);
 		state = checkPort(pRequest, server);
 		return state;
@@ -112,7 +112,7 @@ namespace ft
 		std::list<int> list = pServer->getListenPorts();
 		std::list<int>::iterator it;
 		int port = findPort(pRequest);
-		it = std::find(list.begin(), list.end(), );
+		it = std::find(list.begin(), list.end(), port);
 		if (it == list.end())
 			state = false;
 		return state;
