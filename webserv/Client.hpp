@@ -7,6 +7,8 @@
 #include <IClient.hpp>
 #include <defines.hpp>
 #include <runtime_error.hpp>
+#include "BodyReader.hpp"
+
 namespace ft
 {
 	class Client : public IClient
@@ -59,7 +61,7 @@ namespace ft
 		virtual ~Client();
 		Client			&operator=(const Client &ref);
 
-		req_r_states &getStates();
+		req_r_states	&getStates();
 		int				getSock(void) const;
 		struct timeval	const &getLastEventTime() const;
 
@@ -83,6 +85,8 @@ namespace ft
 		void			sendHeader(void);
 		void			sendBody(void);
 		void			setStates(req_r_states states);
+		BodyReader		*getBReader() const;
+		void			setBReader(BodyReader *bReader);
 
 	private:
 		int					_id;
@@ -95,10 +99,12 @@ namespace ft
 		IResponse			*_response;
 		std::string 		_read_buff;
 		req_r_states		_states;
+		BodyReader			*_b_reader;
 
 		Client();
 		Client(const Client &ref);
 		int				&getflags(client_flags type);
+
 	};
 
 

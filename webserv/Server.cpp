@@ -133,8 +133,7 @@ namespace ft
 
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
-			IRequest	*request = args._reciever->getRequest(args._fd);
-			(void)request;
+			args._reciever->getRequest(args._fd);
 			#ifdef DEBUG
 				std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
 				std::cout << request->to_string() << "===========================\n";
@@ -155,7 +154,7 @@ namespace ft
 			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
 			if (!client)
 				throw ft::runtime_error("Unknown type of client");
-//			FIXME normal size check
+//			FIXME normal size check (if there are no request)
 			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
 				#ifdef DEBUG

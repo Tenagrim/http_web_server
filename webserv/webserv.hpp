@@ -31,6 +31,7 @@ namespace ft
 		m_get = 0,
 		m_post,
 		m_put,
+		m_head,
 		m_undefined
 	};
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);

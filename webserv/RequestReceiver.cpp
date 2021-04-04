@@ -184,16 +184,20 @@ namespace ft {
 #pragma endregion
 
 
-	IRequest *RequestReceiver::getRequest(int sock) {
-		return getRequest(_clients[sock]);
+	void RequestReceiver::getRequest(int sock) {
+		getRequest(_clients[sock]);
 	}
 
-	IRequest *RequestReceiver::getRequest(Client *client) {
+	void RequestReceiver::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
+		int bodyRet;
+		std::string bodyPart;
 
-		if (client->getStates() == Client::s_not_begin)
+		if (client->getStates() == Client::s_not_begin) {
 			client->setLastRequest(new BasicRequest());
+			client->getLastRequest()->setPort(_port);
+		}
 
 		client->setStates(Client::s_start_header_reading);
 		client->setFlag(Client::read_flags, Client::r_begin);
@@ -201,27 +205,37 @@ namespace ft {
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 		buff[n] = 0;
 
-//		FIXME is it for body reading?
-//		if (client->getStates() == Client::s_header_readed)
-//			client->setFlag(Client::read_flags, Client::r_end);
-
 		switch (client->getStates()) {
 			case Client::s_start_header_reading:
-				HeaderMaker::readHeader(client, buff);
+				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_reading:
-				HeaderMaker::readHeader(client, buff);
+				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_readed:
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
-//		TODO where is read body?
-//			case Client::s_header_readed: readBody(client, buff); break;
 		}
-//		IBody *body;
-
-//		FIXME it isn't work fine with getRequest(int sock) method
-		return (nullptr);
+		if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
+			if (!client->getBReader()) {
+				int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
+				client->setBReader(new BodyReader(client->getSock(), contLen, bodyPart));
+			}
+			bodyRet = client->getBReader()->readBody();
+			switch (bodyRet) {
+				case 0:
+					client->getLastRequest()->setBody(client->getBReader()->getBody());
+					break;
+				case 1:
+					return ;
+				case -1:
+					client->setFlag(Client::read_flags, Client::r_end);
+					client->getLastRequest()->getHeader()->makeInvalid();
+					return ;
+			}
+		} else {
+			client->setFlag(Client::read_flags, Client::r_end);
+		}
 	}
 
 	int RequestReceiver::writeEvent(int sock) {

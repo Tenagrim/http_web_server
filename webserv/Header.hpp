@@ -46,7 +46,7 @@ namespace ft
 		void				setCodeDescription(std::string const &new_descr);
 
 		void				setHeader(header_keys key, std::string const &header_value);
-		std::string const	&getHeader(header_keys key);
+		std::string const	&getHeader(header_keys key) const;
 		bool				isHeadAlreadyExist(header_keys key) const;
 		bool 				isValid();
 		void 				makeInvalid();

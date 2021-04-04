@@ -28,11 +28,11 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Getters
-	std::string const	&Header::getHeader(header_keys key)
+	std::string const	&Header::getHeader(header_keys key) const
 	{
 		if (!_header_map.count(key))
 			throw ft::runtime_error("Header not exists");
-		return _header_map[key];
+		return (*(_header_map.find(key))).second;
 	}
 
 	MessageType			Header::getType(void) const
