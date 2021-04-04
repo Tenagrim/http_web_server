@@ -3,6 +3,8 @@
 #include <list>
 #include <map>
 #include <algorithm> // For std::find
+#include <unistd.h> // For pipe;
+#include <iostream>
 
 namespace ft
 {
@@ -17,4 +19,6 @@ namespace ft
 		void deleteCommit(std::list<std::string> &list);
 		iterator &isSpace(iterator &it);
 		reverse_iterator &isSpace(reverse_iterator &it);
+
+		int temporaryBody(std::string const &str);
 }

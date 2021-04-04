@@ -40,4 +40,14 @@ namespace ft {
 			++it;
 		return it;
 	};
+
+	int temporaryBody(std::string const &str) {
+		int fd[2], res;
+		pipe(fd);
+		std::string result;
+		write(fd[1], str.c_str(), str.size());
+		close(fd[1]);
+		return fd[0];
+	}
+
 }

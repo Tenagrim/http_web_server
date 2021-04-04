@@ -41,6 +41,20 @@ namespace ft
 		if (_policies.empty())
 			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
+		if (_policies.count(method))
+		{
+//			TODO: Make config serch
+//			List configs and find coorect config, if nothing find, return  default config
+			ServerInit *serverConfig = findCorrectConfig(request);
+//			Server INit = Get config (request->getHost);
+//
+			ABuildPolicy *policy;
+//			return (_policies[method]->buildResponse(request));
+			policy = _policies[method];
+//			Set police -> set Config;
+
+			return policy->buildResponse(request);
+		}
 #ifdef DEBUG_REQ_PRINT
 		if (request->getHeader()->isValid())
 			std::cout<< "==================\n" << request->to_string() << "=================================\n";
@@ -57,5 +71,33 @@ namespace ft
 #endif
 		return resp;
 
+	}
+
+	void ResponseBuilder::getConfigLists(std::list<ServerInit *> *_list)
+	{
+		if (_list != nullptr)
+			_serv_list = _list;
+		else
+			throw ft::runtime_error("No Lists");
+	}
+
+	ServerInit *ResponseBuilder::findCorrectConfig(IRequest *request)
+	{
+		std::list<ServerInit *>::iterator it = _serv_list->begin();
+		ServerInit *server = NULL;
+		for (; it != _serv_list->end(); ++it){
+			if ((server = checkServer(request, it)))
+				break;
+		}
+		return server;
+	}
+
+	ServerInit *ResponseBuilder::checkServer(IRequest *pRequest, std::list<ServerInit *>::iterator config)
+	{
+		ServerInit *server;
+		server = config.operator*();
+		std::cout<<server->getRoot()<<std::endl;
+		std::list<int> ports = (*config)->getListenPorts();
+		return NULL;
 	}
 }

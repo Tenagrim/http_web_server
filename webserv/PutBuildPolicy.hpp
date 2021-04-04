@@ -13,5 +13,10 @@ namespace ft
 		virtual ~PutBuildPolicy();
 		PutBuildPolicy &operator=(const PutBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
+
+		IHeader *checkCommingURI(IRequest *request);
+		void creatFile(IRequest *pRequest);
+		void mutantExistingFile(IRequest *pRequest);
+		void truncExistingFile(IRequest *pRequest);
 	};
 } // namespace ft

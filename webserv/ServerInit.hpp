@@ -9,8 +9,6 @@
 #include <LocationInit.hpp>
 #include <runtime_error.hpp>
 
-//#include <Utils.hpp>
-
 namespace ft {
 	class ServerInit {
 	private:
@@ -24,33 +22,34 @@ namespace ft {
 		unsigned int			_location_count;
 		list_num				_listen;
 		list					_server_name;
+		std::string				_root;
 		std::list<LocationInit *> _locations;
 
 
 		bool findServerName(list *tmp);
 		bool findListen(list *tmp);
+		bool findRoot(std::list<std::string> *tmp);
 
-	public:
-		ServerInit();
-		~ServerInit();
-
-		unsigned int getId() const;
-		void setId(unsigned int id);
-
-		bool parseInServer(std::list<std::string> tmp);
 		iterator findInList(list *_list,std::string const &string);
-
 		void getConf(std::list<std::string> &list);
 		iterator is_Space(iterator it);
 		bool is_digit(string const &str);
-
 		bool findLocations(list *tmp);
-		std::list<std::string> copyContent(list &tmp,iterator it, std::string const &stop);
+	public:
+		ServerInit(int id);
+		~ServerInit();
 
+		bool parseInServer(std::list<std::string> &tmp);
+
+
+		void setId(unsigned int id);
 		////// Sorry, i need getters /////////////
-		std::list<int>					&getListenPorts();
-		std::list<LocationInit *>		&getLocationInits();
-		std::list<std::string>			&getServerNames();
+		unsigned int getId() const;
+		unsigned int getLocationCount() const;
+		std::list<int>					&getListenPorts(void);
+		std::list<std::string>			&getServerNames(void);
+		std::list<LocationInit *>		&getLocationInits(void);
 
+		const string &getRoot() const;
 	};
 }

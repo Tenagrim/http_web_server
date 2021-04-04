@@ -55,7 +55,7 @@ namespace ft
 		int				copyFdToFile(std::string const &filrname, int input_fd);
 		std::string		getFullPath(std::string const &filename);
 
-		std::string const &getRoot(void);
+		std::string const &getRoot();
 
 		class CannotOpenFile : public std::exception { const char * what() const throw(); };
 		class NoSuchType : public std::exception { const char * what() const throw(); };

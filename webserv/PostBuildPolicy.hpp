@@ -13,6 +13,8 @@ namespace ft
 		virtual ~PostBuildPolicy();
 		PostBuildPolicy &operator=(const PostBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
+
+		IHeader *AcceptingData(IRequest *pRequest);
 	};
 
 

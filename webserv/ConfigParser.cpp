@@ -1,6 +1,6 @@
-#include "ConfigParser.hpp"
+#include <ConfigParser.hpp>
 
-ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile() {
 
 	openConfigFile();
 	if (!initParsing())
@@ -10,6 +10,9 @@ ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0) {
 }
 
 ft::ConfigParser::~ConfigParser() {
+	if (!_confile.empty()){
+		_confile.clear();
+	}
 	std::list<ServerInit *>::iterator it = _server_list.begin();
 	for (; it != _server_list.end(); ++it) {
 		delete *it;
@@ -36,15 +39,11 @@ bool ft::ConfigParser::initParsing(void) {
 			line.push_back(*it);
 		}
 	}
+	line.clear();
 	if (it == _conf.end()) {
 		state = true;
 	}
 	_confile.unique();
-//	std::list<std::string>::iterator lit = _confile.begin();
-//	for (; lit != _confile.end(); ++lit) {
-//		std::cout<<">"<<*lit<<"<";
-//	}
-//	std::cout<<"\n";
 	return state;
 }
 
@@ -59,12 +58,21 @@ void ft::ConfigParser::openConfigFile(void)
 bool ft::ConfigParser::startParse(void)
 {
 	bool state = false;
-	iterator it = _confile.begin();
-	it = isSpace(it);
-	if (*it == "server") {
-		state = findServer(_confile, "server");
-	} else {
-		throw ft::runtime_error("No Main key-word... \"SERVER\"");
+	iterator start = _confile.begin();
+
+	while (start != _confile.end()){
+		start = std::find(_confile.begin(), _confile.end(), "server");
+		if (*start != "server" && _server_count == 0) {
+			throw std::runtime_error("No one Server");
+			break;
+		}
+		else if (start != _confile.end()){
+			iterator it = _confile.begin();
+			it = isSpace(it);
+			_confile.erase(start);
+			state = findServer(_confile, ++start);
+			_server_count++;
+		}
 	}
 	return state;
 }
@@ -72,31 +80,45 @@ bool ft::ConfigParser::startParse(void)
 bool ft::ConfigParser::initServer(std::list<std::string> *tmp)
 {
 	bool state = false;
-	ServerInit *newServer = new ServerInit();
+	ServerInit *newServer = new ServerInit(_server_count);
 	_server_list.push_back(newServer);
 	newServer->setId(_server_count);
-	_server_count++;
 	state = newServer->parseInServer(*tmp);
 	return state;
 }
 
-bool ft::ConfigParser::findServer(std::list<std::string> &_list, std::string _str)
+bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start)
 {
 	bool state = false;
-	std::list<std::string> *tmp = ft::findAndCut(_list,_str);
+
+	std::list<std::string> *tmp = new std::list<std::string>;
+	iterator end = std::find(start, _list.end(), "server");
+	if (*end != "server") {
+		reverse_iterator r_end = std::find(_list.rbegin(), _list.rend(), "}");
+		++r_end;
+		r_end = std::find(_list.rbegin(), _list.rend(), "}");
+		end = r_end.base();
+	}
+	tmp->splice(tmp->begin(), _list, start, end);
+	state = initServer(tmp);
 	iterator count = tmp->begin();
 	reverse_iterator recount = tmp->rbegin();
 	count = isSpace(count);
 	recount = isSpace(recount);
 	if (*count != "{")
-		throw ft::runtime_error("No Open Bracket ...");
+		throw std::runtime_error("No Open Bracket after SERVER key word...");
 	if (*recount != "}")
-		throw ft::runtime_error("No Close Bracket ...");
-	for (; count != tmp->end(); ++count){
-		std::cout<<*count;
-	}
-	std::cout<<"\n";
-	state = initServer(tmp);
+		throw std::runtime_error("No Close Bracket ...");
 	delete tmp;
 	return state;
+}
+
+unsigned int ft::ConfigParser::getServerCount() const
+{
+	return _server_count;
+}
+
+const std::list<ft::ServerInit *> &ft::ConfigParser::getServerList() const
+{
+	return _server_list;
 }
