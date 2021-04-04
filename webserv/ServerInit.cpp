@@ -143,7 +143,7 @@ bool ft::ServerInit::findLocations(std::list<std::string> *tmp)
 			tmp->erase(start);
 			iterator end = std::find(++start, tmp->end(), "location");
 			if (*end != "location") {
-				end = std::find(++start, tmp->end(), "}");
+				end = std::find(start, tmp->end(), "}");
 				++end;
 			}
 			std::list<std::string> *location = new std::list<std::string>;
