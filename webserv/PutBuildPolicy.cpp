@@ -22,6 +22,7 @@ namespace ft
 	IResponse		*PutBuildPolicy::buildResponse(IRequest *request)
 	{
 		(void) request;
+
 		IHeader *head = checkCommingURI(request);
 		if (head == nullptr)
 			return _e_pager.getErrorPage(404);

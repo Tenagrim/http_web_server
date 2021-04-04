@@ -20,8 +20,7 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-		_fmngr.setRoot("/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"); // HARDCODED SERVER ROOT
-		//_fmngr->setRoot("resources/sites/trump");   // HARDCODED SERVER ROOT
+		ApplyConfig(getConfig());
 		IResponse *res = 0;
 		#ifdef DEBUG
 			std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
@@ -43,5 +42,12 @@ namespace ft
 			std::cout << "FILE NOT EXISTS\n";
 		#endif
 		return (_e_pager.getErrorPage(404));
+	}
+
+	void GetBuildPolicy::ApplyConfig(ServerInit *server)
+	{
+		if (server == NULL)
+			throw ft::runtime_error("GetBuildPolicy::ApplyConfig - no incoming server config");
+		_fmngr.setRoot(server->getRoot());
 	}
 }

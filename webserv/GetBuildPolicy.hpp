@@ -12,6 +12,8 @@ namespace ft
 		virtual ~GetBuildPolicy();
 		GetBuildPolicy	&operator=(const GetBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
+
+		void ApplyConfig(ServerInit *server);
 	};
 
 } // namespace ft
