@@ -90,6 +90,8 @@ namespace ft
 		void			setStates(req_r_states states);
 		BodyReader		*getBReader() const;
 		void			setBReader(BodyReader *bReader);
+		void updateEventTime();
+		unsigned long getUsecsFromLastEvent();
 
 	private:
 		int					_id;
@@ -107,6 +109,7 @@ namespace ft
 		Client();
 		Client(const Client &ref);
 		int				&getflags(client_flags type);
+
 	};
 
 

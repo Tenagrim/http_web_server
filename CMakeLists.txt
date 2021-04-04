@@ -106,5 +106,6 @@ add_executable(
         ./webserv/utils/strToLower.cpp
         ./webserv/utils/fdToString.cpp
         ./webserv/utils/ft_strcmp.cpp
+        ./webserv/utils/get_time_udiff.cpp
 )
 
