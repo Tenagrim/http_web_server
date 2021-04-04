@@ -55,7 +55,7 @@ add_executable(
         ./webserv/interfaces/ITimeMachine.hpp
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
-        ./webserv/main.cpp
+#        ./webserv/main.cpp
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
         ./webserv/PostBuildPolicy.hpp
@@ -82,7 +82,7 @@ add_executable(
         ./webserv/TokenPool.cpp
         ./webserv/TokenPool.hpp
 #        ./webserv/trash/reader.cpp
-#        ./webserv/trash/unitTester.cpp
+        ./webserv/trash/testerReqReceiver.cpp
         ./webserv/utils/ft_memcpy.cpp
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
@@ -93,5 +93,9 @@ add_executable(
         ./webserv/utils/Utils.cpp
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
-      webserv/BodyReader.cpp webserv/BodyReader.hpp
-        webserv/utils/isNumber.cpp webserv/HeaderMaker.cpp webserv/HeaderMaker.hpp webserv/utils/strToLower.cpp)
+        ./webserv/BodyReader.cpp webserv/BodyReader.hpp
+        ./webserv/utils/isNumber.cpp
+        ./webserv/HeaderMaker.cpp
+        ./webserv/HeaderMaker.hpp
+        ./webserv/utils/strToLower.cpp
+)

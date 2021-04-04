@@ -213,7 +213,7 @@ namespace ft {
 				HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_readed:
-				HeaderMaker::validateHeader(client->getLastResponse()->getHeader());
+				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
 //		TODO where is read body?
 //			case Client::s_header_readed: readBody(client, buff); break;

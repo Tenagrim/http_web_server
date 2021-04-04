@@ -38,7 +38,6 @@ namespace ft {
 				client->setFlag(Client::read_flags, Client::r_end);
 			}
 			client->setStates(Client::s_header_readed);
-//			TODO body isn't read, but flag r_end has set
 			client->setFlag(Client::read_flags, Client::r_end);
 		}
 		else
@@ -156,8 +155,8 @@ namespace ft {
 
 			if (header->isFieldInHeader(h_content_length)) {
 				if (isNumber(header->getHeader(h_content_length))) {
-					if (strtol(header->getHeader(h_content_length).c_str(),
-							   NULL, 10) < 0) {
+					if (strtol(header->getHeader(h_content_length).c_str(), NULL, 10) < 0
+						|| errno == ERANGE) {
 						header->makeInvalid();
 						return;
 					}
