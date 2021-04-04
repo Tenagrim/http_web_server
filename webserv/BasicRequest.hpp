@@ -11,6 +11,7 @@ namespace ft
 		BasicRequest(const BasicRequest &ref);
 		IHeader	*_header;
 		IBody	*_body;
+		int 	_port;
 	public:
 		BasicRequest();
 		IHeader					*getHeader(void);
@@ -21,6 +22,9 @@ namespace ft
 		void setHeader(IHeader *header);
 		BasicRequest(IHeader *head, IBody *body);
 		BasicRequest &operator=(const BasicRequest &ref);
+
+		int 					getPort();
+		void 					setPort(int port);
 	};
 
 } // namespace ft

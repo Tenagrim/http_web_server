@@ -60,5 +60,13 @@ namespace ft
 		_header = header;
 	}
 
+	int BasicRequest::getPort() {
+		return _port;
+	}
+
+	void BasicRequest::setPort(int port) {
+		_port = port;
+	}
+
 
 } // namespace ft
