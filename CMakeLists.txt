@@ -98,5 +98,7 @@ add_executable(
         ./webserv/utils/Utils.cpp
         ./webserv/Utils.hpp
         ./webserv/webserv.hpp
-      webserv/BodyReader.cpp webserv/BodyReader.hpp
-        webserv/body_reader_test.cpp)
+        webserv/BodyReader.cpp
+        webserv/BodyReader.hpp
+        webserv/body_reader_test.cpp
+        webserv/utils/ft_strcmp.cpp webserv/utils/fdToString.cpp)

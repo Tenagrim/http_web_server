@@ -7,42 +7,53 @@
 ft::BodyReader::BodyReader()
 {/* Illegal */}
 
+
+unsigned int ft::BodyReader::_max_id;
+
 ft::BodyReader::BodyReader(int input_fd, int content_length, std::string rem) :
-		_remainder_of_header(rem),
+		_remainder_of_header(rem), _last_readed(), _block_size_i(content_length),
 		_read_buff(),
 		_output_fd(-1),
-		_pipe(),
 		_ended(false),
-		_readed_size(0),
-		_input_fd(input_fd),
-		_content_length(content_length)
+		_written_size(0),
+		_input_fd(input_fd), _offset(0)
 {
+
 	if (!rem.empty())
 		_state = s_remains;
 	else
 		_state = s_len;
-	openPipe();
+	//_filename = ft::to_string(static_cast<int>(_max_id));
+	openFile();
+	_max_id++;
 }
+
 ft::BodyReader::~BodyReader()
 {}
 
-
 void
-ft::BodyReader::openPipe() {
-	int ret = pipe(_pipe);
+ft::BodyReader::openFile() {
+	char 		dir[MAX_PATH_LEN];
+	char 		*_ret = 0;
+	int ret;
+	_ret = getcwd(dir, MAX_PATH_LEN);
+	if (!_ret)
+		throw ft::runtime_error("Too long path to executable");
+	_filename = std::string(dir) + "/" + std::string(TMP_DIR) + "/" + ft::to_string(static_cast<int>(_max_id));
+	ret = open(_filename.c_str(), O_TRUNC | O_WRONLY | O_CREAT, 0666);
 		if( ret == -1)
-			throw ft::runtime_error("CANT OPEN PIPE: " +std::string(strerror(errno)));
-		_output_fd = _pipe[0];
-}
-
-void ft::BodyReader::setRemainderOfHeader(char *remainderOfHeader) {
-	_remainder_of_header = remainderOfHeader;
+			throw ft::runtime_error("BODY READER: CANT OPEN FILE: " +std::string(strerror(errno)));
+		_output_fd = ret;
 }
 
 void ft::BodyReader::write_block(const char *buff, int len, int offset) {
-	int ret = write(_pipe[1], buff + offset, len - offset);
-	if (ret != len - offset)
+	int ret = write(_output_fd, buff + offset + _offset, len - offset);
+	if (ret != -1)
+		_written_size += ret;
+	if (ret != len - offset - _offset)
 		throw ft::runtime_error("Error in writing block:" + std::string(strerror(errno)));
+	if (_offset == 1)
+		_offset = 0;
 }
 
 
@@ -53,41 +64,39 @@ int ft::BodyReader::get_resultFd() const {
 }
 
 unsigned int ft::BodyReader::getSize() const {
-	return  _readed_size;
+	return  _written_size;
 }
 
-void ft::BodyReader::endReading() {
+int ft::BodyReader::endReading(int ret) {
+	int _ret;
 	if (!_ended)
 	{
 		_ended = true;
-		close(_pipe[1]);
-		_output_fd = _pipe[0];
+		close(_output_fd);
 	}
+	return ret;
 }
 
 int ft::BodyReader::readBody() {
 	int ret;
 	if (_state == s_remains) {
 		ret = readRem();
-		if (ret != 1) {
-			endReading();
-			return (ret);
-		}
+		if (ret != 1)
+			return endReading(ret);
+		else
+			return 1;
 	}
-
 	switch(_state) {
-		case s_len: return (readChunkLen()); break;
+		case s_p_block: return(readPBlock()); break;
+		case s_r_ending: return(readEnding()); break;
+		case s_len: return (readChunkLen(1)); break;
+		case s_a1_len: return (readChunkLen(2)); break;
+		case s_a_len: return (readChunkLen(3)); break;
 		case s_block: return(readChunk()); break;
 		case s_end: return 0; break;
 	}
 	return 0;
 }
-
-int ft::BodyReader::getBlockLen()
-{
-
-}
-
 
 int ft::BodyReader::readRem()
 {
@@ -100,32 +109,39 @@ int ft::BodyReader::readRem()
 		if (pos == std::string::npos)
 		{                // В остатке нет длины блока
 			_state = s_len;
-
-			read(1, &_last_readed, _input_fd);
-			if (_last_readed == '\r')
-				_state = s_block;
-			else
-				_block_size += _last_readed;
+			pos = _remainder_of_header.find('\r');
+			if (pos != std::string::npos) {
+				_offset = 0;
+				_block_size = _remainder_of_header.substr(0, pos);
+				if (_block_size == "0")
+					_state = s_r_ending;
+				else {
+					_state = s_block;
+					_block_size_i = strtol(_block_size.c_str(), NULL, 16);
+					_block_size.clear();
+				}
+				return 1;
+			}
 			return 1;
 		}
 		else
 		{
 			_block_size = _remainder_of_header.substr(0, pos);
 			if (_block_size == "0")
-				return 0;
-			len = std::stoi(_block_size); //         !!!!!!!!!!!  ATTENTION !!!!!!!!!
-			_remainder_of_header.erase(0, pos + 2);
-			if (len > _remainder_of_header.size())
 			{
+				//_state = s_r_ending;
+				return (0);
+			}
+			_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16)); //         !!!!!!!!!!!  ATTENTION !!!!!!!!!
+			_remainder_of_header.erase(0, pos + 2);
+			if (_block_size_i >= _remainder_of_header.size())
+			{
+				if (_block_size_i == _remainder_of_header.size())
+					_state = s_a_len;
+				else
+					_state = s_p_block;
 				write_block(_remainder_of_header.c_str(), _remainder_of_header.size());
-				try {
-					readWriteBlock( len - _remainder_of_header.size() + 2);
-				}
-				catch (ft::runtime_error)
-				{
-					return -1;
-				}
-				_state = s_len;
+
 				_block_size.clear();
 				return 1;
 			}
@@ -135,31 +151,51 @@ int ft::BodyReader::readRem()
 
 				//if (pos == std::string::npos)
 				//	throw ft::runtime_error("AAAAAAAAAAAAAAAAAAAA");
+				_state = s_block;
 				try {
-					write_block(_remainder_of_header.c_str(), len);
+					write_block(_remainder_of_header.c_str(), _block_size_i);
 				}
 				catch (ft::runtime_error){return  -1;}
-				_state = s_len;
-				_remainder_of_header.erase(0, len + 2);
+				if (_remainder_of_header.size() == _block_size_i + 1)
+				{
+					_state = s_a1_len;
+					_block_size.clear();
+					return 1;
+				}
+				_remainder_of_header.erase(0, _block_size_i + 2);
 			}
 		}
 	}
+	if (_state == s_len)
+	{
+		_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16));
+		_offset = 1;
+		_state = s_block;
+	}
+	else if (_state == s_block)
+	{
+		_block_size.clear();
+		_state = s_len;
+	}
+	return 1;
 }
 
-int ft::BodyReader::readChunkLen()
+int ft::BodyReader::readChunkLen(int n)
 {
-	read(_input_fd, &_last_readed, 1);
+	char buff[3];
+	read(_input_fd, buff, n);
+	_last_readed = buff[n -1];
 	if (_last_readed == '\r')
 	{
 		_state = s_block;
 		if (_block_size == "0")
 		{
-			endReading();
-			return (0);
+			_state = s_r_ending;
+			return (1);
 		}
-		if (_block_size == "")
+		if (_block_size.empty())
 			return -1;
-		_block_size_i = std::stoi(_block_size);  // !!!!!!!!!!!! ATTENTION !!!!!!!!!!!!!!!!!!!
+		_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16));  // !!!!!!!!!!!! ATTENTION !!!!!!!!!!!!!!!!!!!
 		_block_size.clear();
 		return 1;
 	}else
@@ -183,24 +219,59 @@ int ft::BodyReader::readChunk()
 int ft::BodyReader::readWriteBlock(int size, int offset) {
 	int ret;
 
-	_read_buff = (char*)malloc(size);
+	_read_buff = (char*)malloc(size + _offset);
 	if (!_read_buff)
 		throw ft::runtime_error("Malloc failed");
-	ret =  read(_input_fd, _read_buff, size);
+	ret =  read(_input_fd, _read_buff, size + _offset);
 	if (ret != size) {
 		free(_read_buff);
-		return -1;
+		return endReading(-1);
 	}
-	if (offset == 1 && _read_buff[0] != '\n')
+	if (offset == 1 && _read_buff[0 + _offset] != '\n')
 	{
 		free(_read_buff);
-		return (-1);
+		return endReading(-1);
 	}
-	if (_read_buff[size -1] == '\n' && _read_buff[size -2] == '\r')
+	if (_read_buff[size -1 + _offset] == '\n' && _read_buff[size -2 + _offset] == '\r')
 		size -= 2;
+	else
+		return endReading(-1);
 	write_block(_read_buff, size, offset);
 	free(_read_buff);
 	_read_buff = nullptr;
 	return 1;
+}
+
+int ft::BodyReader::readPBlock() {
+	int ret;
+	_state = s_len;
+	ret = readWriteBlock( _block_size_i - _remainder_of_header.size() + 2);
+	_remainder_of_header.clear();
+	return ret;
+}
+
+int ft::BodyReader::readEnding() {
+	char buff[4];
+	int ret;
+	ret = read(_input_fd, buff, 3);
+	buff[3] =0;
+	if (ret == -1 || ft::ft_strcmp(buff,"\n\r\n"))
+		ret = -1;
+	else ret = 0;
+	return endReading(ret);
+}
+
+const std::string &ft::BodyReader::getFilename() const {
+	return _filename;
+}
+
+void ft::BodyReader::reset() {
+	_max_id = 0;
+}
+
+ft::IBody *ft::BodyReader::getBody() {
+	if (!_ended)
+		throw ft::runtime_error("Body was not fully readed\n");
+	return new FileBody(_filename);
 }
 

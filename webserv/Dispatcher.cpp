@@ -156,9 +156,10 @@ namespace ft
 			_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
 		else
 			_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
-
-		if (!_events)
+		if (!_events) {
 			sleep();
+			BodyReader::reset();
+		}
 		else
 			wakeUp();
 			#ifdef DEBUG

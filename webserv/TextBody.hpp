@@ -17,7 +17,7 @@ namespace ft
 
 		int					getFd(void);
 		int					getInputFd(void);
-		std::string			to_string(void) const;
+		std::string			to_string(void);
 		unsigned int		size(void) const;
 		BodyType			getType(void);
 	

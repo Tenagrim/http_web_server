@@ -9,6 +9,9 @@
 
 #define UPDATE_DELAY 1000
 
+#define MAX_PATH_LEN	512
+#define TMP_DIR			"trash"
+
 #define DEFAULT_PORT			83
 #define DEFAULT_HOST			"localhost"
 #define DEFAULT_CONN_QUEUE		10

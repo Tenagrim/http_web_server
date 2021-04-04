@@ -4,28 +4,27 @@
 #include <fstream>
 #include <sstream>
 #include <runtime_error.hpp>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <webserv.hpp>
 namespace ft
 {
 	class FileBody : public ABody
 	{
 	private:
 		unsigned int	_size;
-		int				_fd;
-		int				_inp_fd;
-		std::string		_path;
+		std::string		_filename;
 
 		FileBody();
 		FileBody(const FileBody &ref);
 		std::string		readFile() const;
 	public:
-		FileBody(unsigned int size, int opened_fd);
-		FileBody(unsigned int size, int opened_fd, std::string const &path);
+		FileBody(std::string const &path);
 		~FileBody();
 		FileBody &operator=(const FileBody &ref);
 
 		int					getFd();
-		int					getInputFd();
-		std::string			to_string() const;
+		std::string			to_string();
 		unsigned int		size() const;
 		BodyType			getType();
 	};

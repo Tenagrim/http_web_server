@@ -7,60 +7,66 @@
 
 #include <IHeader.hpp>
 #include <unistd.h>
+#include <defines.hpp>
 #include <runtime_error.hpp>
 #include <errno.h>
+#include <fcntl.h>
+#include <FileBody.hpp>
 #define  LEN_CHUNKED -1
 
 #define MIN_NUM_SIZE 4
 
 namespace ft {
 	class BodyReader {
-
-
 		enum r_state
 		{
 			s_remains,
 			s_len,
 			s_block,
+			s_p_block,
+			s_r_ending,
+			s_a_len,
+			s_a1_len,
 			s_end
 		};
 
 	private:
+		static unsigned int	_max_id;
+
 		r_state 			_state;
 
 		std::string 		_remainder_of_header;
-
+		std::string 		_filename;
 		std::string 		_block_size;
 		char 				_last_readed;
 		int 				_block_size_i;
-		char 				*_read_buff;
-		int 				_output_fd;
-		int 				_pipe[2];
+		char 				*_read_buff; // may be local
+		int 				_output_fd; // read / write
 		bool 				_ended;
-		int 				_readed_size;
+		int 				_written_size;
 		int 				_input_fd;
-		int 				_content_length;
+		int 				_offset;
+		//int 				_conrent_length;
 
 		int 				readWriteBlock(int size, int offset =0);
-
-		void 				openPipe();
-
+		void 				openFile();
 		int 				readRem();
-		int 				readChunkLen();
+		int 				readChunkLen(int n);
 		int 				readChunk();
+		int 				readPBlock();
+		int 				readEnding();
 
 
 		void 				write_block(const char *buff, int len, int offset = 0 );
-
-		int 				getBlockLen();
-
-		void 				endReading();
-
+		int 				endReading(int ret);
 
 		BodyReader(const BodyReader &ref);
 		BodyReader();
 	public:
-		void setRemainderOfHeader(char *remainderOfHeader);
+
+		static void 		reset();
+		//void setRemainderOfHeader(char *remainderOfHeader);
+		const std::string &getFilename() const;
 
 		// CLIENT fd , ENCODING: LEN_CHUNKED or Content-length
 		BodyReader(int input_fd, int content_length, std::string remainder = "");
@@ -73,8 +79,8 @@ namespace ft {
 		int readBody();
 
 		int get_resultFd() const;
+		IBody				*getBody();
 		unsigned int	getSize() const;
-
 
 	};
 

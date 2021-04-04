@@ -13,7 +13,7 @@ class Server;
 #include <stack>
 #include <RequestReciever.hpp>
 #include <DispatcherEventArgs.hpp>
-
+#include <BodyReader.hpp>
 #include <defines.hpp>
 
 namespace ft

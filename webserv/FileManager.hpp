@@ -31,7 +31,7 @@ namespace ft
 		FileManager();
 		virtual ~FileManager();
 		FileManager(const FileManager &ref);
-		FileManager &operator=(const FileManager &ref);
+		FileManager		&operator=(const FileManager &ref);
 
 		bool			isFileExisting(std::string const &filename);
 		bool			isADirectory(std::string const &filename);
