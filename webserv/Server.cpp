@@ -136,25 +136,25 @@ namespace ft
 			IRequest	*request = args._reciever->getRequest(args._fd);
 			(void)request;
 			#ifdef DEBUG
-				std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
-				std::cout << request->to_string() << "===========================\n";
+			//	std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
+			//	std::cout << request->to_string() << "===========================\n";
 			#endif
 	}
 
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
 	{
+		IResponse *resp = NULL;
+		Client			*client;
+		#ifdef DEBUG
+			std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+		#endif
+		client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
+		if (!client)
+			throw ft::runtime_error("Unknown type of client");
 
-		//RequestReciever	*_reciever = _listener_map[args._fd];
 		if (args._reciever->writeEvent(args._fd))
 		{
-			IResponse *resp = NULL;
-			Client			*client;
-			#ifdef DEBUG
-				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
-			#endif
-			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
-			if (!client)
-				throw ft::runtime_error("Unknown type of client");
+
 //			FIXME normal size check
 			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
@@ -188,6 +188,17 @@ namespace ft
 			#ifdef DEBUG
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
+		}
+		else
+		{
+			if (client->getUsecsFromLastEvent() > CLIENT_TIMEOUT_MICROS) {
+				if (!client->getLastRequest())
+					client->setLastRequest(new BasicRequest());
+				if (!client->getLastRequest()->getHeader())
+					client->getLastRequest()->setHeader(new Header(request));
+				client->getLastRequest()->getHeader()->makeInvalid();
+				client->setFlag(Client::read_flags, Client::r_end);
+			}
 		}
 	}
 

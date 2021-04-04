@@ -21,11 +21,12 @@
 #define DEFAULT_SERVER_HEADER	"pst/1.1.0"
 
 #define FM_RW_BUFF				1024
-
 #define FM_DEFAULT_ROOT			"/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
-#define READ_BODY_ONE_TIME 200000
+#define READ_BODY_ONE_TIME		200000
+
+#define CLIENT_TIMEOUT_MICROS	2000000
 
 
 #ifdef DEBUG // DON T TOUCH THIS !!

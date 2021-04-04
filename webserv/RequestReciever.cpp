@@ -189,7 +189,7 @@ namespace ft {
 	IRequest *RequestReciever::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
-
+		client->updateEventTime();
 		if (client->getStates() == Client::s_not_begin)
 			client->setLastRequest(new BasicRequest());
 
