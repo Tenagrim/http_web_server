@@ -156,4 +156,14 @@ namespace ft
 	{
 		return (_e_pager.getErrorPage(code));
 	}
+
+	ServerInit *ABuildPolicy::getConfig() const
+	{
+		return config;
+	}
+
+	void ABuildPolicy::setConfig(ServerInit *config)
+	{
+		ABuildPolicy::config = config;
+	}
 } // namespace ft

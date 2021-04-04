@@ -46,11 +46,9 @@ namespace ft
 //			TODO: Make config serch
 			ServerInit *serverConfig = findCorrectConfig(request);
 			ABuildPolicy *policy;
-//			return (_policies[method]->buildResponse(request));
 			policy = _policies[method];
-//			Set police -> set Config;
-
-			return policy->buildResponse(request);
+			policy->setConfig(serverConfig);
+			return (_policies[method]->buildResponse(request));
 		}
 #ifdef DEBUG_REQ_PRINT
 		if (request->getHeader()->isValid())

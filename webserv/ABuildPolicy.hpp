@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <FileBody.hpp>
 #include <ErrorPager.hpp>
+#include <ServerInit.hpp>
 
 #include <defines.hpp>
 #include <list>
@@ -32,6 +33,7 @@ namespace ft
 		FileManager		_fmngr;
 		ErrorPager		_e_pager;
 		ITimeMachine	*_t_machine;
+		ServerInit		*config;
 
 		int findIndexFile(std::list<std::string> &priority);
 
@@ -55,6 +57,9 @@ namespace ft
 		ABuildPolicy &operator=(const ABuildPolicy &ref);
 		virtual IResponse *buildResponse(IRequest *request) = 0;
 		IResponse *buildErrorPage(int code);
+
+		ServerInit *getConfig() const;
+		void setConfig(ServerInit *config);
 	};
 
 } // namespace ft
