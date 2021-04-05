@@ -31,20 +31,25 @@ namespace ft
 
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
+		int ret;
+		client->updateEventTime();
 		if (!client->headerSent())
 		{
 			sendHeader(resp->getHeader(), client);
+			if (resp->getBody())
+				return 1;
+			else return 0;
 		}
 		else if (!client->bodySent())
 		{
 			#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY FOR URI: [" << client->getLastRequest()->getHeader()->getURI() << "]\n";
 			#endif
-			sendBody(resp->getBody(), client);
+			ret = sendBody(resp->getBody(), client);
 		}
 		else
 			throw ft::runtime_error("All is already sent, no need to call Sender");
-		return (1);
+		return (ret);
 	}
 	
 	void			ResponseSender::sendHeader(IHeader *header, IClient *client)
@@ -79,32 +84,34 @@ namespace ft
 		#ifdef DEBUG
 		std::cout << "SENDER: SEND FILE BODY\n";
 		#endif
-		char	*buff = new char [READ_BODY_ONE_TIME];
-		int ret;
-		if (!buff)
-			throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
-		#ifdef DEBUG
+		if (body->getWritten() < body->size()) {
+			char *buff = new char[READ_BODY_ONE_TIME];
+			int ret;
+			if (!buff)
+				throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
+#ifdef DEBUG
 			std::cout << "SENDER: BEGIN READING\n";
-		#endif
-		ret = read(body->getFd(), buff, READ_BODY_ONE_TIME);
-		#ifdef DEBUG
+#endif
+			ret = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
+#ifdef DEBUG
 			std::cout << "SENDER: READING ENDED. READED [" << ret << "]\nSENDER: BEGIN WRITING\n";
-		#endif
-		ret = send(client->getSock(), buff, ret, 0);
-		#ifdef DEBUG
+#endif
+			ret = send(client->getSock(), buff, ret, 0);
+#ifdef DEBUG
 			std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "]\nSENDER: FILE BODY SENT\n";
-		#endif
-		body->setWritten(ret);
-		delete [] buff;
+#endif
+			body->setWritten(ret);
+			delete[] buff;
+		}
 	}
 
 
-	void			ResponseSender::sendBody(IBody *body, IClient *client)
+	int ResponseSender::sendBody(IBody *body, IClient *client)
 	{
 //		TODO:Some something when no BODY;
 		if (!body) {
 			client->sendBody();
-			return;
+			return 0;
 		}
 //			throw ft::runtime_error("RESPONSE SENDER: NULL BODY GOT");
 		if (dynamic_cast<TextBody*>(body))
@@ -116,7 +123,11 @@ namespace ft
 		#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif
-		if (body->size() == body->getWritten())
+
+		if (body->size() == body->getWritten()) {
 			client->sendBody();
+			return 0;
+		}
+		return 1;
 	}
 }

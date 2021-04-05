@@ -47,6 +47,7 @@ namespace ft
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
 
-	unsigned long	get_time_udiff(struct timeval *t1, struct timeval *t2);
+	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
+	bool				methodNeedsBody(methods_enum method);
 
 }

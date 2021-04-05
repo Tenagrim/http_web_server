@@ -176,14 +176,28 @@ namespace ft
 			}
 			else
 				resp = client->getLastResponse();
-			_resp_sender->sendResponce(resp, client);
+
+			int ret;
+			ret = _resp_sender->sendResponce(resp, client);
+			if (ret == 0)
+				client->reset();
+
+			//if ()
+
+			//if (client->requestReceived() && !client->needsResponce())
+
+			//if (ret == 0)
+
+			if (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+				resp->getHeader()->getHeader(h_connection) == "close")
+				_dispatcher->closeSock(client->getSock());
+
 			#ifdef DEBUG
 				std::cout << "RESPONSE SENT: ================\n";	
 				std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
 				std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
 			#endif
-			if (client->requestReceived() && !client->needsResponce())
-				_dispatcher->closeSock(client->getSock());
+
 			#ifdef DEBUG
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif

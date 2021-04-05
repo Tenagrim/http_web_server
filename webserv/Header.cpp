@@ -8,7 +8,7 @@ namespace ft
 	Header::Header() : _http_v(DEFAULT_HTTPV)
 	{}
 
-	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type), _isValid(true)
+	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type), _isValid(true), _method(m_undefined)
 	{}
 
 	Header::~Header()

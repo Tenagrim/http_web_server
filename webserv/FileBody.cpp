@@ -2,15 +2,28 @@
 
 namespace ft
 {
-	FileBody::FileBody() : _size(0)
+	FileBody::FileBody() : _size(0), _opened_fd(-1)
 	{/* Illegal */}
 
 	FileBody::~FileBody()
-	{}
+	{
+		if (_opened_fd != -1)
+			close(_opened_fd);
+	}
 
-	FileBody::FileBody(const FileBody &ref) : _size(0)
+	FileBody::FileBody(const FileBody &ref) : _size(0), _opened_fd(-1)
 	{/* Illegal */ (void)ref; }
 
+	FileBody::FileBody(const std::string &path) : _filename(path), _opened_fd(-1)
+	{
+		int ret;
+
+		struct stat statbuf = {};
+		ret = stat(_filename.c_str(), &statbuf);
+		if (ret == -1)
+			throw ft::runtime_error("Stat failed: filename:" + _filename);
+		_size = statbuf.st_size;
+	}
 	FileBody &FileBody::operator=(const FileBody &ref)
 	{
 		(void)ref;
@@ -59,14 +72,14 @@ namespace ft
 		throw ft::runtime_error("Not implemented");
 	}
 
-	FileBody::FileBody(const std::string &path) : _filename(path)
-	{
-		int ret;
 
-		struct stat statbuf = {};
-		ret = stat(_filename.c_str(), &statbuf);
-		if (ret == -1)
-			throw ft::runtime_error("Stat failed: filename:" + _filename);
-		_size = statbuf.st_size;
+	int FileBody::getOpenedFd() {
+		if (_opened_fd == -1)
+		{
+			_opened_fd = open(_filename.c_str(), O_RDONLY, 0666);
+			if (_opened_fd == -1)
+				throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
+		}
+		return _opened_fd;
 	}
 }

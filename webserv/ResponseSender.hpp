@@ -19,7 +19,7 @@ namespace ft
 		Dispatcher		*_dispattcher;
 		ResponseSender();
 		void			sendHeader(IHeader *header, IClient *client);
-		void			sendBody(IBody *body, IClient *client);
+		int sendBody(IBody *body, IClient *client);
 		
 		void			sendTextBody(TextBody *body, IClient *client);
 		void			sendFileBody(FileBody *body, IClient *client);

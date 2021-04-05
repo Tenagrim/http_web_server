@@ -90,10 +90,13 @@ namespace ft
 		void			setStates(req_r_states states);
 		BodyReader		*getBReader() const;
 		void			setBReader(BodyReader *bReader);
-		void updateEventTime();
-		unsigned long getUsecsFromLastEvent();
+		void			updateEventTime();
+		unsigned long	getUsecsFromLastEvent();
+
+		void 			reset();
 
 	private:
+		static unsigned int	_max_id;
 		int					_id;
 		int					_sock;
 		int					_state_flags;
@@ -101,13 +104,16 @@ namespace ft
 		int					_write_flags;
 		struct timeval		_last_event;
 		IRequest			*_last_request;
-		IResponse			*_response;
+		IResponse			*_last_response;
 		std::string 		_read_buff;
 		req_r_states		_states;
 		BodyReader			*_b_reader;
 
 		Client();
 		Client(const Client &ref);
+		void 			clearResponse();
+		void 			clearRequest();
+
 		int				&getflags(client_flags type);
 
 	};

@@ -6,6 +6,8 @@
 
 namespace ft
 {
+	unsigned int Client::_max_id = 0;
+
 	#pragma region Copilen
 
 	Client::Client(int id,int sock) :
@@ -18,9 +20,10 @@ namespace ft
 		_read_flags = 0;
 		_write_flags = 0;
 		_last_request = 0;
-		_response = 0;
+		_last_response = 0;
 		_states = s_not_begin;
 		updateEventTime();
+		_id = _max_id++;
 	}
 
 	Client::~Client()
@@ -34,8 +37,8 @@ namespace ft
 		#endif
 		if (_last_request)
 			delete _last_request;
-		if (_response)
-			delete _response;
+		if (_last_response)
+			delete _last_response;
 	}
 
 	Client::Client(const Client &ref)
@@ -116,14 +119,14 @@ namespace ft
 
 	void			Client::setLastResponse(IResponse *response)
 	{
-		if (_response)
+		if (_last_response)
 			delete response;
-		_response = response;
+		_last_response = response;
 	}
 
 	IResponse		*Client::getLastResponse()
 	{
-		return _response;
+		return _last_response;
 	}
 	bool			Client::needsResponce()
 	{
@@ -198,5 +201,33 @@ namespace ft
 		struct timeval tv;
 		gettimeofday(&tv, NULL);
 		return (ft::get_time_udiff(&_last_event, &tv));
+	}
+
+	void Client::clearRequest() {
+		if (_last_request){
+			delete _last_request;
+			_last_request = nullptr;
+		}
+	}
+
+	void Client::clearResponse() {
+		if (_last_response) {
+			delete _last_response;
+			_last_response = nullptr;
+		}
+	}
+
+	void Client::reset() {
+		clearRequest();
+		clearResponse();
+		_state_flags = 0;
+		_read_flags = 0;
+		_write_flags = 0;
+		_states = s_not_begin;
+		//if (_b_reader)
+		//	_b_reader->reset();
+		_read_buff.clear();
+		updateEventTime();
+
 	}
 }

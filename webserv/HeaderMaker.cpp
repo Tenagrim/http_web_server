@@ -12,9 +12,8 @@ namespace ft {
 		int end_pos;
 		int ending;
 		std::string bodyPart;
-
 		if (client->getStates() == Client::s_start_header_reading)
-			client->getLastRequest()->setHeader(new Header(request));
+				client->getLastRequest()->setHeader(new Header(request));
 
 		client->getReadBuff().append(buff);
 
@@ -116,11 +115,15 @@ namespace ft {
 		methods_enum a;
 
 		method = line.substr(0, line.find(' '));
+		try {
 		do {
 			a = static_cast<methods_enum>(i);
 			i++;
+		} while (method != getMethodStr(a));
 		}
-		while (method != getMethodStr(a));
+		catch (ft::runtime_error) {
+			header->makeInvalid();
+		}
 		header->setMethod(a);
 	}
 

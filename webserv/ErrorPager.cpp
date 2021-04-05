@@ -62,6 +62,7 @@ namespace ft
 //		head->setHeader(h_conn, "close");
 		head->setHeader(h_content_type, "text/html");
 		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
+		head->setHeader(h_connection, "close");
 		return (new BasicResponse(head, body));
 	}
 	

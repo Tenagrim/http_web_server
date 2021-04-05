@@ -28,6 +28,7 @@ namespace ft
 
 		virtual std::string const		&getContentType() const = 0;
 		virtual void					setContentType(std::string const &type) = 0;
+		virtual int						getOpenedFd() = 0;
 
 		virtual ~IBody(){}
 	};
