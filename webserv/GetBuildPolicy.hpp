@@ -13,7 +13,11 @@ namespace ft
 		GetBuildPolicy	&operator=(const GetBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
 
-		void ApplyConfig(ServerInit *server);
+		void applyConfig(ServerInit *server);
+
+		void collectResponse(IRequest *request, ServerInit *server);
+
+		LocationInit *getCorrectLocation(IRequest *request, ServerInit *server);
 	};
 
 } // namespace ft

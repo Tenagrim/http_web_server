@@ -20,7 +20,8 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-		ApplyConfig(getConfig());
+		applyConfig(getConfig());
+		collectResponse(request, getConfig());
 		IResponse *res = 0;
 		#ifdef DEBUG
 			std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
@@ -44,10 +45,32 @@ namespace ft
 		return (_e_pager.getErrorPage(404));
 	}
 
-	void GetBuildPolicy::ApplyConfig(ServerInit *server)
+	void GetBuildPolicy::collectResponse(IRequest *request, ServerInit *server)
+	{
+		LocationInit* location = getCorrectLocation(request, server);
+		if (!location) {
+
+		}
+	}
+
+	void GetBuildPolicy::applyConfig(ServerInit *server)
 	{
 		if (server == NULL)
 			throw ft::runtime_error("GetBuildPolicy::ApplyConfig - no incoming server config");
 		_fmngr.setRoot(server->getRoot());
+	}
+
+	LocationInit *GetBuildPolicy::getCorrectLocation(IRequest *request, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (int i = 0; i < server->getLocationCount(); i++){
+			if ((*it)->getPath() == request->getHeader()->getURI()) {
+				location = it.operator*();
+				break;
+			}
+		}
+		return location;
 	}
 }
