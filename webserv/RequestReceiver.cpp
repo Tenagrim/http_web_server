@@ -203,6 +203,7 @@ namespace ft {
 		client->setFlag(Client::read_flags, Client::r_begin);
 
 		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
+		//if (buff[0] == 0)
 		buff[n] = 0;
 
 		switch (client->getStates()) {
