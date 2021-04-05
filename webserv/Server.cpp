@@ -133,20 +133,15 @@ namespace ft
 
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
-			IRequest	*request = args._reciever->getRequest(args._fd);
-			(void)request;
+			args._reciever->getRequest(args._fd);
 			#ifdef DEBUG
-				std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
-				std::cout << request->to_string() << "===========================\n";
+			//	std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
+			//	std::cout << request->to_string() << "===========================\n";
 			#endif
 	}
 
 	void			Server::clientEventWrite(Dispatcher_event_args &args)
 	{
-
-		//RequestReceiver	*_reciever = _listener_map[args._fd];
-		if (args._reciever->writeEvent(args._fd))
-		{
 			IResponse *resp = NULL;
 			Client			*client;
 			#ifdef DEBUG
@@ -155,6 +150,10 @@ namespace ft
 			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
 			if (!client)
 				throw ft::runtime_error("Unknown type of client");
+
+		//RequestReciever	*_reciever = _listener_map[args._fd];
+		if (args._reciever->writeEvent(args._fd))
+		{
 //			FIXME normal size check
 			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
 			{
@@ -189,13 +188,28 @@ namespace ft
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
 		}
+		else
+		{
+
+			unsigned  long diff = client->getUsecsFromLastEvent();
+			std::cout << "CLIENT DIFF: " << diff <<"\n";
+			if ( diff > CLIENT_TIMEOUT_MICROS) {
+				if (!client->getLastRequest())
+					client->setLastRequest(new BasicRequest());
+				if (!client->getLastRequest()->getHeader())
+					client->getLastRequest()->setHeader(new Header(request));
+				client->getLastRequest()->getHeader()->makeInvalid();
+				client->setFlag(Client::read_flags, Client::r_end);
+			}
+
+		}
 	}
 
 	#pragma endregion
 
 	void			Server::start(void)
 	{
-		//RequestReceiver *recv;
+		//RequestReciever *recv;
 		setFlag(is_running);
 
 		std::cout << "SERVER: IS STARITING\nLISTENING:\n";

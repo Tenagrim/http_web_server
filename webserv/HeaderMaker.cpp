@@ -4,12 +4,15 @@
 
 #include <HeaderMaker.hpp>
 #include <Header.hpp>
+#include <BodyReader.hpp>
 
 namespace ft {
 
-	void HeaderMaker::readHeader(Client *client, char *buff) {
+	std::string HeaderMaker::readHeader(Client *client, char *buff) {
 		int end_pos;
 		int ending;
+		std::string bodyPart;
+
 		if (client->getStates() == Client::s_start_header_reading)
 			client->getLastRequest()->setHeader(new Header(request));
 
@@ -25,8 +28,7 @@ namespace ft {
 		if (end_pos != std::string::npos)
 		{
 			if (client->getReadBuff().size() > end_pos + ending) {
-//				TODO bodyPart remain for bodyReader
-				std::string bodyPart = client->getReadBuff().substr(end_pos + ending);
+				bodyPart = client->getReadBuff().substr(end_pos + ending);
 			}
 			client->resizeReadBuff(end_pos + ending / 2);
 
@@ -42,6 +44,7 @@ namespace ft {
 		}
 		else
 			client->setStates(Client::s_header_reading);
+		return bodyPart;
 	}
 
 	void HeaderMaker::headerBuilder(const std::string &text, IHeader *header,
@@ -177,6 +180,17 @@ namespace ft {
 
 	bool HeaderMaker::methodNeedsBody(methods_enum method) {
 		return (method == m_post || method == m_put);
+	}
+
+	int HeaderMaker::getContLen(const IHeader &header) {
+		long int contLen;
+
+		if (header.isFieldInHeader(h_content_length)) {
+			std::string s = header.getHeader(h_content_length);
+			contLen = strtol(s.c_str(), nullptr, 10);
+		} else
+			contLen = LEN_CHUNKED;
+		return contLen;
 	}
 
 }

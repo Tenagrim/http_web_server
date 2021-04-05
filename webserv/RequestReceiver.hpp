@@ -63,8 +63,8 @@ namespace ft
 
 		RequestReceiver 		&operator=(const RequestReceiver &ref);
 
-		IRequest				*getRequest(Client *client);
-		IRequest				*getRequest(int sock);
+		void getRequest(Client *client);
+		void getRequest(int sock);
 
 		int						getId();
 		int						accept_connection();
