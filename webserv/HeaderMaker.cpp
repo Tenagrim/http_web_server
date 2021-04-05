@@ -115,11 +115,15 @@ namespace ft {
 		methods_enum a;
 
 		method = line.substr(0, line.find(' '));
+		try {
 		do {
 			a = static_cast<methods_enum>(i);
 			i++;
+		} while (method != getMethodStr(a));
 		}
-		while (method != getMethodStr(a));
+		catch (ft::runtime_error) {
+			header->makeInvalid();
+		}
 		header->setMethod(a);
 	}
 

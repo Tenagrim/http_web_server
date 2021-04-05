@@ -188,9 +188,9 @@ namespace ft
 
 			//if (ret == 0)
 
-//			if (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
-//				resp->getHeader()->getHeader(h_connection) == "close")
-			//	_dispatcher->closeSock(client->getSock());
+			if (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+				resp->getHeader()->getHeader(h_connection) == "close")
+				_dispatcher->closeSock(client->getSock());
 
 			#ifdef DEBUG
 				std::cout << "RESPONSE SENT: ================\n";	
@@ -206,7 +206,7 @@ namespace ft
 		{
 
 			unsigned  long diff = client->getUsecsFromLastEvent();
-			std::cout << "CLIENT DIFF: " << diff <<"\n";
+			//std::cout << "CLIENT DIFF: " << diff <<"\n";
 			if ( diff > CLIENT_TIMEOUT_MICROS) {
 				//if (!client->getLastRequest())
 				//	client->setLastRequest(new BasicRequest());

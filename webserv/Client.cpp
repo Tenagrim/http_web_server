@@ -224,7 +224,9 @@ namespace ft
 		_read_flags = 0;
 		_write_flags = 0;
 		_states = s_not_begin;
-		_b_reader->reset();
+		//if (_b_reader)
+		//	_b_reader->reset();
+		_read_buff.clear();
 		updateEventTime();
 
 	}
