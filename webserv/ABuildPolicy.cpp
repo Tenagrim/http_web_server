@@ -235,7 +235,8 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);
+		res = new TextResponse(header, body);  // WHAT ??!!!??
+		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
 		return (res);

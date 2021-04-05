@@ -16,13 +16,15 @@ namespace ft
 	class ResponseSender : public IResponseSender
 	{
 	private:
-		Dispatcher		*_dispattcher;
+		Dispatcher			*_dispattcher;
 		ResponseSender();
-		void			sendHeader(IHeader *header, IClient *client);
-		int sendBody(IBody *body, IClient *client);
+
+		void				sendHeader(IHeader *header, IClient *client);
+		int					sendBody(IBody *body, IClient *client);
 		
-		void			sendTextBody(TextBody *body, IClient *client);
-		void			sendFileBody(FileBody *body, IClient *client);
+		int sendTextBody(TextBody *body, IClient *client);
+		int sendFileBody(FileBody *body, IClient *client);
+
 	public:
 		ResponseSender(Dispatcher *_disp);
 		virtual ~ResponseSender();

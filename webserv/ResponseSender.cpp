@@ -61,7 +61,7 @@ namespace ft
 		client->sendHeader();
 	}
 
-	void			ResponseSender::sendTextBody(TextBody *body, IClient *client)
+	int ResponseSender::sendTextBody(TextBody *body, IClient *client)
 	{
 		std::string str;
 		int ret;
@@ -70,61 +70,66 @@ namespace ft
 		#endif	
 		str = body->to_string();
 		ret = write(client->getSock(), str.c_str(),str.size());
-		if (ret != -1)
-			body->setWritten(ret);
-		else
+		if (ret == -1)
 			throw ft::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
 		#ifdef DEBUG
 		std::cout << "SENDER: TEXT BODY SENT\n";
 		#endif
+		body->setWritten(ret);
+		return (ret);
 	}
 
-	void			ResponseSender::sendFileBody(FileBody *body, IClient *client)
+	int ResponseSender::sendFileBody(FileBody *body, IClient *client)
 	{
 		#ifdef DEBUG
 		std::cout << "SENDER: SEND FILE BODY\n";
 		#endif
-		if (body->getWritten() < body->size()) {
+		//if (body->getWritten() < body->size()) {
 			char *buff = new char[READ_BODY_ONE_TIME];
-			int ret;
+			int retw, retr;
 			if (!buff)
 				throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
 #ifdef DEBUG
 			std::cout << "SENDER: BEGIN READING\n";
 #endif
-			ret = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
+			retr = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
 #ifdef DEBUG
 			std::cout << "SENDER: READING ENDED. READED [" << ret << "]\nSENDER: BEGIN WRITING\n";
 #endif
-			ret = send(client->getSock(), buff, ret, 0);
+			retw = send(client->getSock(), buff, retr, 0);
 #ifdef DEBUG
-			std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "]\nSENDER: FILE BODY SENT\n";
+			std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "] SENDER: FILE BODY SENT\n";
 #endif
-			body->setWritten(ret);
+			if (retr != retw)
+				throw ft::runtime_error("SOMETHING WENT WRONG");
+			body->setWritten(retw);
 			delete[] buff;
-		}
+		//}
+		return retw;
 	}
 
 
 	int ResponseSender::sendBody(IBody *body, IClient *client)
 	{
+		int written;
 //		TODO:Some something when no BODY;
 		if (!body) {
 			client->sendBody();
 			return 0;
 		}
-//			throw ft::runtime_error("RESPONSE SENDER: NULL BODY GOT");
 		if (dynamic_cast<TextBody*>(body))
-			sendTextBody(dynamic_cast<TextBody*>(body), client);
+			written = sendTextBody(dynamic_cast<TextBody*>(body), client);
 		else if (dynamic_cast<FileBody*>(body))
-			sendFileBody(dynamic_cast<FileBody*>(body), client);
+			written = sendFileBody(dynamic_cast<FileBody*>(body), client);
 		else
 			throw ft::runtime_error("RESPONSE SENDER: WRONG TYPE OF BODY GOT");
 		#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif
-
-		if ( body->getWritten() == body->size()) {
+	//	std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] \n";
+		if (written ==0)
+			throw runtime_error();
+		if (body->getWritten() >= body->size()) {
 			client->sendBody();
 			return 0;
 		}
