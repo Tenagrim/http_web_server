@@ -38,7 +38,7 @@ namespace ft
 		unsigned int	getFileSize(std::string const &filename);
 
 			// as in http header content-type
-		std::string		getContentType(std::string const &filename);
+		static std::string		getContentType(std::string const &filename);
 
 			// Last modification time
 		time_t			getMTime(std::string const &filename);
