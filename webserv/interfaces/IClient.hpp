@@ -23,6 +23,7 @@ namespace ft
 		virtual void			sendBody() = 0;
 		virtual void 			updateEventTime() = 0;
 		virtual unsigned long	getUsecsFromLastEvent() = 0;
+		virtual void 			reset() = 0;
 		virtual ~IClient(){}
 	};
 }

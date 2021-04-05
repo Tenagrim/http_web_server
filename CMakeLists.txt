@@ -107,5 +107,5 @@ add_executable(
         ./webserv/utils/fdToString.cpp
         ./webserv/utils/ft_strcmp.cpp
         ./webserv/utils/get_time_udiff.cpp
-)
+        webserv/utils/methodNeedsBody.cpp)
 

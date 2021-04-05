@@ -12,9 +12,8 @@ namespace ft {
 		int end_pos;
 		int ending;
 		std::string bodyPart;
-
 		if (client->getStates() == Client::s_start_header_reading)
-			client->getLastRequest()->setHeader(new Header(request));
+				client->getLastRequest()->setHeader(new Header(request));
 
 		client->getReadBuff().append(buff);
 
