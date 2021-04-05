@@ -37,8 +37,8 @@ namespace ft
 
 		int findIndexFile(std::list<std::string> &priority);
 
-		IResponse *buildFromDir(IRequest *request);
-		IResponse *buildFromFile(IRequest *request);
+		IResponse *buildFromDir(IRequest *request, LocationInit *location);
+		IResponse *buildFromFile(IRequest *request, LocationInit *location);
 		IResponse *buildFromFile(std::string const &filename);
 		IResponse *buildAutoindex(IRequest *request);
 
@@ -63,7 +63,7 @@ namespace ft
 		LocationInit *getCorrectLocation(IRequest *request, ServerInit *server);
 		LocationInit *getCorrectLocation(std::string const &URI, ServerInit *server);
 		void applyConfig(ServerInit *server);
-		LocationInit *getLocation(IRequest *request, ServerInit *server);
+		LocationInit *getLocationFile(IRequest *request, ServerInit *server);
 
 	};
 
