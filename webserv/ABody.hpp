@@ -1,6 +1,6 @@
 #pragma once
 #include <IBody.hpp>
-
+#include <unistd.h>
 namespace ft
 {
 	class ABody : public IBody
@@ -25,6 +25,7 @@ namespace ft
 		void						setContentType(std::string const &type);
 		unsigned long				getWritten();
 		void						setWritten(unsigned long value);
+
 	};
 
 }

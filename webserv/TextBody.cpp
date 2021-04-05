@@ -41,4 +41,8 @@ namespace ft
 		throw ft::runtime_error("Not implemented");
 		return -1;
 	}
+
+	int TextBody::getOpenedFd() {
+		throw ft::runtime_error("Not implemented");
+	}
 }

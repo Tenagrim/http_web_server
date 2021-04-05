@@ -216,25 +216,28 @@ namespace ft {
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
 		}
-		if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
-			if (!client->getBReader()) {
-				int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
-				client->setBReader(new BodyReader(client->getSock(), contLen, bodyPart));
+		if (client->getStates() == Client::s_header_readed) {
+			//  TODO: if header fully readed
+			if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
+				if (!client->getBReader()) {
+					int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
+					client->setBReader(new BodyReader(client->getSock(), contLen, bodyPart));
+				}
+				bodyRet = client->getBReader()->readBody();
+				switch (bodyRet) {
+					case 0:
+						client->getLastRequest()->setBody(client->getBReader()->getBody());
+						break;
+					case 1:
+						return;
+					case -1:
+						client->setFlag(Client::read_flags, Client::r_end);
+						client->getLastRequest()->getHeader()->makeInvalid();
+						return;
+				}
+			} else {
+				client->setFlag(Client::read_flags, Client::r_end);
 			}
-			bodyRet = client->getBReader()->readBody();
-			switch (bodyRet) {
-				case 0:
-					client->getLastRequest()->setBody(client->getBReader()->getBody());
-					break;
-				case 1:
-					return ;
-				case -1:
-					client->setFlag(Client::read_flags, Client::r_end);
-					client->getLastRequest()->getHeader()->makeInvalid();
-					return ;
-			}
-		} else {
-			client->setFlag(Client::read_flags, Client::r_end);
 		}
 	}
 

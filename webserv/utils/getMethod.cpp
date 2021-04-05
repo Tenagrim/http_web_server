@@ -9,6 +9,7 @@ namespace ft
 		case m_get: return("GET"); break;
 		case m_post: return("POST"); break;
 		case m_put: return("PUT"); break;
+		case m_undefined: return ("UNDEFINED"); break;
 		default: throw ft::runtime_error("Unknown method"); break;
 		}
 	}

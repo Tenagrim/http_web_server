@@ -6,7 +6,8 @@ namespace ft
 	{}
 
 	ABody::~ABody()
-	{}
+	{
+	}
 
 	ABody::ABody(const ABody &ref) : _written(0)
 	{
@@ -33,6 +34,7 @@ namespace ft
 	{
 		return _content_type;
 	}
+
 	void					ABody::setContentType(std::string const &type)
 	{
 		_content_type = type;

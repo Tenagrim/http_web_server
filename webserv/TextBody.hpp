@@ -20,6 +20,7 @@ namespace ft
 		std::string			to_string(void);
 		unsigned int		size(void) const;
 		BodyType			getType(void);
+		int						getOpenedFd();
 	
 	};
 

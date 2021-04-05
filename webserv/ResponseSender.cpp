@@ -37,6 +37,7 @@ namespace ft
 		}
 		else if (!client->bodySent())
 		{
+			client->updateEventTime();
 			#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY FOR URI: [" << client->getLastRequest()->getHeader()->getURI() << "]\n";
 			#endif
@@ -79,23 +80,25 @@ namespace ft
 		#ifdef DEBUG
 		std::cout << "SENDER: SEND FILE BODY\n";
 		#endif
-		char	*buff = new char [READ_BODY_ONE_TIME];
-		int ret;
-		if (!buff)
-			throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
-		#ifdef DEBUG
+		if (body->getWritten() < body->size()) {
+			char *buff = new char[READ_BODY_ONE_TIME];
+			int ret;
+			if (!buff)
+				throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
+#ifdef DEBUG
 			std::cout << "SENDER: BEGIN READING\n";
-		#endif
-		ret = read(body->getFd(), buff, READ_BODY_ONE_TIME);
-		#ifdef DEBUG
+#endif
+			ret = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
+#ifdef DEBUG
 			std::cout << "SENDER: READING ENDED. READED [" << ret << "]\nSENDER: BEGIN WRITING\n";
-		#endif
-		ret = send(client->getSock(), buff, ret, 0);
-		#ifdef DEBUG
+#endif
+			ret = send(client->getSock(), buff, ret, 0);
+#ifdef DEBUG
 			std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "]\nSENDER: FILE BODY SENT\n";
-		#endif
-		body->setWritten(ret);
-		delete [] buff;
+#endif
+			body->setWritten(ret);
+			delete[] buff;
+		}
 	}
 
 

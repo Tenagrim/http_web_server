@@ -14,6 +14,7 @@ namespace ft
 	private:
 		unsigned int	_size;
 		std::string		_filename;
+		int 			_opened_fd;
 
 		FileBody();
 		FileBody(const FileBody &ref);
@@ -27,5 +28,6 @@ namespace ft
 		std::string			to_string();
 		unsigned int		size() const;
 		BodyType			getType();
+		int					getOpenedFd();
 	};
 }
