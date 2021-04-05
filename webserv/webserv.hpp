@@ -35,6 +35,7 @@ namespace ft
 		m_head,
 		m_undefined
 	};
+
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char const *str);
 	std::string			getHeaderKey(header_keys key);
@@ -46,7 +47,8 @@ namespace ft
 	std::string 		fdToString(int fd);
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
-
-	unsigned long	get_time_udiff(struct timeval *t1, struct timeval *t2);
+	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
+	std::vector<std::string> splitString(std::string const & basicString,
+										 std::string const & delim);
 
 }

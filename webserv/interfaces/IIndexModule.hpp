@@ -12,7 +12,7 @@ namespace ft {
 	class IIndexModule {
 	public:
 		virtual IBody * getHtmlPage(LocationInit *location,
-									std::string const &root, const std::string &request) = 0;
+					std::string const &root, const std::string &request) = 0;
 
 		virtual ~IIndexModule() {};
 	};

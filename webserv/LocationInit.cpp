@@ -100,7 +100,7 @@ const std::string &ft::LocationInit::getPath() const
 	return _path;
 }
 
-const ft::LocationInit::argument_map &ft::LocationInit::getLocationsArguments() const
+const ft::LocationInit::argument_map &ft::LocationInit::getArgs() const
 {
 	return _locations_arguments;
 }
