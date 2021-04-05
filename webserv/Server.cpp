@@ -194,12 +194,13 @@ namespace ft
 			unsigned  long diff = client->getUsecsFromLastEvent();
 			std::cout << "CLIENT DIFF: " << diff <<"\n";
 			if ( diff > CLIENT_TIMEOUT_MICROS) {
-				if (!client->getLastRequest())
-					client->setLastRequest(new BasicRequest());
-				if (!client->getLastRequest()->getHeader())
-					client->getLastRequest()->setHeader(new Header(request));
-				client->getLastRequest()->getHeader()->makeInvalid();
-				client->setFlag(Client::read_flags, Client::r_end);
+				//if (!client->getLastRequest())
+				//	client->setLastRequest(new BasicRequest());
+				//if (!client->getLastRequest()->getHeader())
+				//	client->getLastRequest()->setHeader(new Header(request));
+				//client->getLastRequest()->getHeader()->makeInvalid();
+				//client->setFlag(Client::read_flags, Client::r_end);
+				_dispatcher->closeSock(client->getSock());
 			}
 
 		}
