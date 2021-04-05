@@ -166,4 +166,64 @@ namespace ft
 	{
 		ABuildPolicy::config = config;
 	}
-} // namespace ft
+
+	LocationInit *ABuildPolicy::getCorrectLocation(IRequest *request, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (unsigned int i = 0; i < server->getLocationCount(); i++){
+			if ((*it)->getPath() == request->getHeader()->getURI()) {
+				location = it.operator*();
+				break;
+			}
+		}
+		return location;
+	}
+
+	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (unsigned int i = 0; i < server->getLocationCount(); i++){
+			if ((*it)->getPath() == URI) {
+				location = it.operator*();
+				break;
+			}
+		}
+		return location;
+	}
+	void ABuildPolicy::applyConfig(ServerInit *server)
+	{
+		if (server == NULL)
+			throw ft::runtime_error("GetBuildPolicy::ApplyConfig - no incoming server config");
+		_fmngr.setRoot(server->getRoot());
+	}
+
+	LocationInit *ABuildPolicy::getLocation(IRequest *request, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		location = getCorrectLocation(request, server);
+		if (_fmngr.isADirectory(request->getHeader()->getURI())){
+			return (location);
+		} else {
+			if (location)
+				return location;
+			else{
+				std::string new_location = request->getHeader()->getURI();
+				std::string::reverse_iterator rit = new_location.rbegin();
+				rit = std::find(new_location.rbegin(), new_location.rend(), '/');
+				std::string::iterator it = rit.base();
+				if (rit == new_location.rend())
+					return location;
+				else {
+					new_location.erase(it, new_location.end());
+					location = getCorrectLocation(new_location, server);
+					return location;
+				}
+			}
+		}
+	}
+}
+// namespace ft

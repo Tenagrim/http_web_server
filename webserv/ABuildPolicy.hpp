@@ -60,6 +60,11 @@ namespace ft
 
 		ServerInit *getConfig() const;
 		void setConfig(ServerInit *config);
+		LocationInit *getCorrectLocation(IRequest *request, ServerInit *server);
+		LocationInit *getCorrectLocation(std::string const &URI, ServerInit *server);
+		void applyConfig(ServerInit *server);
+		LocationInit *getLocation(IRequest *request, ServerInit *server);
+
 	};
 
 } // namespace ft
