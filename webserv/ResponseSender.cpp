@@ -124,7 +124,7 @@ namespace ft
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif
 
-		if (body->size() == body->getWritten()) {
+		if ( body->getWritten() == body->size()) {
 			client->sendBody();
 			return 0;
 		}

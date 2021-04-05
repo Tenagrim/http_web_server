@@ -164,7 +164,6 @@ namespace ft
 				return;
 			}
 */
-			//if (args.)
 			if (client->getStates() == Client::s_start_body_reading) {
 				client->setFlag(Client::read_flags, Client::r_end);
 				return;
@@ -179,19 +178,13 @@ namespace ft
 
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
-			if (ret == 0)
-				client->reset();
 
-			//if ()
-
-			//if (client->requestReceived() && !client->needsResponce())
-
-			//if (ret == 0)
-
-			if (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+			if (ret == 0 && resp->getHeader()->isHeadAlreadyExist(h_connection) &&
 				resp->getHeader()->getHeader(h_connection) == "close")
 				_dispatcher->closeSock(client->getSock());
 
+			if (ret == 0)
+				client->reset();
 			#ifdef DEBUG
 				std::cout << "RESPONSE SENT: ================\n";	
 				std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
