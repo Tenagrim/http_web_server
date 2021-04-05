@@ -56,11 +56,8 @@ add_executable(
         ./webserv/interfaces/ITimeMachine.hpp
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
-
         ./webserv/main.cpp
 #        ./webserv/body_reader_test.cpp
-
-
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
         ./webserv/PostBuildPolicy.hpp
@@ -107,5 +104,7 @@ add_executable(
         ./webserv/utils/fdToString.cpp
         ./webserv/utils/ft_strcmp.cpp
         ./webserv/utils/get_time_udiff.cpp
+        webserv/interfaces/IIndexModule.hpp
+        webserv/IndexModule.cpp
+        webserv/IndexModule.hpp
 )
-
