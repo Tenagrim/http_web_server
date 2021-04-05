@@ -12,14 +12,6 @@
 namespace ft {
 	class IndexModule : public IIndexModule {
 	public:
-
-		enum states {
-			s_index_start,
-			s_search_index_files,
-			s_search_default_file,
-			s_autoindex
-		};
-
 		IndexModule();
 		virtual ~IndexModule();
 
@@ -28,16 +20,14 @@ namespace ft {
 
 	private:
 		std::string 	_url;	// full path (+root), ends with '/'
-		states			_state;
 
 		IBody			*fileFromIndex(LocationInit *location);
-		IBody			*defaultFile();
-		IBody			*generateAutoindex();
+		IBody			*defaultFile(LocationInit *location);
+		IBody			*generateAutoindex(LocationInit *location);
 
-		void 			setValues(std::string const &root, std::string const &url);
-		void setState(LocationInit *location);
+		void 			setValue(std::string const &root, std::string const &url);
 		IBody *			searchFile(std::string const & filePath);
-		std::string		generateRef(std::string const & filePath);
+		std::string		generateHtmlLine(dirent *info);
 
 		class Forbidden403 : public std::exception { const char * what() const throw(); };
 
