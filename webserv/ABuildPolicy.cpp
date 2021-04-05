@@ -138,16 +138,15 @@ namespace ft
 		return (0);
 	}
 
-	IResponse *ABuildPolicy::buildFromDir(IRequest *request)
+	IResponse *ABuildPolicy::buildFromDir(IRequest *request, LocationInit *location)
 	{
 		(void)request; // FIXME
-		//_fmngr->setRoot(request->getURI());
-		if (_fmngr.isFileExisting("index.html"))
+		if (_fmngr.isFileExisting(request->getHeader()->getURI()))
 		{
 #ifdef DEBUG
 			std::cout << "FILE EXISTS\n";
 #endif
-			return buildFromFile("index.html");
+			return buildFromFile(request->getHeader()->getURI());
 		}
 		return _e_pager.getErrorPage(404);
 	}
@@ -156,4 +155,90 @@ namespace ft
 	{
 		return (_e_pager.getErrorPage(code));
 	}
-} // namespace ft
+
+	ServerInit *ABuildPolicy::getConfig() const
+	{
+		return config;
+	}
+
+	void ABuildPolicy::setConfig(ServerInit *config)
+	{
+		ABuildPolicy::config = config;
+	}
+
+	LocationInit *ABuildPolicy::getCorrectLocation(IRequest *request, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (unsigned int i = 0; i < server->getLocationCount(); i++){
+			if ((*it)->getPath() == request->getHeader()->getURI()) {
+				location = it.operator*();
+				break;
+			}
+		}
+		return location;
+	}
+
+	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (unsigned int i = 0; i < server->getLocationCount(); i++){
+			if ((*it)->getPath() == URI) {
+				location = it.operator*();
+				break;
+			}
+		}
+		return location;
+	}
+	void ABuildPolicy::applyConfig(ServerInit *server)
+	{
+		if (server == NULL)
+			throw ft::runtime_error("GetBuildPolicy::ApplyConfig - no incoming server config");
+		_fmngr.setRoot(server->getRoot());
+	}
+
+	LocationInit *ABuildPolicy::getLocationFile(IRequest *request, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		location = getCorrectLocation(request, server);
+		if (location)
+			return location;
+		else {
+			std::string new_location = request->getHeader()->getURI();
+			std::string::reverse_iterator rit;
+			rit = std::find(new_location.rbegin(), new_location.rend(), '/');
+			std::string::iterator it = rit.base();
+			if (rit == new_location.rend())
+				return location;
+			else {
+				new_location.erase(it, new_location.end());
+				location = getCorrectLocation(new_location, server);
+				return location;
+			}
+		}
+	}
+
+	IResponse *ABuildPolicy::buildFromFile(IRequest *request, LocationInit *location)
+	{
+		IResponse *res;
+		IBody *body;
+		IHeader *header;
+
+#ifdef DEBUG
+		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
+#endif
+
+		body = bodyFromFile(request->getHeader()->getURI());
+		header = buildHeader(200, "OK", body);
+
+		//res = new TextResponse(header->to_string() + body->to_string());
+		res = new TextResponse(header, body);
+		//delete header;
+		//delete body;
+		return (res);
+	}
+}
+// namespace ft

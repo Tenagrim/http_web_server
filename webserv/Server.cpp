@@ -205,7 +205,7 @@ namespace ft
 		else
 		{
 			unsigned  long diff = client->getUsecsFromLastEvent();
-			//std::cout << "CLIENT DIFF: " << diff <<"\n";
+//			std::cout << "CLIENT DIFF: " << diff <<"\n";
 			if ( diff > CLIENT_TIMEOUT_MICROS) {
 				//if (!client->getLastRequest())
 				//	client->setLastRequest(new BasicRequest());

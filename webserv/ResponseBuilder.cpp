@@ -44,16 +44,11 @@ namespace ft
 		if (_policies.count(method))
 		{
 //			TODO: Make config serch
-//			List configs and find coorect config, if nothing find, return  default config
 			ServerInit *serverConfig = findCorrectConfig(request);
-//			Server INit = Get config (request->getHost);
-//
 			ABuildPolicy *policy;
-//			return (_policies[method]->buildResponse(request));
 			policy = _policies[method];
-//			Set police -> set Config;
-
-			return policy->buildResponse(request);
+			policy->setConfig(serverConfig);
+			return (_policies[method]->buildResponse(request));
 		}
 #ifdef DEBUG_REQ_PRINT
 		if (request->getHeader()->isValid())
@@ -100,9 +95,8 @@ namespace ft
 		bool state = false;
 		ServerInit *server = NULL;
 		server = config.operator*();
-//		if ()
 		state = checkServerName(pRequest, server);
-		state = checkPort(pRequest, server);
+		state *= checkPort(pRequest, server);
 		return state;
 	}
 
@@ -139,7 +133,6 @@ namespace ft
 		else {
 			res = strtol(tmp.c_str()+pos+1, NULL, 10);
 		}
-		std::cout<<res<<std::endl;
 		return res;
 	}
 }

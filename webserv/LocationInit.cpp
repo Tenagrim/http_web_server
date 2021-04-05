@@ -69,8 +69,8 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 {
 	bool state = false;
 	std::list<std::string> *tmp = new std::list<std::string>;
-	str_list_it back = std::find(it, list.end(), ";");
-	tmp->splice(tmp->begin(), list, it, ++back);
+	str_list_it back = std::find(it, list.end(), "\n");
+	tmp->splice(tmp->begin(), list, it, back);
 	std::list<std::string>::iterator key = tmp->begin();
 	if (tmp->back() != ";"){
 		state = false;
@@ -87,7 +87,7 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 	_locations_arguments[*key] = buff;
 	}
 	delete tmp;
-	return true;
+	return state;
 }
 
 unsigned int ft::LocationInit::getId() const
