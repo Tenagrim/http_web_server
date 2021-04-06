@@ -54,9 +54,6 @@ namespace ft {
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
-////	todo delete it
-			std::cout << "file path: " << filePath << std::endl;
-////
 			if ((file = searchFile(filePath)))
 				return file;
 		}
@@ -93,11 +90,11 @@ namespace ft {
 		   			"\n"
 					"</body></html>";
 			closedir(dir);
-		} else {
-//			fixme: is 404 here (if there are no such directory). It seems Rus already handle it
-		}
+		} else
+			throw ft::runtime_error("IndexModule: directory isn't exist");
 		return new TextBody(html);
 	}
+
 //	<a href="../">../</a>
 //	<a href="phpmyadmin/">phpmyadmin/</a>                                        05-Apr-2021 11:05                   -
 //	<a href="wordpress/">wordpress/</a>                                         05-Apr-2021 11:04                   -
@@ -107,6 +104,7 @@ namespace ft {
 		std::string		line;
 		char 			lineLen;
 		char 			buf[TIME_BUFF_AUTOINDEX];
+		struct stat		statbuf = {};
 
 		line += "a href=\"";
 		line += info->d_name;
@@ -115,10 +113,18 @@ namespace ft {
 		line += "</a>";
 		lineLen = info->d_namlen;
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
-//		todo insert time here
-
-//		todo insert spaces here
-//		todo insert last symbol here
+		buf[TIME_BUFF_AUTOINDEX - 1] = '\0';
+		currentTimeFormatted("%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
+		line += buf;
+		if (info->d_type != DT_DIR) {
+			stat(info->d_name, &statbuf);
+			std::string fileLen = to_string(statbuf.st_size);
+			line.resize(line.size() + 20 - fileLen.size(), ' ');
+			line += fileLen;
+		} else {
+			line.resize(line.size() + 19, ' ');
+			line += '-';
+		}
 
 		return line;
 	}
