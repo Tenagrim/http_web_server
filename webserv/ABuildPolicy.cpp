@@ -245,10 +245,10 @@ namespace ft
 	{
 		bool res = true;
 		if (!location)
-			return false;
+			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getLocationsArguments();
 		std::string methods = arguments["limit_except"];
-		std::cout<<methods<<std::endl;
+
 		return  res;
 	}
 }

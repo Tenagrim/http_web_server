@@ -36,6 +36,8 @@ namespace ft
 //			return (buildFromFile(request, location));
 //		} else
 //			return (_e_pager.getErrorPage(404));
+
+//		New Version;
 		if (_fmngr.isADirectory(request->getHeader()->getURI())) {
 			location = getCorrectLocation(request, conf);
 			if (!location)
