@@ -35,7 +35,7 @@ namespace ft
 		}
 		else {
 			IResponse *response = _e_pager.getErrorPage(405);
-//			response->getHeader()->setHeader("Allow")
+			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
 			return  _e_pager.getErrorPage(405);
 		}
 	}

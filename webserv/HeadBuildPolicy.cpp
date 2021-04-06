@@ -15,13 +15,6 @@ ft::HeadBuildPolicy &ft::HeadBuildPolicy::operator=(const ft::HeadBuildPolicy &r
 ft::IResponse *ft::HeadBuildPolicy::buildResponse(ft::IRequest *request)
 {
 	(void) request;
-//	IResponse *res = NULL;
-//	ServerInit *conf = getConfig();
-//	applyConfig(conf);
-//	LocationInit *location = NULL;
-//	res = (_e_pager.getErrorPage(405));
-//	res->deleteBody();
-
 	IResponse *res = NULL;
 	ServerInit *conf = getConfig();
 	applyConfig(conf);
