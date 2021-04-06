@@ -146,4 +146,17 @@ namespace ft
 		return _header_map.count(key);
 	}
 
+	std::string Header::getPath() {
+		int pos = _uri.find('?');
+		if (pos == std::string::npos)
+			return _uri;
+		return _uri.substr(0, pos);
+	}
+
+	std::string Header::getQuery() {
+		int pos = _uri.find('?');
+		if (pos == std::string::npos)
+			return _uri.substr(pos);
+	}
+
 } // namespace ft

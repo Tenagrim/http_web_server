@@ -58,6 +58,7 @@ add_executable(
         ./webserv/LocationInit.hpp
 
         ./webserv/main.cpp
+#        webserv/cgi_module_tester.cpp
 #        ./webserv/body_reader_test.cpp
 #        webserv/env_tester.cpp
 
@@ -109,5 +110,7 @@ add_executable(
         ./webserv/utils/get_time_udiff.cpp
         webserv/utils/methodNeedsBody.cpp
         webserv/Environment.cpp
-        webserv/Environment.hpp)
+        webserv/Environment.hpp
+        webserv/CgiModule.cpp
+        )
 
