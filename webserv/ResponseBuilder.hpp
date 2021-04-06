@@ -5,6 +5,7 @@
 #include <GetBuildPolicy.hpp>
 #include <PostBuildPolicy.hpp>
 #include <PutBuildPolicy.hpp>
+#include <HeadBuildPolicy.hpp>
 //Config List
 #include <ServerInit.hpp>
 #include <defines.hpp>

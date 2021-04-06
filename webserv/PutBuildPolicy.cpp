@@ -22,12 +22,22 @@ namespace ft
 	IResponse		*PutBuildPolicy::buildResponse(IRequest *request)
 	{
 		(void) request;
-
-		IHeader *head = checkCommingURI(request);
-		if (head == nullptr)
-			return _e_pager.getErrorPage(404);
-		BasicResponse *response = new BasicResponse(head, NULL);
-		return response;
+		ServerInit *conf = getConfig();
+		applyConfig(conf);
+		LocationInit *location = getCorrectLocation(request, conf);
+		if (ifCorrectMethod(request, location))
+		{
+			IHeader *head = checkCommingURI(request);
+			if (head == nullptr)
+				return _e_pager.getErrorPage(404);
+			BasicResponse *response = new BasicResponse(head, NULL);
+			return response;
+		}
+		else {
+			IResponse *response = _e_pager.getErrorPage(405);
+			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			return  _e_pager.getErrorPage(405);
+		}
 	}
 
 	IHeader *PutBuildPolicy::checkCommingURI(IRequest *request)

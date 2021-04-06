@@ -147,6 +147,7 @@ int ft::ConfigParser::checkHostname(ft::ServerInit *server)
 {
 	int i = 0;
 	std::list<int> *list = &server->getListenPorts();
+	checkPortsOnUniq(list);
 	std::list<int>::iterator it = list->begin();
 	std::list<ServerInit *>::iterator sit = _server_list.begin();
 	for (; sit != _server_list.end(); ++sit) {
@@ -170,6 +171,7 @@ int ft::ConfigParser::checkPorts(ft::ServerInit *server)
 {
 	int y = 0;
 	std::list<std::string> *list = &server->getServerNames();
+	checkHostnameOnUniq(list);
 	std::list<std::string>::iterator it = list->begin();
 	std::list<ServerInit *>::iterator sit = _server_list.begin();
 	for (; sit != _server_list.end(); ++sit) {
@@ -187,4 +189,28 @@ int ft::ConfigParser::checkPorts(ft::ServerInit *server)
 		}
 	}
 	return y;
+}
+
+void ft::ConfigParser::checkPortsOnUniq(std::list<int> *pList)
+{
+	if (!pList)
+		throw ft::runtime_error("t::ConfigParser::checkPortsOnUniq - no list");
+	int i = pList->size();
+	pList->unique();
+	int y = pList->size();
+	if (i != y) {
+		throw ft::runtime_error("Ports is not uniq");
+	}
+}
+
+void ft::ConfigParser::checkHostnameOnUniq(std::list<std::string> *pList)
+{
+	if (!pList)
+		throw ft::runtime_error("t::ConfigParser::checkHostnameOnUniq - no list");
+	int i = pList->size();
+	pList->unique();
+	int y = pList->size();
+	if (i != y) {
+		throw ft::runtime_error("Hostnames is not Uniq");
+	}
 }

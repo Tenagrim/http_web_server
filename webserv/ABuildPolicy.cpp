@@ -1,4 +1,5 @@
 #include <ABuildPolicy.hpp>
+#include <vector>
 
 namespace ft
 {
@@ -120,12 +121,12 @@ namespace ft
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
-
+//		TODO: Check If file get CGI extencion;
 		body = bodyFromFile(filename);
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);
+		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
 		return (res);
@@ -138,17 +139,23 @@ namespace ft
 		return (0);
 	}
 
-	IResponse *ABuildPolicy::buildFromDir(IRequest *request, LocationInit *location)
+	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location)
 	{
-		(void)request; // FIXME
-		if (_fmngr.isFileExisting(request->getHeader()->getURI()))
-		{
-#ifdef DEBUG
-			std::cout << "FILE EXISTS\n";
-#endif
-			return buildFromFile(request->getHeader()->getURI());
-		}
-		return _e_pager.getErrorPage(404);
+//		(void)request; // FIXME
+//		if (_fmngr.isFileExisting(correct_path + "index.html"))
+//		{
+//#ifdef DEBUG
+//			std::cout << "FILE EXISTS\n";
+//#endif
+//			return buildFromFile(correct_path + "index.html");
+//		}
+//		return _e_pager.getErrorPage(404);
+		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());
+		if (!body)
+			return _e_pager.getErrorPage(404);
+		IHeader *header = buildHeader(200, "OK", body);
+		BasicResponse *res = new BasicResponse(header, body);
+		return res;
 	}
 
 	IResponse	*ABuildPolicy::buildErrorPage(int code)
@@ -221,7 +228,7 @@ namespace ft
 		}
 	}
 
-	IResponse *ABuildPolicy::buildFromFile(IRequest *request, LocationInit *location)
+	IResponse *ABuildPolicy::buildFromFile(IRequest *request, std::string const &correct_path)
 	{
 		IResponse *res;
 		IBody *body;
@@ -231,7 +238,7 @@ namespace ft
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
 
-		body = bodyFromFile(request->getHeader()->getURI());
+		body = bodyFromFile(correct_path);
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
@@ -240,6 +247,36 @@ namespace ft
 		//delete header;
 		//delete body;
 		return (res);
+	}
+
+	bool ABuildPolicy::ifCorrectMethod(IRequest *request, LocationInit *location)
+	{
+		bool res = false;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["limit_except"];
+		std::vector<std::string> vec = splitString(methods, " ");
+		for (size_t i = 0; i != vec.size(); ++i) {
+			if (ft::getMethodStr(request->getHeader()->getMethod()) == vec[i])
+				res = true;
+		}
+//		if (ft::getMethodStr(request->getHeader()->getMethod()) == methods){
+//			res = true;
+//		}
+		return  res;
+	}
+
+	std::string ABuildPolicy::ifRootArgument(IRequest *request, LocationInit *location)
+	{
+		std::string res;
+		std::map<std::string, std::string> args = location->getArgs();
+		std::map<std::string, std::string>::iterator it = args.find("root");
+		if (it != args.end())
+			res = request->getHeader()->getURI() + it->second;
+		else
+			res = request->getHeader()->getURI();
+		return res;
 	}
 }
 // namespace ft

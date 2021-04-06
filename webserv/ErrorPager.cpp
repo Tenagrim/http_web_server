@@ -51,19 +51,26 @@ namespace ft
 	
 	IResponse	*ErrorPager::getErrorPage(int code)
 	{
-		IHeader	*head = new Header(response);
+		IHeader	*head = getErrorHead(code);
+		IBody	*body = getErrPageBody(code, getCodeDescr(code));
+		head->setHeader(h_content_length, ft::to_string(body->size()));
+		IResponse *response = new BasicResponse(head, body);
+		return response;
+	}
+
+	IHeader *ErrorPager::getErrorHead(int code)
+	{
+		IHeader *head = new Header(response);
 		std::string descr = getCodeDescr(code);
 		head->setHTTPV("HTTP/1.1");
 		head->setResponseCode(code);
 		head->setCodeDescription(descr);
-		IBody	*body = getErrPageBody(code, descr);
-		head->setHeader(h_content_length, ft::to_string(body->size()));
 		head->setHeader(h_date, _t_machine.getTimestamp());
-//		head->setHeader(h_conn, "close");
 		head->setHeader(h_content_type, "text/html");
-		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
-		head->setHeader(h_connection, "close");
-		return (new BasicResponse(head, body));
+//		Tester 42 don't like this line
+//		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
+//		head->setHeader(h_connection, "close");
+		return head;
 	}
-	
+
 } // namespace ft

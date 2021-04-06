@@ -30,11 +30,20 @@
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
 
-#define CLIENT_TIMEOUT_MICROS	2000000		// 2	secs
+//#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
+//#define CLIENT_TIMEOUT_MICROS	60000000 // 60 secs
+//#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
+//#define CLIENT_TIMEOUT_MICROS	60000000 // 60 secs
+//#define CLIENT_TIMEOUT_MICROS	20000000 // 20 secs
+#define CLIENT_TIMEOUT_MICROS	3600000000 // many secs
+//#define CLIENT_TIMEOUT_MICROS	2000000		// 2	secs
 //#define CLIENT_TIMEOUT_MICROS	20000000	// 20	secs
 //#define CLIENT_TIMEOUT_MICROS	60000000	// 60	secs
 //#define CLIENT_TIMEOUT_MICROS	3600000000	// many	secs
 
+// Time checking
+#define TIME_ZONE 3
+#define TIME_BUFF_AUTOINDEX 18
 
 #ifdef DEBUG // DON T TOUCH THIS !!
 # define DISPATCHER_SLEEP_DELAY	(2 * 1000 * 1000)

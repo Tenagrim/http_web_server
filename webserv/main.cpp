@@ -69,6 +69,9 @@ int main(int ac, char **av)
 	std::list<int> list_listner = (*serv_it)->getListenPorts();
 	serv_it++;
 	list_listner.insert(list_listner.end(), (*serv_it)->getListenPorts().begin(), (*serv_it)->getListenPorts().end());
+	serv_it++;
+	list_listner.insert(list_listner.end(), (*serv_it)->getListenPorts().begin(), (*serv_it)->getListenPorts().end());
+
 
 	list_listner.sort();
 	list_listner.unique();

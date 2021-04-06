@@ -12,6 +12,8 @@ namespace ft
 		virtual std::string				to_string(void) const = 0;
 		virtual unsigned long			size() const = 0;
 		virtual ~IResponse(){}
+
+		virtual void deleteBody() = 0;
 	};
 	std::ostream			&operator<<(std::ostream &os, const IResponse &ref);
 }

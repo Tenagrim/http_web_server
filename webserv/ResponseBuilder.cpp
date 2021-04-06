@@ -10,6 +10,7 @@ namespace ft
 		_policies[m_get] = new GetBuildPolicy();
 		_policies[m_post] = new PostBuildPolicy();
 		_policies[m_put] = new PutBuildPolicy();
+		_policies[m_head] = new HeadBuildPolicy();
 	}
 
 	ResponseBuilder::~ResponseBuilder()
