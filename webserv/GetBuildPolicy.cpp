@@ -20,7 +20,7 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-//		IResponse *res = NULL;
+		IResponse *res = NULL;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = getCorrectLocation(request->getHeader()->getURI(), conf);
@@ -38,7 +38,9 @@ namespace ft
 				return (_e_pager.getErrorPage(404));
 			}
 		} else {
-			return (_e_pager.getErrorPage(405));
+			res = (_e_pager.getErrorPage(405));
+			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			return res;
 		}
 
 
