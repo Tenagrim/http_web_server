@@ -64,4 +64,13 @@ namespace ft
 	{
 		return _text.size();
 	}
+
+	void TextResponse::deleteBody()
+	{
+		if (_body)
+			delete _body;
+		_body = nullptr;
+	}
+
+
 } // namespace ft

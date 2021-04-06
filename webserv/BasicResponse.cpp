@@ -54,4 +54,11 @@ namespace ft
 	{
 		return (_header->size() + _body->size());
 	}
+
+	void BasicResponse::deleteBody()
+	{
+		if (_body)
+			delete _body;
+		_body = nullptr;
+	}
 } // namespace ft

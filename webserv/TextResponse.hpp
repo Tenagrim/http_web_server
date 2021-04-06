@@ -30,6 +30,8 @@ namespace ft
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
 		unsigned long			size() const;
+
+		virtual	void 			deleteBody();
 	};
 
 }
