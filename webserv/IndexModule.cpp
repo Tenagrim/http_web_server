@@ -13,24 +13,6 @@
 
 #define HTML_LINE_LEN 88
 
-// todo remove after testing
-/*
-<html><head><title>Index of /</title></head>
-<body bgcolor="white">
-<h1>Index of /</h1><hr><pre><a href="../">../</a>
-<a href="phpmyadmin/">phpmyadmin/</a>                                        05-Apr-2021 11:05                   -
-<a href="wordpress/">wordpress/</a>                                         05-Apr-2021 11:04                   -
-<a href="index.nginx-debian.html">index.nginx-debian.html</a>                            05-Apr-2021 11:04                 612
-</pre><hr>
-
-</body></html>
-*/
-/*
-	_html(("<html><head><title>Index of /</title></head>\n"
-					   "<body bgcolor=\"white\">\n"
-					   "<h1>Index of /</h1><hr><pre>"))
-*/
-
 namespace ft {
 
 	IndexModule::IndexModule() {}
@@ -85,7 +67,9 @@ namespace ft {
 			html += _reqUrl;
 			html += "</title></head>\n"
 					"<body bgcolor=\"white\">\n"
-					"<h1>Index of /</h1><hr><pre>";
+	 				"<h1>Index of ";
+			html += _reqUrl;
+			html += "</h1><hr><pre>";
 			while ((info = readdir(dir)))
 				html += generateHtmlLine(info);
 			html += "</pre><hr>\n"
@@ -96,11 +80,6 @@ namespace ft {
 			throw ft::runtime_error("IndexModule: directory isn't exist");
 		return new TextBody(html);
 	}
-
-//	<a href="../">../</a>
-//	<a href="phpmyadmin/">phpmyadmin/</a>                                        05-Apr-2021 11:05                   -
-//	<a href="wordpress/">wordpress/</a>                                         05-Apr-2021 11:04                   -
-//	<a href="index.nginx-debian.html">index.nginx-debian.html</a>                            05-Apr-2021 11:04                 612
 
 	std::string IndexModule::generateHtmlLine(dirent *info) {
 		std::string		line;
@@ -116,10 +95,10 @@ namespace ft {
 		lineLen = info->d_namlen;
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
 		buf[TIME_BUFF_AUTOINDEX - 1] = '\0';
-		currentTimeFormatted("%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
+		stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
+		rawTimeFormatted(statbuf.st_ctime, "%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
 		line += buf;
 		if (info->d_type != DT_DIR) {
-			stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
 			std::string fileLen = to_string(statbuf.st_size);
 			line.resize(line.size() + 20 - fileLen.size(), ' ');
 			line += fileLen;
@@ -145,8 +124,8 @@ namespace ft {
 	}
 
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
-		_url = root + (url[0] != '/' ? "/" : "") + url;
-		_reqUrl = url;
+		_reqUrl = url + (url.back() != '/' ? "/" : "");
+		_url = root + (url[0] != '/' ? "/" : "") + _reqUrl;
 	}
 
 }
