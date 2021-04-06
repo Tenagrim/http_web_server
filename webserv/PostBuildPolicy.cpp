@@ -32,7 +32,7 @@ namespace ft
 			return response;
 		} else {
 			IResponse *response = _e_pager.getErrorPage(405);
-			response->getHeader()->setHeader(h_allow, "GET, HEAD");
+			response->getHeader()->setHeader(h_allow, location->getLocationsArguments().find("limit_except")->second);
 			return response;
 		}
 	}

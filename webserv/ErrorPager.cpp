@@ -67,8 +67,9 @@ namespace ft
 		head->setCodeDescription(descr);
 		head->setHeader(h_date, _t_machine.getTimestamp());
 		head->setHeader(h_content_type, "text/html");
-		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
-		head->setHeader(h_connection, "close");
+//		Tester 42 don't like this line
+//		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
+//		head->setHeader(h_connection, "close");
 		return head;
 	}
 

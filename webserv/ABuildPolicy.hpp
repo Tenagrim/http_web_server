@@ -24,6 +24,7 @@
 #include <runtime_error.hpp>
 
 #include <Utils.hpp>
+#include <webserv.hpp>
 
 namespace ft
 {
@@ -37,8 +38,8 @@ namespace ft
 
 		int findIndexFile(std::list<std::string> &priority);
 
-		IResponse *buildFromDir(IRequest *request, LocationInit *location);
-		IResponse *buildFromFile(IRequest *request, LocationInit *location);
+		IResponse *buildFromDir(IRequest *request, std::string const &correct_path);
+		IResponse *buildFromFile(IRequest *request, std::string const &correct_path);
 		IResponse *buildFromFile(std::string const &filename);
 		IResponse *buildAutoindex(IRequest *request);
 
@@ -66,6 +67,7 @@ namespace ft
 		LocationInit *getLocationFile(IRequest *request, ServerInit *server);
 		bool ifCorrectMethod(IRequest *request, LocationInit* location);
 
+		std::string ifRootArgument(IRequest *request, LocationInit *location);
 	};
 
 } // namespace ft

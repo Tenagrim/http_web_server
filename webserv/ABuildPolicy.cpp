@@ -138,15 +138,15 @@ namespace ft
 		return (0);
 	}
 
-	IResponse *ABuildPolicy::buildFromDir(IRequest *request, LocationInit *location)
+	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path)
 	{
 		(void)request; // FIXME
-		if (_fmngr.isFileExisting("index.html"))
+		if (_fmngr.isFileExisting(correct_path + "index.html"))
 		{
 #ifdef DEBUG
 			std::cout << "FILE EXISTS\n";
 #endif
-			return buildFromFile("index.html");
+			return buildFromFile(correct_path + "index.html");
 		}
 		return _e_pager.getErrorPage(404);
 	}
@@ -221,7 +221,7 @@ namespace ft
 		}
 	}
 
-	IResponse *ABuildPolicy::buildFromFile(IRequest *request, LocationInit *location)
+	IResponse *ABuildPolicy::buildFromFile(IRequest *request, std::string const &correct_path)
 	{
 		IResponse *res;
 		IBody *body;
@@ -231,7 +231,7 @@ namespace ft
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
 
-		body = bodyFromFile(request->getHeader()->getURI());
+		body = bodyFromFile(correct_path);
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
@@ -243,13 +243,27 @@ namespace ft
 
 	bool ABuildPolicy::ifCorrectMethod(IRequest *request, LocationInit *location)
 	{
-		bool res = true;
+		bool res = false;
 		if (!location)
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getLocationsArguments();
 		std::string methods = arguments["limit_except"];
-
+		if (ft::getMethodStr(request->getHeader()->getMethod()) == methods){
+			res = true;
+		}
 		return  res;
+	}
+
+	std::string ABuildPolicy::ifRootArgument(IRequest *request, LocationInit *location)
+	{
+		std::string res;
+		std::map<std::string, std::string> args = location->getLocationsArguments();
+		std::map<std::string, std::string>::iterator it = args.find("root");
+		if (it != args.end())
+			res = request->getHeader()->getURI() + it->second;
+		else
+			res = request->getHeader()->getURI();
+		return res;
 	}
 }
 // namespace ft

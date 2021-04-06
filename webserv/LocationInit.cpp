@@ -80,6 +80,7 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 	_locations_arguments[*key];
 	tmp->erase(tmp->begin());
 	std::list<std::string>::iterator tmp_it = tmp->begin();
+	tmp_it = isSpace(tmp_it);
 	std::string buff;
 	for(; tmp_it != tmp->end(); ++tmp_it) {
 		buff += *tmp_it;
