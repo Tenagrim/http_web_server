@@ -48,7 +48,7 @@ namespace ft {
 	IBody *IndexModule::fileFromIndex(LocationInit *location) {
 		typedef std::vector<std::string> t_vector;
 		std::string filePath;
-		t_vector split;
+		t_vector	split;
 		IBody		*file;
 
 		split = splitString(location->getArgs().find("index")->second, " ");
@@ -73,7 +73,7 @@ namespace ft {
 	}
 
 	IBody *IndexModule::generateAutoindex(LocationInit *location) {
-		if (location->getArgs().find("autoindex")->second.empty())
+		if (location->getArgs().find("autoindex") == location->getArgs().end())
 			return nullptr;
 
 		DIR			* dir;
@@ -121,9 +121,10 @@ namespace ft {
 			std::string fileLen = to_string(statbuf.st_size);
 			line.resize(line.size() + 20 - fileLen.size(), ' ');
 			line += fileLen;
+			line += '\n';
 		} else {
 			line.resize(line.size() + 19, ' ');
-			line += '-';
+			line += "-\n";
 		}
 
 		return line;
@@ -131,8 +132,9 @@ namespace ft {
 
 	IBody *IndexModule::searchFile(const std::string &filePath) {
 		FileBody	*file;
+		struct stat statbuf = {};
 
-		if (!stat(filePath.c_str(), nullptr)) {
+		if (!stat(filePath.c_str(), &statbuf)) {
 			file = new FileBody(filePath);
 			file->setContentType(FileManager::getContentType(filePath));
 			return file;
@@ -141,7 +143,7 @@ namespace ft {
 	}
 
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
-		_url = root + url[0] != "/" ? "/" : "" + url;
+		_url = root + (url[0] != '/' ? "/" : "") + url;
 	}
 
 }

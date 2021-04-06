@@ -141,12 +141,12 @@ namespace ft
 	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location)
 	{
 //		(void)request; // FIXME
-//		if (_fmngr.isFileExisting(correct_path + "index.html"))
+//		if (_fmngr.isFileExisting(correct_path + "1index.html"))
 //		{
 //#ifdef DEBUG
 //			std::cout << "FILE EXISTS\n";
 //#endif
-//			return buildFromFile(correct_path + "index.html");
+//			return buildFromFile(correct_path + "1index.html");
 //		}
 //		return _e_pager.getErrorPage(404);
 		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());

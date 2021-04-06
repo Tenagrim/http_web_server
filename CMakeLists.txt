@@ -115,7 +115,7 @@ add_executable(
         ./webserv/IndexModule.cpp
         ./webserv/IndexModule.hpp
         webserv/utils/timeFormatted.cpp
-        webserv/trash/testerTimeFormatted.cpp
+#        webserv/trash/testerTimeFormatted.cpp
         webserv/utils/methodNeedsBody.cpp
         ./webserv/HeadBuildPolicy.hpp
         ./webserv/HeadBuildPolicy.cpp
