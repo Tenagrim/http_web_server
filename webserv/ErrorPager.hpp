@@ -21,5 +21,7 @@ namespace ft
 		ErrorPager(const ErrorPager &ref);
 		ErrorPager	&operator=(const ErrorPager &ref);
 		IResponse	*getErrorPage(int code);
+		IHeader *getErrorHead(int code);
+		IBody *getErrorBody(int code);
 	};
 } // namespace ft

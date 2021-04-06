@@ -64,6 +64,7 @@ namespace ft
 		LocationInit *getCorrectLocation(std::string const &URI, ServerInit *server);
 		void applyConfig(ServerInit *server);
 		LocationInit *getLocationFile(IRequest *request, ServerInit *server);
+		bool ifCorrectMethod(IRequest *request, LocationInit* location);
 
 	};
 

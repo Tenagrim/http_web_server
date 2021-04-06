@@ -120,7 +120,7 @@ namespace ft
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
-
+//		TODO: Check If file get CGI extencion;
 		body = bodyFromFile(filename);
 		header = buildHeader(200, "OK", body);
 
@@ -141,12 +141,12 @@ namespace ft
 	IResponse *ABuildPolicy::buildFromDir(IRequest *request, LocationInit *location)
 	{
 		(void)request; // FIXME
-		if (_fmngr.isFileExisting(request->getHeader()->getURI()))
+		if (_fmngr.isFileExisting("index.html"))
 		{
 #ifdef DEBUG
 			std::cout << "FILE EXISTS\n";
 #endif
-			return buildFromFile(request->getHeader()->getURI());
+			return buildFromFile("index.html");
 		}
 		return _e_pager.getErrorPage(404);
 	}
@@ -239,6 +239,17 @@ namespace ft
 		//delete header;
 		//delete body;
 		return (res);
+	}
+
+	bool ABuildPolicy::ifCorrectMethod(IRequest *request, LocationInit *location)
+	{
+		bool res = true;
+		if (!location)
+			return false;
+		std::map<std::string, std::string> arguments = location->getLocationsArguments();
+		std::string methods = arguments["limit_except"];
+		std::cout<<methods<<std::endl;
+		return  res;
 	}
 }
 // namespace ft

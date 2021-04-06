@@ -179,8 +179,6 @@ namespace ft
 
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
-			if (ret == 0)
-				client->reset();
 
 			//if ()
 
@@ -192,8 +190,10 @@ namespace ft
 				resp->getHeader()->getHeader(h_connection) == "close")
 				_dispatcher->closeSock(client->getSock());
 
+			if (ret == 0)
+				client->reset();
 			#ifdef DEBUG
-				std::cout << "RESPONSE SENT: ================\n";	
+				std::cout << "RESPONSE SENT: ================\n";
 				std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
 				std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
 			#endif
