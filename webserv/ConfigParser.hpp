@@ -38,5 +38,7 @@ namespace ft {
 		int checkHostname(ServerInit *server);
 
 		int checkPorts(ServerInit *server);
+
+		void checkPortsOnUniq(std::list<int> *pList);
 	};
 }

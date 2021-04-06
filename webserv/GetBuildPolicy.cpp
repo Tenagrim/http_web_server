@@ -24,6 +24,18 @@ namespace ft
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = NULL;
+//		if (_fmngr.isADirectory(request->getHeader()->getURI())) {
+//			location = getCorrectLocation(request, conf);
+//			if (!location)
+//				location = getCorrectLocation("/", conf);
+//			return (buildFromDir(request, location));
+//		} else if (_fmngr.isFileExisting(request->getHeader()->getURI())) {
+//			location = getLocationFile(request, conf);
+//			if (!location)
+//				location = getCorrectLocation("/", conf);
+//			return (buildFromFile(request, location));
+//		} else
+//			return (_e_pager.getErrorPage(404));
 		if (_fmngr.isADirectory(request->getHeader()->getURI())) {
 			location = getCorrectLocation(request, conf);
 			if (!location)
@@ -36,7 +48,9 @@ namespace ft
 			return (buildFromFile(request, location));
 		} else
 			return (_e_pager.getErrorPage(404));
+		if (ifCorrectMethod(request, location)){
 
+		}
 
 
 
