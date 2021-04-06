@@ -107,8 +107,10 @@ add_executable(
         ./webserv/utils/ft_strcmp.cpp
         ./webserv/utils/get_time_udiff.cpp
         ./webserv/utils/splitString.cpp
-        ./webserv/trash/testerSplitString.cpp
+#        ./webserv/trash/testerSplitString.cpp
         ./webserv/interfaces/IIndexModule.hpp
         ./webserv/IndexModule.cpp
         ./webserv/IndexModule.hpp
+        webserv/utils/timeFormatted.cpp
+        webserv/trash/testerTimeFormatted.cpp
 )

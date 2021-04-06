@@ -50,5 +50,6 @@ namespace ft
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
 	std::vector<std::string> splitString(std::string const & basicString,
 										 std::string const & delim);
+	void				timeFormatted(char *format, char *buf, int bufLen);
 
 }

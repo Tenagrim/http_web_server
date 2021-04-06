@@ -29,6 +29,8 @@
 //#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
 #define CLIENT_TIMEOUT_MICROS	60000000 // 60 secs
 
+// Time buffers
+#define TIME_BUFF_AUTOINDEX 17
 
 #ifdef DEBUG // DON T TOUCH THIS !!
 //# define	DISPATCHER_TICK_MICROS (0.5 * 1000 * 1000)

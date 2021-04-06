@@ -7,6 +7,7 @@
 #include <FileBody.hpp>
 #include <FileManager.hpp>
 #include <webserv.hpp>
+#include <defines.hpp>
 
 #include <vector>
 
@@ -76,7 +77,7 @@ namespace ft {
 
 	IBody *IndexModule::generateAutoindex(LocationInit *location) {
 		if (location->getArgs().find("autoindex")->second.empty())
-			throw Forbidden403();
+			return nullptr;
 
 		DIR			* dir;
 		dirent		* info;
@@ -103,8 +104,9 @@ namespace ft {
 //	<a href="index.nginx-debian.html">index.nginx-debian.html</a>                            05-Apr-2021 11:04                 612
 
 	std::string IndexModule::generateHtmlLine(dirent *info) {
-		std::string	line;
-		char 		lineLen;
+		std::string		line;
+		char 			lineLen;
+		char 			buf[TIME_BUFF_AUTOINDEX];
 
 		line += "a href=\"";
 		line += info->d_name;
@@ -114,6 +116,7 @@ namespace ft {
 		lineLen = info->d_namlen;
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
 //		todo insert time here
+
 //		todo insert spaces here
 //		todo insert last symbol here
 
@@ -135,7 +138,4 @@ namespace ft {
 		_url = root + url[0] != "/" ? "/" : "" + url;
 	}
 
-	const char *IndexModule::Forbidden403::what() const throw() {
-		return "IndexModule: no such file from index directive";
-	}
 }
