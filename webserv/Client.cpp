@@ -217,6 +217,7 @@ namespace ft
 		}
 	}
 
+
 	void Client::reset() {
 		clearRequest();
 		clearResponse();
@@ -229,5 +230,9 @@ namespace ft
 		_read_buff.clear();
 		updateEventTime();
 
+	}
+
+	int Client::getId() {
+		return _id;
 	}
 }

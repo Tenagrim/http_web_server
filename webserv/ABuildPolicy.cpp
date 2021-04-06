@@ -30,7 +30,7 @@ namespace ft
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
 		res->setHeader(h_content_length, ft::to_string(body->size()));
-		res->setHeader(h_date, _t_machine->getTimestamp());
+		//res->setHeader(h_date, _t_machine->getTimestamp());
 //		res->setHeader(h_connec, "keep-alive");
 		res->setHeader(h_content_type, body->getContentType());
 		res->setHeader(h_server, DEFAULT_SERVER_HEADER);
@@ -239,7 +239,8 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);
+		res = new TextResponse(header, body);  // WHAT ??!!!??
+		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
 		return (res);

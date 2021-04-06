@@ -15,6 +15,14 @@ namespace ft {
 		if (client->getStates() == Client::s_start_header_reading)
 				client->getLastRequest()->setHeader(new Header(request));
 
+		if (buff[0] == 0) // if we got only \0
+		{
+			client->setStates(Client::s_header_readed);
+			client->setFlag(Client::read_flags, Client::r_end);
+			client->getLastRequest()->getHeader()->makeInvalid();
+			return "";
+		}
+
 		client->getReadBuff().append(buff);
 
 		end_pos = client->getReadBuff().find("\r\n\r\n");

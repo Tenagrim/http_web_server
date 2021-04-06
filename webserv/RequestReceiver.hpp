@@ -63,8 +63,8 @@ namespace ft
 
 		RequestReceiver 		&operator=(const RequestReceiver &ref);
 
-		void getRequest(Client *client);
-		void getRequest(int sock);
+		void					getRequest(Client *client);
+		void					getRequest(int sock);
 
 		int						getId();
 		int						accept_connection();
@@ -75,8 +75,8 @@ namespace ft
 
 		int						writeEvent(int sock);
 
-		void					start(void);
-		int						getPort(void);
+		void					start();
+		int						getPort();
 
 	};
 
