@@ -48,7 +48,7 @@ namespace ft
 
 		const std::string &getPath() const;
 
-		const argument_map &getLocationsArguments();
+		const argument_map &getArgs() const;
 
 
 	};

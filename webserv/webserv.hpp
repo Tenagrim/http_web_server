@@ -46,8 +46,13 @@ namespace ft
 	std::string 		fdToString(int fd);
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
-
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
+	std::vector<std::string> splitString(std::string const & basicString,
+										 std::string const & delim);
+	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
+	void				rawTimeFormatted(time_t rawTime, char *format,
+						  								char *buf, int bufLen);
+
 	bool				methodNeedsBody(methods_enum method);
 
 }
