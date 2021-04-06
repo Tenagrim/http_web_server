@@ -59,7 +59,7 @@ add_executable(
 
         ./webserv/main.cpp
 #        ./webserv/body_reader_test.cpp
-
+#        webserv/env_tester.cpp
 
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
@@ -107,5 +107,7 @@ add_executable(
         ./webserv/utils/fdToString.cpp
         ./webserv/utils/ft_strcmp.cpp
         ./webserv/utils/get_time_udiff.cpp
-        webserv/utils/methodNeedsBody.cpp)
+        webserv/utils/methodNeedsBody.cpp
+        webserv/Environment.cpp
+        webserv/Environment.hpp)
 
