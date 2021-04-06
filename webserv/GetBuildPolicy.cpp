@@ -20,7 +20,7 @@ namespace ft
 
 	IResponse *GetBuildPolicy::buildResponse(IRequest *request)
 	{
-		IResponse *res = NULL;
+//		IResponse *res = NULL;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = getCorrectLocation(request->getHeader()->getURI(), conf);
@@ -29,7 +29,7 @@ namespace ft
 		if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
 			if (_fmngr.isADirectory(correct_path)) {
-				return buildFromDir(request, correct_path);
+				return buildFromDir(request, correct_path, location);
 			}
 			else if (_fmngr.isFileExisting(correct_path)) {
 				return buildFromFile(request, correct_path);

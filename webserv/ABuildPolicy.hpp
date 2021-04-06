@@ -25,6 +25,7 @@
 
 #include <Utils.hpp>
 #include <webserv.hpp>
+#include <IndexModule.hpp>
 
 namespace ft
 {
@@ -35,10 +36,11 @@ namespace ft
 		ErrorPager		_e_pager;
 		ITimeMachine	*_t_machine;
 		ServerInit		*config;
+		IndexModule		_index_module;
 
 		int findIndexFile(std::list<std::string> &priority);
 
-		IResponse *buildFromDir(IRequest *request, std::string const &correct_path);
+		IResponse *buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location);
 		IResponse *buildFromFile(IRequest *request, std::string const &correct_path);
 		IResponse *buildFromFile(std::string const &filename);
 		IResponse *buildAutoindex(IRequest *request);

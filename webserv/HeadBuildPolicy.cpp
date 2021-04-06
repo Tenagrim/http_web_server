@@ -31,7 +31,7 @@ ft::IResponse *ft::HeadBuildPolicy::buildResponse(ft::IRequest *request)
 	if (ifCorrectMethod(request, location)){
 		std::string correct_path = ifRootArgument(request, location);
 		if (_fmngr.isADirectory(correct_path)) {
-			res = buildFromDir(request, correct_path);
+			res = buildFromDir(request, correct_path, location);
 		}
 		else if (_fmngr.isFileExisting(correct_path)) {
 			 res = buildFromFile(request, correct_path);
