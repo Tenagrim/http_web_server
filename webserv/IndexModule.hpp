@@ -19,7 +19,8 @@ namespace ft {
 							std::string const &root, const std::string &url);
 
 	private:
-		std::string 	_url;	// full path (+root), ends with '/'
+		std::string 	_url;		// full path (+root), ends with '/'
+		std::string 	_reqUrl;	// URL from request
 
 		IBody			*fileFromIndex(LocationInit *location);
 		IBody			*defaultFile(LocationInit *location);
