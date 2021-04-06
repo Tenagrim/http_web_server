@@ -1,4 +1,5 @@
 #include <ABuildPolicy.hpp>
+#include <vector>
 
 namespace ft
 {
@@ -150,6 +151,8 @@ namespace ft
 //		}
 //		return _e_pager.getErrorPage(404);
 		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());
+		if (!body)
+			return _e_pager.getErrorPage(404);
 		IHeader *header = buildHeader(200, "OK", body);
 		BasicResponse *res = new BasicResponse(header, body);
 		return res;
@@ -252,9 +255,14 @@ namespace ft
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["limit_except"];
-		if (ft::getMethodStr(request->getHeader()->getMethod()) == methods){
-			res = true;
+		std::vector<std::string> vec = splitString(methods, " ");
+		for (size_t i = 0; i != vec.size(); ++i) {
+			if (ft::getMethodStr(request->getHeader()->getMethod()) == vec[i])
+				res = true;
 		}
+//		if (ft::getMethodStr(request->getHeader()->getMethod()) == methods){
+//			res = true;
+//		}
 		return  res;
 	}
 
