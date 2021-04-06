@@ -24,6 +24,7 @@ namespace ft
 		virtual void 			updateEventTime() = 0;
 		virtual unsigned long	getUsecsFromLastEvent() = 0;
 		virtual void 			reset() = 0;
+		virtual int 			getId() = 0;
 		virtual ~IClient(){}
 	};
 }

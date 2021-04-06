@@ -134,6 +134,8 @@ namespace ft
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
 			args._reciever->getRequest(args._fd);
+
+//			std::cout << "CLIENT IS WRITING. NEED TO READ\n";
 			#ifdef DEBUG
 			//	std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
 			//	std::cout << request->to_string() << "===========================\n";
@@ -144,9 +146,9 @@ namespace ft
 	{
 			IResponse *resp = NULL;
 			Client			*client;
-			#ifdef DEBUG
-				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
-			#endif
+		//	#ifdef DEBUG
+		//		std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+		//	#endif
 			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
 			if (!client)
 				throw ft::runtime_error("Unknown type of client");

@@ -1,4 +1,4 @@
-
+#pragma once
 
 //#define DEBUG					1	// Define this for debug logs to stdout
 	
@@ -26,8 +26,8 @@
 #define DEFAULT_HTTPV			"HTTP/1.1"
 
 //////// Varies from Delay ///////////////
-//#define READ_BODY_ONE_TIME		200000
-#define READ_BODY_ONE_TIME		20000
+#define READ_BODY_ONE_TIME		200000
+//#define READ_BODY_ONE_TIME		20000
 //////////////////////////////////////////
 
 #define CLIENT_TIMEOUT_MICROS	2000000		// 2	secs
@@ -43,8 +43,12 @@
 
 #ifndef DEBUG
 # define DISPATCHER_SLEEP_DELAY	200000
-//# define DISPATCHER_WAKE_DELAY	1000
-# define DISPATCHER_WAKE_DELAY	10000		// 2 ms
+# define DISPATCHER_WAKE_DELAY	1000			// 1 ms
+//# define DISPATCHER_WAKE_DELAY	10000		// 10 ms
 //# define DISPATCHER_WAKE_DELAY	500000 // 500 ms
 //# define DISPATCHER_WAKE_DELAY	200000 // 200 ms
 #endif
+
+
+
+//int __RESETS = 0; // FIXME REMOVE GLOBAL

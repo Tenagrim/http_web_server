@@ -81,30 +81,26 @@ namespace ft
 
 	int ResponseSender::sendFileBody(FileBody *body, IClient *client)
 	{
-		#ifdef DEBUG
-		std::cout << "SENDER: SEND FILE BODY\n";
-		#endif
-		//if (body->getWritten() < body->size()) {
-			char *buff = new char[READ_BODY_ONE_TIME];
-			int retw, retr;
-			if (!buff)
-				throw ft::runtime_error("RERPONSE SENDER: UNABLE TO SEND FILE BODY: MALLOC FAILED");
-#ifdef DEBUG
-			std::cout << "SENDER: BEGIN READING\n";
-#endif
+		int retw, retr, offset = 0;
+		char *buff = body->getBuff(READ_BODY_ONE_TIME);
+
+		int lr = body->lastReaded();
+
+		if (body->getReaded() == body->getWritten()) {
 			retr = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
-#ifdef DEBUG
-			std::cout << "SENDER: READING ENDED. READED [" << ret << "]\nSENDER: BEGIN WRITING\n";
-#endif
-			retw = send(client->getSock(), buff, retr, 0);
-#ifdef DEBUG
-			std::cout << "SENDER: WRITING COMPLETED. WRITTEN: [" << ret << "] SENDER: FILE BODY SENT\n";
-#endif
-			if (retr != retw)
-				throw ft::runtime_error("SOMETHING WENT WRONG");
-			body->setWritten(retw);
-			delete[] buff;
-		//}
+			body->setReaded(retr);
+		}
+		else
+		{
+			retr = body->getReaded() - body->getWritten();
+			offset = READ_BODY_ONE_TIME - retr;
+		//	std::cout << "R: ["<< body->getReaded() <<"] W: ["<< body->getWritten() <<"] RETR: ["<<retr <<"]  OFFSET: ["<< offset <<"]\n";
+		}
+
+			retw = send(client->getSock(), buff + offset, retr, 0);
+				if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
+					throw ft::runtime_error("SOMETHING WENT WRONG");
+				body->setWritten(retw);
 		return retw;
 	}
 
@@ -126,9 +122,9 @@ namespace ft
 		#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif
-	//	std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] \n";
-		if (written ==0)
-			throw runtime_error();
+		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
+		//if (written == 0 || )
+		//	throw runtime_error();
 		if (body->getWritten() >= body->size()) {
 			client->sendBody();
 			return 0;
