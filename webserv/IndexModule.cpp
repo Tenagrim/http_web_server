@@ -54,7 +54,7 @@ namespace ft {
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
-			if ((file = searchFile(filePath)))
+			if (!(*it).empty() && (file = searchFile(filePath)))
 				return file;
 		}
 		return defaultFile(location);
@@ -81,7 +81,9 @@ namespace ft {
 		std::string	html;
 
 		if ((dir = opendir(_url.c_str()))) {
-			html += "<html><head><title>Index of /</title></head>\n"
+			html += "<html><head><title>Index of ";
+			html += _reqUrl;
+			html += "</title></head>\n"
 					"<body bgcolor=\"white\">\n"
 					"<h1>Index of /</h1><hr><pre>";
 			while ((info = readdir(dir)))
@@ -106,7 +108,7 @@ namespace ft {
 		char 			buf[TIME_BUFF_AUTOINDEX];
 		struct stat		statbuf = {};
 
-		line += "a href=\"";
+		line += "<a href=\"";
 		line += info->d_name;
 		line += "\">";
 		line += info->d_name;
@@ -117,7 +119,7 @@ namespace ft {
 		currentTimeFormatted("%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
 		line += buf;
 		if (info->d_type != DT_DIR) {
-			stat(info->d_name, &statbuf);
+			stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
 			std::string fileLen = to_string(statbuf.st_size);
 			line.resize(line.size() + 20 - fileLen.size(), ' ');
 			line += fileLen;
@@ -144,6 +146,7 @@ namespace ft {
 
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
 		_url = root + (url[0] != '/' ? "/" : "") + url;
+		_reqUrl = url;
 	}
 
 }
