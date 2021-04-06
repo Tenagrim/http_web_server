@@ -32,6 +32,7 @@ namespace ft
 			location = getCorrectLocation("/", conf);
 		if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
+			// TODO: HANDLE SLASHES IN REQUEST TO DIRECTORY
 			if (_fmngr.isADirectory(correct_path)) {
 				return buildFromDir(request, correct_path, location);
 			}
