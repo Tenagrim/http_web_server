@@ -24,6 +24,7 @@ namespace ft
 				std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
 		#endif
 		IResponse *res = NULL;
+		std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = getCorrectLocation(request->getHeader()->getURI(), conf);
