@@ -134,6 +134,8 @@ namespace ft
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
 			args._reciever->getRequest(args._fd);
+
+//			std::cout << "CLIENT IS WRITING. NEED TO READ\n";
 			#ifdef DEBUG
 			//	std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
 			//	std::cout << request->to_string() << "===========================\n";
@@ -144,9 +146,9 @@ namespace ft
 	{
 			IResponse *resp = NULL;
 			Client			*client;
-			#ifdef DEBUG
-				std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
-			#endif
+		//	#ifdef DEBUG
+		//		std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
+		//	#endif
 			client = dynamic_cast<Client*>(args._reciever->getClient(args._fd));
 			if (!client)
 				throw ft::runtime_error("Unknown type of client");
@@ -164,7 +166,6 @@ namespace ft
 				return;
 			}
 */
-			//if (args.)
 			if (client->getStates() == Client::s_start_body_reading) {
 				client->setFlag(Client::read_flags, Client::r_end);
 				return;
@@ -180,20 +181,14 @@ namespace ft
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			//if ()
-
-			//if (client->requestReceived() && !client->needsResponce())
-
-			//if (ret == 0)
-
-			if (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+			if (ret == 0 && resp->getHeader()->isHeadAlreadyExist(h_connection) &&
 				resp->getHeader()->getHeader(h_connection) == "close")
 				_dispatcher->closeSock(client->getSock());
 
 			if (ret == 0)
 				client->reset();
 			#ifdef DEBUG
-				std::cout << "RESPONSE SENT: ================\n";
+				std::cout << "RESPONSE SENT: ================\n";	
 				std::cout << "RESP BODY SIZE: ["<< resp->getBody()->size() <<"]\n";
 				std::cout << "RESP BODY STR SIZE: ["<< resp->getBody()->to_string().size() <<"]\n";
 			#endif
@@ -204,7 +199,6 @@ namespace ft
 		}
 		else
 		{
-
 			unsigned  long diff = client->getUsecsFromLastEvent();
 //			std::cout << "CLIENT DIFF: " << diff <<"\n";
 			if ( diff > CLIENT_TIMEOUT_MICROS) {

@@ -92,6 +92,7 @@ namespace ft
 		void			setBReader(BodyReader *bReader);
 		void			updateEventTime();
 		unsigned long	getUsecsFromLastEvent();
+		int 			getId();
 
 		void 			reset();
 

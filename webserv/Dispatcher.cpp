@@ -17,8 +17,7 @@ namespace ft
 	}
 
 	Dispatcher::~Dispatcher()
-	{
-	}
+	{}
 
 	Dispatcher::Dispatcher(const Dispatcher &ref)
 	{

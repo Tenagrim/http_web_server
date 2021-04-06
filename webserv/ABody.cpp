@@ -1,15 +1,17 @@
 #include <ABody.hpp>
-
+#include <runtime_error.hpp>
 namespace ft
 {
-	ABody::ABody() : _written(0)
+	ABody::ABody() : _written(0), _last_written(0), _buff(nullptr), _last_readed(0), _readed(0)
 	{}
 
 	ABody::~ABody()
 	{
+		if (_buff)
+			delete [] _buff;
 	}
 
-	ABody::ABody(const ABody &ref) : _written(0)
+	ABody::ABody(const ABody &ref) : _written(0), _last_written(0), _buff(nullptr), _last_readed(0), _readed(0)
 	{
 		(void)ref;
 	}
@@ -20,15 +22,7 @@ namespace ft
 		return (*this);
 	}
 
-	unsigned long			ABody::getWritten()
-	{
-		return _written;
-	}
 
-	void					ABody::setWritten(unsigned long value)
-	{
-		_written += value;
-	}
 
 	std::string const			&ABody::getContentType() const
 	{
@@ -39,4 +33,49 @@ namespace ft
 	{
 		_content_type = type;
 	}
+
+
+	char *ABody::getBuff( unsigned int size) {
+		if (!_buff)
+			setBuff(size);
+		return _buff;
+	}
+
+	void ABody::setBuff(unsigned int size) {
+		if (_buff)
+			delete _buff;
+		_buff = new char [size];
+		if (!_buff)
+			throw ft::runtime_error("Malloc failed");
+	}
+
+	long ABody::lastReaded() const {
+		return _last_readed;
+	}
+
+
+	void ABody::setReaded(unsigned long readed) {
+		_readed += readed;
+		_last_readed = readed;
+	}
+
+	int ABody::lastWritten() const {
+		return _last_written;
+	}
+
+	void					ABody::setWritten(unsigned long value)
+	{
+		_written += value;
+		_last_written = value;
+	}
+
+	unsigned long			ABody::getWritten()
+	{
+		return _written;
+	}
+
+	unsigned long ABody::getReaded() const {
+		return _readed;
+	}
+
 }

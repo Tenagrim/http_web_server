@@ -31,7 +31,7 @@ namespace ft
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
 		res->setHeader(h_content_length, ft::to_string(body->size()));
-		res->setHeader(h_date, _t_machine->getTimestamp());
+		//res->setHeader(h_date, _t_machine->getTimestamp());
 //		res->setHeader(h_connec, "keep-alive");
 		res->setHeader(h_content_type, body->getContentType());
 		res->setHeader(h_server, DEFAULT_SERVER_HEADER);
@@ -142,12 +142,12 @@ namespace ft
 	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location)
 	{
 //		(void)request; // FIXME
-//		if (_fmngr.isFileExisting(correct_path + "index.html"))
+//		if (_fmngr.isFileExisting(correct_path + "1index.html"))
 //		{
 //#ifdef DEBUG
 //			std::cout << "FILE EXISTS\n";
 //#endif
-//			return buildFromFile(correct_path + "index.html");
+//			return buildFromFile(correct_path + "1index.html");
 //		}
 //		return _e_pager.getErrorPage(404);
 		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());
@@ -242,7 +242,8 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);
+		res = new TextResponse(header, body);  // WHAT ??!!!??
+		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
 		return (res);
