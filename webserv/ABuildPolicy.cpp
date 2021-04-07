@@ -150,7 +150,7 @@ namespace ft
 //			return buildFromFile(correct_path + "index.html");
 //		}
 //		return _e_pager.getErrorPage(404);
-		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());
+		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), correct_path);
 		if (!body)
 			return _e_pager.getErrorPage(404);
 		IHeader *header = buildHeader(200, "OK", body);

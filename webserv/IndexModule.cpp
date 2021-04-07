@@ -117,7 +117,13 @@ namespace ft {
 
 		if (!stat(filePath.c_str(), &statbuf)) {
 			file = new FileBody(filePath);
-			file->setContentType(FileManager::getContentType(filePath));
+			std::string content_type;
+			try {
+				content_type = FileManager::getContentType(filePath);
+				file->setContentType(content_type);
+			} catch (FileManager::NoSuchType) {
+				file->setContentType("");
+			}
 			return file;
 		}
 		return nullptr;

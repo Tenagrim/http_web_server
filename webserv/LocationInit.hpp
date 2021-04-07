@@ -11,7 +11,7 @@ namespace ft
 {
 
 	static const char *LocationsKeyWord[] = {
-			"alias", "proxy_pass", "limit_except", "client_max_body_size", "error_page", "autoindex", "index",
+			"root", "proxy_pass", "limit_except", "client_max_body_size", "error_page", "autoindex", "index",
 			"auth_basic", "fastcgi_pass"
 	};
 
