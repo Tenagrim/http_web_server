@@ -54,11 +54,13 @@ namespace ft
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
+				head->setHeader(h_connection, "close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader(h_content_location, request->getHeader()->getURI());
+				head->setHeader(h_connection, "close");
 				truncExistingFile(request);
 			}
 		}

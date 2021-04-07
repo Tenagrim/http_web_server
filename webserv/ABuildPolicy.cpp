@@ -202,17 +202,20 @@ namespace ft
 		return location;
 	}
 
-	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
+	LocationInit *ABuildPolicy::getCorrectLocation(std::string URI, ServerInit *server)
 	{
 		LocationInit *location;
-
 		if (URI.empty())
 			throw ft::runtime_error("*ABuildPolicy::getCorrectLocation - NOT FOUND");
 //		if (URI == "/")
 //			location = findLocation(URI, server);
 		location = findLocation(URI, server);
-		if (!location)
-			location = getCorrectLocation(URI.substr(0,URI.rfind("/")), server);
+		if (!location){
+			std::string new_uri = URI.substr(0, URI.rfind('/'));
+			if (new_uri.empty())
+				new_uri = "/";
+			location = getCorrectLocation(new_uri, server);
+		}
 //		if ( _fmngr.isADirectory(URI)) {
 //			location = findLocation(URI , server);
 //		} else {
