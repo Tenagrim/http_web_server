@@ -181,8 +181,10 @@ namespace ft
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			if (ret == 0 && resp->getHeader()->isHeadAlreadyExist(h_connection) &&
-				resp->getHeader()->getHeader(h_connection) == "close")
+			if (ret == 0 && (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+				resp->getHeader()->getHeader(h_connection) == "close") ||
+					(resp->getHeader()->getResponseCode() == 400)
+					)
 				_dispatcher->closeSock(client->getSock());
 
 			if (ret == 0)
@@ -197,6 +199,7 @@ namespace ft
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
 		}
+		/*
 		else
 		{
 			unsigned  long diff = client->getUsecsFromLastEvent();
@@ -212,6 +215,7 @@ namespace ft
 			}
 
 		}
+		*/
 	}
 
 	#pragma endregion

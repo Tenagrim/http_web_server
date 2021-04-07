@@ -45,6 +45,7 @@ namespace ft {
 			if (!client->getLastRequest()->getHeader()->isValid()) {
 				client->setStates(Client::s_end_reading);
 				client->setFlag(Client::read_flags, Client::r_end);
+				return "";
 			}
 			client->setStates(Client::s_header_readed);
 			client->setFlag(Client::read_flags, Client::r_end);

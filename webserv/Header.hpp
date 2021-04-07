@@ -34,9 +34,9 @@ namespace ft
 		MessageType			getType(void) const;
 		int					getResponseCode(void) const;
 		std::string			&getURI(void);
-		std::string			&getHTTPVersion(void);
-		methods_enum		getMethod(void) const; // GET / POST
-		std::string			&getCodeDescription(void);
+		std::string			&getHTTPVersion();
+		methods_enum		getMethod() const; // GET / POST
+		std::string			&getCodeDescription();
 
 		void				setType(MessageType new_type);
 		void				setHTTPV(std::string const &new_vers);
@@ -51,6 +51,9 @@ namespace ft
 		bool 				isValid();
 		void 				makeInvalid();
 		bool 				isFieldInHeader(header_keys key) const;
+
+		std::string 		getPath();
+		std::string 		getQuery();
 
 		unsigned long		size();
 

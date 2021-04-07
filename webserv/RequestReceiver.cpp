@@ -217,7 +217,10 @@ namespace ft {
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
 		}
-		if (client->getStates() == Client::s_header_readed) {
+		if (client->getStates() == Client::s_header_readed &&
+			client->getLastRequest()->getHeader() &&
+			client->getLastRequest()->getHeader()->isValid()
+			) {
 			//  TODO: if header fully readed
 			if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
 				if (!client->getBReader()) {

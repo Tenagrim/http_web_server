@@ -27,7 +27,7 @@
 
 //////// Varies from Delay ///////////////
 #define READ_BODY_ONE_TIME		200000
-//#define READ_BODY_ONE_TIME		20000
+//#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
 
 //#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
@@ -57,7 +57,5 @@
 //# define DISPATCHER_WAKE_DELAY	500000 // 500 ms
 //# define DISPATCHER_WAKE_DELAY	200000 // 200 ms
 #endif
-
-
 
 //int __RESETS = 0; // FIXME REMOVE GLOBAL

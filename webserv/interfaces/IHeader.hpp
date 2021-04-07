@@ -41,6 +41,8 @@ namespace ft
 		virtual unsigned long		size() = 0;
 		virtual bool				isHeadAlreadyExist(header_keys key) const = 0;
 		virtual bool				isFieldInHeader(header_keys key) const = 0;
+		virtual std::string 		getPath() = 0;
+		virtual std::string 		getQuery() = 0;
 
 		virtual ~IHeader(){}
 	};

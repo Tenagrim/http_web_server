@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 98)
 
 INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra -Werror")
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra ") // -Werror
 #add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 add_executable(
@@ -60,8 +60,9 @@ add_executable(
         ./webserv/LocationInit.hpp
 
         ./webserv/main.cpp
+#        webserv/cgi_module_tester.cpp
 #        ./webserv/body_reader_test.cpp
-
+#        webserv/env_tester.cpp
 
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
@@ -119,5 +120,10 @@ add_executable(
         webserv/utils/methodNeedsBody.cpp
         ./webserv/HeadBuildPolicy.hpp
         ./webserv/HeadBuildPolicy.cpp
-)
+
+        webserv/utils/methodNeedsBody.cpp
+        webserv/Environment.cpp
+        webserv/Environment.hpp
+        webserv/CgiModule.cpp
+        )
 
