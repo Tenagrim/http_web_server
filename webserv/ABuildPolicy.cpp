@@ -166,7 +166,8 @@ namespace ft
 			else
 				throw ft::runtime_error("SOMETHING WENT WRONG");
 		}
-
+		if (!body)
+			return _e_pager.getErrorPage(404);
 		IHeader *header = buildHeader(200, "OK", body);
 		BasicResponse *res = new BasicResponse(header, body);
 		return res;
@@ -204,19 +205,23 @@ namespace ft
 	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
 	{
 		LocationInit *location;
-//		TODO: заменить URI на подмену всех корректных локейшенов
-//		get correctSumLocationPath();
-//		existing ли папка;
 
-		if ( _fmngr.isADirectory(URI)) {
-			location = findLocation(URI , server);
-		} else {
-			location = findLocation(URI , server);
-			if (!location) {
-				std::string dir_name = URI.substr(0,URI.rfind("/"));
-				location = findLocation(dir_name , server);
-			}
-		}
+		if (URI.empty())
+			throw ft::runtime_error("*ABuildPolicy::getCorrectLocation - NOT FOUND");
+//		if (URI == "/")
+//			location = findLocation(URI, server);
+		location = findLocation(URI, server);
+		if (!location)
+			location = getCorrectLocation(URI.substr(0,URI.rfind("/")), server);
+//		if ( _fmngr.isADirectory(URI)) {
+//			location = findLocation(URI , server);
+//		} else {
+//			location = findLocation(URI , server);
+//			if (!location) {
+//				std::string dir_name = URI.substr(0,URI.rfind("/"));
+//				location = findLocation(dir_name , server);
+//			}
+//		}
 		return location;
 	}
 

@@ -30,11 +30,12 @@ namespace ft
 		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);
 		if (!location) {
 			std::string path = checkerPath(request, conf);
-			if (!_fmngr.isFileExisting(path)) {
+			if (!_fmngr.isFileExisting(path) /*|| (_fmngr.isFileExisting(path) && path.back() != '/' && _fmngr
+			.isADirectory(path))*/) {
 				return (_e_pager.getErrorPage(404));
 			} else {
 				if (_fmngr.isADirectory(path)) {
-					return buildFromDir(request, path, NULL);
+					return buildFromDir(request, path, getCorrectLocation(request->getHeader()->getPath(), conf));
 				} else {
 					location = getCorrectLocation(request->getHeader()->getPath(), conf);
 					if (!location) {
