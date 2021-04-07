@@ -229,7 +229,9 @@ namespace ft
 		//	_b_reader->reset();
 		_read_buff.clear();
 		updateEventTime();
-
+		if(_b_reader)
+			delete _b_reader;
+		_b_reader = NULL;
 	}
 
 	int Client::getId() {

@@ -59,6 +59,8 @@ namespace ft
 
 		class CannotOpenFile : public std::exception { const char * what() const throw(); };
 		class NoSuchType : public std::exception { const char * what() const throw(); };
+
+		int mkdir_p(std::string const &dir_name);
 	};
 
 }

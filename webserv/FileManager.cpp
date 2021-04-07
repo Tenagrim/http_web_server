@@ -191,6 +191,8 @@ namespace ft
 
 		std::string file = getPath(filename);
 
+		mkdir_p(filename.substr(0, filename.rfind('/')));
+
 		fd = open(file.c_str(), O_CREAT | O_RDWR, 0666);
 		if (fd < 0)
 			throw CannotOpenFile();
@@ -202,5 +204,26 @@ namespace ft
 				throw ft::runtime_error("An error in rewriting file");
 		} while (readed != 0);
 		return fd;
+	}
+
+	int FileManager::mkdir_p(const std::string &dir_name)
+	{
+		int ret;
+		if (dir_name == "/" || dir_name.empty()) {
+			return 1;
+		}
+		std::string tmp = dir_name;
+		if (tmp.back() == '/')
+			tmp.erase(tmp.end()--);
+		if (!isFileExisting(tmp)) {
+			tmp = dir_name.substr(0, dir_name.rfind('/'));
+		 	ret = mkdir_p(tmp);
+		 	if (ret == 1) {
+		 		ret = mkdir(getPath(dir_name).c_str(), 0755);
+		 		if (ret == -1)
+					throw ft::runtime_error("mkdir failed");
+		 	}
+		}
+		return 1;
 	}
 }

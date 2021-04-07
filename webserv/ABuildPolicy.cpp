@@ -314,7 +314,7 @@ namespace ft
 		std::list<LocationInit *>::reverse_iterator rit = list.rbegin();
 		for (; rit != list.rend() ; ++rit){
 			LocationInit *tmp = *rit;
-			if (tmp->getPath() == URI) {
+			if (tmp->getPath() == URI || (tmp->getPath()) == URI+"/") {
 				location = *rit;
 				break;
 			}
