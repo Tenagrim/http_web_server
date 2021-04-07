@@ -33,10 +33,15 @@ namespace ft
 	{
 		int ret;
 		client->updateEventTime();
+		if (resp->getHeader()->getResponseCode() == 405)
+		{
+			return sendFullResponse(resp, client);
+		}
+
 		if (!client->headerSent())
 		{
 			sendHeader(resp->getHeader(), client);
-			if (resp->getBody())
+			if (resp->getBody()) //&& resp->getHeader()->getResponseCode() != 405)
 				return 1;
 			else return 0;
 		}
@@ -130,5 +135,14 @@ namespace ft
 			return 0;
 		}
 		return 1;
+	}
+
+	int ResponseSender::sendFullResponse(IResponse *resp, IClient *client) {
+		std::string str = resp->to_string();
+		int ret;
+		ret = send(client->getSock(), str.c_str(), str.size(), 0);
+		if (ret == str.size())
+			return 0;
+		else throw ft::runtime_error("SERVER CANNOT HANDLE RESPONSE AS FULL");
 	}
 }

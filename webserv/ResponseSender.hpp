@@ -22,9 +22,10 @@ namespace ft
 		void				sendHeader(IHeader *header, IClient *client);
 		int					sendBody(IBody *body, IClient *client);
 		
-		int sendTextBody(TextBody *body, IClient *client);
-		int sendFileBody(FileBody *body, IClient *client);
+		int 				sendTextBody(TextBody *body, IClient *client);
+		int 				sendFileBody(FileBody *body, IClient *client);
 
+		int sendFullResponse(IResponse *resp, IClient *client);
 	public:
 		ResponseSender(Dispatcher *_disp);
 		virtual ~ResponseSender();

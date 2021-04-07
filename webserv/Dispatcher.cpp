@@ -198,6 +198,13 @@ namespace ft
 		{
 			if (FD_ISSET((*it).first, &_writing_set))
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
+			else {
+				unsigned long diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
+//			std::cout << "CLIENT DIFF: " << diff <<"\n";
+				if (diff > CLIENT_TIMEOUT_MICROS) {
+					closeSock((*it).first);
+				}
+			}
 		}
 	}
 
