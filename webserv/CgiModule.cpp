@@ -35,6 +35,7 @@ namespace ft{
 			throw ft::runtime_error("CGI MODULE: FORK FAILED");
     	else if (pid == 0)
 		{
+
 			sendRequest(req);
 
 			char **c = envs.getEnv();
@@ -90,7 +91,9 @@ namespace ft{
     //		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader(h_content_length));
 
 
-    	env.setVar("PATH_INFO", _root + "/123.bla");
+    	env.setVar("PATH_INFO", req->getHeader()->getPath());
+
+	//	env.setVar("REQUEST_TARGET",)
     //	env.setVar("PATH_TRANSLATED", "/123.bla");
     //	env.setVar("SCRIPT_FILENAME", "/123.bla");
     //	env.setVar("SCRIPT_NAME", "/123.bla");
@@ -172,7 +175,9 @@ namespace ft{
 		int ret;
 		std::string text = body->to_string();
 
-    	_cgi_in = open(_tmp_out.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+    	_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		write(_cgi_in, text.c_str(), text.size());
+		close(_cgi_in);
+		_cgi_in = -1;
 	}
 } // ft

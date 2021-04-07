@@ -33,6 +33,11 @@ namespace ft {
 		t_vector	split;
 		IBody		*file;
 
+
+		if(location->getArgs().count("autoindex") &&
+			location->getArgs().find("autoindex").operator*().second == "on")
+			return generateAutoindex(location);
+
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
