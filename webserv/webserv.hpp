@@ -4,6 +4,11 @@
 #include <sys/time.h>
 namespace ft
 {
+	static const char reset[] = "\033[0m";
+	static const char red[] = "\033[31m";
+	static const char green[] = "\033[32m";
+	static const char yellow[] = "\033[33m";
+
 	enum header_keys
 	{
 		h_accept_charsets = 0,

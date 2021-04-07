@@ -14,6 +14,7 @@
 #define HTML_LINE_LEN 88
 
 namespace ft {
+	bool IndexModule::_index_on = true;
 
 	IndexModule::IndexModule() {}
 
@@ -24,6 +25,9 @@ namespace ft {
 									const std::string &url) {
 		setValue(root, url);
 
+		if (!location)
+			return defaultRules(root,url);
+
 		return fileFromIndex(location);
 	}
 
@@ -32,7 +36,13 @@ namespace ft {
 		std::string filePath;
 		t_vector	split;
 		IBody		*file;
+
 //		TODO if location is NULL;
+
+		if(location->getArgs().count("autoindex") &&
+			location->getArgs().find("autoindex").operator*().second == "on")
+			return generateAutoindex(location);
+
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
@@ -89,6 +99,8 @@ namespace ft {
 
 		line += "<a href=\"";
 		line += info->d_name;
+		if (info->d_type == DT_DIR)
+			line += "/";
 		line += "\">";
 		line += info->d_name;
 		line += "</a>";
@@ -117,13 +129,7 @@ namespace ft {
 
 		if (!stat(filePath.c_str(), &statbuf)) {
 			file = new FileBody(filePath);
-			std::string content_type;
-			try {
-				content_type = FileManager::getContentType(filePath);
-				file->setContentType(content_type);
-			} catch (FileManager::NoSuchType) {
-				file->setContentType("");
-			}
+			file->setContentType(FileManager::getContentType(filePath));
 			return file;
 		}
 		return nullptr;
@@ -132,6 +138,32 @@ namespace ft {
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
 		_reqUrl = url + (url.back() != '/' ? "/" : "");
 		_url = root + (url[0] != '/' ? "/" : "") + _reqUrl;
+	}
+
+	IBody *IndexModule::defaultRules(const std::string &root, const std::string &url) {
+		FileManager	f_man;
+		std::string index_file;
+
+		f_man.setRoot(root);
+		if (!f_man.isFileExisting(url))
+			throw ErrorException(404);
+		index_file = root;
+		addSlashBetween(index_file, url);
+		index_file += url;
+		f_man.setRoot(index_file);
+		if (f_man.isFileExisting("index.html"))
+			return new FileBody(f_man.getFullPath("index.html"));
+		else
+			throw ErrorException(403);
+	}
+
+	void IndexModule::addSlashBetween(std::string &target, const std::string &add) {
+		if (target.back() != '/' && add.front() != '/')
+			target += "/";
+	}
+
+	void IndexModule::setIndexOn(bool isItOn) {
+		_index_on = isItOn;
 	}
 
 }

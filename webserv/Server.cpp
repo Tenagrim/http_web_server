@@ -220,12 +220,12 @@ namespace ft
 
 	#pragma endregion
 
-	void			Server::start(void)
+	void			Server::start()
 	{
 		//RequestReciever *recv;
 		setFlag(is_running);
 
-		std::cout << "SERVER: IS STARITING\nLISTENING:\n";
+		std::cout << yellow << "SERVER: IS STARITING\nLISTENING:\n" << green;
 		for(std::list<RequestReceiver*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 		{
 			(*it)->start();
@@ -233,13 +233,13 @@ namespace ft
 			_dispatcher->addListener((*it), (*it)->getListenSock());
 			std::cout << "["<< (*it)->getListenSock() << "|"<< (*it)->getPort() <<"] ";
 		}
-		std::cout << "\n";
+		std::cout << reset << "\n";
 		_list_to_start.clear();
 
 		_dispatcher->start();
 	}
 	
-	void							Server::stop(void)
+	void							Server::stop()
 	{
 		if (!_dispatcher)
 			throw ft::runtime_error("No connection to dispatcher");

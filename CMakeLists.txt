@@ -27,10 +27,6 @@ add_executable(
         ./webserv/DispatcherEventArgs.hpp
         ./webserv/ErrorPager.cpp
         ./webserv/ErrorPager.hpp
-#        ./webserv/FakeFakeRequestValidator.cpp
-#        ./webserv/FakeFakeRequestValidator.hpp
-#        ./webserv/FakeRequestValidator.cpp
-#        ./webserv/FakeRequestValidator.hpp
         ./webserv/FakeTimeMachine.cpp
         ./webserv/FakeTimeMachine.hpp
         ./webserv/FileBody.cpp
