@@ -306,5 +306,39 @@ namespace ft
 		}
 		return location;
 	}
+
+	std::string ABuildPolicy::checkerPath(IRequest *request,ServerInit *conf)
+	{
+		std::string path;
+		std::string URI = request->getHeader()->getURI();
+		if (!URI.empty()) {
+			std::vector<std::string> vec = splitString(URI, "/");
+			std::cout<<vec.size()<<std::endl;
+			vec.erase(vec.begin());
+			std::list<LocationInit *> list = conf->getLocationInits();
+			for (size_t i = 0; i != vec.size(); i++){
+				std::string part = findPart(list, vec[i]);
+				if (!part.empty())
+					path += part;
+			}
+		}
+		return path;
+	}
+
+	std::string ABuildPolicy::findPart(std::list<LocationInit *> list, const std::string &string)
+	{
+		std::string res = string;
+		if(string.empty())
+			return res;
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (; it != list.end(); ++it) {
+			if ((*it)->getPath() == ("/" + string)) {
+				res = (*it)->getArgs().find("root")->second;
+				return res;
+			}
+		}
+		res = "/" + res;
+		return res;
+	}
 }
 // namespace ft

@@ -72,6 +72,10 @@ namespace ft
 		std::string ifRootArgument(IRequest *request, LocationInit *location);
 
 		LocationInit *findLocation(const std::string &URI, ServerInit *server);
+
+		std::string checkerPath(IRequest *request, ServerInit *conf);
+
+		std::string findPart(std::list<LocationInit *> list, std::string const &string);
 	};
 
 } // namespace ft
