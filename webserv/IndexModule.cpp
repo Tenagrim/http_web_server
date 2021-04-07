@@ -32,7 +32,7 @@ namespace ft {
 		std::string filePath;
 		t_vector	split;
 		IBody		*file;
-
+//		TODO if location is NULL;
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
