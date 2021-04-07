@@ -199,6 +199,7 @@ namespace ft
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
 		}
+		/*
 		else
 		{
 			unsigned  long diff = client->getUsecsFromLastEvent();
@@ -214,6 +215,7 @@ namespace ft
 			}
 
 		}
+		*/
 	}
 
 	#pragma endregion
