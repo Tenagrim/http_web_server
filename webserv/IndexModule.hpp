@@ -18,6 +18,15 @@ namespace ft {
 		IBody * getHtmlPage(LocationInit *location,
 							std::string const &root, const std::string &url);
 
+		class ErrorException : public std::exception {
+			private:
+				int _code;
+			public:
+				ErrorException() : _code(0){}
+				explicit ErrorException(int code):_code(code){}
+				int whatCode(){return _code;}
+			};
+
 	private:
 		std::string 	_url;		// full path (+root), ends with '/'
 		std::string 	_reqUrl;	// URL from request, ends with '/'
@@ -32,5 +41,7 @@ namespace ft {
 
 		IndexModule(IndexModule const & other);
 		IndexModule & operator=(IndexModule const & other);
+		void 			addSlashBetween(std::string &target, const std::string &add);
+		IBody			*defaultRules(const std::string &root, const std::string &url);
 	};
 }

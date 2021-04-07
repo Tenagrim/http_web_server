@@ -154,9 +154,19 @@ namespace ft
 //			return buildFromFile(correct_path + "index.html");
 //		}
 //		return _e_pager.getErrorPage(404);
-		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), correct_path);
-		if (!body)
-			return _e_pager.getErrorPage(404);
+		IBody *body;
+		try {
+			body = _index_module.getHtmlPage(location, _fmngr.getRoot(), correct_path);
+		} catch (IndexModule::ErrorException &e)
+		{
+			if (e.whatCode() == 404)
+				return  _e_pager.getErrorPage(404);
+			else if (e.whatCode() == 403)
+				return  _e_pager.getErrorPage(403);
+			else
+				throw ft::runtime_error("SOMETHING WENT WRONG");
+		}
+
 		IHeader *header = buildHeader(200, "OK", body);
 		BasicResponse *res = new BasicResponse(header, body);
 		return res;
