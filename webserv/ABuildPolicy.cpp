@@ -191,10 +191,11 @@ namespace ft
 	{
 		LocationInit *location = NULL;
 		std::list<LocationInit *> list = server->getLocationInits();
-		std::list<LocationInit *>::iterator it = list.begin();
-		for (unsigned int i = 0; i < server->getLocationCount(); i++){
-			if ((*it)->getPath() == URI) {
-				location = it.operator*();
+		std::list<LocationInit *>::reverse_iterator rit = list.rbegin();
+		for (; rit != list.rend() ; ++rit){
+			LocationInit *tmp = *rit;
+			if (tmp->getPath() == URI) {
+				location = *rit;
 				break;
 			}
 		}
@@ -273,7 +274,7 @@ namespace ft
 		std::map<std::string, std::string> args = location->getArgs();
 		std::map<std::string, std::string>::iterator it = args.find("root");
 		if (it != args.end())
-			res = request->getHeader()->getURI() + it->second;
+			res = it->second;
 		else
 			res = request->getHeader()->getURI();
 		return res;
