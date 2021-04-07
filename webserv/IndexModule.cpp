@@ -14,6 +14,7 @@
 #define HTML_LINE_LEN 88
 
 namespace ft {
+	bool IndexModule::_index_on = true;
 
 	IndexModule::IndexModule() {}
 
@@ -159,6 +160,10 @@ namespace ft {
 	void IndexModule::addSlashBetween(std::string &target, const std::string &add) {
 		if (target.back() != '/' && add.front() != '/')
 			target += "/";
+	}
+
+	void IndexModule::setIndexOn(bool isItOn) {
+		_index_on = isItOn;
 	}
 
 }

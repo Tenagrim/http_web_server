@@ -26,11 +26,11 @@ namespace ft {
 				explicit ErrorException(int code):_code(code){}
 				int whatCode(){return _code;}
 			};
-
+		static void		setIndexOn(bool isItOn);
 	private:
 		std::string 	_url;		// full path (+root), ends with '/'
 		std::string 	_reqUrl;	// URL from request, ends with '/'
-
+		static bool 	_index_on;
 		IBody			*fileFromIndex(LocationInit *location);
 		IBody			*defaultFile(LocationInit *location);
 		IBody			*generateAutoindex(LocationInit *location);
