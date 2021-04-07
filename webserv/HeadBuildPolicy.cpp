@@ -30,10 +30,10 @@ ft::IResponse *ft::HeadBuildPolicy::buildResponse(ft::IRequest *request)
 			 res = buildFromFile(request, correct_path);
 		}
 		else {
-			return (_e_pager.getErrorPage(404));
+			res = (_e_pager.getErrorPage(404));
 		}
 	} else {
-		return (_e_pager.getErrorPage(405));
+		res = (_e_pager.getErrorPage(405));
 	}
 	res->deleteBody();
 	return  res;

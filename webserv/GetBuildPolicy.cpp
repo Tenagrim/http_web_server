@@ -27,9 +27,10 @@ namespace ft
 		std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
-		LocationInit *location = getCorrectLocation(request->getHeader()->getURI(), conf);
-		if (!location)
-			location = getCorrectLocation("/", conf);
+		LocationInit *location = getCorrectLocation(request->getHeader()->getPath(), conf);
+		if (!location) {
+			return buildIfNoLocation(request);
+		}
 		if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
 			// TODO: HANDLE SLASHES IN REQUEST TO DIRECTORY
@@ -46,6 +47,17 @@ namespace ft
 			res = (_e_pager.getErrorPage(405));
 			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
 			return res;
+		}
+	}
+
+	IResponse *GetBuildPolicy::buildIfNoLocation(IRequest *request)
+	{
+		if (!_fmngr.isFileExisting(request->getHeader()->getPath())) {
+			return _e_pager.getErrorPage(404);
+		} else if (_fmngr.isADirectory(request->getHeader()->getPath())) {
+			return buildFromDir(request, request->getHeader()->getPath(), NULL);
+		} else {
+			return buildFromFile(request, request->getHeader()->getPath());
 		}
 	}
 }

@@ -70,6 +70,8 @@ namespace ft
 		bool ifCorrectMethod(IRequest *request, LocationInit* location);
 
 		std::string ifRootArgument(IRequest *request, LocationInit *location);
+
+		LocationInit *findLocation(const std::string &URI, ServerInit *server);
 	};
 
 } // namespace ft

@@ -100,7 +100,11 @@ namespace ft
 		std::string type;
 		IBody *res;
 
-		type = _fmngr.getContentType(filename);
+		try {
+			type = _fmngr.getContentType(filename);
+		} catch (FileManager::NoSuchType) {
+			type = "";
+		}
 #ifdef DEBUG
 		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 #endif
@@ -150,7 +154,7 @@ namespace ft
 //			return buildFromFile(correct_path + "index.html");
 //		}
 //		return _e_pager.getErrorPage(404);
-		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), request->getHeader()->getURI());
+		IBody *body = _index_module.getHtmlPage(location, _fmngr.getRoot(), correct_path);
 		if (!body)
 			return _e_pager.getErrorPage(404);
 		IHeader *header = buildHeader(200, "OK", body);
@@ -189,17 +193,23 @@ namespace ft
 
 	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
 	{
-		LocationInit *location = NULL;
-		std::list<LocationInit *> list = server->getLocationInits();
-		std::list<LocationInit *>::iterator it = list.begin();
-		for (unsigned int i = 0; i < server->getLocationCount(); i++){
-			if ((*it)->getPath() == URI) {
-				location = it.operator*();
-				break;
+		LocationInit *location;
+//		TODO: заменить URI на подмену всех корректных локейшенов
+//		get correctSumLocationPath();
+//		existing ли папка;
+
+		if ( _fmngr.isADirectory(URI)) {
+			location = findLocation(URI , server);
+		} else {
+			location = findLocation(URI , server);
+			if (!location) {
+				std::string dir_name = URI.substr(0,URI.rfind("/"));
+				location = findLocation(dir_name , server);
 			}
 		}
 		return location;
 	}
+
 	void ABuildPolicy::applyConfig(ServerInit *server)
 	{
 		if (server == NULL)
@@ -272,11 +282,29 @@ namespace ft
 		std::string res;
 		std::map<std::string, std::string> args = location->getArgs();
 		std::map<std::string, std::string>::iterator it = args.find("root");
-		if (it != args.end())
-			res = request->getHeader()->getURI() + it->second;
+		if (it != args.end()) {
+			res = request->getHeader()->getURI();
+			int pos = res.rfind(location->getPath());
+			res.replace(pos, location->getPath().size(), it->second);
+		}
 		else
 			res = request->getHeader()->getURI();
 		return res;
+	}
+
+	LocationInit *ABuildPolicy::findLocation(const std::string &URI, ServerInit *server)
+	{
+		LocationInit *location = NULL;
+		std::list<LocationInit *> list = server->getLocationInits();
+		std::list<LocationInit *>::reverse_iterator rit = list.rbegin();
+		for (; rit != list.rend() ; ++rit){
+			LocationInit *tmp = *rit;
+			if (tmp->getPath() == URI) {
+				location = *rit;
+				break;
+			}
+		}
+		return location;
 	}
 }
 // namespace ft

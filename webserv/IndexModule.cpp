@@ -38,6 +38,7 @@ namespace ft {
 			location->getArgs().find("autoindex").operator*().second == "on")
 			return generateAutoindex(location);
 
+//		TODO if location is NULL;
 		split = splitString(location->getArgs().find("index")->second, " ");
 		for (t_vector::iterator it = split.begin(); it < split.end(); it++) {
 			filePath = _url + *it;
@@ -94,8 +95,6 @@ namespace ft {
 
 		line += "<a href=\"";
 		line += info->d_name;
-		if (info->d_type == DT_DIR)
-			line += '/';
 		line += "\">";
 		line += info->d_name;
 		line += "</a>";

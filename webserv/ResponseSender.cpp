@@ -33,11 +33,6 @@ namespace ft
 	{
 		int ret;
 		client->updateEventTime();
-		if (resp->getHeader()->getResponseCode() == 405)
-		{
-			return sendFullResponse(resp, client);
-		}
-
 		if (!client->headerSent())
 		{
 			sendHeader(resp->getHeader(), client);
