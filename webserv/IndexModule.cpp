@@ -89,6 +89,8 @@ namespace ft {
 
 		line += "<a href=\"";
 		line += info->d_name;
+		if (info->d_type == DT_DIR)
+			line += '/';
 		line += "\">";
 		line += info->d_name;
 		line += "</a>";
