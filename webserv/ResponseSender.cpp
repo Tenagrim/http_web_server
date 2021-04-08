@@ -84,7 +84,7 @@ namespace ft
 		int retw, retr, offset = 0;
 		char *buff = body->getBuff(READ_BODY_ONE_TIME);
 
-		int lr = body->lastReaded();
+		//int lr = body->lastReaded();
 
 		if (body->getReaded() == body->getWritten()) {
 			retr = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
@@ -125,7 +125,7 @@ namespace ft
 		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
 		//if (written == 0 || )
 		//	throw runtime_error();
-		if (body->getWritten() >= body->size()) {
+		if (body->getWritten() + body->getOffset() >= body->size()) {
 			client->sendBody();
 			return 0;
 		}
