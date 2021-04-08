@@ -125,7 +125,8 @@ namespace ft
 		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
 		//if (written == 0 || )
 		//	throw runtime_error();
-		if (body->getWritten() + body->getOffset() >= body->size()) {
+		int w = body->getWritten();
+		if (body->getWritten() >= body->size()) {
 			client->sendBody();
 			return 0;
 		}

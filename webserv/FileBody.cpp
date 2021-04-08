@@ -68,7 +68,7 @@ namespace ft
 
 	unsigned int		FileBody::size() const
 	{
-		return _size;
+		return _size - _offset;
 	}
 
 	BodyType			FileBody::getType()

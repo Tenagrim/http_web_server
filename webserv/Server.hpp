@@ -57,7 +57,7 @@ namespace ft
 		ITimeMachine					*_t_machine;
 		IResponseSender					*_resp_sender;
 		IResponseBuilder				*_resp_builder;
-		
+
 		void							close_sockets(void);
 		void							listenerEvent(Dispatcher_event_args &args);
 		void							clientEvent(Dispatcher_event_args &args);

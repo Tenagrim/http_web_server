@@ -55,8 +55,8 @@ add_executable(
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
 
-#        ./webserv/main.cpp
-        webserv/trash/cgi_module_tester.cpp
+        ./webserv/main.cpp
+#        webserv/trash/cgi_module_tester.cpp
 #        ./webserv/body_reader_test.cpp
 #        webserv/env_tester.cpp
 
