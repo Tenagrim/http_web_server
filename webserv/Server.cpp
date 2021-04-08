@@ -47,13 +47,6 @@ namespace ft
 		return (1);
 	}
 
-	int Server::sendResponce(const IResponse &resp)
-	{
-		(void)resp;
-		throw ft::runtime_error("No implementation");
-		return (-1);
-	}
-
 	#pragma region  Flags operations
 
 	bool Server::hasFlag(unsigned int flag)

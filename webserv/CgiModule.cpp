@@ -199,6 +199,9 @@ namespace ft{
 		if (head_part.size() + 2 < size)
 			body = new FileBody(_tmp_out, static_cast<int>(head_part.size() + 2));
 
+		if (body && !header->isHeadAlreadyExist(h_content_length))
+			header->setHeader(h_content_length, ft::to_string(body->size()));
+
 		return new BasicResponse(header, body);
 	}
 
