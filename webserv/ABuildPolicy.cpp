@@ -299,13 +299,14 @@ namespace ft
 	{
 		LocationInit *location = NULL;
 		std::string correct_path = checkerPath(request, conf);
-		if(_fmngr.isFileExisting(correct_path)) {
-			std::string ext = '.' + ft::getFileExtension(correct_path);
+//		if(_fmngr.isFileExisting(correct_path)) {
+		std::string ext = '.' + ft::getFileExtension(correct_path);
+		if (ext == ".bla")
 			location = findLocation(ext, conf);
-			if (!location)
-				location = getCorrectLocation(correct_path, conf);
-			return location;
-		}
+//			if (!location)
+//				location = getCorrectLocation(correct_path, conf);
+//			return location;
+//		}
 		return location;
 	}
 
@@ -425,6 +426,21 @@ namespace ft
 			}
 		}
 		return res;
+	}
+
+	IResponse * ABuildPolicy::redirectToCGI(IRequest *request, LocationInit *location)
+	{
+		IResponse *response = NULL;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["fastcgi_pass"];
+		if(!methods.empty()) {
+			_cgi_module.setRoot(_fmngr.getRoot());
+			_cgi_module.setExecutable(methods);
+			response = _cgi_module.getResponse(request);
+		}
+		return response;
 	}
 }
 // namespace ft

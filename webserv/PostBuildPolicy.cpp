@@ -27,6 +27,8 @@ namespace ft
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = extensionCheck(request, conf);
+		if (!location)
+			location = getCorrectLocation(checkerPath(request, conf), conf);
 		if (ifCorrectMethod(request, location))
 		{
 			if (ifCorrectBodySize(request, location))
@@ -42,21 +44,6 @@ namespace ft
 			response = _e_pager.getErrorPage(405);
 			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
 			return response;
-		}
-		return response;
-	}
-
-	IResponse * PostBuildPolicy::redirectToCGI(IRequest *request, LocationInit *location)
-	{
-		IResponse *response = NULL;
-		if (!location)
-			throw ft::runtime_error("No coorect Location");
-		std::map<std::string, std::string> arguments = location->getArgs();
-		std::string methods = arguments["fastcgi_pass"];
-		if(!methods.empty()) {
-			_cgi_module.setRoot(_fmngr.getRoot());
-			_cgi_module.setExecutable(methods);
-		 	response = _cgi_module.getResponse(request);
 		}
 		return response;
 	}
