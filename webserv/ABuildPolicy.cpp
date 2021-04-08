@@ -393,5 +393,38 @@ namespace ft
 		}
 		return state;
 	}
+
+	IResponse *ABuildPolicy::ifErrorPage(IRequest *request, LocationInit *location, std::basic_string<char,
+	        std::char_traits<char>, std::allocator<char> > code)
+	{
+		IResponse *response = NULL;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["error_page"];
+		if(!methods.empty()) {
+			std::vector<std::string> vec = ft::splitString(methods, " ");
+			if(checkCodePage(vec[0], code)) {
+				IBody *body = bodyFromFile(vec[1]);
+				IHeader *head = _e_pager.getErrorHead(std::stoi(code));
+				head->setHeader(h_content_length, ft::to_string(body->size()));
+				response = new BasicResponse(head, body);
+			}
+		}
+		return response;
+	}
+
+	bool ABuildPolicy::checkCodePage(std::string &string, std::string &code)
+	{
+		bool res = false;
+		std::vector<std::string> vec = ft::splitString(string, ",");
+		for(size_t i = 0; i < vec.size(); ++i) {
+			if (vec[i] == code) {
+				res = true;
+				break;
+			}
+		}
+		return res;
+	}
 }
 // namespace ft

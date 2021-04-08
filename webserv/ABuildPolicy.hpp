@@ -82,6 +82,11 @@ namespace ft
 		LocationInit* extensionCheck(IRequest *request,ServerInit *conf);
 
 		bool ifCorrectBodySize(IRequest *request, LocationInit *location);
+
+		IResponse *ifErrorPage(IRequest *request, LocationInit *location, std::basic_string<char,
+		        std::char_traits<char>, std::allocator<char> > code);
+
+		bool checkCodePage(std::string &string, std::string &code);
 	};
 
 } // namespace ft
