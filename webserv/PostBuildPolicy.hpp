@@ -14,8 +14,6 @@ namespace ft
 		PostBuildPolicy &operator=(const PostBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
 
-		IHeader *AcceptingData(IRequest *pRequest);
-
 		IResponse * redirectToCGI(IRequest *request, LocationInit *location);
 
 		IResponse *generateFile(IRequest *request);
