@@ -295,6 +295,20 @@ namespace ft
 		return  res;
 	}
 
+	LocationInit *ABuildPolicy::extensionCheck(IRequest *request, ServerInit *conf)
+	{
+		LocationInit *location = NULL;
+		std::string correct_path = checkerPath(request, conf);
+		if(_fmngr.isFileExisting(correct_path)) {
+			std::string ext = '.' + ft::getFileExtension(correct_path);
+			location = findLocation(ext, conf);
+			if (!location)
+				location = getCorrectLocation(correct_path, conf);
+			return location;
+		}
+		return location;
+	}
+
 	std::string ABuildPolicy::ifRootArgument(IRequest *request, LocationInit *location)
 	{
 		std::string res;
@@ -340,6 +354,8 @@ namespace ft
 					path += part;
 			}
 		}
+		if (path.empty())
+			path = "/";
 		return path;
 	}
 
@@ -357,6 +373,25 @@ namespace ft
 		}
 		res = "/" + res;
 		return res;
+	}
+
+	bool ABuildPolicy::ifCorrectBodySize(IRequest *request, LocationInit *location)
+	{
+		bool state = true;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["client_max_body_size"];
+		if(!methods.empty()) {
+			unsigned int size = atoi(methods.c_str());
+			if (size != 0) {
+				if (request->getBody()->size() < size)
+					return state;
+			} else {
+				throw ft::runtime_error("client_max_body_size argument is not a a number");
+			}
+		}
+		return state;
 	}
 }
 // namespace ft

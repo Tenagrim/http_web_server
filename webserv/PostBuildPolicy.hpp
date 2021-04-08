@@ -15,6 +15,16 @@ namespace ft
 		IResponse		*buildResponse(IRequest *request);
 
 		IHeader *AcceptingData(IRequest *pRequest);
+
+		IResponse * redirectToCGI(IRequest *request, LocationInit *location);
+
+		IResponse *generateFile(IRequest *request);
+
+		void creatFile(IRequest *pRequest);
+
+		void mutantExistingFile(IRequest *pRequest);
+
+		void truncExistingFile(IRequest *pRequest);
 	};
 
 

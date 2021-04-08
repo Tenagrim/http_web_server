@@ -18,6 +18,7 @@
 #include <FileBody.hpp>
 #include <ErrorPager.hpp>
 #include <ServerInit.hpp>
+#include <CgiModule.hpp>
 
 #include <defines.hpp>
 #include <list>
@@ -37,6 +38,7 @@ namespace ft
 		ITimeMachine	*_t_machine;
 		ServerInit		*config;
 		IndexModule		_index_module;
+		CgiModule		_cgi_module;
 
 		int findIndexFile(std::list<std::string> &priority);
 
@@ -76,6 +78,10 @@ namespace ft
 		std::string checkerPath(IRequest *request, ServerInit *conf);
 
 		std::string findPart(std::list<LocationInit *> list, std::string const &string);
+
+		LocationInit* extensionCheck(IRequest *request,ServerInit *conf);
+
+		bool ifCorrectBodySize(IRequest *request, LocationInit *location);
 	};
 
 } // namespace ft
