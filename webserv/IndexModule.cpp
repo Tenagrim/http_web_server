@@ -132,7 +132,7 @@ namespace ft {
 
 		std::string type;
 		if (!stat(filePath.c_str(), &statbuf)) {
-			file = new FileBody(filePath);
+			file = new FileBody(filePath, 0);
 			try {
 				type = FileManager::getContentType(filePath);
 				file->setContentType(type);
@@ -160,7 +160,7 @@ namespace ft {
 		index_file += url;
 		f_man.setRoot(index_file);
 		if (f_man.isFileExisting(DEFAULT_INDEX))
-			return new FileBody(f_man.getFullPath(DEFAULT_INDEX));
+			return new FileBody(f_man.getFullPath(DEFAULT_INDEX), 0);
 		else
 			throw ErrorException(403);
 	}

@@ -29,7 +29,8 @@ namespace ft
 		h_transfer_encoding,
 		h_user_agent,
 		h_www_authenticate,
-		h_connection
+		h_connection,
+		h_status
 	};
 
 	enum methods_enum
@@ -48,7 +49,7 @@ namespace ft
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
-	std::string 		fdToString(int fd);
+	std::string fdToString(int fd);
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
@@ -59,5 +60,6 @@ namespace ft
 						  								char *buf, int bufLen);
 
 	bool				methodNeedsBody(methods_enum method);
+	unsigned int getFileSize(const char *path);
 
 }

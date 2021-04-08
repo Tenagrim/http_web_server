@@ -274,7 +274,7 @@ void ft::BodyReader::reset() {
 ft::IBody *ft::BodyReader::getBody() {
 	if (!_ended)
 		throw ft::runtime_error("Body was not fully readed\n");
-	return new FileBody(_filename);
+	return new FileBody(_filename, 0);
 }
 
 int ft::BodyReader::readByLen()
@@ -295,5 +295,9 @@ int ft::BodyReader::readByLen()
 	if (ret == -1)
 		throw ft::runtime_error("WRITE FAILED");
 	return (endReading(0));
+}
+
+unsigned int ft::BodyReader::getMaxId() {
+	return _max_id;
 }
 

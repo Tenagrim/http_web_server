@@ -155,8 +155,10 @@ namespace ft
 
 	std::string Header::getQuery() {
 		int pos = _uri.find('?');
-		if (pos == std::string::npos)
+		if (pos != std::string::npos)
 			return _uri.substr(pos);
+		else
+			return "";
 	}
 
 } // namespace ft

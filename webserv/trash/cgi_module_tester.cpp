@@ -10,7 +10,7 @@ int main()
 {
 	ft::CgiModule module;
 	ft::Header *head = new ft::Header(ft::request);
-	ft::TextBody * body= new ft::TextBody("123.bla");
+	ft::TextBody * body= new ft::TextBody("1nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
 	ft::BasicRequest *req = new ft::BasicRequest(head, body);
 
 	head->setHeader(ft::h_content_length, ft::to_string(body->size()));
@@ -24,6 +24,7 @@ int main()
 
 	ft::IResponse	*resp = module.getResponse(req);
 	std::string res;
+	/*
 	try {
 		res  = ft::fdToString(open(TMP_OUT, O_RDONLY));
 	}
@@ -31,12 +32,14 @@ int main()
 	{
 		std::cout << "CANNOT READ FILE\n";
 	}
+	 */
 	std::cout << "====================\n" <<req->to_string() <<"\n=====================\n";
 	if (resp)
 	{
 		std::cout << ">>>>>>>>>>>>>>>>>>>>\n" <<resp->to_string() <<"\n=====================\n";
 		std::cout << "====================\n" <<res <<"\n=====================\n";
 	}
-	else
-		std::cout << "====================\n" <<res <<"\n=====================\n";
+
+//	else
+//		std::cout << "====================\n" <<res <<"\n=====================\n";
 }
