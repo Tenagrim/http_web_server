@@ -14,7 +14,7 @@ namespace ft
 	FileBody::FileBody(const FileBody &ref) : _size(0), _opened_fd(-1)
 	{/* Illegal */ (void)ref; }
 
-	FileBody::FileBody(const std::string &path) : _filename(path), _opened_fd(-1)
+	FileBody::FileBody(std::string const &path, int offset) : _filename(path), _opened_fd(-1), _offset(offset)
 	{
 		int ret;
 
@@ -48,7 +48,10 @@ namespace ft
 	int					FileBody::getFd()
 	{
 		int ret;
-		ret = open(_filename.c_str(), O_RDONLY, 0666);
+		ret = open(_filename.c_str(), O_RDONLY);
+		if (_offset)
+			if (lseek(ret, _offset, SEEK_SET) == -1)
+				throw ft::runtime_error("FILE BODY: CANNOT SEEK IN FILE");
 		if (ret == -1)
 			throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		return(ret);
@@ -57,6 +60,7 @@ namespace ft
 	std::string			FileBody::to_string()
 	{
 		int fd = getFd();
+
 		std::string  res = ft::fdToString(fd);
 		close(fd);
 		return (res);
@@ -72,7 +76,6 @@ namespace ft
 		throw ft::runtime_error("Not implemented");
 	}
 
-
 	int FileBody::getOpenedFd() {
 		if (_opened_fd == -1)
 		{
@@ -81,6 +84,10 @@ namespace ft
 				throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		}
 		return _opened_fd;
+	}
+
+	int FileBody::getOffset() const {
+		return _offset;
 	}
 
 }

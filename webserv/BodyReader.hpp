@@ -33,8 +33,8 @@ namespace ft {
 		};
 
 	private:
-		static unsigned int	_max_id;
 
+		static unsigned int	_max_id;
 		r_state 			_state;
 
 		std::string 		_remainder_of_header;
@@ -66,8 +66,9 @@ namespace ft {
 		BodyReader(const BodyReader &ref);
 		BodyReader();
 	public:
-
 		static void 		reset();
+		static unsigned int getMaxId();
+
 		//void setRemainderOfHeader(char *remainderOfHeader);
 		const std::string &getFilename() const;
 

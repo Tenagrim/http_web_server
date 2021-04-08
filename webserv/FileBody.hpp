@@ -15,12 +15,17 @@ namespace ft
 		unsigned int	_size;
 		std::string		_filename;
 		int 			_opened_fd;
+		int 			_offset;
+	public:
+		int getOffset() const;
+
+	private:
 
 		FileBody();
 		FileBody(const FileBody &ref);
 		std::string		readFile() const;
 	public:
-		FileBody(std::string const &path);
+		FileBody(std::string const &path, int offset = 0);
 		~FileBody();
 		FileBody &operator=(const FileBody &ref);
 

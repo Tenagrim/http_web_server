@@ -56,7 +56,7 @@ add_executable(
         ./webserv/LocationInit.hpp
 
         ./webserv/main.cpp
-#        webserv/cgi_module_tester.cpp
+#        webserv/trash/cgi_module_tester.cpp
 #        ./webserv/body_reader_test.cpp
 #        webserv/env_tester.cpp
 
@@ -121,5 +121,5 @@ add_executable(
         webserv/Environment.cpp
         webserv/Environment.hpp
         webserv/CgiModule.cpp
-        )
+        webserv/utils/getFileSize.cpp)
 
