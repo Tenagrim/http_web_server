@@ -198,16 +198,16 @@ namespace ft {
 			client->setLastRequest(new BasicRequest());
 			client->getLastRequest()->setPort(_port);
 		}
-
-		client->setStates(Client::s_start_header_reading);
-		client->setFlag(Client::read_flags, Client::r_begin);
-
-		n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
-		//if (buff[0] == 0)
-		buff[n] = 0;
-
+		if (client->getStates() != Client::s_body_reading) {
+			client->setStates(Client::s_start_header_reading);
+			client->setFlag(Client::read_flags, Client::r_begin);
+			n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
+			//if (buff[0] == 0)
+			buff[n] = 0;
+		}
 		switch (client->getStates()) {
 			case Client::s_start_header_reading:
+
 				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_reading:
@@ -217,7 +217,7 @@ namespace ft {
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
 		}
-		if (client->getStates() == Client::s_header_readed &&
+		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&
 			client->getLastRequest()->getHeader() &&
 			client->getLastRequest()->getHeader()->isValid()
 			) {
@@ -227,6 +227,7 @@ namespace ft {
 					int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
 					client->setBReader(new BodyReader(client->getSock(), contLen, bodyPart));
 				}
+				client->getStates() = Client::s_body_reading;
 				bodyRet = client->getBReader()->readBody();
 				switch (bodyRet) {
 					case 0:
