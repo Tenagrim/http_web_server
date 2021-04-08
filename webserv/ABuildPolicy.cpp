@@ -284,14 +284,14 @@ namespace ft
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["limit_except"];
+		if (methods.empty()){
+			return true;
+		}
 		std::vector<std::string> vec = splitString(methods, " ");
 		for (size_t i = 0; i != vec.size(); ++i) {
 			if (ft::getMethodStr(request->getHeader()->getMethod()) == vec[i])
 				res = true;
 		}
-//		if (ft::getMethodStr(request->getHeader()->getMethod()) == methods){
-//			res = true;
-//		}
 		return  res;
 	}
 

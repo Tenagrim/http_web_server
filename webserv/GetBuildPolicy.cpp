@@ -30,8 +30,7 @@ namespace ft
 		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);
 		if (!location) {
 			std::string path = checkerPath(request, conf);
-			if (!_fmngr.isFileExisting(path) /*|| (_fmngr.isFileExisting(path) && path.back() != '/' && _fmngr
-			.isADirectory(path))*/) {
+			if (!_fmngr.isFileExisting(path)) {
 				return (_e_pager.getErrorPage(404));
 			} else {
 				if (_fmngr.isADirectory(path)) {
@@ -59,12 +58,11 @@ namespace ft
 			else {
 				return (_e_pager.getErrorPage(404));
 			}
+		} else {
+			res = (_e_pager.getErrorPage(405));
+			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			return res;
 		}
-//		} else {
-//			res = (_e_pager.getErrorPage(405));
-//			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
-//			return res;
-//		}
 		return res;
 	}
 
