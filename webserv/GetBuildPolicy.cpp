@@ -59,12 +59,11 @@ namespace ft
 			else {
 				return (_e_pager.getErrorPage(404));
 			}
+		} else {
+			res = (_e_pager.getErrorPage(405));
+			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			return res;
 		}
-//		} else {
-//			res = (_e_pager.getErrorPage(405));
-//			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
-//			return res;
-//		}
 		return res;
 	}
 

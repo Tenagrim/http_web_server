@@ -40,6 +40,8 @@ namespace ft
 		struct stat statbuf = {};
 		std::string file;
 		file = _root + filename;
+//		if (file.back() == '/')
+//			file.erase(file.end() - 1);
 		stat(file.c_str(), &statbuf);
 		return S_ISDIR(statbuf.st_mode);	
 	}
