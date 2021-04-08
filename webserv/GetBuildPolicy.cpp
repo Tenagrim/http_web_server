@@ -27,13 +27,29 @@ namespace ft
 		std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
-		LocationInit *location = getCorrectLocation(request->getHeader()->getPath(), conf);
+		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);
 		if (!location) {
-			return buildIfNoLocation(request);
-		}
-		if (ifCorrectMethod(request, location)){
+			std::string path = checkerPath(request, conf);
+			if (!_fmngr.isFileExisting(path) /*|| (_fmngr.isFileExisting(path) && path.back() != '/' && _fmngr
+			.isADirectory(path))*/) {
+				return (_e_pager.getErrorPage(404));
+			} else {
+				if (_fmngr.isADirectory(path)) {
+					return buildFromDir(request, path, getCorrectLocation(request->getHeader()->getPath(), conf));
+				} else {
+					location = getCorrectLocation(request->getHeader()->getPath(), conf);
+					if (!location) {
+						return buildFromFile(request, path);
+					} else {
+						if (ifCorrectMethod(request, location)){
+							std::string correct_path = ifRootArgument(request, location);
+							 return buildFromFile(request, correct_path);
+						}
+					}
+				}
+			}
+		} else if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
-			// TODO: HANDLE SLASHES IN REQUEST TO DIRECTORY
 			if (_fmngr.isADirectory(correct_path)) {
 				return buildFromDir(request, correct_path, location);
 			}
@@ -43,11 +59,13 @@ namespace ft
 			else {
 				return (_e_pager.getErrorPage(404));
 			}
-		} else {
-			res = (_e_pager.getErrorPage(405));
-			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
-			return res;
 		}
+//		} else {
+//			res = (_e_pager.getErrorPage(405));
+//			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+//			return res;
+//		}
+		return res;
 	}
 
 	IResponse *GetBuildPolicy::buildIfNoLocation(IRequest *request)

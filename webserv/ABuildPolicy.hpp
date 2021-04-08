@@ -64,7 +64,7 @@ namespace ft
 		ServerInit *getConfig() const;
 		void setConfig(ServerInit *config);
 		LocationInit *getCorrectLocation(IRequest *request, ServerInit *server);
-		LocationInit *getCorrectLocation(std::string const &URI, ServerInit *server);
+		LocationInit *getCorrectLocation(std::string URI, ServerInit *server);
 		void applyConfig(ServerInit *server);
 		LocationInit *getLocationFile(IRequest *request, ServerInit *server);
 		bool ifCorrectMethod(IRequest *request, LocationInit* location);
@@ -72,6 +72,10 @@ namespace ft
 		std::string ifRootArgument(IRequest *request, LocationInit *location);
 
 		LocationInit *findLocation(const std::string &URI, ServerInit *server);
+
+		std::string checkerPath(IRequest *request, ServerInit *conf);
+
+		std::string findPart(std::list<LocationInit *> list, std::string const &string);
 	};
 
 } // namespace ft

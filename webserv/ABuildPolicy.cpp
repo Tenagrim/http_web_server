@@ -166,7 +166,8 @@ namespace ft
 			else
 				throw ft::runtime_error("SOMETHING WENT WRONG");
 		}
-
+		if (!body)
+			return _e_pager.getErrorPage(404);
 		IHeader *header = buildHeader(200, "OK", body);
 		BasicResponse *res = new BasicResponse(header, body);
 		return res;
@@ -201,22 +202,29 @@ namespace ft
 		return location;
 	}
 
-	LocationInit *ABuildPolicy::getCorrectLocation(std::string const &URI, ServerInit *server)
+	LocationInit *ABuildPolicy::getCorrectLocation(std::string URI, ServerInit *server)
 	{
 		LocationInit *location;
-//		TODO: заменить URI на подмену всех корректных локейшенов
-//		get correctSumLocationPath();
-//		existing ли папка;
-
-		if ( _fmngr.isADirectory(URI)) {
-			location = findLocation(URI , server);
-		} else {
-			location = findLocation(URI , server);
-			if (!location) {
-				std::string dir_name = URI.substr(0,URI.rfind("/"));
-				location = findLocation(dir_name , server);
-			}
+		if (URI.empty())
+			throw ft::runtime_error("*ABuildPolicy::getCorrectLocation - NOT FOUND");
+//		if (URI == "/")
+//			location = findLocation(URI, server);
+		location = findLocation(URI, server);
+		if (!location){
+			std::string new_uri = URI.substr(0, URI.rfind('/'));
+			if (new_uri.empty())
+				new_uri = "/";
+			location = getCorrectLocation(new_uri, server);
 		}
+//		if ( _fmngr.isADirectory(URI)) {
+//			location = findLocation(URI , server);
+//		} else {
+//			location = findLocation(URI , server);
+//			if (!location) {
+//				std::string dir_name = URI.substr(0,URI.rfind("/"));
+//				location = findLocation(dir_name , server);
+//			}
+//		}
 		return location;
 	}
 
@@ -309,12 +317,46 @@ namespace ft
 		std::list<LocationInit *>::reverse_iterator rit = list.rbegin();
 		for (; rit != list.rend() ; ++rit){
 			LocationInit *tmp = *rit;
-			if (tmp->getPath() == URI) {
+			if (tmp->getPath() == URI || (tmp->getPath()) == URI+"/") {
 				location = *rit;
 				break;
 			}
 		}
 		return location;
+	}
+
+	std::string ABuildPolicy::checkerPath(IRequest *request,ServerInit *conf)
+	{
+		std::string path;
+		std::string URI = request->getHeader()->getURI();
+		if (!URI.empty()) {
+			std::vector<std::string> vec = splitString(URI, "/");
+			std::cout<<vec.size()<<std::endl;
+			vec.erase(vec.begin());
+			std::list<LocationInit *> list = conf->getLocationInits();
+			for (size_t i = 0; i != vec.size(); i++){
+				std::string part = findPart(list, vec[i]);
+				if (!part.empty())
+					path += part;
+			}
+		}
+		return path;
+	}
+
+	std::string ABuildPolicy::findPart(std::list<LocationInit *> list, const std::string &string)
+	{
+		std::string res = string;
+		if(string.empty())
+			return res;
+		std::list<LocationInit *>::iterator it = list.begin();
+		for (; it != list.end(); ++it) {
+			if ((*it)->getPath() == ("/" + string)) {
+				res = (*it)->getArgs().find("root")->second;
+				return res;
+			}
+		}
+		res = "/" + res;
+		return res;
 	}
 }
 // namespace ft

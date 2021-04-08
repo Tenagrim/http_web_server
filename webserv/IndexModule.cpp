@@ -12,6 +12,9 @@
 #include <vector>
 
 #define HTML_LINE_LEN 88
+//#define DEFAULT_INDEX "youpi.bad_extension"
+#define DEFAULT_INDEX "index.html"
+
 
 namespace ft {
 	bool IndexModule::_index_on = true;
@@ -127,9 +130,14 @@ namespace ft {
 		FileBody	*file;
 		struct stat statbuf = {};
 
+		std::string type;
 		if (!stat(filePath.c_str(), &statbuf)) {
 			file = new FileBody(filePath);
-			file->setContentType(FileManager::getContentType(filePath));
+			try {
+				type = FileManager::getContentType(filePath);
+				file->setContentType(type);
+			} catch (FileManager::NoSuchType)
+			{}
 			return file;
 		}
 		return nullptr;
@@ -151,8 +159,8 @@ namespace ft {
 		addSlashBetween(index_file, url);
 		index_file += url;
 		f_man.setRoot(index_file);
-		if (f_man.isFileExisting("index.html"))
-			return new FileBody(f_man.getFullPath("index.html"));
+		if (f_man.isFileExisting(DEFAULT_INDEX))
+			return new FileBody(f_man.getFullPath(DEFAULT_INDEX));
 		else
 			throw ErrorException(403);
 	}

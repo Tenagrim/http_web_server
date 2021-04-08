@@ -36,7 +36,7 @@ namespace ft
 		if (!client->headerSent())
 		{
 			sendHeader(resp->getHeader(), client);
-			if (resp->getBody()) //&& resp->getHeader()->getResponseCode() != 405)
+			if (resp->getBody() && resp->getBody()->size()) //&& resp->getHeader()->getResponseCode() != 405)
 				return 1;
 			else return 0;
 		}
