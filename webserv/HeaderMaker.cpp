@@ -146,7 +146,7 @@ namespace ft {
 	void HeaderMaker::checkHttp(const std::string &line, IHeader *header) {
 		std::string http;
 
-		http = line.substr(line.rfind(' ') + 1, 8);
+		http = line.substr(line.rfind(' ') + 1);
 		if (http != "HTTP/1.1")
 			header->makeInvalid();
 	}
