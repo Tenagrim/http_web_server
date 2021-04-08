@@ -196,8 +196,8 @@ namespace ft{
 		if (head_part.empty() || !header)
 			return _e_pager.getErrorPage(500);
 		size = ft::getFileSize(_tmp_out.c_str());
-		if (head_part.size() < size)
-			body = new FileBody(_tmp_out, static_cast<int>(head_part.size()));
+		if (head_part.size() + 2 < size)
+			body = new FileBody(_tmp_out, static_cast<int>(head_part.size() + 2));
 
 		return new BasicResponse(header, body);
 	}

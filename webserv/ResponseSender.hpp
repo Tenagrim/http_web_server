@@ -25,13 +25,13 @@ namespace ft
 		int 				sendTextBody(TextBody *body, IClient *client);
 		int 				sendFileBody(FileBody *body, IClient *client);
 
-		int sendFullResponse(IResponse *resp, IClient *client);
+		int					sendFullResponse(IResponse *resp, IClient *client);
 	public:
 		ResponseSender(Dispatcher *_disp);
 		virtual ~ResponseSender();
 		ResponseSender(const ResponseSender &ref);
-		ResponseSender &operator=(const ResponseSender &ref);
-		int sendResponce(IResponse *resp, IClient *client);
+		ResponseSender		&operator=(const ResponseSender &ref);
+		int					sendResponce(IResponse *resp, IClient *client);
 	};
 
 }

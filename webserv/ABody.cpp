@@ -78,4 +78,8 @@ namespace ft
 		return _readed;
 	}
 
+	int ABody::getOffset() const {
+		return 0;
+	}
+
 }

@@ -17,7 +17,6 @@ namespace ft
 		int 			_opened_fd;
 		int 			_offset;
 	public:
-		int getOffset() const;
 
 	private:
 
@@ -29,6 +28,7 @@ namespace ft
 		~FileBody();
 		FileBody &operator=(const FileBody &ref);
 
+		int					getOffset() const;
 		int					getFd();
 		std::string			to_string();
 		unsigned int		size() const;

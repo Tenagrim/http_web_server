@@ -38,6 +38,8 @@ namespace ft
 		unsigned long				getReaded() const;
 		void						setReaded(unsigned long readed);
 		long						lastReaded() const;
+		virtual int					getOffset() const;
+
 	};
 
 }

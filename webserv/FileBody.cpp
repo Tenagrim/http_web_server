@@ -79,9 +79,10 @@ namespace ft
 	int FileBody::getOpenedFd() {
 		if (_opened_fd == -1)
 		{
-			_opened_fd = open(_filename.c_str(), O_RDONLY, 0666);
-			if (_opened_fd == -1)
-				throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
+			_opened_fd = getFd();
+//			_opened_fd = open(_filename.c_str(), O_RDONLY, 0666);
+//			if (_opened_fd == -1)
+//				throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		}
 		return _opened_fd;
 	}
