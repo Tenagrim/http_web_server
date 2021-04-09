@@ -126,21 +126,21 @@ namespace ft
 	{
 		//#undef DEBUG
 
-			#ifdef DEBUG
-				static int i;
+		//	#ifdef DEBUG
+		//		static int i;
 			
-				std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
+			//	std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
 				std::cout << "CLIENTS: \n";
 				fd_map::iterator it = _client_map.begin();
 				for(; it != _client_map.end(); it++)
 					std::cout << "[" << (*it).first << "] ";
 				std::cout << "\n";
-				std::cout << "LISTENERS: \n";
-				it = _listener_map.begin();
-				for(; it != _listener_map.end(); it++)
-					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
-				std::cout << "\n";
-			#endif
+//				std::cout << "LISTENERS: \n";
+//				it = _listener_map.begin();
+//				for(; it != _listener_map.end(); it++)
+//					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
+//				std::cout << "\n";
+		//	#endif
 		_events = 0;
 		if (_listening == 0)
 			throw ft::runtime_error("No have fd to dispatch");
@@ -198,12 +198,12 @@ namespace ft
 		{
 			if (FD_ISSET((*it).first, &_writing_set))
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
-			else {
+//			else {
 				unsigned long diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
 //			std::cout << "CLIENT DIFF: " << diff <<"\n";
 				if (diff > CLIENT_TIMEOUT_MICROS) {
 					ft_closeSock((*it).first);
-				}
+//				}
 			}
 		}
 	}
