@@ -8,7 +8,7 @@ namespace ft
 	FileBody::~FileBody()
 	{
 		if (_opened_fd != -1)
-			close(_opened_fd);
+			ft_close(_opened_fd);
 	}
 
 	FileBody::FileBody(const FileBody &ref) : _size(0), _opened_fd(-1)
@@ -62,7 +62,7 @@ namespace ft
 		int fd = getFd();
 
 		std::string  res = ft::fdToString(fd);
-		close(fd);
+		ft_close(fd);
 		return (res);
 	}
 

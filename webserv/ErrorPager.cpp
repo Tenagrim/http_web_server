@@ -69,7 +69,7 @@ namespace ft
 		head->setHeader(h_content_type, "text/html");
 //		Tester 42 don't like this line
 //		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
-//		head->setHeader(h_connection, "close");
+//		head->setHeader(h_connection, "ft_close");
 		return head;
 	}
 

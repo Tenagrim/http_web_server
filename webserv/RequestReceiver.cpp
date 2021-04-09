@@ -20,8 +20,8 @@ namespace ft {
 
 	RequestReceiver::~RequestReceiver() {
 //		delete _validator;
-		close_connections();
-		close(_main_socket);
+		ft_close_connections();
+		ft_close(_main_socket);
 	}
 
 	RequestReceiver::RequestReceiver(const RequestReceiver &ref) : _host(
@@ -170,12 +170,12 @@ namespace ft {
 
 	void RequestReceiver::close_connection(int sock) {
 		if (!_clients.count(sock))
-			throw ft::runtime_error("Can t close: No such connection");
+			throw ft::runtime_error("Can t ft_close: No such connection");
 		delete _clients[sock];
 		_clients.erase(sock);
 	}
 
-	void RequestReceiver::close_connections(void) {
+	void RequestReceiver::ft_close_connections(void) {
 		fd_map::iterator it;
 		for (it = _clients.begin(); it != _clients.end(); it++)
 			close_connection((*it).first);
@@ -215,6 +215,14 @@ namespace ft {
 				break;
 			case Client::s_header_readed:
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
+				break;
+			case Client::s_not_begin:
+				break;
+			case Client::s_start_body_reading:
+				break;
+			case Client::s_body_reading:
+				break;
+			case Client::s_end_reading:
 				break;
 		}
 		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&

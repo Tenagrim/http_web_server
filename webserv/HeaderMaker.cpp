@@ -9,7 +9,7 @@
 namespace ft {
 
 	std::string HeaderMaker::readHeader(Client *client, char *buff) {
-		int end_pos;
+		size_t end_pos;
 		int ending;
 		std::string bodyPart;
 		if (client->getStates() == Client::s_start_header_reading)
@@ -81,12 +81,23 @@ namespace ft {
 				case Client::s_header_reading:
 					fillHeader(subLine, header, state);
 					break;
+				case Client::s_not_begin:
+					break;
+				case Client::s_header_readed:
+					break;
+				case Client::s_start_body_reading:
+					break;
+				case Client::s_body_reading:
+					break;
+				case Client::s_end_reading:
+					break;
 			}
 		}
 	}
 
 	void HeaderMaker::fillHeader(std::string subLine, IHeader *header,
 									 Client::req_r_states &states) {
+		(void)states;
 		int i = 0;
 		header_keys a;
 		std::string head;
@@ -145,8 +156,10 @@ namespace ft {
 
 	void HeaderMaker::checkHttp(const std::string &line, IHeader *header) {
 		std::string http;
+        strPos a = line.rfind(' ');
+        strPos b = line.rfind('1');
 
-		http = line.substr(line.rfind(' ') + 1, 8);
+		http = line.substr(a + 1, b - a);
 		if (http != "HTTP/1.1")
 			header->makeInvalid();
 	}

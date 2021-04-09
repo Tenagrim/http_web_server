@@ -32,6 +32,8 @@ namespace ft
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
 		int ret;
+		if (resp->getBody())
+			std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd()<<std::endl;
 		client->updateEventTime();
 		if (!client->headerSent())
 		{
@@ -125,7 +127,6 @@ namespace ft
 		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
 		//if (written == 0 || )
 		//	throw runtime_error();
-		int w = body->getWritten();
 		if (body->getWritten() >= body->size()) {
 			client->sendBody();
 			return 0;
@@ -135,7 +136,7 @@ namespace ft
 
 	int ResponseSender::sendFullResponse(IResponse *resp, IClient *client) {
 		std::string str = resp->to_string();
-		int ret;
+		size_t ret;
 		ret = send(client->getSock(), str.c_str(), str.size(), 0);
 		if (ret == str.size())
 			return 0;

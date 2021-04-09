@@ -68,11 +68,10 @@ unsigned int ft::BodyReader::getSize() const {
 }
 
 int ft::BodyReader::endReading(int ret) {
-	int _ret;
 	if (!_ended)
 	{
 		_ended = true;
-		close(_output_fd);
+		ft_close(_output_fd);
 	}
 	return ret;
 }
@@ -96,14 +95,15 @@ int ft::BodyReader::readBody() {
 		case s_a_len: return (readChunkLen(3)); break;
 		case s_block: return(readChunk()); break;
 		case s_end: return 0; break;
+		case s_remains:
+			break;
 	}
 	return 0;
 }
 
 int ft::BodyReader::readRem()
 {
-	int pos ;
-	int len;
+	size_t pos ;
 	while (!_remainder_of_header.empty())
 	{
 		pos = _remainder_of_header.find("\r\n");
@@ -134,11 +134,13 @@ int ft::BodyReader::readRem()
 				//_state = s_r_ending;
 				return (0);
 			}
-			_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16)); //         !!!!!!!!!!!  ATTENTION !!!!!!!!!
+			_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16)); //         !!!!!!!!!!!
+			// ATTENTION
+			// !!!!!!!!!
 			_remainder_of_header.erase(0, pos + 2);
-			if (_block_size_i >= _remainder_of_header.size())
+			if ((size_t)_block_size_i >= _remainder_of_header.size())
 			{
-				if (_block_size_i == _remainder_of_header.size())
+				if ((size_t)_block_size_i == _remainder_of_header.size())
 					_state = s_a_len;
 				else
 					_state = s_p_block;
@@ -158,7 +160,7 @@ int ft::BodyReader::readRem()
 					write_block(_remainder_of_header.c_str(), _block_size_i);
 				}
 				catch (ft::runtime_error){return  -1;}
-				if (_remainder_of_header.size() == _block_size_i + 1)
+				if (_remainder_of_header.size() == (size_t)_block_size_i + 1)
 				{
 					_state = s_a1_len;
 					_block_size.clear();

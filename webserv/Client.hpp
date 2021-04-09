@@ -1,6 +1,6 @@
 #pragma once
 #include <stdexcept>	// for runtime error
-#include <unistd.h>		// for close
+#include <unistd.h>		// for ft_close
 #include <sys/time.h>
 #include <IRequest.hpp>
 #include <IResponse.hpp>

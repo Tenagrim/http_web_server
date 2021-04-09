@@ -1,4 +1,5 @@
 #include <Utils.hpp>
+#include <webserv.hpp>
 
 namespace ft {
 	std::list<std::string> *findAndCut(std::list<std::string> &_list, std::string const &_str) {
@@ -42,12 +43,17 @@ namespace ft {
 	};
 
 	int temporaryBody(std::string const &str) {
-		int fd[2], res;
+		int fd[2];
 		pipe(fd);
 		std::string result;
 		write(fd[1], str.c_str(), str.size());
-		close(fd[1]);
+		ft_close(fd[1]);
 		return fd[0];
+	}
+
+	int ft_close(int fd) {
+		std::cout<<"Closing FD : "<<fd<<std::endl;
+		return close(fd);
 	}
 
 }

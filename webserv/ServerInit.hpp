@@ -31,7 +31,6 @@ namespace ft {
 		bool findRoot(std::list<std::string> *tmp);
 
 		iterator findInList(list *_list,std::string const &string);
-		void getConf(std::list<std::string> &list);
 		iterator is_Space(iterator it);
 		bool is_digit(string const &str);
 		bool findLocations(list *tmp);

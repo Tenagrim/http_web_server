@@ -13,8 +13,8 @@ namespace ft
 	Client::Client(int id,int sock) :
 		_id(id),
 		_sock(sock),
-		_b_reader(),
-		_last_request()
+		_last_request(),
+		_b_reader()
 	{
 		_state_flags = 0;
 		_read_flags = 0;
@@ -29,11 +29,11 @@ namespace ft
 	Client::~Client()
 	{
 		int ret;
-		ret = close(_sock);
+		ret = ft_close(_sock);
 		#ifdef DEBUG
 		std::cout << "CLIENT: CLOSING SOCKET[" << _sock << "]\n";
 		if (ret == -1)
-			std::cout << "CLIENT: FAILED TO CLOSE SOCKET [" << _sock << "]\n";
+			std::cout << "CLIENT: FAILED TO ft_close SOCKET [" << _sock << "]\n";
 		#endif
 		if (_last_request)
 			delete _last_request;

@@ -45,7 +45,7 @@ int main()
 	pipe(_pipe);
 
 	dprintf(_pipe[1], str, sizeof (str));
-	close(_pipe[1]);
+	ft_close(_pipe[1]);
 
 	//print_fd(_pipe[0]);
 
@@ -54,7 +54,7 @@ int main()
 	do {
 		ret = reader.readBody();
 	} while (ret == 1);
-	close (_pipe[0]);
+	ft_close (_pipe[0]);
 	ft::IBody *body = reader.getBody();
 	if (ret == -1)
 		std::cout << "WRONG BODY\n";

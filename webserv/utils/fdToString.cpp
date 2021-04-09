@@ -18,7 +18,7 @@ namespace ft {
 			buff[readed] = 0;
 			res.append(buff);
 		} while (readed == BUFF_SIZE - 1);
-//		close(fd);
+//		ft_close(fd);
 		return res;
 	}
 }
