@@ -22,7 +22,6 @@ bool ft::ServerInit::parseInServer(std::list<std::string> &tmp)
 	state = findServerName(&tmp);
 	state = findRoot(&tmp);
 	std::cout<<string(30, '*')<<std::endl;
-	getConf(tmp);
 	return state;
 }
 
@@ -87,11 +86,6 @@ bool ft::ServerInit::findRoot(std::list<std::string> *tmp)
 		state = true;
 	}
 	return state;
-}
-
-void ft::ServerInit::getConf(std::list<string> &list)
-{
-
 }
 
 ft::ServerInit::iterator ft::ServerInit::is_Space(iterator it)

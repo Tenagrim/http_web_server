@@ -8,7 +8,7 @@ namespace ft
 	Header::Header() : _http_v(DEFAULT_HTTPV)
 	{}
 
-	Header::Header(MessageType type) :  _http_v(DEFAULT_HTTPV), _type(type), _isValid(true), _method(m_undefined)
+	Header::Header(MessageType type) :  _method(m_undefined), _http_v(DEFAULT_HTTPV), _type(type), _isValid(true)
 	{}
 
 	Header::~Header()
@@ -148,14 +148,14 @@ namespace ft
 
 	std::string Header::getPath() {
 		int pos = _uri.find('?');
-		if (pos == std::string::npos)
+		if ((size_t)pos == std::string::npos)
 			return _uri;
 		return _uri.substr(0, pos);
 	}
 
 	std::string Header::getQuery() {
 		int pos = _uri.find('?');
-		if (pos != std::string::npos)
+		if ((size_t)pos != std::string::npos)
 			return _uri.substr(pos);
 		else
 			return "";

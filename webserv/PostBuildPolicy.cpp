@@ -27,6 +27,8 @@ namespace ft
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = extensionCheck(request, conf);
+		if (!location)
+			location = getCorrectLocation(request->getHeader()->getPath(), conf);
 		if (ifCorrectMethod(request, location))
 		{
 			if (ifCorrectBodySize(request, location))
@@ -46,21 +48,6 @@ namespace ft
 		return response;
 	}
 
-	IResponse * PostBuildPolicy::redirectToCGI(IRequest *request, LocationInit *location)
-	{
-		IResponse *response = NULL;
-		if (!location)
-			throw ft::runtime_error("No coorect Location");
-		std::map<std::string, std::string> arguments = location->getArgs();
-		std::string methods = arguments["fastcgi_pass"];
-		if(!methods.empty()) {
-			_cgi_module.setRoot(_fmngr.getRoot());
-			_cgi_module.setExecutable(methods);
-		 	response = _cgi_module.getResponse(request);
-		}
-		return response;
-	}
-
 	IResponse *PostBuildPolicy::generateFile(IRequest *request)
 	{
 		std::cout<<_fmngr.getRoot()<<std::endl;
@@ -74,8 +61,9 @@ namespace ft
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
-				head->setResponseCode(200);
-				head->setCodeDescription(ft::getCodeDescr(200));
+				head->setResponseCode(303);
+				head->setCodeDescription(ft::getCodeDescr(303));
+				head->setHeader(h_location, "/post_body");
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
 				head->setHeader(h_connection, "close");
 				mutantExistingFile(request);

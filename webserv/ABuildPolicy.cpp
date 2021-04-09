@@ -145,7 +145,7 @@ namespace ft
 
 	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location)
 	{
-//		(void)request; // FIXME
+		(void)request;
 //		if (_fmngr.isFileExisting(correct_path + "index.html"))
 //		{
 //#ifdef DEBUG
@@ -258,6 +258,7 @@ namespace ft
 
 	IResponse *ABuildPolicy::buildFromFile(IRequest *request, std::string const &correct_path)
 	{
+		(void)request;
 		IResponse *res;
 		IBody *body;
 		IHeader *header;
@@ -265,7 +266,6 @@ namespace ft
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
-
 		body = bodyFromFile(correct_path);
 		header = buildHeader(200, "OK", body);
 
@@ -299,13 +299,14 @@ namespace ft
 	{
 		LocationInit *location = NULL;
 		std::string correct_path = checkerPath(request, conf);
-		if(_fmngr.isFileExisting(correct_path)) {
-			std::string ext = '.' + ft::getFileExtension(correct_path);
+//		if(_fmngr.isFileExisting(correct_path)) {
+		std::string ext = '.' + ft::getFileExtension(correct_path);
+		if (ext == ".bla" || ext == ".php")
 			location = findLocation(ext, conf);
-			if (!location)
-				location = getCorrectLocation(correct_path, conf);
-			return location;
-		}
+//			if (!location)
+//				location = getCorrectLocation(correct_path, conf);
+//			return location;
+//		}
 		return location;
 	}
 
@@ -385,8 +386,8 @@ namespace ft
 		if(!methods.empty()) {
 			unsigned int size = atoi(methods.c_str());
 			if (size != 0) {
-				if (request->getBody()->size() < size)
-					return state;
+				if (request->getBody()->size() > size)
+					state = false;
 			} else {
 				throw ft::runtime_error("client_max_body_size argument is not a a number");
 			}
@@ -397,6 +398,7 @@ namespace ft
 	IResponse *ABuildPolicy::ifErrorPage(IRequest *request, LocationInit *location, std::basic_string<char,
 	        std::char_traits<char>, std::allocator<char> > code)
 	{
+		(void)request;
 		IResponse *response = NULL;
 		if (!location)
 			throw ft::runtime_error("No coorect Location");
@@ -425,6 +427,21 @@ namespace ft
 			}
 		}
 		return res;
+	}
+
+	IResponse * ABuildPolicy::redirectToCGI(IRequest *request, LocationInit *location)
+	{
+		IResponse *response = NULL;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["fastcgi_pass"];
+		if(!methods.empty()) {
+			_cgi_module.setRoot(_fmngr.getRoot());
+			_cgi_module.setExecutable(methods);
+			response = _cgi_module.getResponse(request);
+		}
+		return response;
 	}
 }
 // namespace ft

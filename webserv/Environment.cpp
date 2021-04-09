@@ -63,11 +63,11 @@ namespace ft{
 		return  _vars;
 	}
 
-	int Environment::setVar(const std::string &key, const std::string &value) {
+	void Environment::setVar(const std::string &key, const std::string &value) {
 		setVar(key.c_str(), value.c_str());
 	}
 
-	int Environment::setVar(const char *key, const char *value) {
+	void Environment::setVar(const char *key, const char *value) {
 		char *line = makeLine(key,	value);
 		addLine(line);
 	}

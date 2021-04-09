@@ -42,7 +42,7 @@ namespace ft {
 	};
 
 	int temporaryBody(std::string const &str) {
-		int fd[2], res;
+		int fd[2];
 		pipe(fd);
 		std::string result;
 		write(fd[1], str.c_str(), str.size());

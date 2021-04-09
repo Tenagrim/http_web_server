@@ -26,6 +26,7 @@ namespace ft
 		case h_www_authenticate: return("WWW-Authenticate");
 		case h_connection: return("Connection");
 		case h_status: return("Status");
+		case h_secret: return("X-Secret-Header-for-Test");
 		default: return "";
 		}
 	}

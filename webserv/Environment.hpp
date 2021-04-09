@@ -17,8 +17,8 @@ namespace ft{
         	Environment &operator=(const Environment &ref);
 
         	char 	**getEnv();
-        	int		setVar(std::string const &key,	std::string const &value);
-        	int		setVar(char const *key,	char const *value);
+        	void setVar(std::string const &key, std::string const &value);
+        	void setVar(char const *key, char const *value);
     };
 } // ft
 

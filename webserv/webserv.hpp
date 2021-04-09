@@ -30,7 +30,8 @@ namespace ft
 		h_user_agent,
 		h_www_authenticate,
 		h_connection,
-		h_status
+		h_status,
+		h_secret
 	};
 
 	enum methods_enum
@@ -56,7 +57,7 @@ namespace ft
 	std::vector<std::string> splitString(std::string const & basicString,
 										 std::string const & delim);
 	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
-	void				rawTimeFormatted(time_t rawTime, char *format,
+	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
 
 	bool				methodNeedsBody(methods_enum method);

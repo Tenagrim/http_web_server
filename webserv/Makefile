@@ -15,7 +15,7 @@ SRC=$(addprefix $(SRC_DIR), $(SRC_FILES))
 UTILS= $(addprefix utils/, $(UTILS_FILES))
 OBJ=$(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o)) $(addprefix $(OBJ_DIR), $(UTILS_FILES:.cpp=.o)) 
 
-FLAGS= -g -Wall -Wextra -I interfaces -I . # -Werror FIXME
+FLAGS= -g -Wall -Wextra -Werror -I interfaces -I . # -Werror FIXME
 
 all: $(NAME)
 

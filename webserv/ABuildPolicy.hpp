@@ -87,6 +87,8 @@ namespace ft
 		        std::char_traits<char>, std::allocator<char> > code);
 
 		bool checkCodePage(std::string &string, std::string &code);
+
+		IResponse * redirectToCGI(IRequest *request, LocationInit *location);
 	};
 
 } // namespace ft
