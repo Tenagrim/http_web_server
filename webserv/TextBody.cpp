@@ -43,6 +43,6 @@ namespace ft
 	}
 
 	int TextBody::getOpenedFd() {
-		throw ft::runtime_error("Not implemented");
+		return -1;
 	}
 }

@@ -59,6 +59,8 @@ namespace ft{
 
 
     	env.setVar("PATH_INFO", req->getHeader()->getPath());
+    	if (req->getHeader()->isFieldInHeader(h_secret))
+    		env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
 
 	//	env.setVar("REQUEST_TARGET",)
     //	env.setVar("PATH_TRANSLATED", "/123.bla");

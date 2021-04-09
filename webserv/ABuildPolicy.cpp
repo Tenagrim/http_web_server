@@ -386,8 +386,8 @@ namespace ft
 		if(!methods.empty()) {
 			unsigned int size = atoi(methods.c_str());
 			if (size != 0) {
-				if (request->getBody()->size() < size)
-					return state;
+				if (request->getBody()->size() > size)
+					state = false;
 			} else {
 				throw ft::runtime_error("client_max_body_size argument is not a a number");
 			}

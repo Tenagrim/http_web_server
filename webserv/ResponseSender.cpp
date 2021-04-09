@@ -32,6 +32,8 @@ namespace ft
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
 		int ret;
+		if (resp->getBody())
+			std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd()<<std::endl;
 		client->updateEventTime();
 		if (!client->headerSent())
 		{

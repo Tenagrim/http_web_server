@@ -28,7 +28,7 @@ namespace ft
 		applyConfig(conf);
 		LocationInit *location = extensionCheck(request, conf);
 		if (!location)
-			location = getCorrectLocation(checkerPath(request, conf), conf);
+			location = getCorrectLocation(request->getHeader()->getPath(), conf);
 		if (ifCorrectMethod(request, location))
 		{
 			if (ifCorrectBodySize(request, location))
@@ -61,8 +61,9 @@ namespace ft
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
-				head->setResponseCode(200);
-				head->setCodeDescription(ft::getCodeDescr(200));
+				head->setResponseCode(303);
+				head->setCodeDescription(ft::getCodeDescr(303));
+				head->setHeader(h_location, "/post_body");
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
 				head->setHeader(h_connection, "close");
 				mutantExistingFile(request);
