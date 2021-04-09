@@ -139,9 +139,9 @@ namespace ft{
 
 	void CgiModule::reset_fd() {
     	if (_cgi_in != -1)
-    		close(_cgi_in);
+    		ft_close(_cgi_in);
     	if (_cgi_out != -1)
-    		close(_cgi_out);
+    		ft_close(_cgi_out);
 
 		_cgi_in = -1;
 		_cgi_out = -1;
@@ -156,7 +156,7 @@ namespace ft{
 
     	_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		write(_cgi_in, text.c_str(), text.size());
-		close(_cgi_in);
+		ft_close(_cgi_in);
 		_cgi_in = -1;
 	}
 
@@ -231,7 +231,7 @@ namespace ft{
 		if (pos == std::string::npos || strbuff.size() >= CGI_HEAD_LIMIT)
 			head_part = "";
 		head_part = strbuff.substr(0, pos + 2);
-		close(_cgi_out);
+		ft_close(_cgi_out);
 	}
 
 	IHeader *CgiModule::getHeader(std::string header_str) {

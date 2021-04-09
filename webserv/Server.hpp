@@ -58,7 +58,7 @@ namespace ft
 		IResponseSender					*_resp_sender;
 		IResponseBuilder				*_resp_builder;
 
-		void							close_sockets(void);
+		void							ft_close_sockets(void);
 		void							listenerEvent(Dispatcher_event_args &args);
 		void							clientEvent(Dispatcher_event_args &args);
 		void							clientEventRead(Dispatcher_event_args &args);

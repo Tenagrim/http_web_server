@@ -48,19 +48,19 @@ namespace ft
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader(h_content_location, request->getHeader()->getURI());
-			head->setHeader(h_connection, "close");
+			head->setHeader(h_connection, "ft_close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
-				head->setHeader(h_connection, "close");
+				head->setHeader(h_connection, "ft_close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader(h_content_location, request->getHeader()->getURI());
-				head->setHeader(h_connection, "close");
+				head->setHeader(h_connection, "ft_close");
 				truncExistingFile(request);
 			}
 		}
@@ -71,14 +71,14 @@ namespace ft
 	{
 		int fd = pRequest->getBody()->getFd();
 		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(),fd);
-		close(fd);
+		ft_close(fd);
 	}
 
 	void PutBuildPolicy::mutantExistingFile(IRequest *pRequest)
 	{
 		int fd = pRequest->getBody()->getFd();
 		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(), fd);
-		close(fd);
+		ft_close(fd);
 	}
 
 	void PutBuildPolicy::truncExistingFile(IRequest *pRequest)

@@ -35,7 +35,7 @@ bool ft::LocationInit::openBracket(std::list<std::string> &list)
 	if (*it != "{")
 		throw ft::runtime_error("No Open Bracket ...");
 	if (*reit != "}")
-		throw ft::runtime_error("No Close Bracket ...");
+		throw ft::runtime_error("No ft_close Bracket ...");
 	state = true;
 	return state;
 }
@@ -74,7 +74,7 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 	std::list<std::string>::iterator key = tmp->begin();
 	if (tmp->back() != ";"){
 		state = false;
-		throw std::runtime_error("No close BRACKET in " + *key + " argument");
+		throw std::runtime_error("No ft_close BRACKET in " + *key + " argument");
 	} else {
 	tmp->pop_back();
 	_locations_arguments[*key];

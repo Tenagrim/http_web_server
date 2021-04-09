@@ -59,29 +59,29 @@ namespace ft
 		_listening++;
 	}
 
-	void Dispatcher::closeSock(int sock)
+	void Dispatcher::ft_closeSock(int sock)
 	{
-		_socks_to_close.push(sock);
+		_socks_to_ft_close.push(sock);
 	}
 	
-	void Dispatcher::closeWhatNeed()
+	void Dispatcher::ft_closeWhatNeed()
 	{
 		int sock;
-		if (!_socks_to_close.empty())
+		if (!_socks_to_ft_close.empty())
 		#ifdef DEBUG
 		std::cout << "CLOSING SOCKETS";
 		#endif
-		while (!_socks_to_close.empty())
+		while (!_socks_to_ft_close.empty())
 		{
-			sock = _socks_to_close.top();
+			sock = _socks_to_ft_close.top();
 			reallyCloseSock(sock);
-			_socks_to_close.pop();
+			_socks_to_ft_close.pop();
 		#ifdef DEBUG
 			std::cout << " CLOSING[" << sock<< "]\n";
 			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
 				std::cout << "[" << (*it).first << "] ";
 			std::cout << "\n";
-			std::cout << " CLOSED[" << sock<< "]\n";
+			std::cout << " ft_closeD[" << sock<< "]\n";
 			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
 		#endif
 		}
@@ -202,7 +202,7 @@ namespace ft
 				unsigned long diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
 //			std::cout << "CLIENT DIFF: " << diff <<"\n";
 				if (diff > CLIENT_TIMEOUT_MICROS) {
-					closeSock((*it).first);
+					ft_closeSock((*it).first);
 				}
 			}
 		}
@@ -212,7 +212,7 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
-		closeWhatNeed();
+		ft_closeWhatNeed();
 	}
 
 	void			Dispatcher::handleEvents()

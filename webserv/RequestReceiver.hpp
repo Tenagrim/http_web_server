@@ -69,7 +69,7 @@ namespace ft
 		int						getId();
 		int						accept_connection();
 		void					close_connection(int sock);
-		void					close_connections();
+		void					ft_close_connections();
 		int						getListenSock();
 		IClient					*getClient(int sock);
 

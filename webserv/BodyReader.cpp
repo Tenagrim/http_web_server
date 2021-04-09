@@ -71,7 +71,7 @@ int ft::BodyReader::endReading(int ret) {
 	if (!_ended)
 	{
 		_ended = true;
-		close(_output_fd);
+		ft_close(_output_fd);
 	}
 	return ret;
 }

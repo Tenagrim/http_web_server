@@ -63,4 +63,5 @@ namespace ft
 	bool				methodNeedsBody(methods_enum method);
 	unsigned int getFileSize(const char *path);
 
+	int ft_close(int fd);
 }

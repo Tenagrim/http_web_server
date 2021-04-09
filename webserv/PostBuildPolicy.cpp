@@ -57,7 +57,7 @@ namespace ft
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader(h_content_location, request->getHeader()->getURI());
 			head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-			head->setHeader(h_connection, "close");
+			head->setHeader(h_connection, "ft_close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
@@ -65,14 +65,14 @@ namespace ft
 				head->setCodeDescription(ft::getCodeDescr(303));
 				head->setHeader(h_location, "/post_body");
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-				head->setHeader(h_connection, "close");
+				head->setHeader(h_connection, "ft_close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader(h_content_location, request->getHeader()->getURI());
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-				head->setHeader(h_connection, "close");
+				head->setHeader(h_connection, "ft_close");
 				truncExistingFile(request);
 			}
 		}
@@ -84,14 +84,14 @@ namespace ft
 	{
 		int fd = pRequest->getBody()->getFd();
 		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(),fd);
-		close(fd);
+		ft_close(fd);
 	}
 
 	void PostBuildPolicy::mutantExistingFile(IRequest *pRequest)
 	{
 		int fd = pRequest->getBody()->getFd();
 		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(), fd);
-		close(fd);
+		ft_close(fd);
 	}
 
 	void PostBuildPolicy::truncExistingFile(IRequest *pRequest)
