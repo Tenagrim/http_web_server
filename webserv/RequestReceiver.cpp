@@ -216,6 +216,14 @@ namespace ft {
 			case Client::s_header_readed:
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
+			case Client::s_not_begin:
+				break;
+			case Client::s_start_body_reading:
+				break;
+			case Client::s_body_reading:
+				break;
+			case Client::s_end_reading:
+				break;
 		}
 		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&
 			client->getLastRequest()->getHeader() &&

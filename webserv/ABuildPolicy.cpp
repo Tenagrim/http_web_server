@@ -145,7 +145,7 @@ namespace ft
 
 	IResponse *ABuildPolicy::buildFromDir(IRequest *request, std::string const &correct_path, LocationInit *location)
 	{
-//		(void)request; // FIXME
+		(void)request;
 //		if (_fmngr.isFileExisting(correct_path + "index.html"))
 //		{
 //#ifdef DEBUG
@@ -258,6 +258,7 @@ namespace ft
 
 	IResponse *ABuildPolicy::buildFromFile(IRequest *request, std::string const &correct_path)
 	{
+		(void)request;
 		IResponse *res;
 		IBody *body;
 		IHeader *header;
@@ -265,7 +266,6 @@ namespace ft
 #ifdef DEBUG
 		std::cout << "BUILDER: BUILD FROM FILE: [" << filename << "]\n";
 #endif
-
 		body = bodyFromFile(correct_path);
 		header = buildHeader(200, "OK", body);
 
@@ -301,7 +301,7 @@ namespace ft
 		std::string correct_path = checkerPath(request, conf);
 //		if(_fmngr.isFileExisting(correct_path)) {
 		std::string ext = '.' + ft::getFileExtension(correct_path);
-		if (ext == ".bla")
+		if (ext == ".bla" || ext == ".php")
 			location = findLocation(ext, conf);
 //			if (!location)
 //				location = getCorrectLocation(correct_path, conf);
@@ -398,6 +398,7 @@ namespace ft
 	IResponse *ABuildPolicy::ifErrorPage(IRequest *request, LocationInit *location, std::basic_string<char,
 	        std::char_traits<char>, std::allocator<char> > code)
 	{
+		(void)request;
 		IResponse *response = NULL;
 		if (!location)
 			throw ft::runtime_error("No coorect Location");

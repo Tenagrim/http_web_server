@@ -13,8 +13,8 @@ namespace ft
 	Client::Client(int id,int sock) :
 		_id(id),
 		_sock(sock),
-		_b_reader(),
-		_last_request()
+		_last_request(),
+		_b_reader()
 	{
 		_state_flags = 0;
 		_read_flags = 0;

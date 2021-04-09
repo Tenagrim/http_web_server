@@ -125,7 +125,6 @@ namespace ft
 		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
 		//if (written == 0 || )
 		//	throw runtime_error();
-		int w = body->getWritten();
 		if (body->getWritten() >= body->size()) {
 			client->sendBody();
 			return 0;
@@ -135,7 +134,7 @@ namespace ft
 
 	int ResponseSender::sendFullResponse(IResponse *resp, IClient *client) {
 		std::string str = resp->to_string();
-		int ret;
+		size_t ret;
 		ret = send(client->getSock(), str.c_str(), str.size(), 0);
 		if (ret == str.size())
 			return 0;

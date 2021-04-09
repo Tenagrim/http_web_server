@@ -79,6 +79,12 @@ namespace ft{
 			case m_post:
 				break;
 		//	default: throw ft::runtime_error("Method not Allowed");
+			case m_put:
+				break;
+			case m_head:
+				break;
+			case m_undefined:
+				break;
 		}
 	}
 
@@ -144,7 +150,6 @@ namespace ft{
 	}
 
 	void CgiModule::sendTextBody(TextBody *body) {
-		int ret;
 		std::string text = body->to_string();
 
     	_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
@@ -189,7 +194,7 @@ namespace ft{
     	std::string		head_part;
     	IHeader			*header = NULL;
     	FileBody		*body = NULL;
-    	unsigned int	size, offset;
+    	unsigned int	size;
 
     	getHeadString(head_part);
 		header = getHeader(head_part);
@@ -208,7 +213,8 @@ namespace ft{
 	void CgiModule::getHeadString(std::string &head_part) {
 		char buff;
 		std::string strbuff;
-		int readed, pos;
+		int readed;
+		size_t  pos;
 
 		_cgi_out = open(_tmp_out.c_str(), O_RDONLY );
 		if (_cgi_out == -1)
@@ -228,7 +234,7 @@ namespace ft{
 
 	IHeader *CgiModule::getHeader(std::string header_str) {
 		Header			*res = new Header(response);
-		int				pos;
+		size_t 			pos;
 		std::string		line;
 		Client::req_r_states	s = Client::s_header_reading;
 
@@ -252,7 +258,7 @@ namespace ft{
 
 	void CgiModule::handleStatusHeader(IHeader *header) {
 		std::string str;
-    	int pos;
+    	size_t pos;
 		if (header->isHeadAlreadyExist(h_status))
 		{
     		str = header->getHeader(h_status);

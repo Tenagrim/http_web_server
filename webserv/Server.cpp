@@ -174,7 +174,7 @@ namespace ft
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			if (ret == 0 && (resp->getHeader()->isHeadAlreadyExist(h_connection) &&
+			if ((ret == 0 && (resp->getHeader()->isHeadAlreadyExist(h_connection)) &&
 				resp->getHeader()->getHeader(h_connection) == "close") ||
 					(resp->getHeader()->getResponseCode() == 400)
 					)

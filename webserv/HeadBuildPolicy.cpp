@@ -38,8 +38,3 @@ ft::IResponse *ft::HeadBuildPolicy::buildResponse(ft::IRequest *request)
 	res->deleteBody();
 	return  res;
 }
-
-ft::Header *ft::HeadBuildPolicy::createHeader(ft::IRequest *request)
-{
-
-}

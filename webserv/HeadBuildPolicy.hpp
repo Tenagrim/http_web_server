@@ -12,8 +12,6 @@ namespace ft
 		virtual ~HeadBuildPolicy();
 		HeadBuildPolicy	&operator=(const HeadBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
-
-		Header *createHeader(IRequest *pRequest);
 	};
 
 } //

@@ -2,7 +2,7 @@
 #include <runtime_error.hpp>
 namespace ft
 {
-	ABody::ABody() : _written(0), _last_written(0), _buff(nullptr), _last_readed(0), _readed(0)
+	ABody::ABody() : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff(nullptr)
 	{}
 
 	ABody::~ABody()
@@ -11,7 +11,7 @@ namespace ft
 			delete [] _buff;
 	}
 
-	ABody::ABody(const ABody &ref) : _written(0), _last_written(0), _buff(nullptr), _last_readed(0), _readed(0)
+	ABody::ABody(const ABody &ref) : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff(nullptr)
 	{
 		(void)ref;
 	}

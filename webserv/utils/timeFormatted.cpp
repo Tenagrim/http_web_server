@@ -36,7 +36,7 @@ namespace ft {
 		rawTimeFormatted(mark_t.tv_sec, format, buf, bufLen);
 	}
 
-	void				rawTimeFormatted(time_t rawTime, char *format,
+	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  							char *buf, int bufLen) {
 		struct tm		timeInfo[1];
 
