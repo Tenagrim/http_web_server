@@ -158,4 +158,24 @@ namespace ft
 			return "";
 	}
 
+	void Header::setEnvs(Environment &env) {
+		for (header_map::iterator it = _header_map.begin(); it != _header_map.end(); it++) {
+			if (!isParsedHeader((*it).first))
+				env.setVar(headToEnvFormat((*it).first), (*it).second);
+		}
+	}
+
+	std::string Header::headToEnvFormat(const std::string &s) {
+		std::string		res;
+		size_t			i = -1;
+
+		while (s[++i]) {
+			if (s[i] == '-')
+				res	+= '_';
+			else
+				res += std::toupper(s[i]);
+		}
+		return res;
+	}
+
 } // namespace ft

@@ -3,43 +3,43 @@
 namespace ft{
 	int CgiModule::_max_id = 0;
 
-    CgiModule::CgiModule() : _av(NULL), _cgi_in(-1), _cgi_out(-1)
-    {
-    	char buff[512];
-    	if (getcwd(buff, 512) == 0)
+	CgiModule::CgiModule() : _av(NULL), _cgi_in(-1), _cgi_out(-1)
+	{
+		char buff[512];
+		if (getcwd(buff, 512) == 0)
 			throw ft::runtime_error("Too Long Path");
-    	_home = std::string(buff);
-    }
-    
-    CgiModule::CgiModule(const CgiModule &ref){
-        (void)ref;
-    }
-    
-    CgiModule::~CgiModule()
-    {}
-    
-    CgiModule &CgiModule::operator=(const CgiModule &ref){
-        (void)ref;
-        return (*this);
-    }
+		_home = std::string(buff);
+	}
+
+	CgiModule::CgiModule(const CgiModule &ref){
+		(void)ref;
+	}
+
+	CgiModule::~CgiModule()
+	{}
+
+	CgiModule &CgiModule::operator=(const CgiModule &ref){
+		(void)ref;
+		return (*this);
+	}
 
 	IResponse *CgiModule::getResponse(IRequest *req) {
-    	int pid, status, ret;
-    	Environment envs;
+		int pid, status, ret;
+		Environment envs;
 		_tmp_in = _home + "/" + TMP_IN  + ft::to_string(_max_id);
 		_tmp_out = _home + "/" + TMP_OUT + ft::to_string(_max_id);
 		_max_id++;
-    	setEnvs(req, envs);
-    	reset_fd();
+		setEnvs(req, envs);
+		reset_fd();
 
-    	pid = fork();
-    	if (pid == -1)
+		pid = fork();
+		if (pid == -1)
 			throw ft::runtime_error("CGI MODULE: FORK FAILED");
-    	else if (pid == 0)
+		else if (pid == 0)
 		{
 			threadPart(req, envs);
 		}
-    	else
+		else
 		{
 			waitpid(pid, &status,0);
 			ret = WEXITSTATUS(status);
@@ -50,28 +50,31 @@ namespace ft{
 	}
 
 	void CgiModule::setEnvs(IRequest *req, Environment &env) {
-    	methods_enum method = req->getHeader()->getMethod();
+		methods_enum method = req->getHeader()->getMethod();
 
-    	env.setVar("REQUEST_METHOD", ft::getMethodStr(req->getHeader()->getMethod()));
-    	env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
-    //	if(req->getHeader()->isHeadAlreadyExist("content-length"))
-    //		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
+		env.setVar("REQUEST_METHOD", ft::getMethodStr(req->getHeader()->getMethod()));
+		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
+	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
+	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
 
+		env.setVar("PATH_INFO", req->getHeader()->getPath());
 
-    	env.setVar("PATH_INFO", req->getHeader()->getPath());
-    	if (req->getHeader()->isFieldInHeader("secret"))
-    		env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
+		req->getHeader()->setEnvs(env);
+/*
+		if (req->getHeader()->isFieldInHeader("secret"))
+			env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
+*/
 
 	//	env.setVar("REQUEST_TARGET",)
-    //	env.setVar("PATH_TRANSLATED", "/123.bla");
-    //	env.setVar("SCRIPT_FILENAME", "/123.bla");
-    //	env.setVar("SCRIPT_NAME", "/123.bla");
+	//	env.setVar("PATH_TRANSLATED", "/123.bla");
+	//	env.setVar("SCRIPT_FILENAME", "/123.bla");
+	//	env.setVar("SCRIPT_NAME", "/123.bla");
 
-//    	char **c = env.getEnv();
-//    	while (*c)
+//		char **c = env.getEnv();
+//		while (*c)
 //		{
-//    		std::cout << *c << "\n";
-//    		c++;
+//			std::cout << *c << "\n";
+//			c++;
 //		}
 
 		switch (method) {
@@ -120,17 +123,17 @@ namespace ft{
 	}
 
 	void CgiModule::sendRequest(IRequest *req) {
-    	//_cgi_in = open(TMP_IN, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		//_cgi_in = open(TMP_IN, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		IBody	*body = req->getBody();
 		if (!body)
 		{
 			_cgi_in = open(_tmp_in.c_str(), O_CREAT  | O_RDONLY | O_TRUNC, 0666);
 			return;
 		}
-    	if (dynamic_cast<FileBody*>(body))
-    		sendFileBody(dynamic_cast<FileBody*>(body));
-    	else if (dynamic_cast<TextBody*>(body))
-    		sendTextBody(dynamic_cast<TextBody*>(body));
+		if (dynamic_cast<FileBody*>(body))
+			sendFileBody(dynamic_cast<FileBody*>(body));
+		else if (dynamic_cast<TextBody*>(body))
+			sendTextBody(dynamic_cast<TextBody*>(body));
 	}
 
 	void CgiModule::initFiles() {
@@ -138,10 +141,10 @@ namespace ft{
 	}
 
 	void CgiModule::reset_fd() {
-    	if (_cgi_in != -1)
-    		ft_close(_cgi_in);
-    	if (_cgi_out != -1)
-    		ft_close(_cgi_out);
+		if (_cgi_in != -1)
+			ft_close(_cgi_in);
+		if (_cgi_out != -1)
+			ft_close(_cgi_out);
 
 		_cgi_in = -1;
 		_cgi_out = -1;
@@ -154,7 +157,7 @@ namespace ft{
 	void CgiModule::sendTextBody(TextBody *body) {
 		std::string text = body->to_string();
 
-    	_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		write(_cgi_in, text.c_str(), text.size());
 		ft_close(_cgi_in);
 		_cgi_in = -1;
@@ -193,12 +196,12 @@ namespace ft{
 	}
 
 	IResponse * CgiModule::getResult() {
-    	std::string		head_part;
-    	IHeader			*header = NULL;
-    	FileBody		*body = NULL;
-    	unsigned int	size;
+		std::string		head_part;
+		IHeader			*header = NULL;
+		FileBody		*body = NULL;
+		unsigned int	size;
 
-    	getHeadString(head_part);
+		getHeadString(head_part);
 		header = getHeader(head_part);
 		if (head_part.empty() || !header)
 			return _e_pager.getErrorPage(500);
@@ -252,7 +255,7 @@ namespace ft{
 		} while (!header_str.empty() && !line.empty());
 		handleStatusHeader(res);
 		return res;
-    }
+	}
 
 	void CgiModule::reset() {
 		_max_id = 0;
@@ -260,10 +263,10 @@ namespace ft{
 
 	void CgiModule::handleStatusHeader(IHeader *header) {
 		std::string str;
-    	size_t pos;
+		size_t pos;
 		if (header->isFieldInHeader("status"))
 		{
-    		str = header->getHeader("status");
+			str = header->getHeader("status");
 			pos = str.find(' ');
 			if (pos != std::string::npos)
 			{

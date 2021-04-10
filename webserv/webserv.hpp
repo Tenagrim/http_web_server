@@ -9,29 +9,6 @@ namespace ft
 	static const char green[] = "\033[32m";
 	static const char yellow[] = "\033[33m";
 
-	enum header_keys
-	{
-		h_accept_charsets = 0,
-		h_accept_language,
-		h_allow,
-		h_authorization,
-		h_content_language,
-		h_content_length,
-		h_content_location,
-		h_content_type,
-		h_date,
-		h_host,
-		h_last_modified,
-		h_location,
-		h_referer,
-		h_retry_after,
-		h_server,
-		h_transfer_encoding,
-		h_user_agent,
-		h_www_authenticate,
-		h_connection
-	};
-
 	enum methods_enum
 	{
 		m_get = 0,
@@ -57,6 +34,7 @@ namespace ft
 	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
+	bool				isParsedHeader(std::string const & head);
 
 	bool				methodNeedsBody(methods_enum method);
 	unsigned int		getFileSize(const char *path);

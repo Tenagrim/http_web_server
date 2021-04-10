@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <webserv.hpp>
+#include <Environment.hpp>
 
 namespace ft
 {
@@ -19,6 +20,8 @@ namespace ft
 	class IHeader
 	{
 	public:
+		typedef std::map<std::string, std::string>	header_map;
+
 		virtual std::string			to_string(void)= 0;
 
 		virtual MessageType			getType(void) const = 0;
@@ -42,6 +45,7 @@ namespace ft
 		virtual bool				isFieldInHeader(std::string const & key) const = 0;
 		virtual std::string 		getPath() = 0;
 		virtual std::string 		getQuery() = 0;
+		virtual void 				setEnvs(Environment &env) = 0;
 
 		virtual ~IHeader(){}
 	};
