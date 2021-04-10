@@ -89,6 +89,8 @@ namespace ft
 		bool checkCodePage(std::string &string, std::string &code);
 
 		IResponse * redirectToCGI(IRequest *request, LocationInit *location);
+
+		bool ifAuthentication(IRequest *request, LocationInit *location);
 	};
 
 } // namespace ft
