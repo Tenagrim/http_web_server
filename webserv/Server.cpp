@@ -47,13 +47,6 @@ namespace ft
 		return (1);
 	}
 
-	int Server::sendResponce(const IResponse &resp)
-	{
-		(void)resp;
-		throw ft::runtime_error("No implementation");
-		return (-1);
-	}
-
 	#pragma region  Flags operations
 
 	bool Server::hasFlag(unsigned int flag)
@@ -162,7 +155,7 @@ namespace ft
 				#ifdef DEBUG
 				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
 				#endif
-				_dispatcher->closeSock(client->getSock());
+				_dispatcher->ft_closeSock(client->getSock());
 				return;
 			}
 */
@@ -181,9 +174,11 @@ namespace ft
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			if (ret == 0 && resp->getHeader()->isFieldInHeader("connection") &&
-				resp->getHeader()->getHeader("connection") == "close")
-				_dispatcher->closeSock(client->getSock());
+			if ((ret == 0 && (resp->getHeader()->isHeadAlreadyExist(h_connection)) &&
+				resp->getHeader()->getHeader(h_connection) == "close") ||
+					(resp->getHeader()->getResponseCode() == 400)
+					)
+				_dispatcher->ft_closeSock(client->getSock());
 
 			if (ret == 0)
 				client->reset();
@@ -197,6 +192,7 @@ namespace ft
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
 		}
+		/*
 		else
 		{
 			unsigned  long diff = client->getUsecsFromLastEvent();
@@ -208,20 +204,21 @@ namespace ft
 				//	client->getLastRequest()->setHeader(new Header(request));
 				//client->getLastRequest()->getHeader()->makeInvalid();
 				//client->setFlag(Client::read_flags, Client::r_end);
-				_dispatcher->closeSock(client->getSock());
+				_dispatcher->ft_closeSock(client->getSock());
 			}
 
 		}
+		*/
 	}
 
 	#pragma endregion
 
-	void			Server::start(void)
+	void			Server::start()
 	{
 		//RequestReciever *recv;
 		setFlag(is_running);
 
-		std::cout << "SERVER: IS STARITING\nLISTENING:\n";
+		std::cout << yellow << "SERVER: IS STARITING\nLISTENING:\n" << green;
 		for(std::list<RequestReceiver*>::iterator it = _list_to_start.begin(); it != _list_to_start.end(); it++)
 		{
 			(*it)->start();
@@ -229,13 +226,13 @@ namespace ft
 			_dispatcher->addListener((*it), (*it)->getListenSock());
 			std::cout << "["<< (*it)->getListenSock() << "|"<< (*it)->getPort() <<"] ";
 		}
-		std::cout << "\n";
+		std::cout << reset << "\n";
 		_list_to_start.clear();
 
 		_dispatcher->start();
 	}
 	
-	void							Server::stop(void)
+	void							Server::stop()
 	{
 		if (!_dispatcher)
 			throw ft::runtime_error("No connection to dispatcher");

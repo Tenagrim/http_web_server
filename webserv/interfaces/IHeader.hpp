@@ -40,6 +40,8 @@ namespace ft
 		virtual void 				makeInvalid() = 0;
 		virtual unsigned long		size() = 0;
 		virtual bool				isFieldInHeader(std::string const & key) const = 0;
+		virtual std::string 		getPath() = 0;
+		virtual std::string 		getQuery() = 0;
 
 		virtual ~IHeader(){}
 	};

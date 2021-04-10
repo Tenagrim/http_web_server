@@ -24,7 +24,7 @@ namespace ft
 		(void) request;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
-		LocationInit *location = getCorrectLocation(request, conf);
+		LocationInit *location = getCorrectLocation(request->getHeader()->getPath(), conf);
 		if (ifCorrectMethod(request, location))
 		{
 			IHeader *head = checkCommingURI(request);
@@ -35,7 +35,7 @@ namespace ft
 		}
 		else {
 			IResponse *response = _e_pager.getErrorPage(405);
-//			response->getHeader()->setHeader("Allow")
+			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
 			return  _e_pager.getErrorPage(405);
 		}
 	}
@@ -48,16 +48,19 @@ namespace ft
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader("content-location", request->getHeader()->getURI());
+			head->setHeader(h_connection, "close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
+				head->setHeader(h_connection, "close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader("content-location", request->getHeader()->getURI());
+				head->setHeader(h_connection, "close");
 				truncExistingFile(request);
 			}
 		}
@@ -66,20 +69,16 @@ namespace ft
 
 	void PutBuildPolicy::creatFile(IRequest *pRequest)
 	{
-		int fd = ft::temporaryBody("<p>Новый файл</p>");
-		//		IBody *body = pRequest->getBody();
-		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(), fd);
-		//		Пока что я закрываю FD
-		close(fd);
+		int fd = pRequest->getBody()->getFd();
+		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(),fd);
+		ft_close(fd);
 	}
 
 	void PutBuildPolicy::mutantExistingFile(IRequest *pRequest)
 	{
-		int fd = ft::temporaryBody("<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>Тег H1 и H2</title>\n</head>\n<body>\n\n<h1>Lorem ipsum dolor sit amet</h1>\n<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diem \nnonummy nibh euismod tincidunt ut lacreet dolore magna \naliguam erat volutpat.</p>\n\n</body>\n</html>");
-		//		IBody *body = pRequest->getBody();
+		int fd = pRequest->getBody()->getFd();
 		_fmngr.copyFdToFile(pRequest->getHeader()->getURI(), fd);
-		//		Пока что я закрываю FD
-		close(fd);
+		ft_close(fd);
 	}
 
 	void PutBuildPolicy::truncExistingFile(IRequest *pRequest)
