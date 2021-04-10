@@ -11,6 +11,8 @@ namespace ft
 	class Header : public IHeader
 	{
 	private:
+		typedef std::map<std::string, std::string>	header_map;
+
 		header_map			_header_map;
 		methods_enum		_method;
 		std::string			_uri;

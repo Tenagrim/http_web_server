@@ -17,10 +17,10 @@ namespace ft
 		response
 	};
 
+
 	class IHeader
 	{
 	public:
-		typedef std::map<std::string, std::string>	header_map;
 
 		virtual std::string			to_string(void)= 0;
 

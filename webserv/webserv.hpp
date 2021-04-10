@@ -34,8 +34,7 @@ namespace ft
 	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
-	bool				isParsedHeader(std::string const & head);
-
+	bool				isParsedHeader(std::string const &head);
 	bool				methodNeedsBody(methods_enum method);
 	unsigned int		getFileSize(const char *path);
 

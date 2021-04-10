@@ -59,11 +59,10 @@ namespace ft{
 
 		env.setVar("PATH_INFO", req->getHeader()->getPath());
 
-		req->getHeader()->setEnvs(env);
-/*
-		if (req->getHeader()->isFieldInHeader("secret"))
+//		req->getHeader()->setEnvs(env);
+
+		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
 			env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
-*/
 
 	//	env.setVar("REQUEST_TARGET",)
 	//	env.setVar("PATH_TRANSLATED", "/123.bla");
