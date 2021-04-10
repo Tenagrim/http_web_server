@@ -455,7 +455,7 @@ namespace ft
 		std::string methods = arguments["auth_basic"];
 		if (methods.empty())
 			return true;
-		
+//		TODO Here
 	}
 }
 // namespace ft
