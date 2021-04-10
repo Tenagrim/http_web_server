@@ -53,7 +53,7 @@ namespace ft
 	{
 		IHeader	*head = getErrorHead(code);
 		IBody	*body = getErrPageBody(code, getCodeDescr(code));
-		head->setHeader(h_content_length, ft::to_string(body->size()));
+		head->setHeader("content-length", ft::to_string(body->size()));
 		IResponse *response = new BasicResponse(head, body);
 		return response;
 	}
@@ -65,8 +65,8 @@ namespace ft
 		head->setHTTPV("HTTP/1.1");
 		head->setResponseCode(code);
 		head->setCodeDescription(descr);
-		head->setHeader(h_date, _t_machine.getTimestamp());
-		head->setHeader(h_content_type, "text/html");
+		head->setHeader("date", _t_machine.getTimestamp());
+		head->setHeader("content-type", "text/html");
 //		Tester 42 don't like this line
 //		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
 //		head->setHeader(h_connection, "close");
