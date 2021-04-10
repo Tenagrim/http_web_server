@@ -2,6 +2,8 @@
 
 namespace ft
 {
+	int GetBuildPolicy::_count = 0;
+
 	GetBuildPolicy::~GetBuildPolicy()
 	{}
 
@@ -23,6 +25,9 @@ namespace ft
 		#ifdef DEBUG
 				std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
 		#endif
+		std::cout << "Respone N: " << _count << "\n";
+		_count++;
+
 		IResponse *res = NULL;
 		std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
@@ -77,5 +82,9 @@ namespace ft
 		} else {
 			return buildFromFile(request, request->getHeader()->getPath());
 		}
+	}
+
+	int GetBuildPolicy::getCount() {
+		return _count;
 	}
 }

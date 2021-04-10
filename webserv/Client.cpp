@@ -30,6 +30,8 @@ namespace ft
 	{
 		int ret;
 		ret = ft_close(_sock);
+		if (ret == -1)
+			throw ft::runtime_error("CLIENT: CAN\'T CLOSE SOCK");
 		#ifdef DEBUG
 		std::cout << "CLIENT: CLOSING SOCKET[" << _sock << "]\n";
 		if (ret == -1)

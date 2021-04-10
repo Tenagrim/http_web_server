@@ -41,11 +41,11 @@ namespace ft
 		bool					_run;
 
 
-		void					handleListeners(void);
-		void					handleClients(void);
-		void					handleClientsRead(void);
-		void					handleClientsWrite(void);
-		void					ft_closeWhatNeed();
+		void					handleListeners();
+		void					handleClients();
+		void					handleClientsRead();
+		void					handleClientsWrite();
+		void					closeWhatNeed();
 		void					reallyCloseSock(int sock);
 		void 					wakeUp();
 		void 					sleep();
@@ -64,7 +64,7 @@ namespace ft
 		void			addListener(RequestReceiver *recv, int sock);
 		void			addClient(RequestReceiver *recv, int sock);
 
-		void			ft_closeSock(int sock);
+		void			closeSock(int sock);
 		void			updateEvents();
 		void			handleEvents();
 

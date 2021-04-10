@@ -155,7 +155,7 @@ namespace ft
 				#ifdef DEBUG
 				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
 				#endif
-				_dispatcher->ft_closeSock(client->getSock());
+				_dispatcher->closeSock(client->getSock());
 				return;
 			}
 */
@@ -178,7 +178,7 @@ namespace ft
 				resp->getHeader()->getHeader(h_connection) == "ft_close") ||
 					(resp->getHeader()->getResponseCode() == 400)
 					)
-				_dispatcher->ft_closeSock(client->getSock());
+				_dispatcher->closeSock(client->getSock());
 
 			if (ret == 0)
 				client->reset();
@@ -204,7 +204,7 @@ namespace ft
 				//	client->getLastRequest()->setHeader(new Header(request));
 				//client->getLastRequest()->getHeader()->makeInvalid();
 				//client->setFlag(Client::read_flags, Client::r_end);
-				_dispatcher->ft_closeSock(client->getSock());
+				_dispatcher->closeSock(client->getSock());
 			}
 
 		}

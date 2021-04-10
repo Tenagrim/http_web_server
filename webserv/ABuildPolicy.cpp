@@ -100,11 +100,6 @@ namespace ft
 		std::string type;
 		IBody *res;
 
-		try {
-			type = _fmngr.getContentType(filename);
-		} catch (FileManager::NoSuchType) {
-			type = "";
-		}
 #ifdef DEBUG
 		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 #endif
@@ -112,7 +107,9 @@ namespace ft
 			res = buildTextBody(filename);
 		else
 			res = buildFileBody(filename);
-		res->setContentType(type);
+			type = _fmngr.getContentType(filename);
+			if (type != "")
+			res->setContentType(type);
 		return (res);
 	}
 
@@ -270,7 +267,7 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);  // WHAT ??!!!??
+		//res = new TextResponse(header, body);  // WHAT ??!!!??
 		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;

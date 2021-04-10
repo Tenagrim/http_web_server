@@ -82,4 +82,8 @@ namespace ft
 		return 0;
 	}
 
+	unsigned int ABody::getId() const {
+		return -1;
+	}
+
 }

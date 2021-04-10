@@ -13,6 +13,7 @@
 #include <sys/param.h>
 #include <iostream>
 #include <runtime_error.hpp>
+#include <webserv.hpp>
 
 #include <defines.hpp>
 

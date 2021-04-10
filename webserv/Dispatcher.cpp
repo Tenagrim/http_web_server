@@ -59,15 +59,16 @@ namespace ft
 		_listening++;
 	}
 
-	void Dispatcher::ft_closeSock(int sock)
+	void Dispatcher::closeSock(int sock)
 	{
 		_socks_to_ft_close.push(sock);
 	}
 	
-	void Dispatcher::ft_closeWhatNeed()
+	void Dispatcher::closeWhatNeed()
 	{
 		int sock;
-		if (!_socks_to_ft_close.empty())
+		if (_socks_to_ft_close.empty())
+			return;
 		#ifdef DEBUG
 		std::cout << "CLOSING SOCKETS";
 		#endif
@@ -126,7 +127,7 @@ namespace ft
 	{
 		//#undef DEBUG
 
-		//	#ifdef DEBUG
+			#ifdef DEBUG
 		//		static int i;
 			
 			//	std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
@@ -135,12 +136,19 @@ namespace ft
 				for(; it != _client_map.end(); it++)
 					std::cout << "[" << (*it).first << "] ";
 				std::cout << "\n";
-//				std::cout << "LISTENERS: \n";
-//				it = _listener_map.begin();
-//				for(; it != _listener_map.end(); it++)
-//					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
-//				std::cout << "\n";
-		//	#endif
+
+				std::cout << "CLIENTS: \n";
+				it = _client_map.begin();
+				for(; it != _client_map.end(); it++)
+					std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+
+				std::cout << "LISTENERS: \n";
+				it = _listener_map.begin();
+				for(; it != _listener_map.end(); it++)
+					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
+				std::cout << "\n";
+			#endif
 		_events = 0;
 		if (_listening == 0)
 			throw ft::runtime_error("No have fd to dispatch");
@@ -158,6 +166,7 @@ namespace ft
 		if (!_events) {
 			sleep();
 			BodyReader::reset();
+			CgiModule::reset();
 		}
 		else
 			wakeUp();
@@ -194,16 +203,14 @@ namespace ft
 	void					Dispatcher::handleClientsWrite()
 	{
 		fd_map::iterator it;
+		unsigned long diff;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
-			if (FD_ISSET((*it).first, &_writing_set))
+			if (FD_ISSET((*it).first, &_writing_set)) {
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
-//			else {
-				unsigned long diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
-//			std::cout << "CLIENT DIFF: " << diff <<"\n";
-				if (diff > CLIENT_TIMEOUT_MICROS) {
-					ft_closeSock((*it).first);
-//				}
+				diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
+				if (diff > CLIENT_TIMEOUT_MICROS)
+					closeSock((*it).first);
 			}
 		}
 	}
@@ -212,7 +219,7 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
-		ft_closeWhatNeed();
+		closeWhatNeed();
 	}
 
 	void			Dispatcher::handleEvents()
@@ -247,6 +254,7 @@ namespace ft
 		{
 			updateEvents();
 			handleEvents();
+			std::cout << " ============== GET RESPONSES BUILT: " << GetBuildPolicy::getCount() << "\n";
 			usleep(_delay);
 		}
 	}

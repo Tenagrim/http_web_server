@@ -26,8 +26,8 @@ namespace ft{
 	IResponse *CgiModule::getResponse(IRequest *req) {
     	int pid, status, ret;
     	Environment envs;
-		_tmp_in = _home + "/" + TMP_IN  + ft::to_string(_max_id);
-		_tmp_out = _home + "/" + TMP_OUT + ft::to_string(_max_id);
+		_tmp_in = _home + "/" + TMP_DIR +"/" + TMP_IN  + ft::to_string(_max_id);
+		_tmp_out = _home + "/" + TMP_DIR + "/" + TMP_OUT + ft::to_string(_max_id);
 		_max_id++;
     	setEnvs(req, envs);
     	reset_fd();

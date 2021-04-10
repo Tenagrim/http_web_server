@@ -7,6 +7,10 @@ namespace ft
 	{
 	private:
 		GetBuildPolicy(const GetBuildPolicy &ref);
+		static int 		_count;
+	public:
+		static int getCount();
+
 	public:
 		GetBuildPolicy();
 		virtual ~GetBuildPolicy();

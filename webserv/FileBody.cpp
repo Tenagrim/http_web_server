@@ -1,14 +1,19 @@
 #include <FileBody.hpp>
+#include <iostream>
+
 
 namespace ft
 {
+	unsigned  int FileBody::_max_id = 0;
 	FileBody::FileBody() : _size(0), _opened_fd(-1)
 	{/* Illegal */}
 
 	FileBody::~FileBody()
 	{
-		if (_opened_fd != -1)
+		if (_opened_fd != -1) {
+			std::cout << "FILE BODY DESTR : " << _opened_fd <<" ["<<_id <<"] \n";
 			ft_close(_opened_fd);
+		}
 	}
 
 	FileBody::FileBody(const FileBody &ref) : _size(0), _opened_fd(-1)
@@ -23,6 +28,8 @@ namespace ft
 		if (ret == -1)
 			throw ft::runtime_error("Stat failed: filename:" + _filename);
 		_size = statbuf.st_size;
+		_id = _max_id;
+		_max_id++;
 	}
 	FileBody &FileBody::operator=(const FileBody &ref)
 	{
@@ -49,11 +56,11 @@ namespace ft
 	{
 		int ret;
 		ret = open(_filename.c_str(), O_RDONLY);
+		if (ret == -1)
+			throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		if (_offset)
 			if (lseek(ret, _offset, SEEK_SET) == -1)
 				throw ft::runtime_error("FILE BODY: CANNOT SEEK IN FILE");
-		if (ret == -1)
-			throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		return(ret);
 	}
 
@@ -89,6 +96,14 @@ namespace ft
 
 	int FileBody::getOffset() const {
 		return _offset;
+	}
+
+	unsigned int FileBody::getId() const {
+		return _id;
+	}
+
+	unsigned int FileBody::getMaxId() {
+		return _max_id;
 	}
 
 }
