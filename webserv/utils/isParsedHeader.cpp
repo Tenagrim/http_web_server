@@ -29,6 +29,7 @@ namespace ft
 //			Additional headers (not from sbj)
 			"accept-encoding",
 			"x-secret-header-for-test",
+//			NULL-terminate
 			""
 	};
 
