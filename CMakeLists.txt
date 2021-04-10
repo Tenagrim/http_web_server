@@ -120,5 +120,6 @@ add_executable(
         webserv/Environment.cpp
         webserv/Environment.hpp
         webserv/CgiModule.cpp
-        webserv/utils/getFileSize.cpp)
+        webserv/utils/getFileSize.cpp
+        webserv/utils/isParsedHeader.cpp)
 

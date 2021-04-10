@@ -9,7 +9,7 @@
 #include <TextBody.hpp>
 #include <iostream>
 #include <HeaderMaker.hpp>
-
+#include <Header.hpp>
 
 #define TMP_IN			"tmp_cgi_in"
 #define TMP_OUT			"tmp_cgi_out"

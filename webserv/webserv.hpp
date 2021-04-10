@@ -25,7 +25,7 @@ namespace ft
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
-	std::string fdToString(int fd);
+	std::string			fdToString(int fd);
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
@@ -34,9 +34,10 @@ namespace ft
 	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
+	bool				isParsedHeader(std::string const & head);
 
 	bool				methodNeedsBody(methods_enum method);
-	unsigned int getFileSize(const char *path);
+	unsigned int		getFileSize(const char *path);
 
-	int ft_close(int fd);
+	int					ft_close(int fd);
 }
