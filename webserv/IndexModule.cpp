@@ -17,8 +17,6 @@
 
 
 namespace ft {
-	bool IndexModule::_index_on = true;
-
 	IndexModule::IndexModule() {}
 
 	IndexModule::~IndexModule() {}
@@ -112,9 +110,7 @@ namespace ft {
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
 		buf[TIME_BUFF_AUTOINDEX - 1] = '\0';
 		stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
-		std::string format = "%d-%b-%Y %H-%M";
-		const char* arr = format.c_str();
-		rawTimeFormatted(statbuf.st_ctime, arr, buf, TIME_BUFF_AUTOINDEX);
+		rawTimeFormatted(statbuf.st_ctime, "%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
 		line += buf;
 		if (info->d_type != DT_DIR) {
 			std::string fileLen = to_string(statbuf.st_size);
@@ -175,10 +171,6 @@ namespace ft {
 	void IndexModule::addSlashBetween(std::string &target, const std::string &add) {
 		if (target.back() != '/' && add.front() != '/')
 			target += "/";
-	}
-
-	void IndexModule::setIndexOn(bool isItOn) {
-		_index_on = isItOn;
 	}
 
 }

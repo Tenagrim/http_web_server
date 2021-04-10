@@ -411,7 +411,7 @@ namespace ft
 			if(checkCodePage(vec[0], code)) {
 				IBody *body = bodyFromFile(vec[1]);
 				IHeader *head = _e_pager.getErrorHead(std::stoi(code));
-				head->setHeader(h_content_length, ft::to_string(body->size()));
+				head->setHeader("content-length", ft::to_string(body->size()));
 				response = new BasicResponse(head, body);
 			}
 		}

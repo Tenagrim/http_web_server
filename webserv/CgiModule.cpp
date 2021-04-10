@@ -54,12 +54,12 @@ namespace ft{
 
     	env.setVar("REQUEST_METHOD", ft::getMethodStr(req->getHeader()->getMethod()));
     	env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
-    //	if(req->getHeader()->isHeadAlreadyExist(h_content_length))
-    //		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader(h_content_length));
+    //	if(req->getHeader()->isHeadAlreadyExist("content-length"))
+    //		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
 
 
     	env.setVar("PATH_INFO", req->getHeader()->getPath());
-    	if (req->getHeader()->isFieldInHeader(h_secret))
+    	if (req->getHeader()->isFieldInHeader("secret"))
     		env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
 
 	//	env.setVar("REQUEST_TARGET",)
@@ -206,8 +206,8 @@ namespace ft{
 		if (head_part.size() + 2 < size)
 			body = new FileBody(_tmp_out, static_cast<int>(head_part.size() + 2));
 
-		if (body && !header->isHeadAlreadyExist(h_content_length))
-			header->setHeader(h_content_length, ft::to_string(body->size()));
+		if (body && !header->isFieldInHeader("content-length"))
+			header->setHeader("content-length", ft::to_string(body->size()));
 
 		return new BasicResponse(header, body);
 	}
@@ -247,7 +247,7 @@ namespace ft{
 			line = header_str.substr(0, pos);
 			header_str.erase(0, pos + 2);
 
-			HeaderMaker::fillHeader(line, res, s);  //// TODO: SADOLPH, WHY THIS FUNCTION NEEDS THIS S ?
+			HeaderMaker::fillHeader(line, res);
 
 		} while (!header_str.empty() && !line.empty());
 		handleStatusHeader(res);
@@ -261,9 +261,9 @@ namespace ft{
 	void CgiModule::handleStatusHeader(IHeader *header) {
 		std::string str;
     	size_t pos;
-		if (header->isHeadAlreadyExist(h_status))
+		if (header->isFieldInHeader("status"))
 		{
-    		str = header->getHeader(h_status);
+    		str = header->getHeader("status");
 			pos = str.find(' ');
 			if (pos != std::string::npos)
 			{

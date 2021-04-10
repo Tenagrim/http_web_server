@@ -79,18 +79,14 @@ namespace ft {
 					firstLine(subLine, header, state);
 					break;
 				case Client::s_header_reading:
-					fillHeader(subLine, header, state);
+					fillHeader(subLine, header);
 					break;
-//					TODO
+				default: break;
 			}
 		}
 	}
 
-	void HeaderMaker::fillHeader(std::string subLine, IHeader *header,
-									 Client::req_r_states &states) {
-		(void)states;
-		int i = 0;
-		header_keys a;
+	void HeaderMaker::fillHeader(std::string subLine, IHeader *header) {
 		std::string head;
 		std::string key;
 
