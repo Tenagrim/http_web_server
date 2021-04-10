@@ -47,7 +47,7 @@ namespace ft
 		if (!_fmngr.isFileExisting(request->getHeader()->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
-			head->setHeader(h_content_location, request->getHeader()->getURI());
+			head->setHeader("content-location", request->getHeader()->getURI());
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
@@ -57,7 +57,7 @@ namespace ft
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
-				head->setHeader(h_content_location, request->getHeader()->getURI());
+				head->setHeader("content-location", request->getHeader()->getURI());
 				truncExistingFile(request);
 			}
 		}

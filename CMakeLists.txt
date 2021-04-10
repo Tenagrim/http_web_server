@@ -94,7 +94,6 @@ add_executable(
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
         ./webserv/utils/getFileExtension.cpp
-        ./webserv/utils/getHeaderKey.cpp
         ./webserv/utils/getMethod.cpp
         ./webserv/utils/to_string.cpp
         ./webserv/utils/Utils.cpp

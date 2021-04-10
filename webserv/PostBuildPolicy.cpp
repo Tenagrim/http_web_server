@@ -32,7 +32,7 @@ namespace ft
 			return response;
 		} else {
 			IResponse *response = _e_pager.getErrorPage(405);
-			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			response->getHeader()->setHeader("allow", location->getArgs().find("limit_except")->second);
 			return response;
 		}
 	}
@@ -44,8 +44,8 @@ namespace ft
 		head->setHTTPV(pRequest->getHeader()->getHTTPVersion());
 		head->setResponseCode(405);
 		head->setCodeDescription(ft::getCodeDescr(405));
-		head->setHeader(h_allow, "GET, HEAD");
-		head->setHeader(h_connection, "close");
+		head->setHeader("allow", "GET, HEAD");
+		head->setHeader("connection", "close");
 
 		return head;
 	}

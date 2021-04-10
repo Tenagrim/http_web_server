@@ -28,9 +28,9 @@ namespace ft
 	#pragma endregion
 
 	#pragma region Getters
-	std::string const	&Header::getHeader(header_keys key) const
+	std::string const	&Header::getHeader(std::string const & key) const
 	{
-		if (!_header_map.count(key))
+		if (!isFieldInHeader(key))
 			throw ft::runtime_error("Header not exists");
 		return (*(_header_map.find(key))).second;
 	}
@@ -86,10 +86,10 @@ namespace ft
 		_uri = new_uri;
 	}
 
-	void				Header::setHeader(header_keys key, std::string const &header_value)
+	void				Header::setHeader(std::string const & key, std::string const &header_value)
 
 	{
-		_header_map[key] = header_value;
+		_header_map[strToLower(key)] = header_value;
 	}
 	
 	void				Header::setResponseCode(int new_code)
@@ -103,6 +103,7 @@ namespace ft
 	}
 	#pragma endregion
 
+//	TODO stringstream here
 	std::string			Header::to_string(void)
 	{
 		std::stringstream ss;
@@ -118,7 +119,7 @@ namespace ft
 			throw ft::runtime_error("Unknown type of header");
 		header_map::iterator it;
 		for (it = _header_map.begin(); it != _header_map.end(); it++)
-			ss <<ft::getHeaderKey( (*it).first) << ": " << (*it).second << "\r\n";
+			ss << (*it).first << ": " << (*it).second << "\r\n";
 		ss << "\r\n";
 		//std::map<header_keys, std::string>::iterator = _header_map.begin()
 		return (ss.str());
@@ -130,10 +131,6 @@ namespace ft
 		return (0);
 	}
 
-	bool Header::isHeadAlreadyExist(header_keys key) const {
-		return _header_map.count(key);
-	}
-
 	bool Header::isValid() {
 		return _isValid;
 	}
@@ -142,7 +139,7 @@ namespace ft
 		_isValid = false;
 	}
 
-	bool Header::isFieldInHeader(header_keys key) const {
+	bool Header::isFieldInHeader(std::string const & key) const {
 		return _header_map.count(key);
 	}
 
