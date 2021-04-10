@@ -445,5 +445,17 @@ namespace ft
 		}
 		return response;
 	}
+
+	bool ABuildPolicy::ifAuthentication(IRequest *request, LocationInit *location)
+	{
+		bool res = false;
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["auth_basic"];
+		if (methods.empty())
+			return true;
+		
+	}
 }
 // namespace ft
