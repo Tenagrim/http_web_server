@@ -49,6 +49,8 @@ namespace ft
 		void					reallyCloseSock(int sock);
 		void 					wakeUp();
 		void 					sleep();
+		void 					killZombies();
+		void 					initFdSets();
 		Dispatcher(const Dispatcher &ref);
 	public:
 		Dispatcher();

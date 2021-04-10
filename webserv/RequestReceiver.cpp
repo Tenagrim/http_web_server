@@ -20,7 +20,7 @@ namespace ft {
 
 	RequestReceiver::~RequestReceiver() {
 //		delete _validator;
-		ft_close_connections();
+		close_connections();
 		ft_close(_main_socket);
 	}
 
@@ -175,7 +175,7 @@ namespace ft {
 		_clients.erase(sock);
 	}
 
-	void RequestReceiver::ft_close_connections(void) {
+	void RequestReceiver::close_connections(void) {
 		fd_map::iterator it;
 		for (it = _clients.begin(); it != _clients.end(); it++)
 			close_connection((*it).first);
@@ -193,7 +193,9 @@ namespace ft {
 		int n;
 		int bodyRet;
 		std::string bodyPart;
+
 		client->updateEventTime();
+
 		if (client->getStates() == Client::s_not_begin) {
 			client->setLastRequest(new BasicRequest());
 			client->getLastRequest()->setPort(_port);
@@ -281,6 +283,14 @@ namespace ft {
 
 	int RequestReceiver::getPort() {
 		return _port;
+	}
+
+	std::map<int, Client *>::iterator RequestReceiver::begin() {
+		return _clients.begin();
+	}
+
+	std::map<int, Client *>::iterator RequestReceiver::end() {
+		return _clients.end();
 	}
 
 //	GET / HTTP/1.1\r\nHost: localhost:83\r\nUser-Agent: Go-http-client/1.1\r\nAccept-Encoding: gzip\r\n\r\n

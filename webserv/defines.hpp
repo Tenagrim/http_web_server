@@ -14,7 +14,7 @@
 
 #define DEFAULT_PORT			83
 #define DEFAULT_HOST			"localhost"
-#define DEFAULT_CONN_QUEUE		10
+#define DEFAULT_CONN_QUEUE		30
 #define READ_BUFF_SIZE			2048
 #define DEFAULT_CLIENT_DELAY	1000 * 1000 * 5
 #define CHECK_SOCKET_DELAY		100
@@ -30,12 +30,12 @@
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
 
-//#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
+#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
 //#define CLIENT_TIMEOUT_MICROS	60000000 // 60 secs
 //#define CLIENT_TIMEOUT_MICROS	2000000  // 2 secs
 //#define CLIENT_TIMEOUT_MICROS	60000000 // 60 secs
 //#define CLIENT_TIMEOUT_MICROS	20000000 // 20 secs
-#define CLIENT_TIMEOUT_MICROS	3600000000 // many secs
+//#define CLIENT_TIMEOUT_MICROS	3600000000 // many secs
 
 
 // Time checking
@@ -49,7 +49,8 @@
 
 #ifndef DEBUG
 # define DISPATCHER_SLEEP_DELAY	200000
-# define DISPATCHER_WAKE_DELAY	1000			// 1 ms
+//# define DISPATCHER_WAKE_DELAY	1000			// 1 ms
+# define DISPATCHER_WAKE_DELAY	500			// 0.5 ms
 //# define DISPATCHER_WAKE_DELAY	10000		// 10 ms
 //# define DISPATCHER_WAKE_DELAY	500000 // 500 ms
 //# define DISPATCHER_WAKE_DELAY	200000 // 200 ms

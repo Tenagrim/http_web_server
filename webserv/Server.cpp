@@ -174,8 +174,8 @@ namespace ft
 			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			if ((ret == 0 && (resp->getHeader()->isHeadAlreadyExist(h_connection)) &&
-				resp->getHeader()->getHeader(h_connection) == "ft_close") ||
+			if ((ret == 0 &&  ((resp->getHeader()->isHeadAlreadyExist(h_connection)) &&
+				resp->getHeader()->getHeader(h_connection) == "close") ) ||
 					(resp->getHeader()->getResponseCode() == 400)
 					)
 				_dispatcher->closeSock(client->getSock());

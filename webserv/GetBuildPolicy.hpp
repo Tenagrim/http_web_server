@@ -9,14 +9,13 @@ namespace ft
 		GetBuildPolicy(const GetBuildPolicy &ref);
 		static int 		_count;
 	public:
-		static int getCount();
-
-	public:
 		GetBuildPolicy();
 		virtual ~GetBuildPolicy();
 		GetBuildPolicy	&operator=(const GetBuildPolicy &ref);
 		IResponse		*buildResponse(IRequest *request);
 
+		static int getCount();
+		static void reset();
 		IResponse *buildIfNoLocation(IRequest *request);
 	};
 

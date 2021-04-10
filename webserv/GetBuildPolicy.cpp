@@ -28,6 +28,7 @@ namespace ft
 		std::cout << "Respone N: " << _count << "\n";
 		_count++;
 
+
 		IResponse *res = NULL;
 		std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
@@ -86,5 +87,9 @@ namespace ft
 
 	int GetBuildPolicy::getCount() {
 		return _count;
+	}
+
+	void GetBuildPolicy::reset() {
+		_count = 0;
 	}
 }

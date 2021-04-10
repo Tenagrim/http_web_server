@@ -1,4 +1,6 @@
 #include <PostBuildPolicy.hpp>
+#include <GetBuildPolicy.hpp>
+
 
 namespace ft
 {
@@ -21,6 +23,7 @@ namespace ft
 
 	IResponse		*PostBuildPolicy::buildResponse(IRequest *request)
 	{
+		GetBuildPolicy::reset();
 		(void) request;
 		IResponse *response = NULL;
 		std::cout<<request->getHeader()->to_string()<<std::endl;
@@ -57,7 +60,7 @@ namespace ft
 			head->setCodeDescription(ft::getCodeDescr(201));
 			head->setHeader(h_content_location, request->getHeader()->getURI());
 			head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-			head->setHeader(h_connection, "ft_close");
+			head->setHeader(h_connection, "close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
@@ -65,14 +68,14 @@ namespace ft
 				head->setCodeDescription(ft::getCodeDescr(303));
 				head->setHeader(h_location, "/post_body");
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-				head->setHeader(h_connection, "ft_close");
+				head->setHeader(h_connection, "close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
 				head->setHeader(h_content_location, request->getHeader()->getURI());
 				head->setHeader(h_content_length, std::to_string(request->getBody()->size()));
-				head->setHeader(h_connection, "ft_close");
+				head->setHeader(h_connection, "close");
 				truncExistingFile(request);
 			}
 		}
