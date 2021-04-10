@@ -177,7 +177,7 @@ namespace ft{
 			_cgi_in = open(_tmp_in.c_str(), O_RDONLY);
 		_cgi_out = open(_tmp_out.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (_cgi_in == -1 || _cgi_out == -1) {
-			dprintf(2, "FILE CAN T BE OPENED\n"); /////////// ATTENTION
+			dprintf(2, "FILE CAN T BE OPENED\n"); /////////// FIXME ATTENTION
 			exit(500);
 		}
 		char buff[300];

@@ -61,22 +61,24 @@ namespace ft
 
 	void Dispatcher::closeSock(int sock)
 	{
-		_socks_to_ft_close.push(sock);
+
+		if (std::find(_socks_to_close.begin(), _socks_to_close.end(), sock) == _socks_to_close.end())
+		_socks_to_close.push_front(sock);
 	}
 	
 	void Dispatcher::closeWhatNeed()
 	{
 		int sock;
-		if (_socks_to_ft_close.empty())
+		if (_socks_to_close.empty())
 			return;
 		#ifdef DEBUG
 		std::cout << "CLOSING SOCKETS";
 		#endif
-		while (!_socks_to_ft_close.empty())
+		while (!_socks_to_close.empty())
 		{
-			sock = _socks_to_ft_close.top();
+			sock = _socks_to_close.front();
 			reallyCloseSock(sock);
-			_socks_to_ft_close.pop();
+			_socks_to_close.erase(_socks_to_close.begin());
 		#ifdef DEBUG
 			std::cout << " CLOSING[" << sock<< "]\n";
 			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
@@ -113,8 +115,9 @@ namespace ft
 			}
 		}
 		else
-			throw ft::runtime_error("requested sock not found to delete it");
-		FD_CLR(sock, &_fd_set);
+			return;
+			//throw ft::runtime_error("requested sock not found to delete it");
+		//FD_CLR(sock, &_fd_set);
 		_listening--;
 	}
 
@@ -197,7 +200,8 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set)) {
-				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client, (*it).second));
+				std::cout << "READING EVENT ON: "<< it->first <<" \n";
+				_server->gotEvent(Dispatcher_event_args(it->first, reading, client, (*it).second));
 			//	FD_CLR((*it).first, &_writing_set);
 			}
 		}
@@ -210,6 +214,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set)) {
+				std::cout << "WRITING EVENT ON: "<< it->first <<" \n";
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
 			}
 		}
@@ -242,6 +247,7 @@ namespace ft
 	{
 		if (_events == 0)
 		{
+		//	std::cout << "DISPATCHER: NO EVENTS\n";
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: NO EVENTS\n";
 			#endif
@@ -299,20 +305,30 @@ namespace ft
 		Client	*client;
 		FD_ZERO(&_reading_set);
 		FD_ZERO(&_writing_set);
+		_max_fd = 0;
 
 		fd_map::iterator it = _listener_map.begin();
-		for(; it != _listener_map.end(); it++)
+		for(; it != _listener_map.end(); it++) {
 			FD_SET(it->first, &_reading_set);
+			setMax(it->first);
+		}
 		it = _client_map.begin();
 		for(; it != _client_map.end(); it++)
 		{
 			FD_SET(it->first, &_reading_set);
+			setMax(it->first);
 			client = dynamic_cast<Client *>(it->second->getClient(it->first));
 			if (!client)
 				throw ft::runtime_error("Unknown type after dynamic cast");
 			if (client->hasFlag(Client::read_flags, Client::r_end))
 				FD_SET(it->first, &_writing_set);
 		}
+		//_max_fd = _client_map.rbegin()->first;
+	}
+
+	void Dispatcher::setMax(int sock) {
+		if (sock > _max_fd)
+			_max_fd = sock;
 	}
 
 

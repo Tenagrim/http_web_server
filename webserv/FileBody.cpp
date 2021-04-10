@@ -13,6 +13,7 @@ namespace ft
 		if (_opened_fd != -1) {
 			std::cout << "FILE BODY DESTR : " << _opened_fd <<" ["<<_id <<"] \n";
 			ft_close(_opened_fd);
+			_opened_fd = -1;
 		}
 	}
 
@@ -56,6 +57,7 @@ namespace ft
 	{
 		int ret;
 		ret = open(_filename.c_str(), O_RDONLY);
+
 		if (ret == -1)
 			throw ft::runtime_error("FILE BODY: CANNOT OPEN FILE FOR READING");
 		if (_offset)

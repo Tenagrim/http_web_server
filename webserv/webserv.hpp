@@ -64,4 +64,5 @@ namespace ft
 	unsigned int getFileSize(const char *path);
 
 	int ft_close(int fd);
+
 }

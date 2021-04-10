@@ -3,6 +3,7 @@
 //
 
 #include <BodyReader.hpp>
+#include <iostream>
 
 ft::BodyReader::BodyReader()
 {/* Illegal */}
@@ -46,10 +47,12 @@ ft::BodyReader::openFile() {
 		_output_fd = ret;
 }
 
-void ft::BodyReader::write_block(const char *buff, int len, int offset) {
+int ft::BodyReader::write_block(const char *buff, int len, int offset) {
 	int ret = write(_output_fd, buff + offset + _offset, len - offset);
 	if (ret != -1)
 		_written_size += ret;
+	else
+		return - 1;
 	if (ret != len - offset - _offset)
 		throw ft::runtime_error("Error in writing block:" + std::string(strerror(errno)));
 	if (_offset == 1)
@@ -89,14 +92,14 @@ int ft::BodyReader::readBody() {
 	}
 	switch(_state) {
 		case s_p_block: return(readPBlock()); break;
+		case s_pp_block: return readPPBlock();
 		case s_r_ending: return(readEnding()); break;
 		case s_len: return (readChunkLen(1)); break;
 		case s_a1_len: return (readChunkLen(2)); break;
 		case s_a_len: return (readChunkLen(3)); break;
 		case s_block: return(readChunk()); break;
 		case s_end: return 0; break;
-		case s_remains:
-			break;
+		case s_remains: throw ft::runtime_error("WE SHOULDN\'N BE HERE\n"); break;
 	}
 	return 0;
 }
@@ -131,7 +134,7 @@ int ft::BodyReader::readRem()
 			_block_size = _remainder_of_header.substr(0, pos);
 			if (_block_size == "0")
 			{
-				//_state = s_r_ending;
+				_state = s_end;
 				return (0);
 			}
 			_block_size_i = static_cast<int>(strtol(_block_size.c_str(), NULL, 16)); //         !!!!!!!!!!!
@@ -187,8 +190,15 @@ int ft::BodyReader::readRem()
 int ft::BodyReader::readChunkLen(int n)
 {
 	char buff[3];
-	read(_input_fd, buff, n);
+	int ret;
+	ret = read(_input_fd, buff, n);
+	//std::cout << "READED: "<< n << " [ "<< _input_fd << "]\n";
+
+	if (ret == -1)
+		return endReading(-2);
 	_last_readed = buff[n -1];
+	if (std::string("ABCDEFabcdef0123456789\r").find(_last_readed) == std::string::npos)
+		throw ft::runtime_error("WRONG STATE IN BODY READER");
 	if (_last_readed == '\r')
 	{
 		_state = s_block;
@@ -216,7 +226,8 @@ int ft::BodyReader::readChunk()
 	if (readWriteBlock(_block_size_i + 3, 1) == -1)
 		return (-1);
 	}catch (ft::runtime_error){return -1;}
-	_state = s_len;
+	if (_state != s_pp_block)
+		_state = s_len;
 	return (1);
 }
 
@@ -226,26 +237,40 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 	_read_buff = (char*)malloc(size + _offset);
 	if (!_read_buff)
 		throw ft::runtime_error("Malloc failed");
-	ret =  read(_input_fd, _read_buff, size + _offset);
+	ret = read(_input_fd, _read_buff, size + _offset);
+	_last_readed_bytes = ret;
+	if (ret == -1)
+		return endReading(-2);
 	if (ret != size) {
-		free(_read_buff);
-		return endReading(-1);
+		//free(_read_buff);
+		//return endReading(-1);
+		_state = s_pp_block;
+		_last_readed_bytes = ret;
+
+		return 1;
 	}
 	if (offset == 1 && _read_buff[0 + _offset] != '\n')
 	{
 		free(_read_buff);
 		return endReading(-1);
 	}
-	if (_read_buff[size -1 + _offset] == '\n' && _read_buff[size -2 + _offset] == '\r')
+	if (_state != s_pp_block && _read_buff[size -1 + _offset] == '\n' && _read_buff[size -2 + _offset] == '\r')
 		size -= 2;
-	else
-		return endReading(-1);
+	//else
+	//	return endReading(-1);
 	write_block(_read_buff, size, offset);
 	free(_read_buff);
 	_read_buff = nullptr;
 	return 1;
 }
 
+int ft::BodyReader::readPPBlock() {
+	int size = _block_size_i - _last_readed_bytes + 3;
+	int ret = readWriteBlock(size);
+	if (_last_readed_bytes == size)
+		_state = s_len;
+	return ret;
+}
 int ft::BodyReader::readPBlock() {
 	int ret;
 	_state = s_len;
@@ -258,6 +283,8 @@ int ft::BodyReader::readEnding() {
 	char buff[4];
 	int ret;
 	ret = read(_input_fd, buff, 3);
+	if(ret == -1)
+		return endReading(-2);
 	buff[3] =0;
 	if (ret == -1 || ft::ft_strcmp(buff,"\n\r\n"))
 		ret = -1;
@@ -287,7 +314,8 @@ int ft::BodyReader::readByLen()
 		throw ft::runtime_error("Malloc failed");
 	ret = read(_input_fd, _read_buff, _content_length);
 	if (ret == -1)
-		throw ft::runtime_error("READ FAILED");
+		return endReading(-2);
+		//throw ft::runtime_error("READ FAILED");
 	if (ret != _content_length) {
 		free(_read_buff);
 		_read_buff = 0;
@@ -302,4 +330,5 @@ int ft::BodyReader::readByLen()
 unsigned int ft::BodyReader::getMaxId() {
 	return _max_id;
 }
+
 

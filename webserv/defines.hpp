@@ -14,7 +14,7 @@
 
 #define DEFAULT_PORT			83
 #define DEFAULT_HOST			"localhost"
-#define DEFAULT_CONN_QUEUE		30
+#define DEFAULT_CONN_QUEUE		256
 #define READ_BUFF_SIZE			2048
 #define DEFAULT_CLIENT_DELAY	1000 * 1000 * 5
 #define CHECK_SOCKET_DELAY		100

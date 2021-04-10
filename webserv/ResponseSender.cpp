@@ -31,7 +31,7 @@ namespace ft
 
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
-		int ret = -1;
+		int ret = 1;
 		int sock;
 	//	if (resp->getBody() && resp->getBody()->size() < 2048)
 	//		return sendFullResponse(resp, client);
@@ -43,7 +43,9 @@ namespace ft
 
 		if (!client->headerSent())
 		{
-			sendHeader(resp->getHeader(), client);
+			ret = sendHeader(resp->getHeader(), client);
+			if (ret == -1)
+				return -1;
 			if (resp->getBody() && resp->getBody()->size()) //&& resp->getHeader()->getResponseCode() != 405)
 				return 1;
 			else return 0;
@@ -60,13 +62,15 @@ namespace ft
 		return (ret);
 	}
 	
-	void			ResponseSender::sendHeader(IHeader *header, IClient *client)
+	int ResponseSender::sendHeader(IHeader *header, IClient *client)
 	{
 		std::string str;
+		int ret;
 		
 		str = header->to_string();
-		write(client->getSock(), str.c_str(),str.size());
+		ret = write(client->getSock(), str.c_str(),str.size());
 		client->sendHeader();
+		return ret;
 	}
 
 	int ResponseSender::sendTextBody(TextBody *body, IClient *client)
@@ -78,8 +82,8 @@ namespace ft
 		#endif	
 		str = body->to_string();
 		ret = write(client->getSock(), str.c_str(),str.size());
-		if (ret == -1)
-			throw ft::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
+		//if (ret == -1)
+		//	throw ft::runtime_error("FAILED TO WRITE RESP: (Write returned -1)");
 		#ifdef DEBUG
 		std::cout << "SENDER: TEXT BODY SENT\n";
 		#endif
@@ -91,11 +95,13 @@ namespace ft
 	{
 		int retw, retr, offset = 0;
 		char *buff = body->getBuff(READ_BODY_ONE_TIME);
-
+		//buff[0] = 0;
 		//int lr = body->lastReaded();
 
 		if (body->getReaded() == body->getWritten()) {
 			retr = read(body->getOpenedFd(), buff, READ_BODY_ONE_TIME);
+			if (retr == -1)
+				throw ft::runtime_error("SEND FILE BODY: UNABLE TO OPEN FILE FOR READING");
 			body->setReaded(retr);
 		}
 		else
@@ -106,15 +112,17 @@ namespace ft
 		}
 
 			retw = send(client->getSock(), buff + offset, retr, 0);
-				if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
-					throw ft::runtime_error("SOMETHING WENT WRONG");
-				body->setWritten(retw);
+			if (retw == -1)
+				return -1;
+			if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
+				throw ft::runtime_error("SOMETHING WENT WRONG");
+			body->setWritten(retw);
 		return retw;
 	}
 
 	int ResponseSender::sendBody(IBody *body, IClient *client)
 	{
-		int written;
+		int written = -1;
 //		TODO:Some something when no BODY;
 		if (!body) {
 			client->sendBody();
@@ -129,6 +137,8 @@ namespace ft
 		#ifdef DEBUG
 			std::cout << "SENDER: SEND BODY SIZE: [" << body->size() << "] WRITTEN: [" <<  body->getWritten() << "]\n";
 		#endif
+			if (written == -1)
+				return -1;
 		//std::cout << "WRITTEN: " << written << " [" << client->getSock() << "] ["<< body->getOpenedFd() <<"]  \n";
 		//if (written == 0 || )
 		//	throw runtime_error();

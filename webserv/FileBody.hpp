@@ -16,16 +16,13 @@ namespace ft
 		static unsigned int 	_max_id;
 		unsigned int			_size;
 		std::string				_filename;
-	public:
-		unsigned int getId() const;
-
-	private:
 		int 					_opened_fd;
 		int 					_offset;
 		FileBody();
 		FileBody(const FileBody &ref);
 		std::string		readFile() const;
 	public:
+		unsigned int getId() const;
 		FileBody(std::string const &path, int offset = 0);
 		~FileBody();
 

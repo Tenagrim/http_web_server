@@ -2,6 +2,7 @@
 #include <map>
 #include <IRequestReciever.hpp>
 #include <sys/select.h> // For select
+#include <queue>
 
 //class Dispatcher;
 namespace ft
@@ -25,7 +26,7 @@ namespace ft
 		fd_map					_listener_map;
 		fd_map					_client_map;
 
-		std::stack<int>			_socks_to_ft_close;
+		std::list<int>			_socks_to_close;
 		unsigned int 			_delay;
 	//	td::map<int, Server *>			_listener_map;
 	//	td::map<int, Server *>				_client_map;
@@ -51,6 +52,7 @@ namespace ft
 		void 					sleep();
 		void 					killZombies();
 		void 					initFdSets();
+		void 					setMax(int sock);
 		Dispatcher(const Dispatcher &ref);
 	public:
 		Dispatcher();

@@ -22,6 +22,7 @@ namespace ft
 		_last_request = 0;
 		_last_response = 0;
 		_states = s_not_begin;
+		_left = false;
 		updateEventTime();
 		_id = _max_id++;
 	}
@@ -238,5 +239,13 @@ namespace ft
 
 	int Client::getId() {
 		return _id;
+	}
+
+	void Client::setLeft() {
+		_left = true;
+	}
+
+	bool Client::left() {
+		return _left;
 	}
 }

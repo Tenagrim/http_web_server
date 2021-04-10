@@ -29,6 +29,7 @@ namespace ft {
 			s_r_ending,
 			s_a_len,
 			s_a1_len,
+			s_pp_block,
 			s_end
 		};
 
@@ -49,6 +50,7 @@ namespace ft {
 		int 				_input_fd;
 		int 				_offset;
 		int 				_content_length;
+		int 				_last_readed_bytes;
 
 		int 				readWriteBlock(int size, int offset =0);
 		void 				openFile();
@@ -56,10 +58,11 @@ namespace ft {
 		int 				readChunkLen(int n);
 		int 				readChunk();
 		int 				readPBlock();
+		int 				readPPBlock();
 		int 				readEnding();
 
 
-		void 				write_block(const char *buff, int len, int offset = 0 );
+		int write_block(const char *buff, int len, int offset = 0 );
 		int 				endReading(int ret);
 
 		int 				readByLen();

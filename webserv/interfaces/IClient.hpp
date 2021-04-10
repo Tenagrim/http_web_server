@@ -25,6 +25,8 @@ namespace ft
 		virtual unsigned long	getUsecsFromLastEvent() = 0;
 		virtual void 			reset() = 0;
 		virtual int 			getId() = 0;
+		virtual bool 			left() = 0;
+		virtual void 			setLeft() = 0;
 		virtual ~IClient(){}
 	};
 }

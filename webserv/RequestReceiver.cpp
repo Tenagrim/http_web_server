@@ -184,11 +184,11 @@ namespace ft {
 #pragma endregion
 
 
-	void RequestReceiver::getRequest(int sock) {
-		getRequest(_clients[sock]);
+	int RequestReceiver::getRequest(int sock) {
+		return getRequest(_clients[sock]);
 	}
 
-	void RequestReceiver::getRequest(Client *client) {
+	int RequestReceiver::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
 		int bodyRet;
@@ -204,12 +204,13 @@ namespace ft {
 			client->setStates(Client::s_start_header_reading);
 			client->setFlag(Client::read_flags, Client::r_begin);
 			n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
-			//if (buff[0] == 0)
+			std::cout << "READED: "<< n << " [ "<< client->getSock() << "]\n";
+			if (n <= 0)
+				return -1;
 			buff[n] = 0;
 		}
 		switch (client->getStates()) {
 			case Client::s_start_header_reading:
-
 				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_reading:
@@ -218,20 +219,13 @@ namespace ft {
 			case Client::s_header_readed:
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
-			case Client::s_not_begin:
-				break;
-			case Client::s_start_body_reading:
-				break;
-			case Client::s_body_reading:
-				break;
-			case Client::s_end_reading:
-				break;
 		}
 		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&
 			client->getLastRequest()->getHeader() &&
 			client->getLastRequest()->getHeader()->isValid()
 			) {
 			//  TODO: if header fully readed
+			client->getReadBuff().clear();
 			if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
 				if (!client->getBReader()) {
 					int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
@@ -242,16 +236,21 @@ namespace ft {
 				switch (bodyRet) {
 					case 0:
 						client->getLastRequest()->setBody(client->getBReader()->getBody());
-						break;
+						client->setFlag(Client::read_flags, Client::r_end);
+						return 0;
 					case 1:
-						return;
+						return 1;
 					case -1:
 						client->setFlag(Client::read_flags, Client::r_end);
 						client->getLastRequest()->getHeader()->makeInvalid();
-						return;
+						return -1;
+					case -2:
+						client->setFlag(Client::read_flags, Client::r_end);
+						return -1;
 				}
 			} else {
 				client->setFlag(Client::read_flags, Client::r_end);
+				return n;
 			}
 		}
 	}
