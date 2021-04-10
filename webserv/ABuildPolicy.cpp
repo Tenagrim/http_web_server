@@ -164,7 +164,7 @@ namespace ft
 			else if (e.whatCode() == 403)
 				return  _e_pager.getErrorPage(403);
 			else
-				throw ft::runtime_error("SOMETHING WENT WRONG");
+				throw ft::runtime_error("SOMETHING WENT WRONG - *ABuildPolicy::buildFromDir");
 		}
 		if (!body)
 			return _e_pager.getErrorPage(404);
@@ -270,7 +270,7 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-		res = new TextResponse(header, body);  // WHAT ??!!!??
+//		res = new TextResponse(header, body);  // WHAT ??!!!??
 		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
@@ -368,8 +368,10 @@ namespace ft
 		std::list<LocationInit *>::iterator it = list.begin();
 		for (; it != list.end(); ++it) {
 			if ((*it)->getPath() == ("/" + string)) {
-				res = (*it)->getArgs().find("root")->second;
-				return res;
+				if ((*it)->getArgs().find("root") != (*it)->getArgs().end()) {
+					res = (*it)->getArgs().find("root")->second;
+					return res;
+				}
 			}
 		}
 		res = "/" + res;

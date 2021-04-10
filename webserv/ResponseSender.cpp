@@ -101,7 +101,8 @@ namespace ft
 
 			retw = send(client->getSock(), buff + offset, retr, 0);
 				if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
-					throw ft::runtime_error("SOMETHING WENT WRONG");
+					throw ft::runtime_error("SOMETHING WENT WRONG - ResponseSender::sendFileBody" + to_string(retw) +
+					to_string(retr) + to_string(offset) + to_string(client->getSock()));
 				body->setWritten(retw);
 		return retw;
 	}
