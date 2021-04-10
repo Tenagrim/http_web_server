@@ -41,6 +41,8 @@ namespace ft
 				response = _e_pager.getErrorPage(413);
 			}
 		} else {
+			IResponse *response = _e_pager.getErrorPage(405);
+			response->getHeader()->setHeader("allow", location->getArgs().find("limit_except")->second);
 			response = _e_pager.getErrorPage(405);
 			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
 			return response;
@@ -52,6 +54,11 @@ namespace ft
 	{
 		std::cout<<_fmngr.getRoot()<<std::endl;
 		IHeader *head = new Header(response);
+		head->setHTTPV(pRequest->getHeader()->getHTTPVersion());
+		head->setResponseCode(405);
+		head->setCodeDescription(ft::getCodeDescr(405));
+		head->setHeader("allow", "GET, HEAD");
+		head->setHeader("connection", "close");
 		if (!_fmngr.isFileExisting(request->getHeader()->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));

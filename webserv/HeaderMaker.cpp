@@ -81,16 +81,7 @@ namespace ft {
 				case Client::s_header_reading:
 					fillHeader(subLine, header, state);
 					break;
-				case Client::s_not_begin:
-					break;
-				case Client::s_header_readed:
-					break;
-				case Client::s_start_body_reading:
-					break;
-				case Client::s_body_reading:
-					break;
-				case Client::s_end_reading:
-					break;
+//					TODO
 			}
 		}
 	}
@@ -103,14 +94,8 @@ namespace ft {
 		std::string head;
 		std::string key;
 
-		head = subLine.substr(0, subLine.find(':'));
-		do {
-			a = static_cast<header_keys>(i);
-			i++;
-		} while (!(key = getHeaderKey(a)).empty() && strToLower(key) != strToLower(head));
-		if (key.empty())
-			return;
-		if (header->isHeadAlreadyExist(a)) {
+		head = strToLower(subLine.substr(0, subLine.find(':')));
+		if (header->isFieldInHeader(head)) {
 			header->makeInvalid();
 			return;
 		}
@@ -118,7 +103,7 @@ namespace ft {
 		while (subLine[0] == ' ') {
 			subLine.erase(0, 1);
 		}
-		header->setHeader(a, subLine);
+		header->setHeader(head, subLine);
 	}
 
 	void HeaderMaker::firstLine(std::string const &line, IHeader *header,
@@ -165,25 +150,25 @@ namespace ft {
 	}
 
 	void HeaderMaker::validateHeader(IHeader *header) {
-		if (!header->isFieldInHeader(h_host)) {
+		if (!header->isFieldInHeader(strToLower("Host"))) {
 			header->makeInvalid();
 			return;
 		}
 
 		if (methodNeedsBody(header->getMethod())) {
 
-			if ((!header->isFieldInHeader(h_content_length) &&
-				 !header->isFieldInHeader(h_transfer_encoding))
+			if ((!header->isFieldInHeader("content-length") &&
+				 !header->isFieldInHeader("transfer-encoding"))
 				||
-				(header->isFieldInHeader(h_content_length) &&
-				 header->isFieldInHeader(h_transfer_encoding))) {
+				(header->isFieldInHeader("content-length") &&
+				 header->isFieldInHeader("transfer-encoding"))) {
 				header->makeInvalid();
 				return;
 			}
 
-			if (header->isFieldInHeader(h_content_length)) {
-				if (isNumber(header->getHeader(h_content_length))) {
-					if (strtol(header->getHeader(h_content_length).c_str(), NULL, 10) < 0
+			if (header->isFieldInHeader("content-length")) {
+				if (isNumber(header->getHeader("content-length"))) {
+					if (strtol(header->getHeader("content-length").c_str(), NULL, 10) < 0
 						|| errno == ERANGE) {
 						header->makeInvalid();
 						return;
@@ -194,8 +179,8 @@ namespace ft {
 				}
 			}
 
-			if (header->isFieldInHeader(h_transfer_encoding)) {
-				if (header->getHeader(h_transfer_encoding) != "chunked") {
+			if (header->isFieldInHeader("transfer-encoding")) {
+				if (header->getHeader("transfer-encoding") != "chunked") {
 					header->makeInvalid();
 					return;
 				}
@@ -210,8 +195,8 @@ namespace ft {
 	int HeaderMaker::getContLen(const IHeader &header) {
 		long int contLen;
 
-		if (header.isFieldInHeader(h_content_length)) {
-			std::string s = header.getHeader(h_content_length);
+		if (header.isFieldInHeader("content-length")) {
+			std::string s = header.getHeader("content-length");
 			contLen = strtol(s.c_str(), nullptr, 10);
 		} else
 			contLen = LEN_CHUNKED;

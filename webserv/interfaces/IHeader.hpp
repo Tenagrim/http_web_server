@@ -34,13 +34,12 @@ namespace ft
 		virtual void				setCodeDescription(std::string const &new_descr) = 0;
 		virtual void				setResponseCode(int new_code) = 0;
 //		virtual void				setHeader(header_keys h_key, std::string const &header_value) = 0;
-		virtual void				setHeader(header_keys header_key, std::string const &header_value) = 0;
-		virtual std::string const	&getHeader(header_keys key) const = 0;
+		virtual void				setHeader(std::string const & header_key, std::string const &header_value) = 0;
+		virtual std::string const	&getHeader(std::string const & key) const = 0;
 		virtual bool 				isValid() = 0;
 		virtual void 				makeInvalid() = 0;
 		virtual unsigned long		size() = 0;
-		virtual bool				isHeadAlreadyExist(header_keys key) const = 0;
-		virtual bool				isFieldInHeader(header_keys key) const = 0;
+		virtual bool				isFieldInHeader(std::string const & key) const = 0;
 		virtual std::string 		getPath() = 0;
 		virtual std::string 		getQuery() = 0;
 

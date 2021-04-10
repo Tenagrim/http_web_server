@@ -30,7 +30,7 @@ namespace ft {
 	private:
 		std::string 	_url;		// full path (+root), ends with '/'
 		std::string 	_reqUrl;	// URL from request, ends with '/'
-		static bool 	_index_on;
+
 		IBody			*fileFromIndex(LocationInit *location);
 		IBody			*defaultFile(LocationInit *location);
 		IBody			*generateAutoindex(LocationInit *location);
@@ -38,6 +38,8 @@ namespace ft {
 		void 			setValue(std::string const &root, std::string const &url);
 		IBody *			searchFile(std::string const & filePath);
 		std::string		generateHtmlLine(dirent *info);
+
+		std::string		addSlash(std::string const & url);
 
 		IndexModule(IndexModule const & other);
 		IndexModule & operator=(IndexModule const & other);
