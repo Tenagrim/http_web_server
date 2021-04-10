@@ -35,7 +35,7 @@ namespace ft
 		}
 		else {
 			IResponse *response = _e_pager.getErrorPage(405);
-			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			response->getHeader()->setHeader("allow", location->getArgs().find("limit_except")->second);
 			return  _e_pager.getErrorPage(405);
 		}
 	}
@@ -47,20 +47,20 @@ namespace ft
 		if (!_fmngr.isFileExisting(request->getHeader()->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
-			head->setHeader(h_content_location, request->getHeader()->getURI());
-			head->setHeader(h_connection, "close");
+			head->setHeader("content-location", request->getHeader()->getURI());
+			head->setHeader("connection", "close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
-				head->setHeader(h_connection, "close");
+				head->setHeader("connection", "close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
-				head->setHeader(h_content_location, request->getHeader()->getURI());
-				head->setHeader(h_connection, "close");
+				head->setHeader("content-location", request->getHeader()->getURI());
+				head->setHeader("connection", "close");
 				truncExistingFile(request);
 			}
 		}
