@@ -59,7 +59,7 @@ namespace ft{
 
 
     	env.setVar("PATH_INFO", req->getHeader()->getPath());
-    	if (req->getHeader()->isFieldInHeader("secret"))
+    	if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
     		env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
 
 	//	env.setVar("REQUEST_TARGET",)
@@ -238,7 +238,7 @@ namespace ft{
 		Header			*res = new Header(response);
 		size_t 			pos;
 		std::string		line;
-		Client::req_r_states	s = Client::s_header_reading;
+//		Client::req_r_states	s = Client::s_header_reading;
 
 		do{
 			pos = header_str.find("\r\n");
