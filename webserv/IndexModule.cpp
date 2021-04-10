@@ -64,14 +64,15 @@ namespace ft {
 
 		if ((dir = opendir(_url.c_str()))) {
 			html += "<html><head><title>Index of ";
-			html += _reqUrl;
+			html += _requestUrl;
 			html += "</title></head>\n"
 					"<body bgcolor=\"white\">\n"
 	 				"<h1>Index of ";
-			html += _reqUrl;
+			html += _requestUrl;
 			html += "</h1><hr><pre>";
 			while ((info = readdir(dir)))
-				html += generateHtmlLine(info);
+				if (strcmp(info->d_name, "."))
+					html += generateHtmlLine(info);
 			html += "</pre><hr>\n"
 		   			"\n"
 					"</body></html>";
@@ -124,8 +125,12 @@ namespace ft {
 	}
 
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
-		_reqUrl = url + (url.back() != '/' ? "/" : "");
-		_url = root + (url[0] != '/' ? "/" : "") + _reqUrl;
+		_requestUrl = url;
+		_url = root + (url[0] != '/' ? "/" : "") + addSlash(_requestUrl);
+	}
+
+	std::string IndexModule::addSlash(const std::string &url) {
+		return url + (url.back() != '/' ? "/" : "");
 	}
 
 }
