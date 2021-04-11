@@ -14,7 +14,7 @@ Light Gray   0;37     White         1;37
 */
 namespace ft
 {
-	static const char reset[] = "\033[0m";
+	static const char reset_[] = "\033[0m";
 	static const char red[] = "\033[31m";
 	static const char green[] = "\033[32m";
 	static const char yellow[] = "\033[33m";

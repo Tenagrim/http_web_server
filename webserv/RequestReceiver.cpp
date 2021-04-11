@@ -210,7 +210,7 @@ namespace ft {
 			client->setStates(Client::s_start_header_reading);
 			client->setFlag(Client::read_flags, Client::r_begin);
 			n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
-			std::cout << "READED: "<< n << " [ "<< client->getSock() << "]\n";
+			std::cout << "READED: "<< n << " ["<< client->getSock() << "]\n";
 			if (n <= 0)
 				return -1;
 			buff[n] = 0;
@@ -239,7 +239,7 @@ namespace ft {
 				}
 				client->getStates() = Client::s_body_reading;
 				bodyRet = client->getBReader()->readBody();
-				std::cout << cyan << "["<< client->getSock() <<"] RECIEVED : " << client->getBReader()->getWritten() << " ["<<client->requests() <<"] " << reset << "\n";
+				std::cout << cyan << "[" << client->getSock() << "] RECIEVED : " << client->getBReader()->getWritten() << " [" << client->requests() << "] " << reset_ << "\n";
 				switch (bodyRet) {
 					case 0:
 						client->getLastRequest()->setBody(client->getBReader()->getBody());
