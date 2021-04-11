@@ -17,8 +17,6 @@
 
 
 namespace ft {
-	bool IndexModule::_index_on = true;
-
 	IndexModule::IndexModule() {}
 
 	IndexModule::~IndexModule() {}
@@ -77,14 +75,15 @@ namespace ft {
 
 		if ((dir = opendir(_url.c_str()))) {
 			html += "<html><head><title>Index of ";
-			html += _reqUrl;
+			html += _requestUrl;
 			html += "</title></head>\n"
 					"<body bgcolor=\"white\">\n"
 	 				"<h1>Index of ";
-			html += _reqUrl;
+			html += _requestUrl;
 			html += "</h1><hr><pre>";
 			while ((info = readdir(dir)))
-				html += generateHtmlLine(info);
+				if (strcmp(info->d_name, "."))
+					html += generateHtmlLine(info);
 			html += "</pre><hr>\n"
 		   			"\n"
 					"</body></html>";
@@ -111,9 +110,7 @@ namespace ft {
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
 		buf[TIME_BUFF_AUTOINDEX - 1] = '\0';
 		stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
-		std::string format = "%d-%b-%Y %H-%M";
-		const char* arr = format.c_str();
-		rawTimeFormatted(statbuf.st_ctime, arr, buf, TIME_BUFF_AUTOINDEX);
+		rawTimeFormatted(statbuf.st_ctime, "%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
 		line += buf;
 		if (info->d_type != DT_DIR) {
 			std::string fileLen = to_string(statbuf.st_size);
@@ -144,8 +141,12 @@ namespace ft {
 	}
 
 	void IndexModule::setValue(std::string const &root, std::string const &url) {
-		_reqUrl = url + (url.back() != '/' ? "/" : "");
-		_url = root + (url[0] != '/' ? "/" : "") + _reqUrl;
+		_requestUrl = url;
+		_url = root + (url[0] != '/' ? "/" : "") + addSlash(_requestUrl);
+	}
+
+	std::string IndexModule::addSlash(const std::string &url) {
+		return url + (url.back() != '/' ? "/" : "");
 	}
 
 	IBody *IndexModule::defaultRules(const std::string &root, const std::string &url) {
@@ -168,10 +169,6 @@ namespace ft {
 	void IndexModule::addSlashBetween(std::string &target, const std::string &add) {
 		if (target.back() != '/' && add.front() != '/')
 			target += "/";
-	}
-
-	void IndexModule::setIndexOn(bool isItOn) {
-		_index_on = isItOn;
 	}
 
 }

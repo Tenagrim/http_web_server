@@ -118,7 +118,7 @@ namespace ft
 		bool state = true;
 		std::list<std::string> list = pServer->getServerNames();
 		std::list<std::string>::iterator it;
-		it = std::find(list.begin(), list.end(), pRequest->getHeader()->getHeader(h_host));
+		it = std::find(list.begin(), list.end(), pRequest->getHeader()->getHeader("host"));
 		if (it == list.end())
 			state = false;
 		return state;
@@ -127,7 +127,7 @@ namespace ft
 	int ResponseBuilder::findPort(IRequest *pRequest)
 	{
 		int res = 0;
-		std::string tmp = pRequest->getHeader()->getHeader(h_host);
+		std::string tmp = pRequest->getHeader()->getHeader("host");
 		size_t pos = tmp.find(':');
 		if (pos == std::string::npos)
 			res = 80;

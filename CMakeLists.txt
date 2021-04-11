@@ -67,8 +67,8 @@ add_executable(
         ./webserv/PutBuildPolicy.hpp
         ./webserv/Request.cpp
         ./webserv/Request.hpp
-        webserv/RequestReceiver.cpp
-        webserv/RequestReceiver.hpp
+        ./webserv/RequestReceiver.cpp
+        ./webserv/RequestReceiver.hpp
         ./webserv/ResponseBuilder.cpp
         ./webserv/ResponseBuilder.hpp
         ./webserv/ResponseSender.cpp
@@ -91,7 +91,6 @@ add_executable(
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
         ./webserv/utils/getFileExtension.cpp
-        ./webserv/utils/getHeaderKey.cpp
         ./webserv/utils/getMethod.cpp
         ./webserv/utils/to_string.cpp
         ./webserv/utils/Utils.cpp
@@ -121,5 +120,7 @@ add_executable(
         webserv/Environment.cpp
         webserv/Environment.hpp
         webserv/CgiModule.cpp
-        webserv/utils/getFileSize.cpp)
+        webserv/utils/getFileSize.cpp
+        webserv/utils/isParsedHeader.cpp
+        webserv/Authorization.cpp webserv/Authorization.hpp webserv/utils/Base64.cpp)
 

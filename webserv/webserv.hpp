@@ -56,15 +56,15 @@ namespace ft
 		m_head,
 		m_undefined
 	};
+
 	void				*ft_memcpy(void *dest, const void *src, unsigned long num);
 	unsigned long		ft_strlen(char const *str);
-	std::string			getHeaderKey(header_keys key);
 	std::string			getMethodStr(const methods_enum key);
 	std::string			getCodeDescr(int code);
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
-	std::string fdToString(int fd);
+	std::string			fdToString(int fd);
 	bool				isNumber(std::string s);
 	std::string 		strToLower(const std::string & s);
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
@@ -73,10 +73,12 @@ namespace ft
 	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
-
+	bool				isParsedHeader(std::string const &head);
 	bool				methodNeedsBody(methods_enum method);
-	unsigned int getFileSize(const char *path);
+	unsigned int		getFileSize(const char *path);
 
-	int ft_close(int fd);
+	int					ft_close(int fd);
 
+	std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+	std::string base64_decode(std::string const &encoded_string);
 }

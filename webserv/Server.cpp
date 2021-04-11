@@ -174,8 +174,8 @@ namespace ft
 				std::cout << "WRITING RETURNED -1 ["<< args._fd <<"]\n";
 			}
 
-		if ((ret == 0 &&  ((resp->getHeader()->isHeadAlreadyExist(h_connection)) &&
-				resp->getHeader()->getHeader(h_connection) == "close") ) ||
+		if ((ret == 0 &&  ((resp->getHeader()->isFieldInHeader("connection")) &&
+				resp->getHeader()->getHeader("connection") == "close") ) ||
 					(resp->getHeader()->getResponseCode() == 400)
 					)
 				_dispatcher->closeSock(client->getSock());

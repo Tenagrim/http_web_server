@@ -1,6 +1,6 @@
 #include <ConfigParser.hpp>
 
-ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile() {
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(), _conf() {
 
 	openConfigFile();
 	if (!initParsing())

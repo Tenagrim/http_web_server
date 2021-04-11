@@ -57,6 +57,8 @@ namespace ft
 	}
 
 	void BasicRequest::setHeader(IHeader *header) {
+		if (_header)
+			delete _header;
 		_header = header;
 	}
 

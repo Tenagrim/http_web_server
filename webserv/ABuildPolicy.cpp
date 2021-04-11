@@ -30,11 +30,11 @@ namespace ft
 		res->setCodeDescription(descr);
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
-		res->setHeader(h_content_length, ft::to_string(body->size()));
+		res->setHeader("content-length", ft::to_string(body->size()));
 		//res->setHeader(h_date, _t_machine->getTimestamp());
 //		res->setHeader(h_connec, "keep-alive");
-		res->setHeader(h_content_type, body->getContentType());
-		res->setHeader(h_server, DEFAULT_SERVER_HEADER);
+		res->setHeader("content-type", body->getContentType());
+		res->setHeader("server", DEFAULT_SERVER_HEADER);
 
 		//std::string type =
 		return res;
@@ -161,7 +161,7 @@ namespace ft
 			else if (e.whatCode() == 403)
 				return  _e_pager.getErrorPage(403);
 			else
-				throw ft::runtime_error("SOMETHING WENT WRONG");
+				throw ft::runtime_error("SOMETHING WENT WRONG - *ABuildPolicy::buildFromDir");
 		}
 		if (!body)
 			return _e_pager.getErrorPage(404);
@@ -365,8 +365,10 @@ namespace ft
 		std::list<LocationInit *>::iterator it = list.begin();
 		for (; it != list.end(); ++it) {
 			if ((*it)->getPath() == ("/" + string)) {
-				res = (*it)->getArgs().find("root")->second;
-				return res;
+				if ((*it)->getArgs().find("root") != (*it)->getArgs().end()) {
+					res = (*it)->getArgs().find("root")->second;
+					return res;
+				}
 			}
 		}
 		res = "/" + res;
@@ -406,7 +408,7 @@ namespace ft
 			if(checkCodePage(vec[0], code)) {
 				IBody *body = bodyFromFile(vec[1]);
 				IHeader *head = _e_pager.getErrorHead(std::stoi(code));
-				head->setHeader(h_content_length, ft::to_string(body->size()));
+				head->setHeader("content-length", ft::to_string(body->size()));
 				response = new BasicResponse(head, body);
 			}
 		}
@@ -439,6 +441,35 @@ namespace ft
 			response = _cgi_module.getResponse(request);
 		}
 		return response;
+	}
+
+	std::pair<bool, std::string> ABuildPolicy::ifAuthentication(IRequest *request, LocationInit *location)
+	{
+		std::pair<bool, std::string> res;
+		res.first = false;
+		res.second = "";
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["auth_basic"];
+		if (methods.empty()) {
+			res.first = true;
+			return res;
+		}
+		if (request->getHeader()->isFieldInHeader("authorization")) {
+			std::string auth_req = request->getHeader()->getHeader("authorization");
+			res.first = _auth.checkAuth(auth_req);
+			if (res.first) {
+				res.second.clear();
+				return res;
+			}
+		}
+		std::map<std::string, std::string>::iterator it = arguments.find("auth_basic");
+		std::string tmp = it->second;
+		res.second = _auth.getRealmKey(ft::base64_encode(reinterpret_cast<const unsigned char *>(tmp.c_str()), tmp.length
+		()));
+		res.first = false;
+		return res;
 	}
 }
 // namespace ft

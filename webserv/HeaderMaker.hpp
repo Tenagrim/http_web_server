@@ -23,7 +23,7 @@ namespace ft {
 		static void			checkHttp(const std::string &line, IHeader *header);
 
 		static std::string	readHeader(Client *client, char *buff);
-		static void			fillHeader(std::string subLine, IHeader *header, Client::req_r_states &states);
+		static void fillHeader(std::string subLine, IHeader *header);
 		static void			validateHeader(IHeader *header);
 
 		static bool 		methodNeedsBody(methods_enum method);

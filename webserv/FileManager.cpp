@@ -42,8 +42,10 @@ namespace ft
 		file = _root + filename;
 //		if (file.back() == '/')
 //			file.erase(file.end() - 1);
-		stat(file.c_str(), &statbuf);
-		return S_ISDIR(statbuf.st_mode);	
+		if (!stat(file.c_str(), &statbuf))
+			return S_ISDIR(statbuf.st_mode);
+		else
+			return -1;
 	}
 
 	bool			FileManager::isFileExisting(std::string const &filename)

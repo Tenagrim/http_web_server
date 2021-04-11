@@ -23,19 +23,29 @@ namespace ft
 	{
 		(void) request;
 		ServerInit *conf = getConfig();
+		IResponse *response;
 		applyConfig(conf);
 		LocationInit *location = getCorrectLocation(request->getHeader()->getPath(), conf);
 		if (ifCorrectMethod(request, location))
 		{
-			IHeader *head = checkCommingURI(request);
-			if (head == nullptr)
-				return _e_pager.getErrorPage(404);
-			BasicResponse *response = new BasicResponse(head, NULL);
-			return response;
+			std::pair<bool, std::string> author = ifAuthentication(request, location);
+			if (author.first && author.second == "")
+			{
+				IHeader *head = checkCommingURI(request);
+				if (head == nullptr)
+					return _e_pager.getErrorPage(404);
+				response = new BasicResponse(head, NULL);
+				return response;
+			}
+			else {
+				response = _e_pager.getErrorPage(401);
+				response->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+				return response;
+			}
 		}
 		else {
 			IResponse *response = _e_pager.getErrorPage(405);
-			response->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			response->getHeader()->setHeader("allow", location->getArgs().find("limit_except")->second);
 			return  _e_pager.getErrorPage(405);
 		}
 	}
@@ -47,20 +57,20 @@ namespace ft
 		if (!_fmngr.isFileExisting(request->getHeader()->getURI())) {
 			head->setResponseCode(201);
 			head->setCodeDescription(ft::getCodeDescr(201));
-			head->setHeader(h_content_location, request->getHeader()->getURI());
-			head->setHeader(h_connection, "close");
+			head->setHeader("content-location", request->getHeader()->getURI());
+			head->setHeader("connection", "close");
 			creatFile(request);
 		} else {
 			if (request->getBody()) {
 				head->setResponseCode(200);
 				head->setCodeDescription(ft::getCodeDescr(200));
-				head->setHeader(h_connection, "close");
+				head->setHeader("connection", "close");
 				mutantExistingFile(request);
 			} else {
 				head->setResponseCode(204);
 				head->setCodeDescription(ft::getCodeDescr(204));
-				head->setHeader(h_content_location, request->getHeader()->getURI());
-				head->setHeader(h_connection, "close");
+				head->setHeader("content-location", request->getHeader()->getURI());
+				head->setHeader("connection", "close");
 				truncExistingFile(request);
 			}
 		}

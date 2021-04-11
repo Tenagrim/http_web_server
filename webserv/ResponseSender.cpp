@@ -66,7 +66,7 @@ namespace ft
 	{
 		std::string str;
 		int ret;
-		
+
 		str = header->to_string();
 		ret = write(client->getSock(), str.c_str(),str.size());
 		if (ret  == -1)
@@ -97,7 +97,7 @@ namespace ft
 	{
 		int retw, retr, offset = 0;
 		char *buff = body->getBuff(READ_BODY_ONE_TIME);
-		//buff[0] = 0;
+
 		//int lr = body->lastReaded();
 
 		if (body->getReaded() == body->getWritten()) {
@@ -117,7 +117,8 @@ namespace ft
 			if (retw == -1)
 				return -1;
 			if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
-				throw ft::runtime_error("SOMETHING WENT WRONG");
+				throw ft::runtime_error("SOMETHING WENT WRONG - ResponseSender::sendFileBody" + to_string(retw) +
+										to_string(retr) + to_string(offset) + to_string(client->getSock()));
 			body->setWritten(retw);
 			std::cout << yellow << "["<< client->getSock() <<"] SENDED : " << body->getWritten() << "  OF : " << body->size() << " ["<< client->requests() <<"] " << reset << "\n";
 		return retw;

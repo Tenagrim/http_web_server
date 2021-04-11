@@ -23,14 +23,24 @@ ft::IResponse *ft::HeadBuildPolicy::buildResponse(ft::IRequest *request)
 		location = getCorrectLocation("/", conf);
 	if (ifCorrectMethod(request, location)){
 		std::string correct_path = ifRootArgument(request, location);
-		if (_fmngr.isADirectory(correct_path)) {
-			res = buildFromDir(request, correct_path, location);
-		}
-		else if (_fmngr.isFileExisting(correct_path)) {
-			 res = buildFromFile(request, correct_path);
+		std::pair<bool, std::string> author = ifAuthentication(request, location);
+		if (author.first && author.second == "")
+		{
+			if (_fmngr.isADirectory(correct_path))
+			{
+				res = buildFromDir(request, correct_path, location);
+			} else if (_fmngr.isFileExisting(correct_path))
+			{
+				res = buildFromFile(request, correct_path);
+			} else
+			{
+				res = (_e_pager.getErrorPage(404));
+			}
 		}
 		else {
-			res = (_e_pager.getErrorPage(404));
+			res = _e_pager.getErrorPage(401);
+			res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+			return res;
 		}
 	} else {
 		res = (_e_pager.getErrorPage(405));

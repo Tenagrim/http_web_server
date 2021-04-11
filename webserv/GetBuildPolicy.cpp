@@ -48,27 +48,40 @@ namespace ft
 					} else {
 						if (ifCorrectMethod(request, location)){
 							std::string correct_path = ifRootArgument(request, location);
-							 return buildFromFile(request, correct_path);
+							std::pair<bool, std::string> author = ifAuthentication(request, location);
+							if (ifAuthentication(request, location).first){
+								return buildFromFile(request, correct_path);
+							} else {
+								res = _e_pager.getErrorPage(401);
+								res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+							}
 						}
 					}
 				}
 			}
 		} else if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
-			if (_fmngr.isADirectory(correct_path)) {
-				return buildFromDir(request, correct_path, location);
-			}
-			else if (_fmngr.isFileExisting(correct_path)) {
-				return buildFromFile(request, correct_path);
-			}
-			else {
-				return (_e_pager.getErrorPage(404));
+			std::pair<bool, std::string> author = ifAuthentication(request, location);
+			if (author.first && author.second == ""){
+				if (_fmngr.isADirectory(correct_path)) {
+					return buildFromDir(request, correct_path, location);
+				}
+				else if (_fmngr.isFileExisting(correct_path)) {
+					return buildFromFile(request, correct_path);
+				}
+				else {
+					return (_e_pager.getErrorPage(404));
+				}
+			} else {
+				res = _e_pager.getErrorPage(401);
+				res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+				return res;
 			}
 		} else {
 			res = ifErrorPage(request, location, to_string(405));
 			if (!res)
 				res = (_e_pager.getErrorPage(405));
-			res->getHeader()->setHeader(h_allow, location->getArgs().find("limit_except")->second);
+			res->getHeader()->setHeader("allow", location->getArgs().find("limit_except")->second);
 			return res;
 		}
 		return res;
