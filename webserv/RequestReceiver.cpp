@@ -194,12 +194,13 @@ namespace ft {
 		int bodyRet;
 		std::string bodyPart;
 		client->updateEventTime();
+
 		if (client->getStates() == Client::s_not_begin) {
 			client->setLastRequest(new BasicRequest());
 			client->getLastRequest()->setPort(_port);
+			client->setStates(Client::s_start_header_reading);
 		}
 		if (client->getStates() != Client::s_body_reading) {
-			client->setStates(Client::s_start_header_reading);
 			client->setFlag(Client::read_flags, Client::r_begin);
 			n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
 			//if (buff[0] == 0)
@@ -207,7 +208,6 @@ namespace ft {
 		}
 		switch (client->getStates()) {
 			case Client::s_start_header_reading:
-
 				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
 			case Client::s_header_reading:
@@ -216,13 +216,7 @@ namespace ft {
 			case Client::s_header_readed:
 				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
 				break;
-			case Client::s_not_begin:
-				break;
-			case Client::s_start_body_reading:
-				break;
-			case Client::s_body_reading:
-				break;
-			case Client::s_end_reading:
+			default:
 				break;
 		}
 		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&

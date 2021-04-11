@@ -12,8 +12,6 @@ namespace ft {
 		size_t end_pos;
 		int ending;
 		std::string bodyPart;
-		if (client->getStates() == Client::s_start_header_reading)
-				client->getLastRequest()->setHeader(new Header(request));
 
 		if (buff[0] == 0) // if we got only \0
 		{
@@ -34,6 +32,9 @@ namespace ft {
 
 		if (end_pos != std::string::npos)
 		{
+			if (client->getStates() == Client::s_start_header_reading)
+				client->getLastRequest()->setHeader(new Header(request));
+
 			if (client->getReadBuff().size() > end_pos + ending) {
 				bodyPart = client->getReadBuff().substr(end_pos + ending);
 			}
@@ -50,8 +51,8 @@ namespace ft {
 			client->setStates(Client::s_header_readed);
 			client->setFlag(Client::read_flags, Client::r_end);
 		}
-		else
-			client->setStates(Client::s_header_reading);
+//		else
+//			client->setStates(Client::s_header_reading);
 		return bodyPart;
 	}
 
@@ -70,7 +71,10 @@ namespace ft {
 				if (pos2 == std::string::npos)
 					break;
 			}
-			subLine = text.substr(pos1, pos2 - pos1);
+			if ((subLine = text.substr(pos1, pos2 - pos1)).empty()) {
+				header->makeInvalid();
+				return;
+			}
 			subLine.erase(std::remove(subLine.begin(), subLine.end(), '\r'),
 						  subLine.end());
 			pos1 = pos2 + ending;
@@ -90,8 +94,8 @@ namespace ft {
 		std::string head;
 		std::string key;
 
-		head = strToLower(subLine.substr(0, subLine.find(':')));
-		if (header->isFieldInHeader(head)) {
+		head = subLine.substr(0, subLine.find(':'));
+		if (head == subLine || header->isFieldInHeader(head)) {
 			header->makeInvalid();
 			return;
 		}
@@ -129,10 +133,14 @@ namespace ft {
 	}
 
 	void HeaderMaker::fillUrl(const std::string &line, IHeader *header) {
-		strPos a = line.find(' ') + 1;
+		strPos a = line.find(' ');
 		strPos b = line.rfind(' ');
 
-		header->setURI(line.substr(a, b - a));
+		std::string uri = line.substr(a, b - a + 1);
+		a = uri.find_first_not_of(' ');
+		b = uri.find_last_not_of(' ');
+		uri = uri.substr(a, b - a + 1);
+		header->setURI(uri);
 	}
 
 	void HeaderMaker::checkHttp(const std::string &line, IHeader *header) {
@@ -146,7 +154,7 @@ namespace ft {
 	}
 
 	void HeaderMaker::validateHeader(IHeader *header) {
-		if (!header->isFieldInHeader(strToLower("Host"))) {
+		if (!header->isFieldInHeader("host")) {
 			header->makeInvalid();
 			return;
 		}

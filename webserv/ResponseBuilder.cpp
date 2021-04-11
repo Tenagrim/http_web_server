@@ -39,6 +39,8 @@ namespace ft
 		ft::methods_enum method = request->getHeader()->getMethod();
 		IResponse	*resp = nullptr;
 
+		if (!request->getHeader()->isValid())
+			return (*(_policies.begin())).second->buildErrorPage(400);
 		if (_policies.empty())
 			throw ft::runtime_error("BUILDER HAS NO BUILD POLICIES");
 
