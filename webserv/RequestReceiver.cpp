@@ -213,12 +213,13 @@ namespace ft {
 			case Client::s_header_reading:
 				bodyPart = HeaderMaker::readHeader(client, buff);
 				break;
-			case Client::s_header_readed:
-				HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
-				break;
 			default:
 				break;
 		}
+
+		if (client->getStates() == Client::s_header_readed)
+			HeaderMaker::validateHeader(client->getLastRequest()->getHeader());
+
 		if ((client->getStates() == Client::s_header_readed || client->getStates() == Client::s_body_reading) &&
 			client->getLastRequest()->getHeader() &&
 			client->getLastRequest()->getHeader()->isValid()
