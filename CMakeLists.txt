@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.17)
 project(webserv)
 set(CMAKE_CXX_STANDARD 98)
 
-INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
+INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/ ./webserv/utils)
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra ") // -Werror
-#add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra ") # -Werror
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 add_executable(
         webserv
@@ -90,7 +90,7 @@ add_executable(
         ./webserv/utils/getMethod.cpp
         ./webserv/utils/to_string.cpp
         ./webserv/utils/Utils.cpp
-        ./webserv/Utils.hpp
+        webserv/utils/Utils.hpp
         ./webserv/webserv.hpp
         ./webserv/BodyReader.cpp
         ./webserv/BodyReader.hpp
@@ -124,7 +124,6 @@ add_executable(
         webserv/utils/gnl/get_next_line.cpp
         webserv/utils/gnl/get_next_line_utils.cpp
 
-        webserv/tests/testerFileManager.cpp
-#        ./webserv/main.cpp
+#        webserv/tests/testerFileManager.cpp
+        ./webserv/main.cpp
 )
-
