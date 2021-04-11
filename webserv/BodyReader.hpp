@@ -47,10 +47,6 @@ namespace ft {
 		int 				_output_fd; // read / write
 		bool 				_ended;
 		int 				_written_size;
-	public:
-		int getWritten() const;
-
-	private:
 		int 				_input_fd;
 		int 				_offset;
 		int 				_content_length;
@@ -66,7 +62,7 @@ namespace ft {
 		int 				readEnding();
 
 
-		int write_block(const char *buff, int len, int offset = 0 );
+		int					write_block(const char *buff, int len, int offset = 0 );
 		int 				endReading(int ret);
 
 		int 				readByLen();
@@ -75,6 +71,7 @@ namespace ft {
 		int					_readed_bytes;
 	public:
 		static void 		reset();
+		int getWritten() const;
 		static unsigned int getMaxId();
 
 		//void setRemainderOfHeader(char *remainderOfHeader);

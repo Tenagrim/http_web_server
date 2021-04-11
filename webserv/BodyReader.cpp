@@ -57,6 +57,7 @@ int ft::BodyReader::write_block(const char *buff, int len, int offset) {
 		throw ft::runtime_error("Error in writing block:" + std::string(strerror(errno)));
 	if (_offset == 1)
 		_offset = 0;
+	return ret;
 }
 
 
