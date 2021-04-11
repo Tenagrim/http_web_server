@@ -42,21 +42,33 @@ namespace ft
 					} else {
 						if (ifCorrectMethod(request, location)){
 							std::string correct_path = ifRootArgument(request, location);
-							 return buildFromFile(request, correct_path);
+							if (ifAuthentication(request, location).first){
+								return buildFromFile(request, correct_path);
+							} else {
+								res = _e_pager.getErrorPage(401);
+//								TODO add in file manger get realm list.
+//								res->getHeader()->setHeader("WWW-Authenticate", )
+							}
 						}
 					}
 				}
 			}
 		} else if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
-			if (_fmngr.isADirectory(correct_path)) {
-				return buildFromDir(request, correct_path, location);
-			}
-			else if (_fmngr.isFileExisting(correct_path)) {
-				return buildFromFile(request, correct_path);
-			}
-			else {
-				return (_e_pager.getErrorPage(404));
+			std::pair<bool, std::string> author = ifAuthentication(request, location);
+			if (author.first && author.second == ""){
+				if (_fmngr.isADirectory(correct_path)) {
+					return buildFromDir(request, correct_path, location);
+				}
+				else if (_fmngr.isFileExisting(correct_path)) {
+					return buildFromFile(request, correct_path);
+				}
+				else {
+					return (_e_pager.getErrorPage(404));
+				}
+			} else {
+				res = _e_pager.getErrorPage(401);
+				res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
 			}
 		} else {
 			res = ifErrorPage(request, location, to_string(405));

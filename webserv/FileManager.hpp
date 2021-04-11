@@ -5,6 +5,7 @@
 #include <defines.hpp>
 
 #include <IFileManager.hpp>
+#include <Authorization.hpp>
 
 #include <sys/stat.h>
 #include <fstream>
