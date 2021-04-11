@@ -39,20 +39,6 @@ namespace ft
 		return (*this);
 	}
 
-	std::string		FileBody::readFile() const
-	{
-
-		std::stringstream	ss;
-		std::ifstream		fin(_filename, std::ios::binary);
-		if (fin.good())
-		{
-			ss << fin.rdbuf();
-			return(ss.str());
-		}
-		else
-			return ("CAN\'T READ FILE BODY");
-	}
-
 	int					FileBody::getFd()
 	{
 		int ret;

@@ -1,7 +1,6 @@
 #pragma once
 #include <ABody.hpp>
 #include <unistd.h>
-#include <fstream>
 #include <sstream>
 #include <runtime_error.hpp>
 #include <fcntl.h>
@@ -20,7 +19,6 @@ namespace ft
 		int 					_offset;
 		FileBody();
 		FileBody(const FileBody &ref);
-		std::string		readFile() const;
 	public:
 		unsigned int getId() const;
 		FileBody(std::string const &path, int offset = 0);
