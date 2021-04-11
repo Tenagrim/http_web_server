@@ -48,11 +48,13 @@ namespace ft {
 		int secsFromDay = rawTime - days * 86400;							// secs from day
 		timeInfo->tm_hour = secsFromDay / 3600;
 		timeInfo->tm_min = (secsFromDay - (timeInfo->tm_hour * 3600)) / 60;
-		timeInfo->tm_sec = secsFromDay - (timeInfo->tm_min * 60);
+		timeInfo->tm_sec = secsFromDay - (timeInfo->tm_hour * 3600 + timeInfo->tm_min * 60);
 		timeInfo->tm_hour += TIME_ZONE;
 		timeInfo->tm_year -= 1900;
+		timeInfo->tm_wday = (days + 4) % 7;
 
 		strftime(buf, bufLen, format, timeInfo);
+		buf[bufLen - 1] = '\0';
 	}
 
 	void				monthCount(tm *timeInfo, bool yearLeap) {

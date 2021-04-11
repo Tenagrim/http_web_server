@@ -1,8 +1,6 @@
 #include <ResponseBuilder.hpp>
 namespace ft
 {
-	//ITimeMachine const &ResponseBuilder::_t_machine = FakeTimeMachine();
-
 	#pragma region Copilen
 
 	ResponseBuilder::ResponseBuilder()
@@ -17,7 +15,6 @@ namespace ft
 	{
 		for (policy_map::iterator it = _policies.begin(); it!= _policies.end(); it++)
 			delete (*it).second;
-		//delete _t_machine;
 	}
 
 	ResponseBuilder::ResponseBuilder(const ResponseBuilder &ref)
