@@ -42,12 +42,12 @@ namespace ft
 					} else {
 						if (ifCorrectMethod(request, location)){
 							std::string correct_path = ifRootArgument(request, location);
+							std::pair<bool, std::string> author = ifAuthentication(request, location);
 							if (ifAuthentication(request, location).first){
 								return buildFromFile(request, correct_path);
 							} else {
 								res = _e_pager.getErrorPage(401);
-//								TODO add in file manger get realm list.
-//								res->getHeader()->setHeader("WWW-Authenticate", )
+								res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
 							}
 						}
 					}
@@ -69,6 +69,7 @@ namespace ft
 			} else {
 				res = _e_pager.getErrorPage(401);
 				res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+				return res;
 			}
 		} else {
 			res = ifErrorPage(request, location, to_string(405));

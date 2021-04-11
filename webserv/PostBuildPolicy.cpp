@@ -31,14 +31,24 @@ namespace ft
 			location = getCorrectLocation(request->getHeader()->getPath(), conf);
 		if (ifCorrectMethod(request, location))
 		{
-			if (ifCorrectBodySize(request, location))
+			std::pair<bool, std::string> author = ifAuthentication(request, location);
+			if (author.first && author.second == "")
 			{
-				response = redirectToCGI(request, location);
-				if(!response) {
-					response = generateFile(request);
+				if (ifCorrectBodySize(request, location))
+				{
+					response = redirectToCGI(request, location);
+					if (!response)
+					{
+						response = generateFile(request);
+					}
+				} else
+				{
+					response = _e_pager.getErrorPage(413);
 				}
 			} else {
-				response = _e_pager.getErrorPage(413);
+				response = _e_pager.getErrorPage(401);
+				response->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+				return response;
 			}
 		} else {
 			IResponse *response = _e_pager.getErrorPage(405);
