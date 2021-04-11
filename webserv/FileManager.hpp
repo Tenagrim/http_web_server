@@ -5,6 +5,7 @@
 #include <defines.hpp>
 
 #include <IFileManager.hpp>
+#include <Authorization.hpp>
 
 #include <sys/stat.h>
 #include <fstream>
@@ -13,6 +14,7 @@
 #include <sys/param.h>
 #include <iostream>
 #include <runtime_error.hpp>
+#include <webserv.hpp>
 
 #include <defines.hpp>
 

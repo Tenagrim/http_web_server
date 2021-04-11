@@ -12,20 +12,22 @@ namespace ft
 	class FileBody : public ABody
 	{
 	private:
-		unsigned int	_size;
-		std::string		_filename;
-		int 			_opened_fd;
-		int 			_offset;
-	public:
-
-	private:
-
+		unsigned int 			_id;
+		static unsigned int 	_max_id;
+		unsigned int			_size;
+		std::string				_filename;
+		int 					_opened_fd;
+		int 					_offset;
 		FileBody();
 		FileBody(const FileBody &ref);
 		std::string		readFile() const;
 	public:
+		unsigned int getId() const;
 		FileBody(std::string const &path, int offset = 0);
 		~FileBody();
+
+		static unsigned int getMaxId();
+
 		FileBody &operator=(const FileBody &ref);
 
 		int					getOffset() const;

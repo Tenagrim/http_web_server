@@ -13,6 +13,7 @@ namespace ft {
 		int ending;
 		std::string bodyPart;
 
+		/*
 		if (buff[0] == 0) // if we got only \0
 		{
 			client->setStates(Client::s_header_readed);
@@ -20,7 +21,7 @@ namespace ft {
 			client->getLastRequest()->getHeader()->makeInvalid();
 			return "";
 		}
-
+		*/
 		client->getReadBuff().append(buff);
 
 		end_pos = client->getReadBuff().find("\r\n\r\n");
@@ -32,7 +33,7 @@ namespace ft {
 
 		if (end_pos != std::string::npos)
 		{
-			if (client->getStates() == Client::s_start_header_reading)
+			if (client->getStates() == Client::s_start_header_reading && !client->getLastRequest()->getHeader())
 				client->getLastRequest()->setHeader(new Header(request));
 
 			if (client->getReadBuff().size() > end_pos + ending) {
@@ -49,7 +50,8 @@ namespace ft {
 				return "";
 			}
 			client->setStates(Client::s_header_readed);
-			client->setFlag(Client::read_flags, Client::r_end);
+//			todo is it have to be commented?
+		//	client->setFlag(Client::read_flags, Client::r_end);
 		}
 //		else
 //			client->setStates(Client::s_header_reading);
@@ -201,7 +203,9 @@ namespace ft {
 
 		if (header.isFieldInHeader("content-length")) {
 			std::string s = header.getHeader("content-length");
-			contLen = strtol(s.c_str(), nullptr, 10);
+		if (header.isFieldInHeader("transfer-encoding") && header.getHeader("transfer-encoding") == "chunked")
+			return LEN_CHUNKED;
+		contLen = strtol(s.c_str(), nullptr, 10);
 		} else
 			contLen = LEN_CHUNKED;
 		return contLen;

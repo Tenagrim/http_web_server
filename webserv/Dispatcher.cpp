@@ -59,23 +59,25 @@ namespace ft
 		_listening++;
 	}
 
-	void Dispatcher::ft_closeSock(int sock)
+	void Dispatcher::closeSock(int sock)
 	{
-		_socks_to_ft_close.push(sock);
+		if (std::find(_socks_to_close.begin(), _socks_to_close.end(), sock) == _socks_to_close.end())
+		_socks_to_close.push_front(sock);
 	}
 	
-	void Dispatcher::ft_closeWhatNeed()
+	void Dispatcher::closeWhatNeed()
 	{
 		int sock;
-		if (!_socks_to_ft_close.empty())
+		if (_socks_to_close.empty())
+			return;
 		#ifdef DEBUG
 		std::cout << "CLOSING SOCKETS";
 		#endif
-		while (!_socks_to_ft_close.empty())
+		while (!_socks_to_close.empty())
 		{
-			sock = _socks_to_ft_close.top();
+			sock = _socks_to_close.front();
 			reallyCloseSock(sock);
-			_socks_to_ft_close.pop();
+			_socks_to_close.erase(_socks_to_close.begin());
 		#ifdef DEBUG
 			std::cout << " CLOSING[" << sock<< "]\n";
 			for(fd_map::iterator it = _client_map.begin(); it != _client_map.end(); it++)
@@ -85,7 +87,6 @@ namespace ft
 			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
 		#endif
 		}
-		
 	}
 
 	void Dispatcher::reallyCloseSock(int sock)
@@ -111,10 +112,11 @@ namespace ft
 					_max_fd = 0;
 			}
 		}
-		else
+		else {
+			return;
 			throw ft::runtime_error("requested sock not found to delete it");
-
-		FD_CLR(sock, &_fd_set);
+		}
+		//FD_CLR(sock, &_fd_set);
 		_listening--;
 	}
 
@@ -126,7 +128,7 @@ namespace ft
 	{
 		//#undef DEBUG
 
-		//	#ifdef DEBUG
+			#ifdef DEBUG
 		//		static int i;
 			
 			//	std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
@@ -135,29 +137,41 @@ namespace ft
 				for(; it != _client_map.end(); it++)
 					std::cout << "[" << (*it).first << "] ";
 				std::cout << "\n";
-//				std::cout << "LISTENERS: \n";
-//				it = _listener_map.begin();
-//				for(; it != _listener_map.end(); it++)
-//					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
-//				std::cout << "\n";
-		//	#endif
+
+				std::cout << "CLIENTS: \n";
+				it = _client_map.begin();
+				for(; it != _client_map.end(); it++)
+					std::cout << "[" << (*it).first << "] ";
+				std::cout << "\n";
+
+				std::cout << "LISTENERS: \n";
+				it = _listener_map.begin();
+				for(; it != _listener_map.end(); it++)
+					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
+				std::cout << "\n";
+			#endif
 		_events = 0;
 		if (_listening == 0)
 			throw ft::runtime_error("No have fd to dispatch");
-		ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
-		ft_memcpy(&_writing_set, &_fd_set, sizeof(_fd_set));
+		//ft_memcpy(&_reading_set, &_fd_set, sizeof(_fd_set));
+		//ft_memcpy(&_writing_set, &_fd_set, sizeof(_fd_set));
 		//FD_ZERO(&_writing_set);
 
-			#ifdef DEBUG
-				std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
-			#endif
-		if (_client_map.empty())
-			_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
-		else
-			_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
+		#ifdef DEBUG
+		std::cout << "DISPATCHER: SELECTIN..." << " " << "\n";
+		#endif
+
+		initFdSets();
+
+	//	if (_client_map.empty())
+	//		_events = select(_max_fd + 1, &_reading_set, NULL, NULL, &_upd_delay);
+	//	else
+		_events = select(_max_fd + 1, &_reading_set, &_writing_set, NULL, &_upd_delay);
+
 		if (!_events) {
 			sleep();
 			BodyReader::reset();
+			CgiModule::reset();
 		}
 		else
 			wakeUp();
@@ -185,8 +199,9 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set)) {
-				_server->gotEvent(Dispatcher_event_args((*it).first, reading, client, (*it).second));
-				FD_CLR((*it).first, &_writing_set);
+			//	std::cout << "READING EVENT ON: "<< it->first <<" \n";
+				_server->gotEvent(Dispatcher_event_args(it->first, reading, client, (*it).second));
+			//	FD_CLR((*it).first, &_writing_set);
 			}
 		}
 	}
@@ -194,17 +209,29 @@ namespace ft
 	void					Dispatcher::handleClientsWrite()
 	{
 		fd_map::iterator it;
+		unsigned long diff;
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
-			if (FD_ISSET((*it).first, &_writing_set))
+			if (FD_ISSET((*it).first, &_writing_set)) {
+			//	std::cout << "WRITING EVENT ON: "<< it->first <<" \n";
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
-//			else {
-				unsigned long diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
-//			std::cout << "CLIENT DIFF: " << diff <<"\n";
-				if (diff > CLIENT_TIMEOUT_MICROS) {
-					ft_closeSock((*it).first);
-//				}
 			}
+		}
+	}
+
+	void Dispatcher::killZombies() {
+		fd_map::iterator it;
+		unsigned long diff;
+		int sock;
+		for(it = _client_map.begin();it != _client_map.end() ;it++) {
+			diff = (*it).second->getClient((*it).first)->getUsecsFromLastEvent();
+			sock = it->first;
+			if (diff > CLIENT_TIMEOUT_MICROS)
+				closeSock((*it).first);
+			else if (diff > CLIENT_TIMEOUT_MICROS &&
+					!FD_ISSET(sock, &_writing_set) &&
+					!FD_ISSET(sock, &_reading_set))
+				closeSock((*it).first);
 		}
 	}
 
@@ -212,13 +239,14 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
-		ft_closeWhatNeed();
+
 	}
 
 	void			Dispatcher::handleEvents()
 	{
 		if (_events == 0)
 		{
+		//	std::cout << "DISPATCHER: NO EVENTS\n";
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: NO EVENTS\n";
 			#endif
@@ -243,10 +271,18 @@ namespace ft
 		if (!_server)
 			throw ft::runtime_error("Not connected to server");
 		_run = true;
+
+		unsigned int count;
+
+
 		while (_run)
 		{
 			updateEvents();
 			handleEvents();
+			closeWhatNeed();
+		//	count = GetBuildPolicy::getCount();
+			//std::cout << " ============== GET RESPONSES BUILT: " << count << "\n";
+			//killZombies();
 			usleep(_delay);
 		}
 	}
@@ -264,4 +300,36 @@ namespace ft
 		//std::cout<< "SLEEPING\n";
 		_delay = DISPATCHER_SLEEP_DELAY;
 	}
+
+	void Dispatcher::initFdSets() {
+		Client	*client;
+		FD_ZERO(&_reading_set);
+		FD_ZERO(&_writing_set);
+		_max_fd = 0;
+
+		fd_map::iterator it = _listener_map.begin();
+		for(; it != _listener_map.end(); it++) {
+			FD_SET(it->first, &_reading_set);
+			setMax(it->first);
+		}
+		it = _client_map.begin();
+		for(; it != _client_map.end(); it++)
+		{
+			FD_SET(it->first, &_reading_set);
+			setMax(it->first);
+			client = dynamic_cast<Client *>(it->second->getClient(it->first));
+			if (!client)
+				throw ft::runtime_error("Unknown type after dynamic cast");
+			if (client->hasFlag(Client::read_flags, Client::r_end))
+				FD_SET(it->first, &_writing_set);
+		}
+		//_max_fd = _client_map.rbegin()->first;
+	}
+
+	void Dispatcher::setMax(int sock) {
+		if (sock > _max_fd)
+			_max_fd = sock;
+	}
+
+
 } // namespace ft

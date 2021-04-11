@@ -126,8 +126,12 @@ namespace ft
 
 	void			Server::clientEventRead(Dispatcher_event_args &args)
 	{
-			args._reciever->getRequest(args._fd);
-
+		int ret;
+			ret = args._reciever->getRequest(args._fd);
+			if (ret == -1) {
+				_dispatcher->closeSock(args._fd);
+				std::cout << "READING RETURNED -1 ["<< args._fd <<"]\n";
+			}
 //			std::cout << "CLIENT IS WRITING. NEED TO READ\n";
 			#ifdef DEBUG
 			//	std::cout << "GOT REQUEST: [" << args._fd << "] ===========================\n";
@@ -139,6 +143,7 @@ namespace ft
 	{
 			IResponse *resp = NULL;
 			Client			*client;
+			int ret;
 		//	#ifdef DEBUG
 		//		std::cout << "CLIENT NEEDS RESPONSE ["<< args._fd <<"]\n";
 		//	#endif
@@ -147,22 +152,13 @@ namespace ft
 				throw ft::runtime_error("Unknown type of client");
 
 		//RequestReciever	*_reciever = _listener_map[args._fd];
-		if (args._reciever->writeEvent(args._fd))
-		{
-//			FIXME normal size check
-			/*if (client->getLastRequest() && client->getLastRequest()->to_string().size() == 0)
-			{
-				#ifdef DEBUG
-				std::cout << "FINISHING MESSAGE RECEIVED. CLOSING\n";
-				#endif
-				_dispatcher->ft_closeSock(client->getSock());
-				return;
-			}
-*/
-			if (client->getStates() == Client::s_start_body_reading) {
-				client->setFlag(Client::read_flags, Client::r_end);
-				return;
-			}
+		//if (args._reciever->writeEvent(args._fd))
+	//	{
+
+		//	if (client->getStates() == Client::s_start_body_reading) {
+		//		client->setFlag(Client::read_flags, Client::r_end);
+		//		return;
+		//	}
 			if (!client->getLastResponse())
 			{
 				resp = _resp_builder->buildResponse(client->getLastRequest());
@@ -171,14 +167,18 @@ namespace ft
 			else
 				resp = client->getLastResponse();
 
-			int ret;
 			ret = _resp_sender->sendResponce(resp, client);
 
-			if ((ret == 0 && (resp->getHeader()->isFieldInHeader("connection")) &&
-				resp->getHeader()->getHeader("connection") == "close") ||
+			if (ret == -1) {
+				_dispatcher->closeSock(client->getSock());
+				std::cout << "WRITING RETURNED -1 ["<< args._fd <<"]\n";
+			}
+
+		if ((ret == 0 &&  ((resp->getHeader()->isFieldInHeader("connection")) &&
+				resp->getHeader()->getHeader("connection") == "close") ) ||
 					(resp->getHeader()->getResponseCode() == 400)
 					)
-				_dispatcher->ft_closeSock(client->getSock());
+				_dispatcher->closeSock(client->getSock());
 
 			if (ret == 0)
 				client->reset();
@@ -191,7 +191,7 @@ namespace ft
 			#ifdef DEBUG
 				std::cout << "WRITE EVENT END : " << client->getSock() << " ================\n";
 			#endif
-		}
+//		}
 		/*
 		else
 		{
@@ -204,7 +204,7 @@ namespace ft
 				//	client->getLastRequest()->setHeader(new Header(request));
 				//client->getLastRequest()->getHeader()->makeInvalid();
 				//client->setFlag(Client::read_flags, Client::r_end);
-				_dispatcher->ft_closeSock(client->getSock());
+				_dispatcher->closeSock(client->getSock());
 			}
 
 		}

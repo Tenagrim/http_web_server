@@ -20,7 +20,7 @@ namespace ft {
 
 	RequestReceiver::~RequestReceiver() {
 //		delete _validator;
-		ft_close_connections();
+		close_connections();
 		ft_close(_main_socket);
 	}
 
@@ -175,7 +175,7 @@ namespace ft {
 		_clients.erase(sock);
 	}
 
-	void RequestReceiver::ft_close_connections(void) {
+	void RequestReceiver::close_connections() {
 		fd_map::iterator it;
 		for (it = _clients.begin(); it != _clients.end(); it++)
 			close_connection((*it).first);
@@ -183,16 +183,23 @@ namespace ft {
 
 #pragma endregion
 
+	int RequestReceiver::getRequest(int sock) {
+		int ret;
+		if (!_clients.count(sock))
+			throw ft::runtime_error("No such client");
+		ret =  getRequest(_clients[sock]);
 
-	void RequestReceiver::getRequest(int sock) {
-		getRequest(_clients[sock]);
+		//if (ret == -1)
+		//	close_connection(sock);
+		return ret;
 	}
 
-	void RequestReceiver::getRequest(Client *client) {
+	int RequestReceiver::getRequest(Client *client) {
 		char buff[READ_BUFF_SIZE];
 		int n;
 		int bodyRet;
 		std::string bodyPart;
+
 		client->updateEventTime();
 
 		if (client->getStates() == Client::s_not_begin) {
@@ -203,7 +210,9 @@ namespace ft {
 		if (client->getStates() != Client::s_body_reading) {
 			client->setFlag(Client::read_flags, Client::r_begin);
 			n = recv(client->getSock(), buff, READ_BUFF_SIZE - 1, 0);
-			//if (buff[0] == 0)
+			std::cout << "READED: "<< n << " [ "<< client->getSock() << "]\n";
+			if (n <= 0)
+				return -1;
 			buff[n] = 0;
 		}
 		switch (client->getStates()) {
@@ -225,6 +234,7 @@ namespace ft {
 			client->getLastRequest()->getHeader()->isValid()
 			) {
 			//  TODO: if header fully readed
+			client->getReadBuff().clear();
 			if (HeaderMaker::methodNeedsBody(client->getLastRequest()->getHeader()->getMethod())) {
 				if (!client->getBReader()) {
 					int contLen = HeaderMaker::getContLen(*(client->getLastRequest()->getHeader()));
@@ -232,19 +242,25 @@ namespace ft {
 				}
 				client->getStates() = Client::s_body_reading;
 				bodyRet = client->getBReader()->readBody();
+				std::cout << cyan << "["<< client->getSock() <<"] RECIEVED : " << client->getBReader()->getWritten() << " ["<<client->requests() <<"] " << reset << "\n";
 				switch (bodyRet) {
 					case 0:
 						client->getLastRequest()->setBody(client->getBReader()->getBody());
-						break;
+						client->setFlag(Client::read_flags, Client::r_end);
+						return 0;
 					case 1:
-						return;
+						return 1;
 					case -1:
 						client->setFlag(Client::read_flags, Client::r_end);
 						client->getLastRequest()->getHeader()->makeInvalid();
-						return;
+						return -1;
+					case -2:
+						client->setFlag(Client::read_flags, Client::r_end);
+						return -1;
 				}
 			} else {
 				client->setFlag(Client::read_flags, Client::r_end);
+				return n;
 			}
 		}
 	}
@@ -276,6 +292,14 @@ namespace ft {
 
 	int RequestReceiver::getPort() {
 		return _port;
+	}
+
+	std::map<int, Client *>::iterator RequestReceiver::begin() {
+		return _clients.begin();
+	}
+
+	std::map<int, Client *>::iterator RequestReceiver::end() {
+		return _clients.end();
 	}
 
 //	GET / HTTP/1.1\r\nHost: localhost:83\r\nUser-Agent: Go-http-client/1.1\r\nAccept-Encoding: gzip\r\n\r\n

@@ -104,7 +104,8 @@ namespace ft
 			}
 		}
 		fileTypes.close();
-		throw NoSuchType();
+		//throw NoSuchType();
+		return "";
 	}
 
 	time_t			FileManager::getMTime(std::string const &filename)
@@ -207,7 +208,8 @@ namespace ft
 			if (readed != written)
 				throw ft::runtime_error("An error in rewriting file");
 		} while (readed != 0);
-		return fd;
+		ft_close(fd);
+		return 1;
 	}
 
 	int FileManager::mkdir_p(const std::string &dir_name)

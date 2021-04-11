@@ -100,11 +100,6 @@ namespace ft
 		std::string type;
 		IBody *res;
 
-		try {
-			type = _fmngr.getContentType(filename);
-		} catch (FileManager::NoSuchType) {
-			type = "";
-		}
 #ifdef DEBUG
 		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 #endif
@@ -112,7 +107,9 @@ namespace ft
 			res = buildTextBody(filename);
 		else
 			res = buildFileBody(filename);
-		res->setContentType(type);
+			type = _fmngr.getContentType(filename);
+			if (type != "")
+			res->setContentType(type);
 		return (res);
 	}
 
@@ -270,7 +267,7 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-//		res = new TextResponse(header, body);  // WHAT ??!!!??
+		//res = new TextResponse(header, body);  // WHAT ??!!!??
 		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
@@ -446,15 +443,33 @@ namespace ft
 		return response;
 	}
 
-	bool ABuildPolicy::ifAuthentication(IRequest *request, LocationInit *location)
+	std::pair<bool, std::string> ABuildPolicy::ifAuthentication(IRequest *request, LocationInit *location)
 	{
+		std::pair<bool, std::string> res;
+		res.first = false;
+		res.second = "";
 		if (!location)
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["auth_basic"];
-		if (methods.empty())
-			return true;
-//		TODO Here
+		if (methods.empty()) {
+			res.first = true;
+			return res;
+		}
+		if (request->getHeader()->isFieldInHeader("authorization")) {
+			std::string auth_req = request->getHeader()->getHeader("authorization");
+			res.first = _auth.checkAuth(auth_req);
+			if (res.first) {
+				res.second.clear();
+				return res;
+			}
+		}
+		std::map<std::string, std::string>::iterator it = arguments.find("auth_basic");
+		std::string tmp = it->second;
+		res.second = _auth.getRealmKey(ft::base64_encode(reinterpret_cast<const unsigned char *>(tmp.c_str()), tmp.length
+		()));
+		res.first = false;
+		return res;
 	}
 }
 // namespace ft
