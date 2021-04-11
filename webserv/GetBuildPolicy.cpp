@@ -49,6 +49,7 @@ namespace ft
 			}
 		} else if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
+//			todo check is there AUTHORIZATION here
 			if (_fmngr.isADirectory(correct_path)) {
 				return buildFromDir(request, correct_path, location);
 			}

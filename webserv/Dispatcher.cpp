@@ -130,7 +130,7 @@ namespace ft
 		//		static int i;
 			
 			//	std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
-				std::cout << "CLIENTS: \n";
+//				std::cout << "CLIENTS: \n";
 				fd_map::iterator it = _client_map.begin();
 				for(; it != _client_map.end(); it++)
 					std::cout << "[" << (*it).first << "] ";
