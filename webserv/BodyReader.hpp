@@ -68,6 +68,7 @@ namespace ft {
 		int 				readByLen();
 		BodyReader(const BodyReader &ref);
 		BodyReader();
+		int					_readed_bytes;
 	public:
 		static void 		reset();
 		static unsigned int getMaxId();

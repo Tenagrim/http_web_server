@@ -17,7 +17,7 @@ ft::BodyReader::BodyReader(int input_fd, int content_length, std::string rem) :
 		_output_fd(-1),
 		_ended(false),
 		_written_size(0),
-		_input_fd(input_fd), _offset(0), _content_length(content_length)
+		_input_fd(input_fd), _offset(0), _content_length(content_length), _last_readed_bytes(0), _readed_bytes(0)
 {
 
 	if (!rem.empty())
@@ -233,6 +233,7 @@ int ft::BodyReader::readChunk()
 
 int ft::BodyReader::readWriteBlock(int size, int offset) {
 	int ret;
+	char tail[6];
 
 	_read_buff = (char*)malloc(size + _offset);
 	if (!_read_buff)
@@ -241,41 +242,56 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 	_last_readed_bytes = ret;
 	if (ret == -1)
 		return endReading(-2);
+	ft_memcpy(tail, _read_buff + (ret - 5), 5);
+	tail[5] = 0;
 	if (ret != size) {
 		//free(_read_buff);
 		//return endReading(-1);
 		_state = s_pp_block;
 		_last_readed_bytes = ret;
-
-		return 1;
+		_readed_bytes += ret;
+		//write_block(_read_buff, ret, offset);
+	//	free(_read_buff);
+		//_read_buff = nullptr;
+		//return 1;
 	}
 	if (offset == 1 && _read_buff[0 + _offset] != '\n')
 	{
 		free(_read_buff);
 		return endReading(-1);
 	}
-	if (_state != s_pp_block && _read_buff[size -1 + _offset] == '\n' && _read_buff[size -2 + _offset] == '\r')
+	size = ret;
+	if (_read_buff[ret - 1 + _offset] == '\n' && _read_buff[ret -2 + _offset] == '\r')
 		size -= 2;
 	//else
 	//	return endReading(-1);
 	write_block(_read_buff, size, offset);
 	free(_read_buff);
 	_read_buff = nullptr;
-	return 1;
+	return ret;
 }
 
 int ft::BodyReader::readPPBlock() {
-	int size = _block_size_i - _last_readed_bytes + 3;
+	int size = _block_size_i - _readed_bytes + 2;
 	int ret = readWriteBlock(size);
-	if (_last_readed_bytes == size)
+	if (ret == size) {
 		_state = s_len;
+		_readed_bytes = 0;
+	}
+
 	return ret;
 }
 int ft::BodyReader::readPBlock() {
 	int ret;
-	_state = s_len;
-	ret = readWriteBlock( _block_size_i - _remainder_of_header.size() + 2);
-	_remainder_of_header.clear();
+	//_block_size_i = _block_size_i - _remainder_of_header.size();
+	_readed_bytes = _remainder_of_header.size();
+	int size = _block_size_i - _remainder_of_header.size();
+	ret = readWriteBlock(size + 2);
+	if (_last_readed_bytes == size + 2)
+		_state = s_len;
+	else
+		_state = s_pp_block;
+		_remainder_of_header.clear();
 	return ret;
 }
 

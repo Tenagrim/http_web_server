@@ -175,7 +175,7 @@ namespace ft {
 		_clients.erase(sock);
 	}
 
-	void RequestReceiver::close_connections(void) {
+	void RequestReceiver::close_connections() {
 		fd_map::iterator it;
 		for (it = _clients.begin(); it != _clients.end(); it++)
 			close_connection((*it).first);
@@ -183,9 +183,15 @@ namespace ft {
 
 #pragma endregion
 
-
 	int RequestReceiver::getRequest(int sock) {
-		return getRequest(_clients[sock]);
+		int ret;
+		if (!_clients.count(sock))
+			throw ft::runtime_error("No such client");
+		ret =  getRequest(_clients[sock]);
+
+		//if (ret == -1)
+		//	close_connection(sock);
+		return ret;
 	}
 
 	int RequestReceiver::getRequest(Client *client) {

@@ -61,7 +61,6 @@ namespace ft
 
 	void Dispatcher::closeSock(int sock)
 	{
-
 		if (std::find(_socks_to_close.begin(), _socks_to_close.end(), sock) == _socks_to_close.end())
 		_socks_to_close.push_front(sock);
 	}
@@ -88,7 +87,6 @@ namespace ft
 			std::cout << "MAX FD: ["<<_max_fd <<"]\n";
 		#endif
 		}
-		
 	}
 
 	void Dispatcher::reallyCloseSock(int sock)
@@ -114,9 +112,10 @@ namespace ft
 					_max_fd = 0;
 			}
 		}
-		else
+		else {
 			return;
-			//throw ft::runtime_error("requested sock not found to delete it");
+			throw ft::runtime_error("requested sock not found to delete it");
+		}
 		//FD_CLR(sock, &_fd_set);
 		_listening--;
 	}
@@ -240,7 +239,7 @@ namespace ft
 	{
 		handleClientsRead();
 		handleClientsWrite();
-		closeWhatNeed();
+
 	}
 
 	void			Dispatcher::handleEvents()
@@ -280,6 +279,7 @@ namespace ft
 		{
 			updateEvents();
 			handleEvents();
+			closeWhatNeed();
 			count = GetBuildPolicy::getCount();
 			std::cout << " ============== GET RESPONSES BUILT: " << count << "\n";
 			//killZombies();

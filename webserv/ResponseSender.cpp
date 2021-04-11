@@ -69,6 +69,8 @@ namespace ft
 		
 		str = header->to_string();
 		ret = write(client->getSock(), str.c_str(),str.size());
+		if (ret  == -1)
+			return -1;
 		client->sendHeader();
 		return ret;
 	}

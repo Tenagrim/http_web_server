@@ -211,7 +211,8 @@ namespace ft {
 
 	int HeaderMaker::getContLen(const IHeader &header) {
 		long int contLen;
-
+		if (header.isFieldInHeader(h_transfer_encoding) && header.getHeader(h_transfer_encoding) == "chunked")
+			return LEN_CHUNKED;
 		if (header.isFieldInHeader(h_content_length)) {
 			std::string s = header.getHeader(h_content_length);
 			contLen = strtol(s.c_str(), nullptr, 10);
