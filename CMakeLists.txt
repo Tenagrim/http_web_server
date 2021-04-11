@@ -55,10 +55,8 @@ add_executable(
         ./webserv/LocationInit.cpp
         ./webserv/LocationInit.hpp
 
-        ./webserv/main.cpp
-#        webserv/trash/cgi_module_tester.cpp
+#        webserv/tests/cgi_module_tester.cpp
 #        ./webserv/body_reader_test.cpp
-#        webserv/env_tester.cpp
 
         ./webserv/OutOperators.cpp
         ./webserv/PostBuildPolicy.cpp
@@ -85,8 +83,6 @@ add_executable(
         ./webserv/TextResponse.hpp
         ./webserv/TokenPool.cpp
         ./webserv/TokenPool.hpp
-#        ./webserv/trash/reader.cpp
-#        ./webserv/trash/unitTester.cpp
         ./webserv/utils/ft_memcpy.cpp
         ./webserv/utils/ft_strlen.cpp
         ./webserv/utils/getCodeDescr.cpp
@@ -106,21 +102,29 @@ add_executable(
         ./webserv/utils/ft_strcmp.cpp
         ./webserv/utils/get_time_udiff.cpp
         ./webserv/utils/splitString.cpp
-#        ./webserv/trash/testerSplitString.cpp
+#        webserv/tests/testerSplitString.cpp
         ./webserv/interfaces/IIndexModule.hpp
         ./webserv/IndexModule.cpp
         ./webserv/IndexModule.hpp
         webserv/utils/timeFormatted.cpp
-#        webserv/trash/testerTimeFormatted.cpp
+#        webserv/tests/testerTimeFormatted.cpp
         webserv/utils/methodNeedsBody.cpp
         ./webserv/HeadBuildPolicy.hpp
         ./webserv/HeadBuildPolicy.cpp
-
         webserv/utils/methodNeedsBody.cpp
         webserv/Environment.cpp
         webserv/Environment.hpp
         webserv/CgiModule.cpp
         webserv/utils/getFileSize.cpp
         webserv/utils/isParsedHeader.cpp
-        webserv/Authorization.cpp webserv/Authorization.hpp webserv/utils/Base64.cpp)
+        webserv/Authorization.cpp
+        webserv/Authorization.hpp
+        webserv/utils/Base64.cpp
+        webserv/utils/gnl/get_next_line.hpp
+        webserv/utils/gnl/get_next_line.cpp
+        webserv/utils/gnl/get_next_line_utils.cpp
+
+        webserv/tests/testerFileManager.cpp
+#        ./webserv/main.cpp
+)
 

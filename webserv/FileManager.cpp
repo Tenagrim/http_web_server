@@ -1,4 +1,6 @@
 #include <FileManager.hpp>
+#include <Utils.hpp>
+
 namespace ft
 {
 
@@ -86,25 +88,26 @@ namespace ft
 		std::string extension;
 		std::string buf;
 		std::string tmp;
-		char 		dir[MAXPATHLEN];
+		int			fdFileTypes;
+		char 		*line;
 
-		getcwd(dir, MAXPATHLEN);
-		tmp = dir;
-		tmp = tmp.substr(0, tmp.rfind('/'));
-		tmp += "/webserv/utils/mimi_types.txt";
-		std::ifstream fileTypes(tmp);
-		if (!fileTypes)
+		tmp = FM_DEFAULT_ROOT;
+//		todo hardcode=(
+		tmp.resize(tmp.size() - 26);
+		tmp += "/utils/mimi_types.txt";
+
+		if ((fdFileTypes = open(tmp.c_str(), O_RDONLY)) < 0)
 			throw CannotOpenFile();
 		extension = filename.substr(filename.find('.') + 1);
-		while (std::getline(fileTypes, buf)) {
+		while (get_next_line(fdFileTypes, &line)) {
+			buf = line;
 			tmp = buf.substr(buf.find(' ') + 1);
 			if (tmp == extension) {
-				fileTypes.close();
+				close(fdFileTypes);
 				return buf.substr(0, buf.find(' '));
 			}
 		}
-		fileTypes.close();
-		//throw NoSuchType();
+		close(fdFileTypes);
 		return "";
 	}
 
@@ -127,16 +130,7 @@ namespace ft
 		stat(file.c_str(), &statbuf);
 		return statbuf.st_ctime;
 	}
-/*
-	std::ifstream	FileManager::getIfstream(std::string const &filename)
-	{
-		std::ifstream res(getPath(filename), std::ios::binary);
-		if (res.good())
-			return res;
-		else
-			throw CannotOpenFile();
-	}
-*/
+
 	int				FileManager::getFd(std::string const &filename, unsigned int _acess)
 	{
 		int fd;
@@ -159,28 +153,11 @@ namespace ft
 
 	void            FileManager::setRoot(const std::string &new_root) {
 		_root = new_root;
-		
-		/*
-		char 		dir[MAXPATHLEN];
-
-		getcwd(dir, MAXPATHLEN);
-		std::string slash;
-		if (new_root[0] != '/')
-			slash += '/';
-		this->_root = dir + slash + new_root;
-		#ifdef DEBUG
-			std::cout << "set root: " << _root << std::endl;
-		#endif
-		*/
 	}
 
 
 	const char *FileManager::CannotOpenFile::what() const throw() {
 		return "FileManager: Cannot open file";
-	}
-
-	const char *FileManager::NoSuchType::what() const throw() {
-		return "FileManager: getContentType: Nginx doesn't support this file type";
 	}
 
 	std::string const		&FileManager::getRoot(void)

@@ -8,7 +8,6 @@
 #include <Authorization.hpp>
 
 #include <sys/stat.h>
-#include <fstream>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/param.h>
@@ -39,19 +38,17 @@ namespace ft
 		bool			isADirectory(std::string const &filename);
 		unsigned int	getFileSize(std::string const &filename);
 
-			// as in http header content-type
+		// as in http header content-type
 		static std::string		getContentType(std::string const &filename);
 
-			// Last modification time
+		// Last modification time
 		time_t			getMTime(std::string const &filename);
 
-			// Last change time
+		// Last change time
 		time_t			getCTime(std::string const &filename);
 
 		// open file & returns it's descriptor
 		int				getFd(std::string const &filename, unsigned int _acess = O_RDONLY);
-
-		//std::ifstream	getIfstream(std::string const &filename);
 
 		void			setRoot(std::string const &new_root);
 		int				copyFdToFile(std::string const &filrname, int input_fd);
@@ -60,7 +57,6 @@ namespace ft
 		std::string const &getRoot();
 
 		class CannotOpenFile : public std::exception { const char * what() const throw(); };
-		class NoSuchType : public std::exception { const char * what() const throw(); };
 
 		int mkdir_p(std::string const &dir_name);
 	};

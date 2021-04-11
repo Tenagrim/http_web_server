@@ -11,11 +11,9 @@ int main() {
 ////	isFileExisting
 		std::cout << file.isFileExisting("/Makefile") << std::endl;
 ////	getContentType
-		std::cout << file.getContentType("test.html") << std::endl;
+		std::cout << "|" << file.getContentType("test.png") << "|" << std::endl;
 ////	setRoot
 		file.setRoot("/root/newroot");
-////	getFD
-		file.getFdReadOnly("/Makefile");
 ////	getTime
 		std::cout << file.getCTime("/Makefile") << std::endl;
 	}
