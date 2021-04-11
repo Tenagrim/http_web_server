@@ -1,5 +1,7 @@
 #include <ABody.hpp>
 #include <runtime_error.hpp>
+#include <webserv.hpp>
+
 namespace ft
 {
 	ABody::ABody() : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff(nullptr)
@@ -46,7 +48,7 @@ namespace ft
 			delete _buff;
 		_buff = new char [size];
 		if (!_buff)
-			throw ft::runtime_error("Malloc failed");
+			throw ft::runtime_error("ABODY: SET BUFF: Malloc failed : " + ft::to_string(size));
 	}
 
 	long ABody::lastReaded() const {

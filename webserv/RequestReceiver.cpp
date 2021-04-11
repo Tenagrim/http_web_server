@@ -239,6 +239,7 @@ namespace ft {
 				}
 				client->getStates() = Client::s_body_reading;
 				bodyRet = client->getBReader()->readBody();
+				std::cout << cyan << "["<< client->getSock() <<"] RECIEVED : " << client->getBReader()->getWritten() << " ["<<client->requests() <<"] " << reset << "\n";
 				switch (bodyRet) {
 					case 0:
 						client->getLastRequest()->setBody(client->getBReader()->getBody());

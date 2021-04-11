@@ -236,8 +236,9 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 	char tail[6];
 
 	_read_buff = (char*)malloc(size + _offset);
+
 	if (!_read_buff)
-		throw ft::runtime_error("Malloc failed");
+		throw ft::runtime_error("READ WRITE BLOCK: Malloc failed : " + ft::to_string(size + offset));
 	ret = read(_input_fd, _read_buff, size + _offset);
 	_last_readed_bytes = ret;
 	if (ret == -1)
@@ -327,7 +328,7 @@ int ft::BodyReader::readByLen()
 	int ret;
 	_read_buff = (char*)malloc(_content_length);
 	if (!_read_buff)
-		throw ft::runtime_error("Malloc failed");
+		throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
 	ret = read(_input_fd, _read_buff, _content_length);
 	if (ret == -1)
 		return endReading(-2);
@@ -345,6 +346,10 @@ int ft::BodyReader::readByLen()
 
 unsigned int ft::BodyReader::getMaxId() {
 	return _max_id;
+}
+
+int ft::BodyReader::getWritten() const {
+	return _written_size;
 }
 
 

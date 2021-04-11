@@ -97,9 +97,12 @@ namespace ft
 		void 			reset();
 		bool 			left();
 		void 			setLeft();
+		int 			requests();
+
 
 
 	private:
+		int 				_requests;
 		bool 				_left;
 		static unsigned int	_max_id;
 		unsigned int		_id;

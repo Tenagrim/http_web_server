@@ -36,8 +36,8 @@ namespace ft
 	//	if (resp->getBody() && resp->getBody()->size() < 2048)
 	//		return sendFullResponse(resp, client);
 
-		if (resp->getBody())
-			std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
+		//if (resp->getBody())
+		//	std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
 
 		client->updateEventTime();
 
@@ -119,6 +119,7 @@ namespace ft
 			if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
 				throw ft::runtime_error("SOMETHING WENT WRONG");
 			body->setWritten(retw);
+			std::cout << yellow << "["<< client->getSock() <<"] SENDED : " << body->getWritten() << "  OF : " << body->size() << " ["<< client->requests() <<"] " << reset << "\n";
 		return retw;
 	}
 

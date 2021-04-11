@@ -47,6 +47,10 @@ namespace ft {
 		int 				_output_fd; // read / write
 		bool 				_ended;
 		int 				_written_size;
+	public:
+		int getWritten() const;
+
+	private:
 		int 				_input_fd;
 		int 				_offset;
 		int 				_content_length;

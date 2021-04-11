@@ -199,7 +199,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_reading_set)) {
-				std::cout << "READING EVENT ON: "<< it->first <<" \n";
+			//	std::cout << "READING EVENT ON: "<< it->first <<" \n";
 				_server->gotEvent(Dispatcher_event_args(it->first, reading, client, (*it).second));
 			//	FD_CLR((*it).first, &_writing_set);
 			}
@@ -213,7 +213,7 @@ namespace ft
 		for(it = _client_map.begin();it != _client_map.end() ;it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set)) {
-				std::cout << "WRITING EVENT ON: "<< it->first <<" \n";
+			//	std::cout << "WRITING EVENT ON: "<< it->first <<" \n";
 				_server->gotEvent(Dispatcher_event_args((*it).first, writing, client, (*it).second));
 			}
 		}
@@ -280,8 +280,8 @@ namespace ft
 			updateEvents();
 			handleEvents();
 			closeWhatNeed();
-			count = GetBuildPolicy::getCount();
-			std::cout << " ============== GET RESPONSES BUILT: " << count << "\n";
+		//	count = GetBuildPolicy::getCount();
+			//std::cout << " ============== GET RESPONSES BUILT: " << count << "\n";
 			//killZombies();
 			usleep(_delay);
 		}

@@ -30,7 +30,7 @@ namespace ft
 
 
 		IResponse *res = NULL;
-		std::cout<<request->to_string()<<std::endl;
+		//std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);

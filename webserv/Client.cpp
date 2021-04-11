@@ -10,9 +10,9 @@ namespace ft
 
 	#pragma region Copilen
 
-	Client::Client(int id,int sock) :
+	Client::Client(int id,int sock) : _requests(0),
 		_id(id),
-		_sock(sock),
+		_sock(sock), _last_event(),
 		_last_request(),
 		_b_reader()
 	{
@@ -113,6 +113,7 @@ namespace ft
 		if (_last_request)
 			delete _last_request;
 		_last_request = request;
+		_requests++;
 	}
 	
 	IRequest		*Client::getLastRequest(void)
@@ -247,5 +248,9 @@ namespace ft
 
 	bool Client::left() {
 		return _left;
+	}
+
+	int Client::requests() {
+		return _requests;
 	}
 }

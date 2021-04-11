@@ -42,7 +42,7 @@ namespace ft
 
 	IHeader *PutBuildPolicy::checkCommingURI(IRequest *request)
 	{
-		std::cout<<_fmngr.getRoot()<<std::endl;
+		//std::cout<<_fmngr.getRoot()<<std::endl;
 		IHeader *head = new Header(response);
 		if (!_fmngr.isFileExisting(request->getHeader()->getURI())) {
 			head->setResponseCode(201);

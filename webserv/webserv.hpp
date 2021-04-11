@@ -2,12 +2,26 @@
 #include <string>
 #include <stdexcept>
 #include <sys/time.h>
+/*
+Black        0;30     Dark Gray     1;30
+Red          0;31     Light Red     1;31
+Green        0;32     Light Green   1;32
+Brown/Orange 0;33     Yellow        1;33
+Blue         0;34     Light Blue    1;34
+Purple       0;35     Light Purple  1;35
+Cyan         0;36     Light Cyan    1;36
+Light Gray   0;37     White         1;37
+*/
 namespace ft
 {
 	static const char reset[] = "\033[0m";
 	static const char red[] = "\033[31m";
 	static const char green[] = "\033[32m";
 	static const char yellow[] = "\033[33m";
+
+	static const char magenta[] = "\033[1;35m";
+	static const char blue[] = "\033[1;34m";
+	static const char cyan[] = "\033[0;36m";
 
 	enum header_keys
 	{

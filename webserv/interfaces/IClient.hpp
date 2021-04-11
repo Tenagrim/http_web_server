@@ -27,6 +27,7 @@ namespace ft
 		virtual int 			getId() = 0;
 		virtual bool 			left() = 0;
 		virtual void 			setLeft() = 0;
+		virtual int 			requests() = 0;
 		virtual ~IClient(){}
 	};
 }
