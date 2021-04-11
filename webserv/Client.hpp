@@ -44,6 +44,7 @@ namespace ft
 			s_header_reading,
 			s_header_readed,
 			s_start_body_reading,
+//			todo do we really need this state???
 			s_body_reading,
 			s_end_reading
 		};
