@@ -22,7 +22,7 @@
 #define DEFAULT_SERVER_HEADER	"pst/1.1.0"
 
 #define FM_RW_BUFF				1024
-#define FM_DEFAULT_ROOT			"/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"
+#define FM_DEFAULT_ROOT			"/Users/sadolph/21/webserv/webserv/resources/sites/particles"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
 
