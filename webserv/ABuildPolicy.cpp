@@ -25,13 +25,15 @@ namespace ft
 	{
 		//std::stringstream ss;
 		IHeader *res = new Header(response);
+		char buf[TIME_BUFF_RESPONSE];
 
 		//ss << body->size();
 		res->setCodeDescription(descr);
 		res->setResponseCode(ret_code);
 		res->setHTTPV("HTTP/1.1");
 		res->setHeader("content-length", ft::to_string(body->size()));
-		//res->setHeader(h_date, _t_machine->getTimestamp());
+		currentTimeFormatted("%a, %d %b %Y %T GMT", buf, TIME_BUFF_RESPONSE);
+		res->setHeader("date", buf);
 //		res->setHeader(h_connec, "keep-alive");
 		res->setHeader("content-type", body->getContentType());
 		res->setHeader("server", DEFAULT_SERVER_HEADER);
@@ -435,10 +437,11 @@ namespace ft
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["fastcgi_pass"];
+		std::string script = checkerPath(request, getConfig());
 		if(!methods.empty()) {
 			_cgi_module.setRoot(_fmngr.getRoot());
 			_cgi_module.setExecutable(methods);
-			response = _cgi_module.getResponse(request);
+			response = _cgi_module.getResponse(request, script);
 		}
 		return response;
 	}

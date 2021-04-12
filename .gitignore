@@ -9,5 +9,6 @@ webserv/log.txt
 .idea
 cmake-build-debug
 CMakeLists.txt
+obj
 webserv/resources/42_test/post_body
 webserv/resources/42_test/put_test/multiple_same

@@ -31,13 +31,12 @@ namespace ft
 
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
-		int ret = 1;
-		int sock;
-	//	if (resp->getBody() && resp->getBody()->size() < 2048)
-	//		return sendFullResponse(resp, client);
+		int ret;
 
-		//if (resp->getBody())
-		//	std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
+//		if (resp->getBody() && resp->getBody()->size() < 2048)
+//			return sendFullResponse(resp, client);
+//		if (resp->getBody())
+//			std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
 
 		client->updateEventTime();
 

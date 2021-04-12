@@ -24,6 +24,7 @@ namespace ft{
     		std::string _home;
     		std::string _tmp_in;
     		std::string _tmp_out;
+    		std::string _script;
 
     		char 		**_av;
 
@@ -56,7 +57,7 @@ namespace ft{
 			void		setRoot(const std::string &root);
 			static void reset();
 
-            IResponse	*getResponse(IRequest *req);
+            IResponse *getResponse(IRequest *req, std::string const &script);
     };
 } // ft
 

@@ -56,4 +56,21 @@ namespace ft {
 		return close(fd);
 	}
 
+	std::string readFileIntoString4(const std::string& path) {
+		struct stat sb;
+		std::string res;
+
+		int fd = open(path.c_str(), O_RDONLY);
+		if (fd < 0) {
+			return (res = "");
+		}
+
+		fstat(fd, &sb);
+		res.resize(sb.st_size);
+		read(fd, (char*)(res.data()), sb.st_size);
+		close(fd);
+
+		return res;
+	}
+
 }

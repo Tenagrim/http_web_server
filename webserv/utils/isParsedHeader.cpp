@@ -26,7 +26,10 @@ namespace ft
 			"transfer-encoding",
 			"user-agent",
 			"www-authenticate",
+//			Additional headers (not from sbj)
 			"accept-encoding",
+			"x-secret-header-for-test",
+//			NULL-terminate
 			""
 	};
 

@@ -140,7 +140,7 @@ namespace ft
 	}
 
 	bool Header::isFieldInHeader(std::string const & key) const {
-		return _header_map.count(key);
+		return _header_map.count(strToLower(key));
 	}
 
 	std::string Header::getPath() {
