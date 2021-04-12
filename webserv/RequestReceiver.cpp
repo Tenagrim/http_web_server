@@ -263,6 +263,11 @@ namespace ft {
 				return n;
 			}
 		}
+		else if (client->getLastRequest()->getHeader() &&
+				 !client->getLastRequest()->getHeader()->isValid()) {
+			client->setFlag(Client::read_flags, Client::r_end);
+		}
+		return 0;
 	}
 
 	int RequestReceiver::writeEvent(int sock) {

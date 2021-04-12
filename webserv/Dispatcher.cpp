@@ -218,8 +218,8 @@ namespace ft
 	void					Dispatcher::handleClientsWrite()
 	{
 		fd_map::iterator it;
-		unsigned long diff;
-		for(it = _client_map.begin();it != _client_map.end() ;it++)
+
+		for(it = _client_map.begin(); it != _client_map.end(); it++)
 		{
 			if (FD_ISSET((*it).first, &_writing_set)) {
 			//	std::cout << "WRITING EVENT ON: "<< it->first <<" \n";
@@ -280,9 +280,6 @@ namespace ft
 		if (!_server)
 			throw ft::runtime_error("Not connected to server");
 		_run = true;
-
-		unsigned int count;
-
 
 		while (_run)
 		{
