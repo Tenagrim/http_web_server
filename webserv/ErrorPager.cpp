@@ -60,12 +60,15 @@ namespace ft
 
 	IHeader *ErrorPager::getErrorHead(int code)
 	{
+		char buf[TIME_BUFF_RESPONSE];
+
 		IHeader *head = new Header(response);
 		std::string descr = getCodeDescr(code);
 		head->setHTTPV("HTTP/1.1");
 		head->setResponseCode(code);
 		head->setCodeDescription(descr);
-		head->setHeader("date", _t_machine.getTimestamp());
+		currentTimeFormatted("%a, %d %b %Y %T GMT", buf, TIME_BUFF_RESPONSE);
+		head->setHeader("date", buf);
 		head->setHeader("content-type", "text/html");
 //		Tester 42 don't like this line
 //		head->setHeader(h_server, DEFAULT_SERVER_HEADER);
