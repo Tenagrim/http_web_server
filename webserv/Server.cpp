@@ -180,6 +180,9 @@ namespace ft
 					)
 				_dispatcher->closeSock(client->getSock());
 
+//// TEST
+//		int code = resp->getHeader()->getResponseCode();
+////
 			if (ret == 0)
 				client->reset();
 			#ifdef DEBUG

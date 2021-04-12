@@ -1,3 +1,5 @@
+#include <__bit_reference>
+
 #pragma once
 #include <fstream>
 #include <algorithm>
@@ -24,7 +26,7 @@ namespace ft {
 		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 		std::list<ServerInit *> _server_list;
 
-		void openConfigFile(char *config);
+		void openConfigFile(const char *config);
 		bool initParsing(void);
 		bool startParse(void);
 		bool initServer(std::list<std::string> *tmp);
@@ -33,7 +35,7 @@ namespace ft {
 		ConfigParser();
 		~ConfigParser();
 
-		void firstStep(int ac, char *av[]);
+		void firstStep (int ac, char *av[]);
 		unsigned int getServerCount() const;
 		const std::list<ServerInit *> &getServerList() const;
 		bool checkConfig();

@@ -25,31 +25,7 @@ namespace ft
 	static const char magenta[] = "\033[1;35m";
 	static const char blue[] = "\033[1;34m";
 	static const char cyan[] = "\033[0;36m";
-
-	enum header_keys
-	{
-		h_accept_charsets = 0,
-		h_accept_language,
-		h_allow,
-		h_authorization,
-		h_content_language,
-		h_content_length,
-		h_content_location,
-		h_content_type,
-		h_date,
-		h_host,
-		h_last_modified,
-		h_location,
-		h_referer,
-		h_retry_after,
-		h_server,
-		h_transfer_encoding,
-		h_user_agent,
-		h_www_authenticate,
-		h_connection,
-		h_status,
-		h_secret
-	};
+	static const char purple[] = "\033[0;35m";
 
 	enum methods_enum
 	{
@@ -74,7 +50,7 @@ namespace ft
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
 	std::vector<std::string> splitString(std::string const & basicString,
 										 std::string const & delim);
-	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
+	void 				currentTimeFormatted(const char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
 	bool				isParsedHeader(std::string const &head);

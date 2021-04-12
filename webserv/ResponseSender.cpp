@@ -31,13 +31,12 @@ namespace ft
 
 	int ResponseSender::sendResponce(IResponse *resp, IClient *client)
 	{
-		int ret = 1;
-		int sock;
-	//	if (resp->getBody() && resp->getBody()->size() < 2048)
-	//		return sendFullResponse(resp, client);
+		int ret;
 
-		//if (resp->getBody())
-		//	std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
+//		if (resp->getBody() && resp->getBody()->size() < 2048)
+//			return sendFullResponse(resp, client);
+//		if (resp->getBody())
+//			std::cout<<"FILE FD IN BODY : "<<resp->getBody()->getOpenedFd() << " ["<< resp->getBody()->getId() <<"]" <<std::endl;
 
 		client->updateEventTime();
 
@@ -110,13 +109,17 @@ namespace ft
 		{
 			retr = body->getReaded() - body->getWritten();
 			offset = READ_BODY_ONE_TIME - retr;
-			//std::cout << "PARTIAL SEND \n";
+			std::cout << green << "PARTIAL SEND: ";
+			write(1, green , ft::ft_strlen(green));
+			write(1, buff + offset, 20);
+			write(1, "\n", 1);
+			write(1, reset_ , ft::ft_strlen(reset_));
 		//	std::cout << "R: ["<< body->getReaded() <<"] W: ["<< body->getWritten() <<"] RETR: ["<<retr <<"]  OFFSET: ["<< offset <<"]\n";
 		}
 
 			retw = send(client->getSock(), buff + offset, retr, 0);
 
-		std::cout << "SEND : "<< retw <<" ["<< client->getSock() <<"]\n";
+		//std::cout << "SEND : "<< retw <<" ["<< client->getSock() <<"]\n";
 		if (body->getWritten() + 10 < READ_BODY_ONE_TIME) {
 			//std::cout << magenta;
 			write(1, magenta , ft::ft_strlen(magenta));

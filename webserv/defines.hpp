@@ -30,6 +30,7 @@
 //#define READ_BODY_ONE_TIME	200000
 //#define READ_BODY_ONE_TIME		1000000    // 1 Mb
 #define READ_BODY_ONE_TIME		100000 // 100 kb
+//#define READ_BODY_ONE_TIME		32000 // 32 kb
 //#define READ_BODY_ONE_TIME	500000
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
@@ -45,6 +46,7 @@
 // Time checking
 #define TIME_ZONE 3
 #define TIME_BUFF_AUTOINDEX 18
+#define TIME_BUFF_RESPONSE 30
 
 #ifdef DEBUG // DON T TOUCH THIS !!
 # define DISPATCHER_SLEEP_DELAY	(2 * 1000 * 1000)

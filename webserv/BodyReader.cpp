@@ -12,13 +12,19 @@ ft::BodyReader::BodyReader()
 unsigned int ft::BodyReader::_max_id;
 
 ft::BodyReader::BodyReader(int input_fd, int content_length, std::string rem) :
-		_remainder_of_header(rem), _last_readed(), _block_size_i(0),
+		_prev_state(s_end),
+		_remainder_of_header(rem),
+		_last_readed(),
+		_block_size_i(0),
 		_read_buff(0),
 		_output_fd(-1),
 		_ended(false),
 		_written_size(0),
-		_input_fd(input_fd), _offset(0), _content_length(content_length), _last_readed_bytes(0), _readed_bytes(0),
-		_prev_state(s_end)
+		_input_fd(input_fd),
+		_offset(0),
+		_content_length(content_length),
+		_last_readed_bytes(0),
+		_readed_bytes(0)
 {
 
 	if (!rem.empty())
@@ -197,12 +203,13 @@ int ft::BodyReader::readRem()
 
 int ft::BodyReader::readChunkLen(int n)
 {
+	std::cout<< purple << "READ LEN [" <<  ft::to_string(_input_fd) << "]"<<  reset_ <<std::endl;
 	char buff[3];
 	int ret;
 	ret = read(_input_fd, buff, n);
 	//std::cout << "READED: "<< n << " [ "<< _input_fd << "]\n";
 
-	if (ret == -1)
+	if (ret <= 0)
 		return endReading(-2);
 	_last_readed = buff[n -1];
 	if (std::string("ABCDEFabcdef0123456789\r").find(_last_readed) == std::string::npos)
@@ -241,6 +248,7 @@ int ft::BodyReader::readChunk()
 	if (_state != s_pp_block)
 		setState(s_len);
 //		_state = s_len;
+	std::cout<< purple << "READ BLOCK [" <<  ft::to_string(_input_fd) << "]["<< _last_readed_bytes <<"]" <<  reset_ <<std::endl;
 	return (1);
 }
 
@@ -254,7 +262,7 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 		throw ft::runtime_error("READ WRITE BLOCK: Malloc failed : " + ft::to_string(size + offset));
 	ret = read(_input_fd, _read_buff, size + _offset);
 	_last_readed_bytes = ret;
-	if (ret == -1)
+	if (ret <= 0 )
 		return endReading(-2);
 	ft_memcpy(tail, _read_buff + (ret - 5), 5);
 	tail[5] = 0;
@@ -287,6 +295,7 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 }
 
 int ft::BodyReader::readPPBlock() {
+	std::cout<< green << "READPP BLOCK [" << ft::to_string(_input_fd) << "][" << _last_readed_bytes<<"]"<< reset_ << std::endl;
 	int size = _block_size_i - _readed_bytes;
 	int ret = readWriteBlock(size);
 	if (ret == size) {
@@ -308,15 +317,16 @@ int ft::BodyReader::readPBlock() {
 	else
 		setState(s_pp_block);
 //		_state = s_pp_block;
-		_remainder_of_header.clear();
+	_remainder_of_header.clear();
 	return ret;
 }
 
 int ft::BodyReader::readEnding() {
+	std::cout<< purple << "READ ENDING [" <<  ft::to_string(_input_fd) << "]"<<  reset_ <<std::endl;
 	char buff[4];
 	int ret;
 	ret = read(_input_fd, buff, 3);
-	if(ret == -1)
+	if(ret <= 0)
 		return endReading(-2);
 	buff[3] =0;
 	if (ret == -1 || ft::ft_strcmp(buff,"\n\r\n"))
@@ -335,7 +345,8 @@ void ft::BodyReader::reset() {
 
 ft::IBody *ft::BodyReader::getBody() {
 	if (!_ended)
-		throw ft::runtime_error("Body was not fully readed\n");
+		return 0;
+		//throw ft::runtime_error("Body was not fully readed\n");
 	return new FileBody(_filename, 0);
 }
 
@@ -346,7 +357,7 @@ int ft::BodyReader::readByLen()
 	if (!_read_buff)
 		throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
 	ret = read(_input_fd, _read_buff, _content_length);
-	if (ret == -1)
+	if (ret <= 0)
 		return endReading(-2);
 		//throw ft::runtime_error("READ FAILED");
 	if (ret != _content_length) {
@@ -355,7 +366,7 @@ int ft::BodyReader::readByLen()
 		return endReading(-1);
 	}
 	ret = write(_output_fd, _read_buff, _content_length);
-	if (ret == -1)
+	if (ret <= 0)
 		throw ft::runtime_error("WRITE FAILED");
 	return (endReading(0));
 }
