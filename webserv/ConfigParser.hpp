@@ -24,7 +24,7 @@ namespace ft {
 		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 		std::list<ServerInit *> _server_list;
 
-		void openConfigFile(char *config);
+		void openConfigFile(const char *config);
 		bool initParsing(void);
 		bool startParse(void);
 		bool initServer(std::list<std::string> *tmp);
