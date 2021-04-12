@@ -77,16 +77,6 @@ bool ft::ConfigParser::startParse(void)
 	return state;
 }
 
-bool ft::ConfigParser::initServer(std::list<std::string> &tmp)
-{
-	bool state = false;
-	ServerInit *newServer = new ServerInit(_server_count);
-	_server_list.push_back(newServer);
-	newServer->setId(_server_count);
-	state = newServer->parseInServer(tmp);
-	return state;
-}
-
 bool ft::ConfigParser::findServer(std::list<std::string> &_list)
 {
 	bool state = false;
@@ -101,6 +91,17 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list)
 	state = initServer(_list);
 	return state;
 }
+
+bool ft::ConfigParser::initServer(std::list<std::string> &tmp)
+{
+	bool state = false;
+	ServerInit *newServer = new ServerInit(_server_count);
+	_server_list.push_back(newServer);
+	newServer->setId(_server_count);
+	state = newServer->parseInServer(tmp);
+	return state;
+}
+
 
 unsigned int ft::ConfigParser::getServerCount() const
 {

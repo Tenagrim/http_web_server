@@ -1,7 +1,7 @@
 #include <ServerInit.hpp>
 //#include "ServerInit.hpp"
 
-ft::ServerInit::ServerInit(int id): _id(id), _location_count(0) {
+ft::ServerInit::ServerInit(int id): _id(id), _location_count(0), _listen(), _server_name(), _root(), _locations(0) {
 }
 
 ft::ServerInit::~ServerInit() {
