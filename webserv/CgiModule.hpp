@@ -13,7 +13,7 @@
 
 #define TMP_IN			"tmp_cgi_in"
 #define TMP_OUT			"tmp_cgi_out"
-#define CGI_HEAD_LIMIT	512
+#define CGI_HEAD_LIMIT	2048
 
 namespace ft{
     class CgiModule {

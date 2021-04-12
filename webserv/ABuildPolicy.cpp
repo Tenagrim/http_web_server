@@ -297,7 +297,12 @@ namespace ft
 		LocationInit *location = NULL;
 		std::string correct_path = checkerPath(request, conf);
 //		if(_fmngr.isFileExisting(correct_path)) {
-		std::string ext = '.' + ft::getFileExtension(correct_path);
+		std::string queri = ft::getFileQueri(correct_path);
+		std::string ext;
+		if (!queri.empty())
+			ext = '.' + ft::getFileExtension(queri);
+		else
+			ext = '.' + ft::getFileExtension(correct_path);
 		if (ext == ".bla" || ext == ".php")
 			location = findLocation(ext, conf);
 //			if (!location)
@@ -313,12 +318,12 @@ namespace ft
 		std::map<std::string, std::string> args = location->getArgs();
 		std::map<std::string, std::string>::iterator it = args.find("root");
 		if (it != args.end()) {
-			res = request->getHeader()->getURI();
+			res = request->getHeader()->getPath();
 			int pos = res.rfind(location->getPath());
 			res.replace(pos, location->getPath().size(), it->second);
 		}
 		else
-			res = request->getHeader()->getURI();
+			res = request->getHeader()->getPath();
 		return res;
 	}
 
@@ -340,7 +345,7 @@ namespace ft
 	std::string ABuildPolicy::checkerPath(IRequest *request,ServerInit *conf)
 	{
 		std::string path;
-		std::string URI = request->getHeader()->getURI();
+		std::string URI = request->getHeader()->getPath();
 		if (!URI.empty()) {
 			std::vector<std::string> vec = splitString(URI, "/");
 			std::cout<<vec.size()<<std::endl;

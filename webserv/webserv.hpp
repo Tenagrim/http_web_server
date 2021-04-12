@@ -66,6 +66,7 @@ namespace ft
 	std::string			getCodeDescr(int code);
 	std::string			to_string(int num);
 	std::string			getFileExtension(std::string const & filename);
+	std::string			getFileQueri(std::string & filename);
 	int					ft_strcmp(const char *string1, const char *string2);
 	std::string			fdToString(int fd);
 	bool				isNumber(std::string s);

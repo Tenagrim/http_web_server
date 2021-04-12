@@ -65,13 +65,15 @@ namespace ft{
 	void CgiModule::setEnvs(IRequest *req, Environment &env) {
 		methods_enum method = req->getHeader()->getMethod();
 
+		std::string tmp = _root + _script;
 		env.setVar("REQUEST_METHOD", ft::getMethodStr(req->getHeader()->getMethod()));
 		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
-	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
-	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
-		std::string tmp = _root + _script;
-		env.setVar("PATH_INFO",  _root + _script);
+//		if(req->getHeader()->isHeadAlreadyExist("content-length"))
+//			env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
+		env.setVar("PATH_INFO",  "/");
 //		req->getHeader()->setEnvs(env);
+		env.setVar("REDIRECT_STATUS", "200");
+		env.setVar("SCRIPT_FILENAME", tmp);
 
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
 			env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
@@ -90,7 +92,11 @@ namespace ft{
 
 		switch (method) {
 			case m_get:
-				env.setVar("QUERY_STRING", req->getHeader()->getQuery());
+				if (req->getHeader()->getQuery()!= "")
+				{
+					std::string query = req->getHeader()->getQuery();
+					env.setVar("QUERY_STRING", req->getHeader()->getQuery());
+				}
 				break;
 			case m_post:
 				break;
@@ -202,6 +208,7 @@ namespace ft{
 
 		getcwd(buff,300);
 		std::cout << "[[[[[[ " << buff<< "\n";
+		std::cout<<_root<<std::endl;
 
 		dup2(_cgi_in, 0);
 		dup2(_cgi_out, 1);
