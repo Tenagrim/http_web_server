@@ -41,7 +41,7 @@ bool ft::ConfigParser::initParsing(void) {
 	return state;
 }
 
-void ft::ConfigParser::openConfigFile(char *config)
+void ft::ConfigParser::openConfigFile(const char *config)
 {
 	std::string path = config;
 	_conf = ft::readFileIntoString4(path);
@@ -211,16 +211,14 @@ void ft::ConfigParser::checkHostnameOnUniq(std::list<std::string> *pList)
 
 void ft::ConfigParser::firstStep(int ac, char **av)
 {
-	if (ac == 2){
+	if (ac == 2)
 		openConfigFile(av[1]);
+	else
+		openConfigFile("./conf/mywebserv.conf");
 	if (!initParsing())
 		throw ft::runtime_error("Can't Read Config File ... ");
 	if (!startParse())
 		throw ft::runtime_error("Mistake in config file...");
 	if (!checkConfig())
 		throw ft::runtime_error("In config file you have duplicate construct...");
-	}
-	else {
-		throw ft::runtime_error("Wrong argument, need 1");
-	}
 }
