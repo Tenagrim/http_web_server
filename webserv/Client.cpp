@@ -234,6 +234,14 @@ namespace ft
 		updateEventTime();
 		if(_b_reader)
 			delete _b_reader;
+		if (_last_response) {
+			delete _last_response;
+			_last_response = 0;
+		}
+		if (_last_request) {
+			delete _last_request;
+			_last_request = 0;
+		}
 		_b_reader = NULL;
 	}
 

@@ -12,13 +12,19 @@ ft::BodyReader::BodyReader()
 unsigned int ft::BodyReader::_max_id;
 
 ft::BodyReader::BodyReader(int input_fd, int content_length, std::string rem) :
-		_remainder_of_header(rem), _last_readed(), _block_size_i(0),
+		_prev_state(s_end),
+		_remainder_of_header(rem),
+		_last_readed(),
+		_block_size_i(0),
 		_read_buff(0),
 		_output_fd(-1),
 		_ended(false),
 		_written_size(0),
-		_input_fd(input_fd), _offset(0), _content_length(content_length), _last_readed_bytes(0), _readed_bytes(0),
-		_prev_state(s_end)
+		_input_fd(input_fd),
+		_offset(0),
+		_content_length(content_length),
+		_last_readed_bytes(0),
+		_readed_bytes(0)
 {
 
 	if (!rem.empty())
@@ -305,10 +311,11 @@ int ft::BodyReader::readPBlock() {
 	if (_last_readed_bytes == size + 2)
 		setState(s_len);
 //		_state = s_len;
-	else
+	else {
 		setState(s_pp_block);
 //		_state = s_pp_block;
 		_remainder_of_header.clear();
+	}
 	return ret;
 }
 
