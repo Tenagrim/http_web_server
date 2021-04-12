@@ -23,8 +23,10 @@ namespace ft{
 		return (*this);
 	}
 
-	IResponse *CgiModule::getResponse(IRequest *req) {
+	IResponse *CgiModule::getResponse(IRequest *req, std::string const &script)
+	{
     	int pid, status, ret;
+    	_script = script;
     	Environment envs;
 		_tmp_in = _home + "/" + TMP_DIR +"/" + TMP_IN  + ft::to_string(_max_id);
 		_tmp_out = _home + "/" + TMP_DIR + "/" + TMP_OUT + ft::to_string(_max_id);
@@ -67,13 +69,13 @@ namespace ft{
 		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
 	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
 	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
-
-		env.setVar("PATH_INFO", req->getHeader()->getPath());
-
+		env.setVar("PATH_INFO", _script);
 //		req->getHeader()->setEnvs(env);
 
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
 			env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
+
+		req->getHeader()->setEnvs(env);
 
 	//	env.setVar("REQUEST_TARGET",)
 	//	env.setVar("PATH_TRANSLATED", "/123.bla");
@@ -191,7 +193,7 @@ namespace ft{
 		if (_cgi_in == -1)
 			_cgi_in = open(_tmp_in.c_str(), O_RDONLY);
 		if (_cgi_in == -1 || _cgi_out == -1) {
-			dprintf(2, "FILE CAN T BE OPENED\n"); /////////// FIXME ATTENTION
+			std::cerr << "FILE CAN T BE OPENED" << std::endl;
 			exit(500);
 		}
 		char buff[300];
@@ -202,7 +204,7 @@ namespace ft{
 		dup2(_cgi_in, 0);
 		dup2(_cgi_out, 1);
 		execve(_executable.c_str(), _av, envs.getEnv());
-		dprintf(2, "EXECVE FAILED\n"); ////////// ATTENTION
+		std::cerr << "EXECVE FAILED" << std::endl;
 		exit(500);
 	}
 

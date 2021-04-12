@@ -108,7 +108,6 @@ namespace ft {
 		line += "</a>";
 		lineLen = info->d_namlen;
 		line.resize(line.size() + (HTML_LINE_LEN - 37 - lineLen), ' ');
-		buf[TIME_BUFF_AUTOINDEX - 1] = '\0';
 		stat((_url + static_cast<std::string>(info->d_name)).c_str(), &statbuf);
 		rawTimeFormatted(statbuf.st_ctime, "%d-%b-%Y %H-%M", buf, TIME_BUFF_AUTOINDEX);
 		line += buf;
