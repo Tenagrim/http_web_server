@@ -130,7 +130,7 @@ namespace ft
 			ret = args._reciever->getRequest(args._fd);
 			if (ret == -1) {
 				_dispatcher->closeSock(args._fd);
-				std::cout << "READING RETURNED -1 ["<< args._fd <<"]\n";
+				std::cout << "GET REQUEST RETURNED [" << ret << "] ["<< args._fd <<"]\n";
 			}
 //			std::cout << "CLIENT IS WRITING. NEED TO READ\n";
 			#ifdef DEBUG
@@ -226,7 +226,7 @@ namespace ft
 			_dispatcher->addListener((*it), (*it)->getListenSock());
 			std::cout << "["<< (*it)->getListenSock() << "|"<< (*it)->getPort() <<"] ";
 		}
-		std::cout << reset << "\n";
+		std::cout << reset_ << "\n";
 		_list_to_start.clear();
 
 		_dispatcher->start();

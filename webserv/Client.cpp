@@ -1,16 +1,14 @@
 #include <Client.hpp>
 #include <BasicRequest.hpp>
-#ifdef DEBUG
-# include <iostream>
-#endif
-
+#include <iostream>
+#include <webserv.hpp>
 namespace ft
 {
 	unsigned int Client::_max_id = 0;
 
 	#pragma region Copilen
 
-	Client::Client(int id,int sock) : _requests(0),
+	Client::Client(int id, int sock) : _requests(0),
 		_id(id),
 		_sock(sock), _last_event(),
 		_last_request(),
@@ -29,7 +27,9 @@ namespace ft
 
 	Client::~Client()
 	{
-		int ret;
+		int ret = 0;
+		//if (_id < 106700)
+		std::cout << red << "CLIENT ["<< _sock <<"]["<< _id <<"] DIED\n" << reset_;
 		ret = ft_close(_sock);
 		if (ret == -1)
 			throw ft::runtime_error("CLIENT: CAN\'T CLOSE SOCK");
@@ -221,7 +221,6 @@ namespace ft
 		}
 	}
 
-
 	void Client::reset() {
 		clearRequest();
 		clearResponse();
@@ -230,7 +229,7 @@ namespace ft
 		_write_flags = 0;
 		_states = s_not_begin;
 		//if (_b_reader)
-		//	_b_reader->reset();
+		//	_b_reader->reset_();
 		_read_buff.clear();
 		updateEventTime();
 		if(_b_reader)

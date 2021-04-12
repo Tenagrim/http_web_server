@@ -2,6 +2,9 @@
 #include <string>
 #include <stdexcept>
 #include <sys/time.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+
 /*
 Black        0;30     Dark Gray     1;30
 Red          0;31     Light Red     1;31
@@ -14,7 +17,7 @@ Light Gray   0;37     White         1;37
 */
 namespace ft
 {
-	static const char reset[] = "\033[0m";
+	static const char reset_[] = "\033[0m";
 	static const char red[] = "\033[31m";
 	static const char green[] = "\033[32m";
 	static const char yellow[] = "\033[33m";
@@ -80,4 +83,6 @@ namespace ft
 
 	std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
 	std::string base64_decode(std::string const &encoded_string);
+
+	std::string readFileIntoString4(const std::string& path);
 }
