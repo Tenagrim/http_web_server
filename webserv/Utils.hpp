@@ -9,7 +9,6 @@
 namespace ft
 {
 		typedef std::string			value;
-		typedef std::list<value>	list;
 		typedef std::list<value>::iterator iterator;
 		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 
@@ -19,6 +18,9 @@ namespace ft
 		void deleteCommit(std::list<std::string> &list);
 		iterator &isSpace(iterator &it);
 		reverse_iterator &isSpace(reverse_iterator &it);
+
+		std::list <std::string> & isSpace(std::list <std::string> &it);
+		std::list <std::string> & isSpaceRev(std::list <std::string> &it);
 
 		int temporaryBody(std::string const &str);
 }

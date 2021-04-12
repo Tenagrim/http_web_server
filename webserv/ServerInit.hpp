@@ -26,19 +26,19 @@ namespace ft {
 		std::list<LocationInit *> _locations;
 
 
-		bool findServerName(list *tmp);
-		bool findListen(list *tmp);
-		bool findRoot(std::list<std::string> *tmp);
+		bool findServerName(std::list<string> &tmp);
+		bool findListen(std::list<string> &tmp);
+		bool findRoot(std::list<string> &tmp);
 
 		iterator findInList(list *_list,std::string const &string);
 		iterator is_Space(iterator it);
 		bool is_digit(string const &str);
-		bool findLocations(list *tmp);
+		bool findLocations(std::list<string> &tmp);
 	public:
 		ServerInit(int id);
 		~ServerInit();
 
-		bool parseInServer(std::list<std::string> &tmp);
+		bool parseInServer(std::list<string> tmp);
 
 
 		void setId(unsigned int id);
