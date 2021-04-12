@@ -26,31 +26,6 @@ namespace ft
 	static const char blue[] = "\033[1;34m";
 	static const char cyan[] = "\033[0;36m";
 
-	enum header_keys
-	{
-		h_accept_charsets = 0,
-		h_accept_language,
-		h_allow,
-		h_authorization,
-		h_content_language,
-		h_content_length,
-		h_content_location,
-		h_content_type,
-		h_date,
-		h_host,
-		h_last_modified,
-		h_location,
-		h_referer,
-		h_retry_after,
-		h_server,
-		h_transfer_encoding,
-		h_user_agent,
-		h_www_authenticate,
-		h_connection,
-		h_status,
-		h_secret
-	};
-
 	enum methods_enum
 	{
 		m_get = 0,
