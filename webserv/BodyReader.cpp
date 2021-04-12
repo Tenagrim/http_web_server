@@ -266,6 +266,7 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 		return endReading(-2);
 	ft_memcpy(tail, _read_buff + (ret - 5), 5);
 	tail[5] = 0;
+
 	if (ret != size) {
 		//free(_read_buff);
 		//return endReading(-1);
@@ -297,8 +298,8 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 int ft::BodyReader::readPPBlock() {
 	std::cout<< green << "READPP BLOCK [" << ft::to_string(_input_fd) << "][" << _last_readed_bytes<<"]"<< reset_ << std::endl;
 	int size = _block_size_i - _readed_bytes;
-	int ret = readWriteBlock(size);
-	if (ret == size) {
+	int ret = readWriteBlock(size + 2);
+	if (ret == size + 2) {
 		setState(s_len);
 //		_state = s_len;
 		_readed_bytes = 0;
@@ -353,22 +354,31 @@ ft::IBody *ft::BodyReader::getBody() {
 int ft::BodyReader::readByLen()
 {
 	int ret;
-	_read_buff = (char*)malloc(_content_length);
-	if (!_read_buff)
-		throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
-	ret = read(_input_fd, _read_buff, _content_length);
-	if (ret <= 0)
-		return endReading(-2);
+	if (_state == s_remains)
+	{
+		ret = ret = write(_output_fd, _remainder_of_header.c_str(), _remainder_of_header.size());
+		if (ret <= 0)
+			throw ft::runtime_error("WRITE FAILED");
+		setState(s_r_by_len);
+		return 1;
+	} else {
+		_read_buff = (char *) malloc(_content_length);
+		if (!_read_buff)
+			throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
+		ret = read(_input_fd, _read_buff, _content_length);
+		if (ret <= 0)
+			return endReading(-2);
 		//throw ft::runtime_error("READ FAILED");
-	if (ret != _content_length) {
-		free(_read_buff);
-		_read_buff = 0;
-		return endReading(-1);
+		if (ret != _content_length) {
+			free(_read_buff);
+			_read_buff = 0;
+			return endReading(-1);
+		}
+		ret = write(_output_fd, _read_buff, _content_length);
+		if (ret <= 0)
+			throw ft::runtime_error("WRITE FAILED");
+		return (endReading(0));
 	}
-	ret = write(_output_fd, _read_buff, _content_length);
-	if (ret <= 0)
-		throw ft::runtime_error("WRITE FAILED");
-	return (endReading(0));
 }
 
 unsigned int ft::BodyReader::getMaxId() {

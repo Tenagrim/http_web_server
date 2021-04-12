@@ -30,7 +30,8 @@ namespace ft {
 			s_a_len,
 			s_a1_len,
 			s_pp_block,
-			s_end
+			s_end,
+			s_r_by_len
 		};
 
 	private:
@@ -52,6 +53,7 @@ namespace ft {
 		int 				_offset;
 		int 				_content_length;
 		int 				_last_readed_bytes;
+		int					_readed_bytes;
 
 		int 				readWriteBlock(int size, int offset =0);
 		void 				openFile();
@@ -69,7 +71,6 @@ namespace ft {
 		int 				readByLen();
 		BodyReader(const BodyReader &ref);
 		BodyReader();
-		int					_readed_bytes;
 		void 				setState(r_state state);
 		int					get_resultFd() const;
 		unsigned int		getSize() const;
