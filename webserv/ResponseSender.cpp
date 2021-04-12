@@ -110,7 +110,11 @@ namespace ft
 		{
 			retr = body->getReaded() - body->getWritten();
 			offset = READ_BODY_ONE_TIME - retr;
-			//std::cout << "PARTIAL SEND \n";
+			std::cout << green << "PARTIAL SEND: ";
+			write(1, green , ft::ft_strlen(green));
+			write(1, buff + offset, 20);
+			write(1, "\n", 1);
+			write(1, reset_ , ft::ft_strlen(reset_));
 		//	std::cout << "R: ["<< body->getReaded() <<"] W: ["<< body->getWritten() <<"] RETR: ["<<retr <<"]  OFFSET: ["<< offset <<"]\n";
 		}
 
