@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <FileBody.hpp>
-
+#include <list>
 #define  LEN_CHUNKED -1
 //#define  B_READER_BUFF_SIZE
 
@@ -37,6 +37,7 @@ namespace ft {
 
 		static unsigned int	_max_id;
 		r_state 			_state;
+		std::list<r_state>	_prev_state;
 
 		std::string 		_remainder_of_header;
 		std::string 		_filename;
@@ -69,6 +70,9 @@ namespace ft {
 		BodyReader(const BodyReader &ref);
 		BodyReader();
 		int					_readed_bytes;
+		void 				setState(r_state state);
+		int					get_resultFd() const;
+		unsigned int		getSize() const;
 	public:
 		static void 		reset();
 		int getWritten() const;
@@ -85,11 +89,9 @@ namespace ft {
 		// TODO: Complete copilen form
 
 		//return values:  0 - end of body, 1 - readed
-		int readBody();
+		int					readBody();
 
-		int get_resultFd() const;
 		IBody				*getBody();
-		unsigned int	getSize() const;
 
 	};
 }

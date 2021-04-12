@@ -128,28 +128,28 @@ namespace ft
 	{
 		//#undef DEBUG
 
-			#ifdef DEBUG
+		//	#ifdef DEBUG
 		//		static int i;
 			
 			//	std::cout << "DISPATCHER: UPDATE EVENTS ["<< i++ <<"] max fd: "<< _max_fd <<"\n";
-				std::cout << "CLIENTS: \n";
+//				std::cout << "CLIENTS: \n";
 				fd_map::iterator it = _client_map.begin();
-				for(; it != _client_map.end(); it++)
-					std::cout << "[" << (*it).first << "] ";
-				std::cout << "\n";
-
-				std::cout << "CLIENTS: \n";
-				it = _client_map.begin();
-				for(; it != _client_map.end(); it++)
-					std::cout << "[" << (*it).first << "] ";
-				std::cout << "\n";
-
-				std::cout << "LISTENERS: \n";
-				it = _listener_map.begin();
-				for(; it != _listener_map.end(); it++)
-					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
-				std::cout << "\n";
-			#endif
+//				for(; it != _client_map.end(); it++)
+//					std::cout << "[" << (*it).first << "] ";
+//				std::cout << "\n";
+//
+//				std::cout << "CLIENTS:   ";
+//				it = _client_map.begin();
+//				for(; it != _client_map.end(); it++)
+//					std::cout << "[" << (*it).first << "] ";
+//				std::cout << "\n";
+//
+//				std::cout << "LISTENERS: \n";
+//				it = _listener_map.begin();
+//				for(; it != _listener_map.end(); it++)
+//					std::cout << "[" << (*it).second->getListenSock() << "|" << (*it).second->getPort() << "] ";
+//				std::cout << "\n";
+		//	#endif
 		_events = 0;
 		if (_listening == 0)
 			throw ft::runtime_error("No have fd to dispatch");
@@ -173,8 +173,17 @@ namespace ft
 			BodyReader::reset();
 			CgiModule::reset();
 		}
-		else
+		else {
 			wakeUp();
+
+			std::cout << red << "========================================================\n" << reset_;
+
+			std::cout << "CLIENTS:   " << red;
+			it = _client_map.begin();
+			for(; it != _client_map.end(); it++)
+				std::cout << "[" << (*it).first << "] ";
+			std::cout << "\n" << reset_;
+		}
 			#ifdef DEBUG
 				std::cout << "DISPATCHER: EVENTS UPDATET. GOT: " << _events << "\n";
 			#endif

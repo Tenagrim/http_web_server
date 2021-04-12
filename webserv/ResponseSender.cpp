@@ -110,17 +110,30 @@ namespace ft
 		{
 			retr = body->getReaded() - body->getWritten();
 			offset = READ_BODY_ONE_TIME - retr;
+			//std::cout << "PARTIAL SEND \n";
 		//	std::cout << "R: ["<< body->getReaded() <<"] W: ["<< body->getWritten() <<"] RETR: ["<<retr <<"]  OFFSET: ["<< offset <<"]\n";
 		}
 
 			retw = send(client->getSock(), buff + offset, retr, 0);
-			if (retw == -1)
+
+		std::cout << "SEND : "<< retw <<" ["<< client->getSock() <<"]\n";
+		if (body->getWritten() + 10 < READ_BODY_ONE_TIME) {
+			//std::cout << magenta;
+			write(1, magenta , ft::ft_strlen(magenta));
+			write(1, buff, 20);
+			write(1, "\n", 1);
+			write(1, reset_ , ft::ft_strlen(reset_));
+
+//			std::cout << reset_;
+		}
+
+		if (retw == -1)
 				return -1;
 			if (retw == 0 || retr == 0 || retr == -1 || retw == -1 || offset < 0)
 				throw ft::runtime_error("SOMETHING WENT WRONG - ResponseSender::sendFileBody" + to_string(retw) +
 										to_string(retr) + to_string(offset) + to_string(client->getSock()));
 			body->setWritten(retw);
-			std::cout << yellow << "["<< client->getSock() <<"] SENDED : " << body->getWritten() << "  OF : " << body->size() << " ["<< client->requests() <<"] " << reset << "\n";
+			std::cout << yellow << "[" << client->getSock() << "] SENDED : " << body->getWritten() << "  OF : " << body->size() << " [" << client->requests() << "] " << reset_ << "\n";
 		return retw;
 	}
 

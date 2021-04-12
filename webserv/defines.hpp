@@ -7,6 +7,7 @@
 #define DEBUG_REQ_PRINT 		1
 #define DEBUG_RESP_PRINT 		1
 
+//#define UPDATE_DELAY 			0
 #define UPDATE_DELAY 			1000
 
 #define MAX_PATH_LEN			512
@@ -26,8 +27,10 @@
 #define DEFAULT_HTTPV			"HTTP/1.1"
 
 //////// Varies from Delay ///////////////
-//#define READ_BODY_ONE_TIME		200000
-#define READ_BODY_ONE_TIME		500000
+//#define READ_BODY_ONE_TIME	200000
+//#define READ_BODY_ONE_TIME		1000000    // 1 Mb
+#define READ_BODY_ONE_TIME		100000 // 100 kb
+//#define READ_BODY_ONE_TIME	500000
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
 
@@ -50,8 +53,9 @@
 
 #ifndef DEBUG
 # define DISPATCHER_SLEEP_DELAY	200000
-//# define DISPATCHER_WAKE_DELAY	1000			// 1 ms
-# define DISPATCHER_WAKE_DELAY	500			// 0.5 ms
+# define DISPATCHER_WAKE_DELAY	1500			// 1.5 ms
+//# define DISPATCHER_WAKE_DELAY	1			// 1 us
+//# define DISPATCHER_WAKE_DELAY	500			// 0.5 ms
 //# define DISPATCHER_WAKE_DELAY	10000		// 10 ms
 //# define DISPATCHER_WAKE_DELAY	500000 // 500 ms
 //# define DISPATCHER_WAKE_DELAY	200000 // 200 ms
