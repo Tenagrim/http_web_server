@@ -23,7 +23,7 @@ namespace ft {
 		bool res = true;
 		while(res) {
 			iterator it = std::find(list.begin(), list.end(), "#");
-			if (*it == "#")
+			if (it != list.end())
 				ft::findAndErase(list, "#", "\n");
 			else
 				res = false;

@@ -34,6 +34,12 @@ namespace ft
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);
+		if (getFileExtension(request->getHeader()->getPath()) == "php") {
+			location = extensionCheck(request, conf);
+			res = redirectToCGI(request, location);
+			if (res)
+				return res;
+		}
 		if (!location) {
 			std::string path = checkerPath(request, conf);
 			if (!_fmngr.isFileExisting(path)) {

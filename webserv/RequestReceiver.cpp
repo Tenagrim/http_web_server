@@ -88,7 +88,7 @@ namespace ft {
 		ret = bind(_main_socket, (struct sockaddr *) &_sockaddr,
 				   sizeof(_sockaddr));  // may be another sizeof
 		if (ret == -1)
-			throw ft::runtime_error(std::string("\nUnable to bind socket: \n" +
+			throw ft::runtime_error(std::string("\nUnable to bind socket: ["+ ft::to_string(_main_socket) + "] \n" +
 												std::string(strerror(errno))));
 #ifdef DEBUG
 		std::cout << "MAIN SOCKET BINDED\n";

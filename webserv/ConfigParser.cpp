@@ -1,6 +1,6 @@
 #include <ConfigParser.hpp>
 
-ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(), _conf() {
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(NULL), _conf() {
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -16,7 +16,8 @@ ft::ConfigParser::~ConfigParser() {
 
 bool ft::ConfigParser::initParsing(void) {
 	bool state = false;
-	std::string line = " ";
+	std::string line;
+	line.push_back(' ');
 	std::string::iterator it = _conf.begin();
 	for (; it != _conf.end(); ++it) {
 		if(_tokenPool.checkInPool(*it)) {
@@ -87,25 +88,25 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start
 {
 	bool state = false;
 
-	std::list<std::string> *tmp = new std::list<std::string>;
-	iterator end = std::find(start, _list.end(), "server");
+//	std::list<std::string> *tmp = new std::list<std::string>;
+	std::list<std::string>::iterator end = std::find(start, _list.end(), "server");
 	if (*end != "server") {
 		reverse_iterator r_end = std::find(_list.rbegin(), _list.rend(), "}");
 		++r_end;
 		r_end = std::find(_list.rbegin(), _list.rend(), "}");
 		end = r_end.base();
 	}
-	tmp->splice(tmp->begin(), _list, start, end);
-	state = initServer(tmp);
-	iterator count = tmp->begin();
-	reverse_iterator recount = tmp->rbegin();
+	std::list<std::string> tmp;
+	tmp.splice(tmp.begin(), _list, start, end);
+	state = initServer(&tmp);
+	iterator count = tmp.begin();
+	reverse_iterator recount = tmp.rbegin();
 	count = isSpace(count);
 	recount = isSpace(recount);
 	if (*count != "{")
 		throw std::runtime_error("No Open Bracket after SERVER key word...");
 	if (*recount != "}")
 		throw std::runtime_error("No ft_close Bracket ...");
-	delete tmp;
 	return state;
 }
 

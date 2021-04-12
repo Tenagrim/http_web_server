@@ -77,7 +77,7 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 		throw std::runtime_error("No ft_close BRACKET in " + *key + " argument");
 	} else {
 	tmp->pop_back();
-	_locations_arguments[*key];
+	std::string key_value = *key;
 	tmp->erase(tmp->begin());
 	std::list<std::string>::iterator tmp_it = tmp->begin();
 	tmp_it = isSpace(tmp_it);
@@ -85,7 +85,7 @@ bool ft::LocationInit::parseKeyWord(std::list<std::string> &list, std::list<std:
 	for(; tmp_it != tmp->end(); ++tmp_it) {
 		buff += *tmp_it;
 	}
-	_locations_arguments[*key] = buff;
+	_locations_arguments[key_value] = (buff);
 	}
 	delete tmp;
 	return state;

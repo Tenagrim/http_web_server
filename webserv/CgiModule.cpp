@@ -69,7 +69,8 @@ namespace ft{
 		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
 	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
 	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
-		env.setVar("PATH_INFO", _script);
+		std::string tmp = _root + _script;
+		env.setVar("PATH_INFO",  _root + _script);
 //		req->getHeader()->setEnvs(env);
 
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
@@ -183,6 +184,9 @@ namespace ft{
 			std::cout << *c << "\n";
 			c++;
 		}
+		 if(chdir(_root.c_str()) == -1) {
+		 	std::cerr<<"chdir failed \n";
+		 }
 		_av = getArgv(_executable, _root + req->getHeader()->getPath());
 
 		std::cout << "AV 0:" << _av[0] << "\n";
