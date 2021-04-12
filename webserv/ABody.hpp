@@ -39,6 +39,8 @@ namespace ft
 		void						setReaded(unsigned long readed);
 		long						lastReaded() const;
 		virtual int					getOffset() const;
+		virtual unsigned int getId() const;
+
 
 	};
 

@@ -23,17 +23,23 @@ namespace ft{
 		return (*this);
 	}
 
-	IResponse *CgiModule::getResponse(IRequest *req) {
-		int pid, status, ret;
-		Environment envs;
-		_tmp_in = _home + "/" + TMP_IN  + ft::to_string(_max_id);
-		_tmp_out = _home + "/" + TMP_OUT + ft::to_string(_max_id);
+	IResponse *CgiModule::getResponse(IRequest *req, std::string const &script)
+	{
+    	int pid, status, ret;
+    	_script = script;
+    	Environment envs;
+		_tmp_in = _home + "/" + TMP_DIR +"/" + TMP_IN  + ft::to_string(_max_id);
+		_tmp_out = _home + "/" + TMP_DIR + "/" + TMP_OUT + ft::to_string(_max_id);
 		_max_id++;
-		setEnvs(req, envs);
-		reset_fd();
+    	setEnvs(req, envs);
+    	reset_fd();
+    	IResponse *resp;
 
-		pid = fork();
-		if (pid == -1)
+		_cgi_out = open(_tmp_out.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (_cgi_out == -1)
+			throw ft::runtime_error("Unable to open cgi output file for reading");
+    	pid = fork();
+    	if (pid == -1)
 			throw ft::runtime_error("CGI MODULE: FORK FAILED");
 		else if (pid == 0)
 		{
@@ -45,25 +51,32 @@ namespace ft{
 			ret = WEXITSTATUS(status);
 			if (ret == 500)
 				return _e_pager.getErrorPage(500);
+			if (_cgi_out != -1)
+				ft_close(_cgi_out);
 		}
-		return getResult();
+		resp = getResult();
+    	if (_cgi_out != -1)
+    		ft_close(_cgi_out);
+		if (_cgi_in != -1)
+			ft_close(_cgi_out);
+		return resp;
 	}
 
 	void CgiModule::setEnvs(IRequest *req, Environment &env) {
 		methods_enum method = req->getHeader()->getMethod();
 
+		std::string tmp = _root + _script;
 		env.setVar("REQUEST_METHOD", ft::getMethodStr(req->getHeader()->getMethod()));
 		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
-	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
-	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
+//		if(req->getHeader()->isHeadAlreadyExist("content-length"))
+//			env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
+		env.setVar("PATH_INFO",  "/");
+//		req->getHeader()->setEnvs(env);
+		env.setVar("REDIRECT_STATUS", "200");
+		env.setVar("SCRIPT_FILENAME", tmp);
 
-		env.setVar("PATH_INFO", req->getHeader()->getPath());
-
-//		todo: this is the kostil'!!!!
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
 			env.setVar("HTTP_X_SECRET_HEADER_FOR_TEST", "1");
-
-		req->getHeader()->setEnvs(env);
 
 	//	env.setVar("REQUEST_TARGET",)
 	//	env.setVar("PATH_TRANSLATED", "/123.bla");
@@ -79,7 +92,11 @@ namespace ft{
 
 		switch (method) {
 			case m_get:
-				env.setVar("QUERY_STRING", req->getHeader()->getQuery());
+				if (req->getHeader()->getQuery()!= "")
+				{
+					std::string query = req->getHeader()->getQuery();
+					env.setVar("QUERY_STRING", req->getHeader()->getQuery());
+				}
 				break;
 			case m_post:
 				break;
@@ -158,6 +175,8 @@ namespace ft{
 		std::string text = body->to_string();
 
 		_cgi_in = open(_tmp_in.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (_cgi_in == -1)
+			throw ft::runtime_error("Noooooooooo");
 		write(_cgi_in, text.c_str(), text.size());
 		ft_close(_cgi_in);
 		_cgi_in = -1;
@@ -171,6 +190,9 @@ namespace ft{
 			std::cout << *c << "\n";
 			c++;
 		}
+		 if(chdir(_root.c_str()) == -1) {
+		 	std::cerr<<"chdir failed \n";
+		 }
 		_av = getArgv(_executable, _root + req->getHeader()->getPath());
 
 		std::cout << "AV 0:" << _av[0] << "\n";
@@ -178,15 +200,15 @@ namespace ft{
 
 		if (_cgi_in == -1)
 			_cgi_in = open(_tmp_in.c_str(), O_RDONLY);
-		_cgi_out = open(_tmp_out.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (_cgi_in == -1 || _cgi_out == -1) {
-			dprintf(2, "FILE CAN T BE OPENED\n"); /////////// ATTENTION
+			dprintf(2, "FILE CAN T BE OPENED\n"); /////////// FIXME ATTENTION
 			exit(500);
 		}
 		char buff[300];
 
 		getcwd(buff,300);
 		std::cout << "[[[[[[ " << buff<< "\n";
+		std::cout<<_root<<std::endl;
 
 		dup2(_cgi_in, 0);
 		dup2(_cgi_out, 1);
@@ -235,6 +257,7 @@ namespace ft{
 			head_part = "";
 		head_part = strbuff.substr(0, pos + 2);
 		ft_close(_cgi_out);
+		_cgi_out = -1;
 	}
 
 	IHeader *CgiModule::getHeader(std::string header_str) {

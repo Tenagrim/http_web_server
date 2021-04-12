@@ -1,14 +1,6 @@
 #include <ConfigParser.hpp>
 
-ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(), _conf() {
-
-	openConfigFile();
-	if (!initParsing())
-		throw ft::runtime_error("Can't Read Config File ... ");
-	if (!startParse())
-		throw ft::runtime_error("Mistake in config file...");
-	if (!checkConfig())
-		throw ft::runtime_error("In config file you have duplicate construct...");
+ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(NULL), _conf() {
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -24,7 +16,8 @@ ft::ConfigParser::~ConfigParser() {
 
 bool ft::ConfigParser::initParsing(void) {
 	bool state = false;
-	std::string line = " ";
+	std::string line;
+	line.push_back(' ');
 	std::string::iterator it = _conf.begin();
 	for (; it != _conf.end(); ++it) {
 		if(_tokenPool.checkInPool(*it)) {
@@ -49,12 +42,14 @@ bool ft::ConfigParser::initParsing(void) {
 	return state;
 }
 
-void ft::ConfigParser::openConfigFile(void)
+void ft::ConfigParser::openConfigFile(char *config)
 {
-	std::ifstream fin("./conf/mywebserv.conf");
-	if (!fin.is_open())
-		throw ft::runtime_error("Can not open file ....");
-	std::getline(fin, _conf, '\0');
+	std::string path = config;
+	_conf = ft::readFileIntoString4(path);
+	if (_conf.empty())
+		_conf = ft::readFileIntoString4("./conf/mywebserv.conf");
+	if (_conf.empty())
+		throw ft::runtime_error("Can not open file or default config is wrong....");
 }
 
 bool ft::ConfigParser::startParse(void)
@@ -93,25 +88,25 @@ bool ft::ConfigParser::findServer(std::list<std::string> &_list, iterator &start
 {
 	bool state = false;
 
-	std::list<std::string> *tmp = new std::list<std::string>;
-	iterator end = std::find(start, _list.end(), "server");
+//	std::list<std::string> *tmp = new std::list<std::string>;
+	std::list<std::string>::iterator end = std::find(start, _list.end(), "server");
 	if (*end != "server") {
 		reverse_iterator r_end = std::find(_list.rbegin(), _list.rend(), "}");
 		++r_end;
 		r_end = std::find(_list.rbegin(), _list.rend(), "}");
 		end = r_end.base();
 	}
-	tmp->splice(tmp->begin(), _list, start, end);
-	state = initServer(tmp);
-	iterator count = tmp->begin();
-	reverse_iterator recount = tmp->rbegin();
+	std::list<std::string> tmp;
+	tmp.splice(tmp.begin(), _list, start, end);
+	state = initServer(&tmp);
+	iterator count = tmp.begin();
+	reverse_iterator recount = tmp.rbegin();
 	count = isSpace(count);
 	recount = isSpace(recount);
 	if (*count != "{")
 		throw std::runtime_error("No Open Bracket after SERVER key word...");
 	if (*recount != "}")
 		throw std::runtime_error("No ft_close Bracket ...");
-	delete tmp;
 	return state;
 }
 
@@ -212,5 +207,21 @@ void ft::ConfigParser::checkHostnameOnUniq(std::list<std::string> *pList)
 	int y = pList->size();
 	if (i != y) {
 		throw ft::runtime_error("Hostnames is not Uniq");
+	}
+}
+
+void ft::ConfigParser::firstStep(int ac, char **av)
+{
+	if (ac == 2){
+		openConfigFile(av[1]);
+	if (!initParsing())
+		throw ft::runtime_error("Can't Read Config File ... ");
+	if (!startParse())
+		throw ft::runtime_error("Mistake in config file...");
+	if (!checkConfig())
+		throw ft::runtime_error("In config file you have duplicate construct...");
+	}
+	else {
+		throw ft::runtime_error("Wrong argument, need 1");
 	}
 }

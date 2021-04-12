@@ -17,7 +17,7 @@ namespace ft
 		IHeader					*getHeader(void);
 		IBody					*getBody(void);
 		std::string				to_string(void) const;
-		~BasicRequest();
+		virtual  ~BasicRequest();
 		void setBody(IBody *body);
 		void setHeader(IHeader *header);
 		BasicRequest(IHeader *head, IBody *body);

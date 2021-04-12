@@ -63,17 +63,19 @@ namespace ft
 
 		RequestReceiver 		&operator=(const RequestReceiver &ref);
 
-		void					getRequest(Client *client);
-		void					getRequest(int sock);
+		int						getRequest(Client *client);
+		int						getRequest(int sock);
 
 		int						getId();
 		int						accept_connection();
 		void					close_connection(int sock);
-		void					ft_close_connections();
+		void					close_connections();
 		int						getListenSock();
 		IClient					*getClient(int sock);
 
 		int						writeEvent(int sock);
+		fd_map::iterator 		begin();
+		fd_map::iterator 		end();
 
 		void					start();
 		int						getPort();

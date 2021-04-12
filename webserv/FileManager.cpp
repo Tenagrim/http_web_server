@@ -42,8 +42,10 @@ namespace ft
 		file = _root + filename;
 //		if (file.back() == '/')
 //			file.erase(file.end() - 1);
-		stat(file.c_str(), &statbuf);
-		return S_ISDIR(statbuf.st_mode);	
+		if (!stat(file.c_str(), &statbuf))
+			return S_ISDIR(statbuf.st_mode);
+		else
+			return -1;
 	}
 
 	bool			FileManager::isFileExisting(std::string const &filename)
@@ -102,7 +104,8 @@ namespace ft
 			}
 		}
 		fileTypes.close();
-		throw NoSuchType();
+		//throw NoSuchType();
+		return "";
 	}
 
 	time_t			FileManager::getMTime(std::string const &filename)
@@ -205,7 +208,8 @@ namespace ft
 			if (readed != written)
 				throw ft::runtime_error("An error in rewriting file");
 		} while (readed != 0);
-		return fd;
+		ft_close(fd);
+		return 1;
 	}
 
 	int FileManager::mkdir_p(const std::string &dir_name)

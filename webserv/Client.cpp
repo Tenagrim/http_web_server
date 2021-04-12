@@ -1,18 +1,16 @@
 #include <Client.hpp>
 #include <BasicRequest.hpp>
-#ifdef DEBUG
-# include <iostream>
-#endif
-
+#include <iostream>
+#include <webserv.hpp>
 namespace ft
 {
 	unsigned int Client::_max_id = 0;
 
 	#pragma region Copilen
 
-	Client::Client(int id,int sock) :
+	Client::Client(int id, int sock) : _requests(0),
 		_id(id),
-		_sock(sock),
+		_sock(sock), _last_event(),
 		_last_request(),
 		_b_reader()
 	{
@@ -22,14 +20,19 @@ namespace ft
 		_last_request = 0;
 		_last_response = 0;
 		_states = s_not_begin;
+		_left = false;
 		updateEventTime();
 		_id = _max_id++;
 	}
 
 	Client::~Client()
 	{
-		int ret;
+		int ret = 0;
+		//if (_id < 106700)
+		std::cout << red << "CLIENT ["<< _sock <<"]["<< _id <<"] DIED\n" << reset_;
 		ret = ft_close(_sock);
+		if (ret == -1)
+			throw ft::runtime_error("CLIENT: CAN\'T CLOSE SOCK");
 		#ifdef DEBUG
 		std::cout << "CLIENT: CLOSING SOCKET[" << _sock << "]\n";
 		if (ret == -1)
@@ -110,6 +113,7 @@ namespace ft
 		if (_last_request)
 			delete _last_request;
 		_last_request = request;
+		_requests++;
 	}
 	
 	IRequest		*Client::getLastRequest(void)
@@ -217,7 +221,6 @@ namespace ft
 		}
 	}
 
-
 	void Client::reset() {
 		clearRequest();
 		clearResponse();
@@ -226,7 +229,7 @@ namespace ft
 		_write_flags = 0;
 		_states = s_not_begin;
 		//if (_b_reader)
-		//	_b_reader->reset();
+		//	_b_reader->reset_();
 		_read_buff.clear();
 		updateEventTime();
 		if(_b_reader)
@@ -236,5 +239,17 @@ namespace ft
 
 	int Client::getId() {
 		return _id;
+	}
+
+	void Client::setLeft() {
+		_left = true;
+	}
+
+	bool Client::left() {
+		return _left;
+	}
+
+	int Client::requests() {
+		return _requests;
 	}
 }

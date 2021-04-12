@@ -34,6 +34,7 @@ namespace ft
 	{
 	protected:
 		FileManager		_fmngr;
+		Authorization	_auth;
 		ErrorPager		_e_pager;
 		ITimeMachine	*_t_machine;
 		ServerInit		*config;
@@ -89,6 +90,8 @@ namespace ft
 		bool checkCodePage(std::string &string, std::string &code);
 
 		IResponse * redirectToCGI(IRequest *request, LocationInit *location);
+
+		std::pair<bool, std::string> ifAuthentication(IRequest *request, LocationInit *location);
 	};
 
 } // namespace ft

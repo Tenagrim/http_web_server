@@ -100,11 +100,6 @@ namespace ft
 		std::string type;
 		IBody *res;
 
-		try {
-			type = _fmngr.getContentType(filename);
-		} catch (FileManager::NoSuchType) {
-			type = "";
-		}
 #ifdef DEBUG
 		std::cout << "BUILDER: GOT FILE TYPE [" << type << "]\n";
 #endif
@@ -112,7 +107,9 @@ namespace ft
 			res = buildTextBody(filename);
 		else
 			res = buildFileBody(filename);
-		res->setContentType(type);
+			type = _fmngr.getContentType(filename);
+			if (type != "")
+			res->setContentType(type);
 		return (res);
 	}
 
@@ -270,7 +267,7 @@ namespace ft
 		header = buildHeader(200, "OK", body);
 
 		//res = new TextResponse(header->to_string() + body->to_string());
-//		res = new TextResponse(header, body);  // WHAT ??!!!??
+		//res = new TextResponse(header, body);  // WHAT ??!!!??
 		res = new BasicResponse(header, body);
 		//delete header;
 		//delete body;
@@ -300,7 +297,12 @@ namespace ft
 		LocationInit *location = NULL;
 		std::string correct_path = checkerPath(request, conf);
 //		if(_fmngr.isFileExisting(correct_path)) {
-		std::string ext = '.' + ft::getFileExtension(correct_path);
+		std::string queri = ft::getFileQueri(correct_path);
+		std::string ext;
+		if (!queri.empty())
+			ext = '.' + ft::getFileExtension(queri);
+		else
+			ext = '.' + ft::getFileExtension(correct_path);
 		if (ext == ".bla" || ext == ".php")
 			location = findLocation(ext, conf);
 //			if (!location)
@@ -316,12 +318,12 @@ namespace ft
 		std::map<std::string, std::string> args = location->getArgs();
 		std::map<std::string, std::string>::iterator it = args.find("root");
 		if (it != args.end()) {
-			res = request->getHeader()->getURI();
+			res = request->getHeader()->getPath();
 			int pos = res.rfind(location->getPath());
 			res.replace(pos, location->getPath().size(), it->second);
 		}
 		else
-			res = request->getHeader()->getURI();
+			res = request->getHeader()->getPath();
 		return res;
 	}
 
@@ -343,7 +345,7 @@ namespace ft
 	std::string ABuildPolicy::checkerPath(IRequest *request,ServerInit *conf)
 	{
 		std::string path;
-		std::string URI = request->getHeader()->getURI();
+		std::string URI = request->getHeader()->getPath();
 		if (!URI.empty()) {
 			std::vector<std::string> vec = splitString(URI, "/");
 			std::cout<<vec.size()<<std::endl;
@@ -438,12 +440,42 @@ namespace ft
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["fastcgi_pass"];
+		std::string script = checkerPath(request, getConfig());
 		if(!methods.empty()) {
 			_cgi_module.setRoot(_fmngr.getRoot());
 			_cgi_module.setExecutable(methods);
-			response = _cgi_module.getResponse(request);
+			response = _cgi_module.getResponse(request, script);
 		}
 		return response;
+	}
+
+	std::pair<bool, std::string> ABuildPolicy::ifAuthentication(IRequest *request, LocationInit *location)
+	{
+		std::pair<bool, std::string> res;
+		res.first = false;
+		res.second = "";
+		if (!location)
+			throw ft::runtime_error("No coorect Location");
+		std::map<std::string, std::string> arguments = location->getArgs();
+		std::string methods = arguments["auth_basic"];
+		if (methods.empty()) {
+			res.first = true;
+			return res;
+		}
+		if (request->getHeader()->isFieldInHeader("authorization")) {
+			std::string auth_req = request->getHeader()->getHeader("authorization");
+			res.first = _auth.checkAuth(auth_req);
+			if (res.first) {
+				res.second.clear();
+				return res;
+			}
+		}
+		std::map<std::string, std::string>::iterator it = arguments.find("auth_basic");
+		std::string tmp = it->second;
+		res.second = _auth.getRealmKey(ft::base64_encode(reinterpret_cast<const unsigned char *>(tmp.c_str()), tmp.length
+		()));
+		res.first = false;
+		return res;
 	}
 }
 // namespace ft

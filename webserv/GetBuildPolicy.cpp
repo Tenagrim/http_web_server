@@ -2,6 +2,8 @@
 
 namespace ft
 {
+	int GetBuildPolicy::_count = 0;
+
 	GetBuildPolicy::~GetBuildPolicy()
 	{}
 
@@ -23,11 +25,22 @@ namespace ft
 		#ifdef DEBUG
 				std::cout << "URI ::::::::::: [" << request->getHeader()->getURI() << "]\n";
 		#endif
+		std::cout << "Respone N: " << _count << "\n";
+		_count++;
+
+
 		IResponse *res = NULL;
-		std::cout<<request->to_string()<<std::endl;
+		//std::cout<<request->to_string()<<std::endl;
 		ServerInit *conf = getConfig();
 		applyConfig(conf);
 		LocationInit *location = findLocation(request->getHeader()->getPath(), conf);
+		std::string ext = getFileExtension(request->getHeader()->getPath());
+		if (ext == "php") {
+			location = extensionCheck(request, conf);
+			res = redirectToCGI(request, location);
+			if (res)
+				return res;
+		}
 		if (!location) {
 			std::string path = checkerPath(request, conf);
 			if (!_fmngr.isFileExisting(path)) {
@@ -42,21 +55,34 @@ namespace ft
 					} else {
 						if (ifCorrectMethod(request, location)){
 							std::string correct_path = ifRootArgument(request, location);
-							 return buildFromFile(request, correct_path);
+							std::pair<bool, std::string> author = ifAuthentication(request, location);
+							if (ifAuthentication(request, location).first){
+								return buildFromFile(request, correct_path);
+							} else {
+								res = _e_pager.getErrorPage(401);
+								res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+							}
 						}
 					}
 				}
 			}
 		} else if (ifCorrectMethod(request, location)){
 			std::string correct_path = ifRootArgument(request, location);
-			if (_fmngr.isADirectory(correct_path)) {
-				return buildFromDir(request, correct_path, location);
-			}
-			else if (_fmngr.isFileExisting(correct_path)) {
-				return buildFromFile(request, correct_path);
-			}
-			else {
-				return (_e_pager.getErrorPage(404));
+			std::pair<bool, std::string> author = ifAuthentication(request, location);
+			if (author.first && author.second == ""){
+				if (_fmngr.isADirectory(correct_path)) {
+					return buildFromDir(request, correct_path, location);
+				}
+				else if (_fmngr.isFileExisting(correct_path)) {
+					return buildFromFile(request, correct_path);
+				}
+				else {
+					return (_e_pager.getErrorPage(404));
+				}
+			} else {
+				res = _e_pager.getErrorPage(401);
+				res->getHeader()->setHeader("WWW-Authenticate", "Basic realm=\""+author.second+"\"");
+				return res;
 			}
 		} else {
 			res = ifErrorPage(request, location, to_string(405));
@@ -77,5 +103,13 @@ namespace ft
 		} else {
 			return buildFromFile(request, request->getHeader()->getPath());
 		}
+	}
+
+	int GetBuildPolicy::getCount() {
+		return _count;
+	}
+
+	void GetBuildPolicy::reset() {
+		_count = 0;
 	}
 }

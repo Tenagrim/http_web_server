@@ -95,10 +95,17 @@ namespace ft
 		int 			getId();
 
 		void 			reset();
+		bool 			left();
+		void 			setLeft();
+		int 			requests();
+
+
 
 	private:
+		int 				_requests;
+		bool 				_left;
 		static unsigned int	_max_id;
-		int					_id;
+		unsigned int		_id;
 		int					_sock;
 		int					_state_flags;
 		int					_read_flags;

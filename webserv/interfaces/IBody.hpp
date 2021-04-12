@@ -30,6 +30,8 @@ namespace ft
 		virtual void					setContentType(std::string const &type) = 0;
 		virtual int						getOpenedFd() = 0;
 		virtual int						getOffset() const = 0;
+		virtual unsigned int 			getId() const = 0;
+
 
 
 		virtual ~IBody(){}
