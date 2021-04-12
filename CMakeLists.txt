@@ -112,11 +112,9 @@ add_executable(
         ./webserv/IndexModule.hpp
         webserv/utils/timeFormatted.cpp
 #        webserv/trash/testerTimeFormatted.cpp
-        webserv/utils/methodNeedsBody.cpp
         ./webserv/HeadBuildPolicy.hpp
         ./webserv/HeadBuildPolicy.cpp
 
-        webserv/utils/methodNeedsBody.cpp
         webserv/Environment.cpp
         webserv/Environment.hpp
         webserv/CgiModule.cpp
