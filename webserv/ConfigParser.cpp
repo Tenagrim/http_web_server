@@ -1,14 +1,6 @@
 #include <ConfigParser.hpp>
 
 ft::ConfigParser::ConfigParser(): _tokenPool(), _server_count(0), _confile(), _conf() {
-
-	openConfigFile();
-	if (!initParsing())
-		throw ft::runtime_error("Can't Read Config File ... ");
-	if (!startParse())
-		throw ft::runtime_error("Mistake in config file...");
-	if (!checkConfig())
-		throw ft::runtime_error("In config file you have duplicate construct...");
 }
 
 ft::ConfigParser::~ConfigParser() {
@@ -49,12 +41,14 @@ bool ft::ConfigParser::initParsing(void) {
 	return state;
 }
 
-void ft::ConfigParser::openConfigFile(void)
+void ft::ConfigParser::openConfigFile(char *config)
 {
-	std::ifstream fin("./conf/mywebserv.conf");
-	if (!fin.is_open())
-		throw ft::runtime_error("Can not open file ....");
-	std::getline(fin, _conf, '\0');
+	std::string path = config;
+	_conf = ft::readFileIntoString4(path);
+	if (_conf.empty())
+		_conf = ft::readFileIntoString4("./conf/mywebserv.conf");
+	if (_conf.empty())
+		throw ft::runtime_error("Can not open file or default config is wrong....");
 }
 
 bool ft::ConfigParser::startParse(void)
@@ -212,5 +206,21 @@ void ft::ConfigParser::checkHostnameOnUniq(std::list<std::string> *pList)
 	int y = pList->size();
 	if (i != y) {
 		throw ft::runtime_error("Hostnames is not Uniq");
+	}
+}
+
+void ft::ConfigParser::firstStep(int ac, char **av)
+{
+	if (ac == 2){
+		openConfigFile(av[1]);
+	if (!initParsing())
+		throw ft::runtime_error("Can't Read Config File ... ");
+	if (!startParse())
+		throw ft::runtime_error("Mistake in config file...");
+	if (!checkConfig())
+		throw ft::runtime_error("In config file you have duplicate construct...");
+	}
+	else {
+		throw ft::runtime_error("Wrong argument, need 1");
 	}
 }

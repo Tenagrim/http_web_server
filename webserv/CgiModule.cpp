@@ -68,8 +68,11 @@ namespace ft{
 	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
 	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
 
-		env.setVar("PATH_INFO", req->getHeader()->getPath());
-
+		std::string ext = '.' + ft::getFileExtension(req->getHeader()->getPath());
+		std::cout<<ext<<std::endl;
+		if (ext == ".bla")
+			env.setVar("PATH_INFO", req->getHeader()->getPath());
+//TODO : if .php
 //		req->getHeader()->setEnvs(env);
 
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))
