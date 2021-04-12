@@ -354,22 +354,31 @@ ft::IBody *ft::BodyReader::getBody() {
 int ft::BodyReader::readByLen()
 {
 	int ret;
-	_read_buff = (char*)malloc(_content_length);
-	if (!_read_buff)
-		throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
-	ret = read(_input_fd, _read_buff, _content_length);
-	if (ret <= 0)
-		return endReading(-2);
+	if (_state == s_remains)
+	{
+		ret = ret = write(_output_fd, _remainder_of_header.c_str(), _remainder_of_header.size());
+		if (ret <= 0)
+			throw ft::runtime_error("WRITE FAILED");
+		setState(s_r_by_len);
+		return 1;
+	} else {
+		_read_buff = (char *) malloc(_content_length);
+		if (!_read_buff)
+			throw ft::runtime_error("READ BY LEN: Malloc failed " + ft::to_string(_content_length));
+		ret = read(_input_fd, _read_buff, _content_length);
+		if (ret <= 0)
+			return endReading(-2);
 		//throw ft::runtime_error("READ FAILED");
-	if (ret != _content_length) {
-		free(_read_buff);
-		_read_buff = 0;
-		return endReading(-1);
+		if (ret != _content_length) {
+			free(_read_buff);
+			_read_buff = 0;
+			return endReading(-1);
+		}
+		ret = write(_output_fd, _read_buff, _content_length);
+		if (ret <= 0)
+			throw ft::runtime_error("WRITE FAILED");
+		return (endReading(0));
 	}
-	ret = write(_output_fd, _read_buff, _content_length);
-	if (ret <= 0)
-		throw ft::runtime_error("WRITE FAILED");
-	return (endReading(0));
 }
 
 unsigned int ft::BodyReader::getMaxId() {
