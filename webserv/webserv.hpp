@@ -22,6 +22,7 @@ namespace ft
 	static const char magenta[] = "\033[1;35m";
 	static const char blue[] = "\033[1;34m";
 	static const char cyan[] = "\033[0;36m";
+	static const char purple[] = "\033[0;35m";
 
 	enum header_keys
 	{

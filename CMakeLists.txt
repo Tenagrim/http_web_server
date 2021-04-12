@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 98)
 
 INCLUDE_DIRECTORIES(./webserv/interfaces ./webserv/)
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra ") // -Werror
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra  ") # -Werror
 #add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 add_executable(

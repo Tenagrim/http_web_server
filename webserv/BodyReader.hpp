@@ -75,11 +75,11 @@ namespace ft {
 		unsigned int		getSize() const;
 	public:
 		static void 		reset();
-		int getWritten() const;
+		int					getWritten() const;
 		static unsigned int getMaxId();
 
 		//void setRemainderOfHeader(char *remainderOfHeader);
-		const std::string &getFilename() const;
+		const std::string	&getFilename() const;
 
 		// CLIENT fd , ENCODING: LEN_CHUNKED or Content-length
 		BodyReader(int input_fd, int content_length, std::string remainder = "");

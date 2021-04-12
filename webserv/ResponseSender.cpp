@@ -120,7 +120,7 @@ namespace ft
 
 			retw = send(client->getSock(), buff + offset, retr, 0);
 
-		std::cout << "SEND : "<< retw <<" ["<< client->getSock() <<"]\n";
+		//std::cout << "SEND : "<< retw <<" ["<< client->getSock() <<"]\n";
 		if (body->getWritten() + 10 < READ_BODY_ONE_TIME) {
 			//std::cout << magenta;
 			write(1, magenta , ft::ft_strlen(magenta));

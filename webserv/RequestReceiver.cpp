@@ -199,6 +199,7 @@ namespace ft {
 		int n;
 		int bodyRet;
 		std::string bodyPart;
+		IBody *b = 0;
 
 		client->updateEventTime();
 
@@ -242,7 +243,10 @@ namespace ft {
 				std::cout << cyan << "[" << client->getSock() << "] RECIEVED : " << client->getBReader()->getWritten() << " [" << client->requests() << "] " << reset_ << "\n";
 				switch (bodyRet) {
 					case 0:
-						client->getLastRequest()->setBody(client->getBReader()->getBody());
+						b = client->getBReader()->getBody();
+						if (!b)
+							return -1;
+						client->getLastRequest()->setBody(b);
 						client->setFlag(Client::read_flags, Client::r_end);
 						return 0;
 					case 1:
