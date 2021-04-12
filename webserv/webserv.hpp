@@ -73,7 +73,7 @@ namespace ft
 	unsigned long		get_time_udiff(struct timeval *t1, struct timeval *t2);
 	std::vector<std::string> splitString(std::string const & basicString,
 										 std::string const & delim);
-	void 				currentTimeFormatted(char *format, char *buf, int bufLen);
+	void 				currentTimeFormatted(const char *format, char *buf, int bufLen);
 	void				rawTimeFormatted(time_t rawTime,const char *format,
 						  								char *buf, int bufLen);
 	bool				isParsedHeader(std::string const &head);
