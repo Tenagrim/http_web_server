@@ -1,6 +1,6 @@
 
 CC= clang++
-CFLAGS= -g -Wall -Wextra -Werror -MMD
+CFLAGS= -g -Wall -Wextra -O1 -fsanitize=address -fno-omit-frame-pointer # -Werror -MMD
 
 NAME=webserv
 
