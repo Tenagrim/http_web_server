@@ -23,8 +23,10 @@ namespace ft{
 		return (*this);
 	}
 
-	IResponse *CgiModule::getResponse(IRequest *req) {
+	IResponse *CgiModule::getResponse(IRequest *req, std::string const &script)
+	{
     	int pid, status, ret;
+    	_script = script;
     	Environment envs;
 		_tmp_in = _home + "/" + TMP_DIR +"/" + TMP_IN  + ft::to_string(_max_id);
 		_tmp_out = _home + "/" + TMP_DIR + "/" + TMP_OUT + ft::to_string(_max_id);
@@ -67,12 +69,7 @@ namespace ft{
 		env.setVar("SERVER_PROTOCOL", req->getHeader()->getHTTPVersion());
 	//	if(req->getHeader()->isHeadAlreadyExist("content-length"))
 	//		env.setVar("CONTENT_LENGTH", req->getHeader()->getHeader("content-length"));
-
-		std::string ext = '.' + ft::getFileExtension(req->getHeader()->getPath());
-		std::cout<<ext<<std::endl;
-		if (ext == ".bla")
-			env.setVar("PATH_INFO", req->getHeader()->getPath());
-//TODO : if .php
+		env.setVar("PATH_INFO", _script);
 //		req->getHeader()->setEnvs(env);
 
 		if (req->getHeader()->isFieldInHeader("x-secret-header-for-test"))

@@ -435,10 +435,11 @@ namespace ft
 			throw ft::runtime_error("No coorect Location");
 		std::map<std::string, std::string> arguments = location->getArgs();
 		std::string methods = arguments["fastcgi_pass"];
+		std::string script = checkerPath(request, getConfig());
 		if(!methods.empty()) {
 			_cgi_module.setRoot(_fmngr.getRoot());
 			_cgi_module.setExecutable(methods);
-			response = _cgi_module.getResponse(request);
+			response = _cgi_module.getResponse(request, script);
 		}
 		return response;
 	}
