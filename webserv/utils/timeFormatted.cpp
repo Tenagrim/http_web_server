@@ -28,7 +28,7 @@ namespace ft {
 
 	void				monthCount(tm *timeInfo, bool yearLeap);
 
-	void 				currentTimeFormatted(char *format, char *buf, int bufLen) {
+	void 				currentTimeFormatted(const char *format, char *buf, int bufLen) {
 		struct timeval	mark_t;
 
 		if (gettimeofday(&mark_t, NULL))
@@ -36,8 +36,8 @@ namespace ft {
 		rawTimeFormatted(mark_t.tv_sec, format, buf, bufLen);
 	}
 
-	void				rawTimeFormatted(time_t rawTime,const char *format,
-						  							char *buf, int bufLen) {
+	void				rawTimeFormatted(time_t rawTime, const char *format,
+										 char *buf, int bufLen) {
 		struct tm		timeInfo[1];
 
 		timeInfo->tm_year = 1970 + rawTime / 31436000;						// years from 1970
@@ -48,11 +48,13 @@ namespace ft {
 		int secsFromDay = rawTime - days * 86400;							// secs from day
 		timeInfo->tm_hour = secsFromDay / 3600;
 		timeInfo->tm_min = (secsFromDay - (timeInfo->tm_hour * 3600)) / 60;
-		timeInfo->tm_sec = secsFromDay - (timeInfo->tm_min * 60);
+		timeInfo->tm_sec = secsFromDay - ((timeInfo->tm_hour * 3600) + (timeInfo->tm_min * 60));
 		timeInfo->tm_hour += TIME_ZONE;
 		timeInfo->tm_year -= 1900;
+		timeInfo->tm_wday = (days + 4) % 7;
 
 		strftime(buf, bufLen, format, timeInfo);
+		buf[bufLen - 1] = '\0';
 	}
 
 	void				monthCount(tm *timeInfo, bool yearLeap) {
