@@ -82,7 +82,7 @@ namespace ft {
 			html += _requestUrl;
 			html += "</h1><hr><pre>";
 			while ((info = readdir(dir)))
-				if (strcmp(info->d_name, "."))
+				if (ft_strcmp(info->d_name, "."))
 					html += generateHtmlLine(info);
 			html += "</pre><hr>\n"
 		   			"\n"

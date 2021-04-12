@@ -22,14 +22,14 @@
 #define DEFAULT_SERVER_HEADER	"pst/1.1.0"
 
 #define FM_RW_BUFF				1024
-#define FM_DEFAULT_ROOT			"/Users/pcatrina/Desktop/workspace/webserv/webserv/resources/sites/particles"
+#define FM_DEFAULT_ROOT			"/Users/sadolph/21/webserv/webserv/resources/sites/particles"
 
 #define DEFAULT_HTTPV			"HTTP/1.1"
 
 //////// Varies from Delay ///////////////
 //#define READ_BODY_ONE_TIME	200000
-//#define READ_BODY_ONE_TIME		1000000    // 1 Mb
-#define READ_BODY_ONE_TIME		100000 // 100 kb
+#define READ_BODY_ONE_TIME		1000000    // 1 Mb
+//#define READ_BODY_ONE_TIME		100000 // 100 kb
 //#define READ_BODY_ONE_TIME	500000
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////
