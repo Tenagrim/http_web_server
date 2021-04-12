@@ -311,11 +311,10 @@ int ft::BodyReader::readPBlock() {
 	if (_last_readed_bytes == size + 2)
 		setState(s_len);
 //		_state = s_len;
-	else {
+	else
 		setState(s_pp_block);
 //		_state = s_pp_block;
-		_remainder_of_header.clear();
-	}
+	_remainder_of_header.clear();
 	return ret;
 }
 
