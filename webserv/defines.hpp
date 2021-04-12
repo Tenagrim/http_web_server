@@ -31,6 +31,7 @@
 //#define READ_BODY_ONE_TIME		1000000    // 1 Mb
 #define READ_BODY_ONE_TIME		100000 // 100 kb
 //#define READ_BODY_ONE_TIME		32000 // 32 kb
+//#define READ_BODY_ONE_TIME		5000 // 5 kb
 //#define READ_BODY_ONE_TIME	500000
 //#define READ_BODY_ONE_TIME	20000
 //////////////////////////////////////////

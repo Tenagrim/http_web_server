@@ -266,6 +266,7 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 		return endReading(-2);
 	ft_memcpy(tail, _read_buff + (ret - 5), 5);
 	tail[5] = 0;
+
 	if (ret != size) {
 		//free(_read_buff);
 		//return endReading(-1);
@@ -297,8 +298,8 @@ int ft::BodyReader::readWriteBlock(int size, int offset) {
 int ft::BodyReader::readPPBlock() {
 	std::cout<< green << "READPP BLOCK [" << ft::to_string(_input_fd) << "][" << _last_readed_bytes<<"]"<< reset_ << std::endl;
 	int size = _block_size_i - _readed_bytes;
-	int ret = readWriteBlock(size);
-	if (ret == size) {
+	int ret = readWriteBlock(size + 2);
+	if (ret == size + 2) {
 		setState(s_len);
 //		_state = s_len;
 		_readed_bytes = 0;
