@@ -9,3 +9,4 @@ webserv/log.txt
 .idea
 cmake-build-debug
 CMakeLists.txt
+obj
