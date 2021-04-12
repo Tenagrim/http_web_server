@@ -18,19 +18,18 @@ namespace ft {
 	class ConfigParser {
 	private:
 		TokenPool				_tokenPool;
-		unsigned int			_server_count;
+		int			_server_count;
 		std::list<std::string>	_confile;
 		std::string				_conf;
-		std::map<std::string, std::string>	_conf_param;
-		typedef std::list<std::string>::iterator iterator;
-		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 		std::list<ServerInit *> _server_list;
 
+		typedef std::list<std::string>::iterator iterator;
+		typedef std::list<std::string>::reverse_iterator reverse_iterator;
 		void openConfigFile(const char *config);
 		bool initParsing(void);
 		bool startParse(void);
-		bool initServer(std::list<std::string> *tmp);
-		bool findServer(std::list<std::string> &_list, iterator &start);
+		bool initServer(std::list<std::string> &tmp);
+		bool findServer(std::list<std::string> &_list);
 	public:
 		ConfigParser();
 		~ConfigParser();

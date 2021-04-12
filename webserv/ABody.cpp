@@ -4,7 +4,7 @@
 
 namespace ft
 {
-	ABody::ABody() : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff(nullptr)
+	ABody::ABody() : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff()
 	{}
 
 	ABody::~ABody()
@@ -13,7 +13,7 @@ namespace ft
 			delete [] _buff;
 	}
 
-	ABody::ABody(const ABody &ref) : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff(nullptr)
+	ABody::ABody(const ABody &ref) : _last_written(0), _last_readed(0), _readed(0), _written(0), _buff()
 	{
 		(void)ref;
 	}

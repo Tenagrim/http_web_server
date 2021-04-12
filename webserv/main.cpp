@@ -36,7 +36,6 @@ void	sigint_handler(int sig)
 	exit(2);
 }
 
-
 int main(int ac, char **av)
 {
 	(void)ac; // FIXME:

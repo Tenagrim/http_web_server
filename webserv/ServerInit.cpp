@@ -1,7 +1,7 @@
 #include <ServerInit.hpp>
 //#include "ServerInit.hpp"
 
-ft::ServerInit::ServerInit(int id): _id(id), _location_count(0) {
+ft::ServerInit::ServerInit(int id): _id(id), _location_count(0), _listen(), _server_name(), _root(), _locations(0) {
 }
 
 ft::ServerInit::~ServerInit() {
@@ -13,14 +13,13 @@ ft::ServerInit::~ServerInit() {
 	_locations.clear();
 }
 
-bool ft::ServerInit::parseInServer(std::list<std::string> &tmp)
+bool ft::ServerInit::parseInServer(std::list<string> tmp)
 {
 	bool state = false;
-	ft::deleteCommit(tmp);
-	state = findLocations(&tmp);
-	state = findListen(&tmp);
-	state = findServerName(&tmp);
-	state = findRoot(&tmp);
+	state = findLocations(tmp);
+	state = findListen(tmp);
+	state = findServerName(tmp);
+	state = findRoot(tmp);
 	std::cout<<string(30, '*')<<std::endl;
 	return state;
 }
@@ -36,14 +35,14 @@ ft::ServerInit::iterator ft::ServerInit::findInList(ft::ServerInit::list *_list,
 	return end;
 }
 
-bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
+bool ft::ServerInit::findListen(std::list<string> &tmp)
 {
 	bool state = false;
-	iterator it = tmp->begin();
-	it = findInList(tmp,"listen");
-	if (it == tmp->end())
+	iterator it = tmp.begin();
+	it = std::find(it, tmp.end(), "listen");
+	if (it == tmp.end())
 		throw ft::runtime_error("No key-word \"LISTEN\"");
-	while (*it != ";" || it == tmp->end()) {
+	while (*it != ";" || it == tmp.end()) {
 		if (*it == "\n") break;
 		it = is_Space(++it);
 		if (!is_digit(*it))
@@ -56,33 +55,30 @@ bool ft::ServerInit::findListen(ft::ServerInit::list *tmp)
 		throw ft::runtime_error("No \";\" after key-word LISTEN");
 	} else
 		state = true;
-//	Удаление обработоанной строки
-	*tmp = ft::findAndErase(*tmp, "listen", ";");
 	return state;
 }
 
-bool ft::ServerInit::findRoot(std::list<std::string> *tmp)
+bool ft::ServerInit::findRoot(std::list<string> &tmp)
 {
 	bool state = false;
-	iterator it = tmp->begin();
-	it = std::find(it, tmp->end(), "root");
+	iterator it = tmp.begin();
+	it = std::find(it, tmp.end(), "root");
 	if (*it != "root")
 		throw std::runtime_error("No \"ROOT\" key-word");
 	else{
-		iterator end = std::find(it, tmp->end(), "\n");
-		std::list<std::string> *root = new std::list<std::string>;
-		root->splice(root->begin(), *tmp, it, end);
-		root->pop_front();
-		iterator rit = root->begin();
+		iterator end = std::find(it, tmp.end(), "\n");
+		std::list<std::string> root;
+		root.splice(root.begin(), tmp, it, end);
+		root.pop_front();
+		iterator rit = root.begin();
 		rit = is_Space(rit);
-		reverse_iterator rev_it = root->rbegin();
+		reverse_iterator rev_it = root.rbegin();
 		rev_it = isSpace(rev_it);
 		if (*(rev_it) != ";")
 			throw std::runtime_error("no \";\" after key-word ROOT");
 		_root = *rit;
 		if (_root.empty() || _root == ";")
 			throw std::runtime_error("nothing in root path");
-		delete root;
 		state = true;
 	}
 	return state;
@@ -100,14 +96,14 @@ bool ft::ServerInit::is_digit(const std::string &str)
 	return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
-bool ft::ServerInit::findServerName(list *tmp)
+bool ft::ServerInit::findServerName(std::list<string> &tmp)
 {
 	bool state = false;
-	iterator it = tmp->begin();
-	it = findInList(tmp,"server_name");
-	if (it == tmp->end())
+	iterator it = tmp.begin();
+	it = std::find(it, tmp.end(), "server_name");
+	if (it == tmp.end())
 		throw ft::runtime_error("No key-word \"SERVER_NAME\"");
-	while (*it != ";" || it == tmp->end()) {
+	while (*it != ";" || it == tmp.end()) {
 		if (*it == "\n") break;
 		it = is_Space(++it);
 		_server_name.push_back(*it);
@@ -117,35 +113,33 @@ bool ft::ServerInit::findServerName(list *tmp)
 		throw ft::runtime_error("No \";\" after key-word SERVER_NAME");
 	} else
 		state = true;
-	//	Удаление обработоанной строки
-	*tmp = ft::findAndErase(*tmp, "server_name", ";");
 	return state;
 }
 
-bool ft::ServerInit::findLocations(std::list<std::string> *tmp)
+bool ft::ServerInit::findLocations(std::list<string> &tmp)
 {
 	bool state = false;
-	iterator start = tmp->begin();
+	iterator start = tmp.begin();
 
-	while (start != tmp->end()){
-		start = std::find(tmp->begin(), tmp->end(), "location");
+	while (start != tmp.end()){
+		start = std::find(tmp.begin(), tmp.end(), "location");
 		if (*start != "location" && _location_count == 0) {
 			throw std::runtime_error("No one LOCATION");
 			break;
 		}
-		else if (start != tmp->end()){
-			tmp->erase(start);
-			iterator end = std::find(++start, tmp->end(), "location");
+		else if (start != tmp.end()){
+			tmp.erase(start);
+			iterator end = std::find(++start, tmp.end(), "location");
 			if (*end != "location") {
-				end = std::find(start, tmp->end(), "}");
+				end = std::find(start, tmp.end(), "}");
 				++end;
 			}
-			std::list<std::string> *location = new std::list<std::string>;
-			location->splice(location->begin(), *tmp, ++start, end);
+			std::list<std::string> location;
+			location.splice(location.begin(), tmp, ++start, end);
 			LocationInit *Location = new LocationInit(_location_count);
 			_locations.push_back(Location);
 			_location_count++;
-			state =  Location->InitParse(*location);
+			state =  Location->InitParse(location);
 		}
 	}
 	return state;

@@ -23,8 +23,10 @@ namespace ft {
 		bool res = true;
 		while(res) {
 			iterator it = std::find(list.begin(), list.end(), "#");
-			if (it != list.end())
-				ft::findAndErase(list, "#", "\n");
+			if (it != list.end()){
+				iterator end = std::find(it, list.end(), "\n");
+				list.erase(it, end);
+			}
 			else
 				res = false;
 		}
@@ -39,6 +41,18 @@ namespace ft {
 	reverse_iterator &isSpace(reverse_iterator &it) {
 		while (*it == " " || *it == "\t" || *it == "\n")
 			++it;
+		return it;
+	};
+
+	std::list<std::string> & isSpace(std::list<std::string> &it) {
+		while (it.front() == " " || it.front() == "\t" || it.front() == "\n")
+			it.pop_front();
+		return it;
+	};
+
+	std::list<std::string> & isSpaceRev(std::list<std::string> &it) {
+		while (it.back() == " " || it.back() == "\t" || it.back() == "\n")
+			it.pop_back();
 		return it;
 	};
 
