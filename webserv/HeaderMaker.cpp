@@ -165,9 +165,9 @@ namespace ft {
 
 			if ((!header->isFieldInHeader("content-length") &&
 				 !header->isFieldInHeader("transfer-encoding"))
-				||
+					/*||
 				(header->isFieldInHeader("content-length") &&
-				 header->isFieldInHeader("transfer-encoding"))) {
+				 header->isFieldInHeader("transfer-encoding")) */) {
 				header->makeInvalid();
 				return;
 			}

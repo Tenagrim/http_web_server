@@ -30,7 +30,8 @@ namespace ft {
 			s_a_len,
 			s_a1_len,
 			s_pp_block,
-			s_end
+			s_end,
+			s_r_by_len
 		};
 
 	private:
