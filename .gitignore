@@ -10,6 +10,6 @@ webserv/log.txt
 cmake-build-debug
 CMakeLists.txt
 obj
-webserv/resources/42_test/post_body
-webserv/resources/42_test/put_test/multiple_same
-webserv/resources/42_test/put_test/
+site/42_test/post_body
+site/42_test/put_test/multiple_same
+site/42_test/put_test/
